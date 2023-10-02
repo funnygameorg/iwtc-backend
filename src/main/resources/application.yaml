@@ -1,0 +1,5 @@
+jwt:
+  secret: glgful8fLHILImISgmxcq123458C76wrqwmrnJFfn5585j3602r8rt29f9
+  token-validity-milli-seconds:
+    access: 20000
+    refresh: 21600000
