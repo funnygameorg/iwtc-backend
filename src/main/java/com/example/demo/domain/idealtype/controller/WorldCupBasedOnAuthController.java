@@ -46,7 +46,7 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     )
             }
     )
@@ -77,12 +77,12 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "월드컵 없음",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     )
             }
     )
@@ -113,7 +113,7 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     )
             }
     )
@@ -137,7 +137,7 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     )
             }
     )
@@ -154,22 +154,23 @@ public class WorldCupBasedOnAuthController {
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "월드컵 생성"
+                            description = "월드컵 생성",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "204",
                             description = "월드컵 수정",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "월드컵 없음",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     )
             }
     )

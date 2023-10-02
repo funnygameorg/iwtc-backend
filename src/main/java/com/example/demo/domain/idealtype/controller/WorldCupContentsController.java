@@ -2,6 +2,7 @@ package com.example.demo.domain.idealtype.controller;
 
 import com.example.demo.domain.idealtype.controller.dto.response.GetMyWorldCupsAllContentsResponse;
 import com.example.demo.domain.idealtype.controller.dto.response.GetWorldCupPlayContentsResponse;
+import com.example.demo.domain.idealtype.controller.dto.response.GetWorldCupsResponse;
 import com.example.demo.global.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,7 +58,7 @@ public class WorldCupContentsController {
                     @ApiResponse(
                             responseCode = "400",
                             description = "플레이 불가능 라운드",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     )
             }
     )

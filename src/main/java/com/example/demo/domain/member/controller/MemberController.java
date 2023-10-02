@@ -25,17 +25,18 @@ public class MemberController {
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "가입 성공"
+                            description = "가입 성공",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "validation request",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "409",
                             description = "[아이디 중복, 이메일 중복, 닉네임 중복]",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     )
             }
     )

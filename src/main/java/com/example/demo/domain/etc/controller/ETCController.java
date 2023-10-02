@@ -34,7 +34,10 @@ class ETCController {
                     @ApiResponse(
                             responseCode = "404",
                             description = "미디어 파일 없음",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = RestApiResponse.class)
+                            )
                     )
             }
     )
@@ -53,18 +56,24 @@ class ETCController {
                     @ApiResponse(
                             responseCode = "201",
                             description = "의견 작성",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = RestApiResponse.class)
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "존재하지 않는 컨텐츠",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = RestApiResponse.class)
+                            )
                     )
             }
     )
     @PostMapping("/contents/{contentsId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public RestApiResponse<WriteCommentRequest> writeComment(
+    public RestApiResponse<Object> writeComment(
             @PathVariable Long contentsId,
             @Valid @RequestBody WriteCommentRequest request
     ) {
