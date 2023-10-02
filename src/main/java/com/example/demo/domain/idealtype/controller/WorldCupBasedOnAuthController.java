@@ -101,8 +101,8 @@ public class WorldCupBasedOnAuthController {
             parameters = {
                     @Parameter(
                             name = "sort",
-                            description = "순위 정렬 근거",
-                            required = false
+                            description = "순위 정렬 근거 [LATEST, POPULARITY]",
+                            required = true
                     )
             },
             responses = {
@@ -120,7 +120,7 @@ public class WorldCupBasedOnAuthController {
     @GetMapping("/summary-ranks")
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<List<GetMyWorldCupSummaryRanksResponse>> getMyWorldCupSummaryRanks(
-            @RequestParam(name = "sort", required = false) MyWorldCupRankSort sort
+            @RequestParam(name = "sort") MyWorldCupRankSort sort
     ) {
         return new RestApiResponse(1, "", null);
     }
