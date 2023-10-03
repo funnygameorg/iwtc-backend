@@ -20,7 +20,6 @@ public class CustomExceptionHandler {
     ResponseEntity<CustomErrorResponse> webRequestValidException(
             MethodArgumentNotValidException ex
     ) {
-        log.warn("[4xx][presentation] : ");
         String invalidRequestMessage = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -48,7 +47,6 @@ public class CustomExceptionHandler {
     ResponseEntity<CustomErrorResponse> webRequestValidException(
             RuntimeException ex
     ) {
-        log.error("[5xx][internal] : ");
         return ResponseEntity
                 .internalServerError()
                 .body(

@@ -3,3 +3,5 @@ jwt:
   token-validity-milli-seconds:
     access: 20000
     refresh: 21600000
+logging:
+  config: classpath:log/logback-spring-${spring.profiles.active}.xml
