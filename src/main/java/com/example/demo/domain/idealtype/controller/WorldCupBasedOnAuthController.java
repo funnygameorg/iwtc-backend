@@ -6,6 +6,7 @@ import com.example.demo.domain.idealtype.controller.dto.response.GetMyWorldCupSu
 import com.example.demo.domain.idealtype.controller.dto.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.idealtype.controller.dto.response.GetWorldCupResponse;
 import com.example.demo.domain.idealtype.controller.vo.MyWorldCupRankSort;
+import com.example.demo.global.error.CustomErrorResponse;
 import com.example.demo.global.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,7 +47,7 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
     )
@@ -77,12 +78,12 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "월드컵 없음",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
     )
@@ -113,7 +114,7 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
     )
@@ -137,7 +138,7 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
     )
@@ -165,12 +166,12 @@ public class WorldCupBasedOnAuthController {
                     @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "월드컵 없음",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
     )

@@ -3,6 +3,7 @@ import com.example.demo.domain.etc.controller.dto.request.WriteCommentRequest;
 
 import com.example.demo.domain.etc.controller.dto.response.CreateAccessTokenResponse;
 import com.example.demo.domain.etc.controller.dto.response.MediaFileResponse;
+import com.example.demo.global.error.CustomErrorResponse;
 import com.example.demo.global.jwt.JwtService;
 import com.example.demo.global.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +37,7 @@ class ETCController {
                             description = "미디어 파일 없음",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = RestApiResponse.class)
+                                    schema = @Schema(implementation = CustomErrorResponse.class)
                             )
                     )
             }
@@ -66,7 +67,7 @@ class ETCController {
                             description = "존재하지 않는 컨텐츠",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = RestApiResponse.class)
+                                    schema = @Schema(implementation = CustomErrorResponse.class)
                             )
                     )
             }
@@ -80,7 +81,6 @@ class ETCController {
         return new RestApiResponse(1, "", null);
     }
 
-    // TODO: jwt 라이브러리 예외 응답 추가하기
     @Operation(
             summary = "새로운 액세스 토큰 반환",
             description = "리프레시 토큰을 받아 새로운 액세스 토큰을 반환합니다.",
@@ -88,7 +88,15 @@ class ETCController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "액세스 토큰 생성"
-                    )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "액세스 토큰 생성 실패",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CustomErrorResponse.class)
+                            )
+                    ),
             }
     )
     @PostMapping("/new-access-token")
@@ -96,6 +104,9 @@ class ETCController {
     public RestApiResponse<CreateAccessTokenResponse> createAccessToken(
             @RequestHeader("refresh-token") String refreshToken
     ) {
+        if(refreshToken.length() < 3) {
+            throw new RuntimeException();
+        }
         String newAccessToken = jwtService.createAccessTokenByRefreshToken(refreshToken);
         return new RestApiResponse<CreateAccessTokenResponse>(
                 1,

@@ -1,6 +1,7 @@
 package com.example.demo.domain.member.controller;
 
 import com.example.demo.domain.member.controller.dto.SignUpRequest;
+import com.example.demo.global.error.CustomErrorResponse;
 import com.example.demo.global.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,12 +32,12 @@ public class MemberController {
                     @ApiResponse(
                             responseCode = "400",
                             description = "validation request",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "409",
                             description = "[아이디 중복, 이메일 중복, 닉네임 중복]",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
     )
