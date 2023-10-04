@@ -1,5 +1,6 @@
 package com.example.demo.global.error;
 
+import com.example.demo.global.error.exception.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class CustomExceptionHandler {
                 .toList()
                 .toString();
 
+        log.warn("MethodArgumentNotValidException - {}", ex);
         return ResponseEntity
                 .badRequest()
                 .body(
@@ -40,6 +42,22 @@ public class CustomExceptionHandler {
     }
 
 
+    @ExceptionHandler(BaseException.class)
+    ResponseEntity<CustomErrorResponse> webRequestValidException(
+            BaseException ex
+    ) {
+        log.warn("BaseException {}", ex);
+        return ResponseEntity
+                .badRequest()
+                .body(
+                        new CustomErrorResponse(
+                                LocalDateTime.now(),
+                                CustomErrorCode.INVALID_DATA_FORMAT,
+                                "",
+                                "에러 고유 값"
+                        )
+                );
+    }
     /*
         핸들링하지 못한 예외
      */
@@ -47,6 +65,7 @@ public class CustomExceptionHandler {
     ResponseEntity<CustomErrorResponse> webRequestValidException(
             RuntimeException ex
     ) {
+        log.error("RuntimeException - {}", ex);
         return ResponseEntity
                 .internalServerError()
                 .body(

@@ -47,6 +47,11 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("com.mysql:mysql-connector-j")
 
+	// logack json
+	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
+	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
+	implementation("net.logstash.logback:logstash-logback-encoder:6.1")
+
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

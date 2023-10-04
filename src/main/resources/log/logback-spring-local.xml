@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanReriod="60 seconds">
 
+
+
     <conversionRule
             conversionWord="clr"
             converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <!-- 변수 설정 -->
+    <property name="BY_DATE" value="%d{yyyy-MM-dd}.%i" />
     <property name="LOG_PATH" value="./logs" />
     <property name="LOG_FILE_NAME" value="logFile" />
     <property name="LOG_PATTERN" value="[%d{HH:mm:ss.SSS}][%thread][%-5level][%logger{36}] -- %msg%n" />
+
 
 
     <!-- 콘솔 어펜더-->
@@ -19,26 +23,100 @@
         </encoder>
     </appender>
 
-    <!-- 파일 어펜더 -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-        <!-- 로그 저장 위치 -->
-        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+
+    <!--
+        파일 어펜더
+        INFO LEVEL
+    -->
+    <appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
 
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
 
-        <!-- Rollover 정책을 TimeBasedRollingPolicy로 사용-->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일 기록-->
-            <totalSizeCap>50MB</totalSizeCap>
+        <!-- 로그 저장 위치 -->
+        <file>${LOG_PATH}/info/info-${LOG_FILE_NAME}-${BY_DATE}.log</file>
+
+        <!-- 롤링 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/info/rolling/info-${LOG_FILE_NAME}-${BY_DATE}.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
-    <root level="DEBUG">
+
+
+    <!--
+        파일 어펜더
+        WARN LEVEL
+    -->
+    <appender name="FILE_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <!-- 로그 저장 위치 -->
+        <file>${LOG_PATH}/warn/warn-${LOG_FILE_NAME}-${BY_DATE}.log</file>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!-- 롤링 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/warn/rolling/warn-${LOG_FILE_NAME}-${BY_DATE}.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+
+
+    <!--
+        파일 어펜더
+        ERROR LEVEL
+    -->
+    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <!-- 로그 저장 위치 -->
+        <file>${LOG_PATH}/error/error-${LOG_FILE_NAME}-${BY_DATE}.log</file>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!-- 롤링 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/error/rolling/error-${LOG_FILE_NAME}-${BY_DATE}.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+
+
+    <root level="TRACE ">
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="FILE_WARN" />
+        <appender-ref ref="FILE_INFO" />
+        <appender-ref ref="FILE_ERROR" />
     </root>
 
     <logger name="org.hibernate" additivity="false">
