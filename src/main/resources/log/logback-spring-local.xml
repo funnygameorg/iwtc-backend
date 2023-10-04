@@ -1,31 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true" scanReriod="60 seconds">
+
+    <conversionRule
+            conversionWord="clr"
+            converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <!-- 변수 설정 -->
+    <property name="LOG_PATH" value="./logs" />
+    <property name="LOG_FILE_NAME" value="logFile" />
+    <property name="LOG_PATTERN" value="[%d{HH:mm:ss.SSS}][%thread][%-5level][%logger{36}] -- %msg%n" />
+
+
     <!-- 콘솔 어펜더-->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
+            <pattern>
+                ${LOG_PATTERN}
+            </pattern>
         </encoder>
     </appender>
 
     <!-- 파일 어펜더 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
         <!-- 로그 저장 위치 -->
-        <file>./logs/logback.log</file>
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!-- Rollover 정책을 TimeBasedRollingPolicy로 사용-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일 기록-->
             <totalSizeCap>50MB</totalSizeCap>
         </rollingPolicy>
-        <encoder>
-            <pattern>%date %level [%thread] %msg%n</pattern>
-        </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="STDOUT" />
-    </root>
-
-    <root name="org.springframework.web" level="debug">
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>
+
+    <logger name="org.hibernate" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <level value="DEBUG"/>
+    </logger>
 </configuration>
