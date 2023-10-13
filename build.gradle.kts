@@ -45,7 +45,6 @@ dependencies {
 
 	// database
 	runtimeOnly("com.h2database:h2")
-	runtimeOnly("com.mysql:mysql-connector-j")
 
 	// logack json
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")

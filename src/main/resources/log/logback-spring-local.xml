@@ -109,18 +109,10 @@
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
     </appender>
-
-
-
-    <root level="TRACE ">
+    <root level="OFF">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE_WARN" />
         <appender-ref ref="FILE_INFO" />
         <appender-ref ref="FILE_ERROR" />
     </root>
-
-    <logger name="org.hibernate" additivity="false">
-        <appender-ref ref="CONSOLE" />
-        <level value="DEBUG"/>
-    </logger>
 </configuration>

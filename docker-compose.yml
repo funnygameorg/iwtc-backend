@@ -1,6 +1,17 @@
 version: "3.0"
 services:
-
+  db:
+    container_name: h2
+    image: oscarfonts/h2:latest
+    restart: always
+    ports:
+      - 1521:1521
+      - 8081:81
+    environment:
+      H2_OPTIONS: -ifNotExists
+      restart: always
+    networks:
+      - network1
   itwc-back:
     container_name: itwc-back
     build:
@@ -13,14 +24,7 @@ services:
       - "8080:8080"
     volumes:
       - ./logs:/logs
-
-  mysql8:
-    container_name: mysql8
-    image: mysql:8.0
-    restart: always
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: a1234
-      TZ: Asia/Seoul
-    platform: linux/x86_64
+    networks:
+      - network1
+networks:
+  network1:
