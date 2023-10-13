@@ -49,7 +49,6 @@ dependencies {
 	// logack json
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
 	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
-	implementation("net.logstash.logback:logstash-logback-encoder:6.1")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

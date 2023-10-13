@@ -28,7 +28,7 @@ public class CustomExceptionHandler {
                 .toList()
                 .toString();
 
-        log.warn("MethodArgumentNotValidException - {}", ex);
+        log.info("MethodArgumentNotValidException - {}", invalidRequestMessage);
         return ResponseEntity
                 .badRequest()
                 .body(
@@ -46,7 +46,7 @@ public class CustomExceptionHandler {
     ResponseEntity<CustomErrorResponse> webRequestValidException(
             BaseException ex
     ) {
-        log.warn("BaseException {}", ex);
+        log.info("BaseException {}", ex);
         return ResponseEntity
                 .badRequest()
                 .body(
@@ -65,7 +65,7 @@ public class CustomExceptionHandler {
     ResponseEntity<CustomErrorResponse> webRequestValidException(
             RuntimeException ex
     ) {
-        log.error("RuntimeException - {}", ex);
+        log.warn("RuntimeException - {}", ex);
         return ResponseEntity
                 .internalServerError()
                 .body(

@@ -10,8 +10,6 @@ services:
     environment:
       H2_OPTIONS: -ifNotExists
       restart: always
-    networks:
-      - network1
   itwc-back:
     container_name: itwc-back
     build:
@@ -24,7 +22,3 @@ services:
       - "8080:8080"
     volumes:
       - ./logs:/logs
-    networks:
-      - network1
-networks:
-  network1:

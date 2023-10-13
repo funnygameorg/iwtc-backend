@@ -10,12 +10,17 @@
     <property name="BY_DATE" value="%d{yyyy-MM-dd-HH-mm}.%i" />
     <property name="LOG_PATH" value="./logs" />
     <property name="LOG_FILE_NAME" value="logFile" />
-    <property name="LOG_PATTERN" value="[%d{HH:mm:ss.SSS}][%thread][%-5level][%logger{36}] -- %msg%n" />
+    <property name="LOG_PATTERN" value="[%X{request_id:-startup}][%d{HH:mm:ss.SSS}][%thread][%-5level][%logger{36}] -- %msg%n" />
 
 
 
-    <!-- 콘솔 어펜더-->
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- DEBUG 콘솔 어펜더-->
+    <appender name="CONSOLE_DEBUG" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
         <encoder>
             <pattern>
                 ${LOG_PATTERN}
@@ -23,12 +28,25 @@
         </encoder>
     </appender>
 
+    <!-- INFO 콘솔 어펜더-->
+    <appender name="CONSOLE_INFO" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+            <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSX</timestampFormat>
+            <timestampFormatTimezoneId>Etc/UTC</timestampFormatTimezoneId>
+            <appendLineSeparator>true</appendLineSeparator>
+            <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                <prettyPrint>true</prettyPrint>
+            </jsonFormatter>
+        </layout>
+    </appender>
 
 
-    <!--
-        파일 어펜더
-        INFO LEVEL
-    -->
+    <!-- INFO 파일 어펜더 -->
     <appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
@@ -36,8 +54,15 @@
             <onMismatch>DENY</onMismatch>
         </filter>
 
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSX</timestampFormat>
+                <timestampFormatTimezoneId>Etc/UTC</timestampFormatTimezoneId>
+                <appendLineSeparator>true</appendLineSeparator>
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    <prettyPrint>true</prettyPrint>
+                </jsonFormatter>
+            </layout>
         </encoder>
 
         <!-- 로그 저장 위치 -->
@@ -54,10 +79,7 @@
 
 
 
-    <!--
-        파일 어펜더
-        WARN LEVEL
-    -->
+    <!-- WARN 파일 어펜더 -->
     <appender name="FILE_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
@@ -68,8 +90,15 @@
         <!-- 로그 저장 위치 -->
         <file>${LOG_PATH}/warn/warn-${LOG_FILE_NAME}.log</file>
 
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSX</timestampFormat>
+                <timestampFormatTimezoneId>Etc/UTC</timestampFormatTimezoneId>
+                <appendLineSeparator>true</appendLineSeparator>
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    <prettyPrint>true</prettyPrint>
+                </jsonFormatter>
+            </layout>
         </encoder>
 
         <!-- 롤링 정책 -->
@@ -83,10 +112,7 @@
 
 
 
-    <!--
-        파일 어펜더
-        ERROR LEVEL
-    -->
+    <!-- ERROR 파일 어펜더 -->
     <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
@@ -97,8 +123,15 @@
         <!-- 로그 저장 위치 -->
         <file>${LOG_PATH}/error/error-${LOG_FILE_NAME}.log</file>
 
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSX</timestampFormat>
+                <timestampFormatTimezoneId>Etc/UTC</timestampFormatTimezoneId>
+                <appendLineSeparator>true</appendLineSeparator>
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    <prettyPrint>true</prettyPrint>
+                </jsonFormatter>
+            </layout>
         </encoder>
 
         <!-- 롤링 정책 -->
@@ -109,8 +142,9 @@
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
     </appender>
-    <root level="OFF">
-        <appender-ref ref="CONSOLE" />
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE_INFO" />
+        <appender-ref ref="CONSOLE_DEBUG" />
         <appender-ref ref="FILE_WARN" />
         <appender-ref ref="FILE_INFO" />
         <appender-ref ref="FILE_ERROR" />
