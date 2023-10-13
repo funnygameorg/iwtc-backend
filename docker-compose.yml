@@ -1,0 +1,26 @@
+version: "3.0"
+services:
+
+  itwc-back:
+    container_name: itwc-back
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SPRING_PROFILES_ACTIVE: local
+    image: itwc-back
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/logs
+
+  mysql8:
+    container_name: mysql8
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: a1234
+      TZ: Asia/Seoul
+    platform: linux/x86_64
