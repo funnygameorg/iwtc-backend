@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static com.example.demo.common.error.CustomErrorCode.INVALID_CLIENT_REQUEST_BODY;
+import static com.example.demo.common.error.CustomErrorCode.SERVER_INTERNAL_ERROR;
 
 @Slf4j
 @RestControllerAdvice
@@ -34,9 +38,9 @@ public class CustomExceptionHandler {
                 .body(
                         new CustomErrorResponse(
                                 LocalDateTime.now(),
-                                CustomErrorCode.INVALID_DATA_FORMAT,
+                                INVALID_CLIENT_REQUEST_BODY,
                                 invalidRequestMessage,
-                                "에러 고유 값"
+                                UUID.randomUUID().toString()
                         )
                 );
     }
@@ -51,10 +55,10 @@ public class CustomExceptionHandler {
                 .badRequest()
                 .body(
                         new CustomErrorResponse(
-                                LocalDateTime.now(),
-                                CustomErrorCode.INVALID_DATA_FORMAT,
-                                "",
-                                "에러 고유 값"
+                                ex.getErrorTime(),
+                                ex.getErrorCode(),
+                                ex.getMessage(),
+                                ex.getErrorId()
                         )
                 );
     }
@@ -71,9 +75,9 @@ public class CustomExceptionHandler {
                 .body(
                         new CustomErrorResponse(
                                 LocalDateTime.now(),
-                                CustomErrorCode.SERVER_INTERNAL_ERROR,
-                                "invalidRequestMessage",
-                                "에러 고유 값"
+                                SERVER_INTERNAL_ERROR,
+                                "관리자에게 연락해주세요.",
+                                UUID.randomUUID().toString()
                         )
                 );
     }

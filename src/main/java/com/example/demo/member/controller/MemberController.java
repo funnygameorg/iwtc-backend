@@ -3,14 +3,18 @@ package com.example.demo.member.controller;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
+import com.example.demo.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Tag(
         name = "Member",
@@ -18,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping("/members")
+@RequiredArgsConstructor
 public class MemberController {
+
+    private final MemberService memberService;
 
     @Operation(
             summary = "일반 회원가입",
@@ -36,7 +43,7 @@ public class MemberController {
                     ),
                     @ApiResponse(
                             responseCode = "409",
-                            description = "[아이디 중복, 이메일 중복, 닉네임 중복]",
+                            description = "[아이디 중복, 닉네임 중복]",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
@@ -46,6 +53,7 @@ public class MemberController {
     public RestApiResponse<Object> signUp(
             @Valid @RequestBody SignUpRequest request
     ) {
+        memberService.signUp(request, LocalDateTime.now());
         return new RestApiResponse(
                 1,
                 "가입 성공",

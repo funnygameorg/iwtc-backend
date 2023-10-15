@@ -11,8 +11,6 @@ spring:
     username: sa
     password:
   jpa:
-    database: mysql   # 추가 해준 부분
-    database-platform: org.hibernate.dialect.MySQL8Dialect # 추가 해준 부분
     hibernate:
       ddl-auto: create
     properties:
@@ -25,4 +23,4 @@ jwt:
     access: 20000
     refresh: 21600000
 logging:
-  config: classpath:log/logback-spring-${spring.profiles.active}.xml
+  config: classpath:log/logback-spring-local.xml

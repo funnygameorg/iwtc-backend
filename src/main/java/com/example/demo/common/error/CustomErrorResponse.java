@@ -13,11 +13,11 @@ public class CustomErrorResponse {
 
     public CustomErrorResponse(
             LocalDateTime errorTime,
-            CustomErrorCode httpErrorCode,
+            CustomErrorCode errorCode,
             String message,
             String errorId
     ) {
-        this.customErrorCode = httpErrorCode;
+        this.customErrorCode = errorCode;
         this.errorTime = errorTime;
         this.message = message;
         this.errorId = errorId;
