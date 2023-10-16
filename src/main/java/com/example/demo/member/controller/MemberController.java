@@ -7,6 +7,7 @@ import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,7 +73,10 @@ public class MemberController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "로그인 성공",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class)),
+                            headers = {
+                                    @Header(name="access-token", description = "엑세스 토큰"),
+                                    @Header(name="refresh-token", description = "리프레시 토큰")}
                     ),
                     @ApiResponse(
                             responseCode = "404",
