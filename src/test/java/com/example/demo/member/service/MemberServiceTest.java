@@ -5,7 +5,7 @@ import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.member.exception.DuplicatedNicknameException;
 import com.example.demo.member.exception.DuplicatedServiceIdException;
-import com.example.demo.member.exception.NotFoundMember;
+import com.example.demo.member.exception.NotFoundMemberException;
 import com.example.demo.member.model.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -150,7 +150,7 @@ public class MemberServiceTest {
 
         // when then
         assertThrows(
-                NotFoundMember.class,
+                NotFoundMemberException.class,
                 () ->sut.signIn(request)
         );
 

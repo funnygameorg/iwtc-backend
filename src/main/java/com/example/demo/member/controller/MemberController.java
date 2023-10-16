@@ -65,6 +65,28 @@ public class MemberController {
                 .build();
     }
 
+    @Operation(
+            summary = "로그인",
+            description = "로그인을 하고 access, refresh token을 반환합니다.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "로그인 성공",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "사용자의 로그인 요청에 일치하는 멤버 정보가 없음",
+                            content = @Content(
+                                    mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "validation request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
     @PostMapping("/sign-in")
     @ResponseStatus(OK)
     public RestApiResponse signIn(

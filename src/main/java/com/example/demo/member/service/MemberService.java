@@ -5,7 +5,7 @@ import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.member.exception.DuplicatedNicknameException;
 import com.example.demo.member.exception.DuplicatedServiceIdException;
-import com.example.demo.member.exception.NotFoundMember;
+import com.example.demo.member.exception.NotFoundMemberException;
 import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
 import com.example.demo.member.service.dto.SignInResponse;
@@ -51,7 +51,7 @@ public class MemberService {
                 );
 
         if(!existsMember) {
-            throw new NotFoundMember();
+            throw new NotFoundMemberException();
         }
 
         String refreshToken = jwtService.createRefreshToken(request.serviceId());
