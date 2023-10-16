@@ -1,20 +1,24 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.member.service.MemberService;
+import com.example.demo.member.service.dto.SignInResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Tag(
         name = "Member",
@@ -49,15 +53,33 @@ public class MemberController {
             }
     )
     @PostMapping("/sign-up")
-    @ResponseStatus(HttpStatus.CREATED)
-    public RestApiResponse<Object> signUp(
+    @ResponseStatus(CREATED)
+    public RestApiResponse signUp(
             @Valid @RequestBody SignUpRequest request
     ) {
         memberService.signUp(request, LocalDateTime.now());
-        return new RestApiResponse(
-                1,
-                "가입 성공",
-                null
-        );
+        return RestApiResponse.builder()
+                .code(1)
+                .message("가입 성공")
+                .data(null)
+                .build();
+    }
+
+    @PostMapping("/sign-in")
+    @ResponseStatus(OK)
+    public RestApiResponse signIn(
+            @Valid @RequestBody SignInRequest request,
+            HttpServletResponse httpServletResponse
+    ) {
+        SignInResponse response = memberService.signIn(request);
+
+        httpServletResponse.addHeader("access-token", response.accessToken());
+        httpServletResponse.addHeader("refresh-token", response.refreshToken());
+
+        return RestApiResponse.builder()
+                .code(1)
+                .message("로그인 성공")
+                .data(null)
+                .build();
     }
 }

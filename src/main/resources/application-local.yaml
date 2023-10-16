@@ -18,7 +18,7 @@ spring:
         format_sql: true
 
 jwt:
-  secret: glgful8fLHILImISgmxcq123458C76wrqwmrnJFfn5585j3602r8rt29f9
+  secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
   token-validity-milli-seconds:
     access: 20000
     refresh: 21600000

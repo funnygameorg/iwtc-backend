@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberQueryRepository {
 
-    int existsNickname(String nickname);
-    int existsServiceId(String serviceId);
+    Boolean existsNickname(String nickname);
+    Boolean existsServiceId(String serviceId);
+    Boolean existsMemberWithServiceIdAndPassword(String serviceId, String password);
 }
