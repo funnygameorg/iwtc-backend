@@ -1,17 +1,13 @@
 package com.example.demo.member.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.demo.common.jpa.TimeBaseEntity;
+import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,22 +19,15 @@ public class Member {
 
     private String password;
 
-    private LocalDateTime signUpdate;
-
     @Builder
-    public Member(String serviceId, String nickname, String password, LocalDateTime signUpdate) {
+    public Member(Long id, String serviceId, String nickname, String password) {
+        this.id = id;
         this.serviceId = serviceId;
         this.nickname = nickname;
         this.password = password;
-        this.signUpdate = signUpdate;
     }
-    public static Member signUp(String serviceId, String nickname, String password, LocalDateTime signUpDate) {
-        Member instance = new Member();
-        instance.serviceId = serviceId;
-        instance.nickname = nickname;
-        instance.password = password;
-        instance.signUpdate = signUpDate;
 
-        return instance;
+    public static Member signUp(String serviceId, String nickname, String password) {
+        return new Member(null, serviceId, nickname, password);
     }
 }
