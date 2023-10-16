@@ -25,21 +25,20 @@ public class MemberService {
     private final JwtService jwtService;
 
     @Transactional
-    public void signUp(@Valid SignUpRequest request, LocalDateTime requestDate) {
-        Member newMember = Member.signUp(
-                request.serviceId(),
-                request.nickname(),
-                request.password(),
-                requestDate
-        );
+    public void signUp(SignUpRequest request) {
 
-        if(memberRepository.existsNickname(newMember.getNickname())) {
+        if(memberRepository.existsNickname(request.nickname())) {
             throw new DuplicatedNicknameException();
         }
-        if(memberRepository.existsServiceId(newMember.getServiceId())) {
+        if(memberRepository.existsServiceId(request.serviceId())) {
             throw new DuplicatedServiceIdException();
         }
 
+        Member newMember = Member.signUp(
+                request.serviceId(),
+                request.nickname(),
+                request.password()
+        );
         memberRepository.save(newMember);
     }
 

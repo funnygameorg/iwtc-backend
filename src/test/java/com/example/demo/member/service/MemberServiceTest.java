@@ -46,7 +46,7 @@ public class MemberServiceTest {
                 .build();
 
         // When
-        sut.signUp(request, signUpDate);
+        sut.signUp(request);
 
         then(memberRepository)
                 .should(times(1))
@@ -72,7 +72,7 @@ public class MemberServiceTest {
         // when then
         assertThrows(
                 DuplicatedNicknameException.class,
-                () -> sut.signUp(request, signUpDate)
+                () -> sut.signUp(request)
         );
 
         then(memberRepository)
@@ -99,7 +99,7 @@ public class MemberServiceTest {
         // when then
         assertThrows(
                 DuplicatedServiceIdException.class,
-                () -> sut.signUp(request, signUpDate)
+                () -> sut.signUp(request)
         );
 
         then(memberRepository)

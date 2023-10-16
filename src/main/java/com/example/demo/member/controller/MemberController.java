@@ -58,7 +58,7 @@ public class MemberController {
     public RestApiResponse signUp(
             @Valid @RequestBody SignUpRequest request
     ) {
-        memberService.signUp(request, LocalDateTime.now());
+        memberService.signUp(request);
         return RestApiResponse.builder()
                 .code(1)
                 .message("가입 성공")

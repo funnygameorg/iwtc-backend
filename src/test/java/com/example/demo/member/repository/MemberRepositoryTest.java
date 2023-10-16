@@ -22,12 +22,10 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("사용자의 서비스 아이디가 있다면 true를 반환한다.")
     public void Return1_If_ExistsServiceId() {
-        LocalDateTime signUpDate = LocalDateTime.of(2022, 10, 1, 1, 1, 1);
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
                 .password("A")
-                .signUpdate(signUpDate)
                 .build();
         sut.save(member);
 
@@ -39,12 +37,10 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("사용자의 서비스 아이디가 없다면 false을 반환한다.")
     public void Return0_If_NotExistsServiceId() {
-        LocalDateTime signUpDate = LocalDateTime.of(2022, 10, 1, 1, 1, 1);
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
                 .password("A")
-                .signUpdate(signUpDate)
                 .build();
         sut.save(member);
 
@@ -56,12 +52,10 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("사용자의 서비스 아이디가 있다면 true를 반환한다.")
     public void Return1_If_ExistsNickname() {
-        LocalDateTime signUpDate = LocalDateTime.of(2022, 10, 1, 1, 1, 1);
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
                 .password("A")
-                .signUpdate(signUpDate)
                 .build();
         sut.save(member);
 
@@ -73,12 +67,10 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("사용자의 서비스 아이디가 없다면 false를 반환한다.")
     public void Return0_If_NotExistsNickname() {
-        LocalDateTime signUpDate = LocalDateTime.of(2022, 10, 1, 1, 1, 1);
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
                 .password("A")
-                .signUpdate(signUpDate)
                 .build();
         sut.save(member);
 
@@ -90,12 +82,10 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("서비스 아이디는 일치하나 사용자의 다른 패스워드로 조회할 때 false를 반환한다.")
     public void return_false_if_notExistsMember() {
-        LocalDateTime signUpDate = LocalDateTime.of(2022, 10, 1, 1, 1, 1);
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
                 .password("B")
-                .signUpdate(signUpDate)
                 .build();
         sut.save(member);
 
@@ -107,12 +97,10 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("서비스 아이디와 패스워드로 검색한 사용자가 존재한다면 true를 반환한다.")
     public void return_true_if_existsMember() {
-        LocalDateTime signUpDate = LocalDateTime.of(2022, 10, 1, 1, 1, 1);
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
                 .password("A")
-                .signUpdate(signUpDate)
                 .build();
         sut.save(member);
 
@@ -124,12 +112,10 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("존재하지 않는 서비스 아이디와 패스워드로 검색한다면 false를 반환한다.")
     public void return_false_if_not_exists_id_and_password() {
-        LocalDateTime signUpDate = LocalDateTime.of(2022, 10, 1, 1, 1, 1);
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
                 .password("A")
-                .signUpdate(signUpDate)
                 .build();
         sut.save(member);
 
