@@ -33,7 +33,7 @@ public class Member extends TimeBaseEntity {
 
     @Override
     public int hashCode() {
-        return id.intValue();
+        return id == null? 0 : id.intValue();
     }
 
     @Builder
