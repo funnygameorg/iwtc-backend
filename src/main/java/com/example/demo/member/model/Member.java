@@ -28,12 +28,12 @@ public class Member extends TimeBaseEntity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
         Member member = (Member) o;
-        return Objects.equals(id, member.id);
+        return Objects.equals(serviceId, member.serviceId) && Objects.equals(password, member.password);
     }
 
     @Override
     public int hashCode() {
-        return id == null? 0 : id.intValue();
+        return serviceId.hashCode() + password.hashCode();
     }
 
     @Builder
