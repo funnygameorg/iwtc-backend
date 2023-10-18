@@ -3,10 +3,14 @@ package com.example.demo.member.controller;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
+import com.example.demo.member.exception.NotFoundMemberException;
+import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.constraints.AssertTrue;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +25,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Locale;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.*;
@@ -51,6 +57,7 @@ class MemberControllerTest {
     private final String VERIFY_DUPLICATED_ID_API = "/members/duplicated-check/service-id";
     private final String VERIFY_DUPLICATED_NICKNAME_API = "/members/duplicated-check/nickname";
 
+    private final String GET_MY_SUMMARY_API = "/members/me/summary";
 
     @DisplayName("회원가입 성공")
     @Test
@@ -309,5 +316,52 @@ class MemberControllerTest {
                                 .params(param)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("자기 자신 로그인 정보 조회 성공")
+    public void 로그인_정보_조회() throws Exception{
+        Member member = Member.builder()
+                .id(1L)
+                .serviceId("A")
+                .nickname("A")
+                .password("A")
+                .build();
+        given(jwtService.getPayLoadByToken(any()))
+                .willReturn(1L);
+        given(memberRepository.findById(any()))
+                .willReturn(Optional.of(member));
+
+        // when then
+        mockMvc.perform(
+                        get(GET_MY_SUMMARY_API)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value("1"))
+                .andExpect(jsonPath("$.data.serviceId").value("A"))
+                .andExpect(jsonPath("$.data.nickname").value("A"));
+    }
+    @Test
+    @DisplayName("자기 자신 로그인 정보 조회 실패 - 존재하지 않는 사용자")
+    public void 로그인_정보_조회_실패() throws Exception{
+        Member member = Member.builder()
+                .id(1L)
+                .serviceId("A")
+                .nickname("A")
+                .password("A")
+                .build();
+        given(jwtService.getPayLoadByToken(any()))
+                .willReturn(1L);
+        given(memberRepository.findById(any()))
+                .willReturn(Optional.empty());
+
+        // when then
+        mockMvc.perform(
+                        get(GET_MY_SUMMARY_API)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> {
+                    assert result.getResolvedException() instanceof NotFoundMemberException;
+                });
     }
 }

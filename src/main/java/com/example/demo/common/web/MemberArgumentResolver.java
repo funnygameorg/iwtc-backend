@@ -37,9 +37,9 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
             WebDataBinderFactory binderFactory
     ) throws Exception {
         String accessToken = webRequest.getHeader("access-token");
-        Long serviceId = Long.parseLong(jwtService.getPayLoadByToken(accessToken));
+        Long memberId = jwtService.getPayLoadByToken(accessToken);
         Member member = memberRepository
-                .findById(serviceId)
+                .findById(memberId)
                 .orElseThrow(NotFoundMemberException::new);
 
         return MemberDto.fromEntity(member);

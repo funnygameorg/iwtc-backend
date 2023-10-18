@@ -29,35 +29,43 @@ public class JwtService {
     }
 
 
-    public String getPayLoadByToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secret)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("id", String.class);
+    public Long getPayLoadByToken(String token) {
+        try{
+            return Jwts.parserBuilder()
+                    .setSigningKey(secret)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get("id", Long.class);
+        } catch (
+                SecurityException |
+                ExpiredJwtException |
+                MalformedJwtException |
+                UnsupportedJwtException |
+                IllegalArgumentException e
+        ) {
+            throw new AuthenticationTokenException(e.getMessage());
+        }
     }
 
-    public String createAccessTokenByServiceId(String serviceId) {
-        return createToken(serviceId, accessTokenValidityMilliSeconds);
+    public String createAccessTokenById(Long id) {
+        return createToken(id, accessTokenValidityMilliSeconds);
+    }
+    public String createRefreshTokenById(Long id) {
+        return createToken(id, refreshTokenValidityMilliSeconds);
     }
 
     public String createAccessTokenByRefreshToken(String refreshToken) {
-        String serviceId = getPayLoadByToken(refreshToken);
-        return createToken(serviceId, accessTokenValidityMilliSeconds);
+        Long id = getPayLoadByToken(refreshToken);
+        return createToken(id, accessTokenValidityMilliSeconds);
     }
 
-    public String createRefreshToken(String serviceId) {
-        return createToken(serviceId, refreshTokenValidityMilliSeconds);
-    }
-
-    private String createToken(String serviceId, long tokenValidityMilliSeconds) {
+    private String createToken(Long id, long tokenValidityMilliSeconds) {
         long now = System.currentTimeMillis();
         Date validity = new Date(now + tokenValidityMilliSeconds);
 
         return Jwts.builder()
-                .setSubject(serviceId)
-                .claim("serviceId", serviceId)
+                .claim("id", id)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();

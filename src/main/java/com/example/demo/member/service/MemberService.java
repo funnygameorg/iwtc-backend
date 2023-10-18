@@ -46,13 +46,12 @@ public class MemberService {
     }
 
     public SignInResponse signIn(SignInRequest request) {
-        String memberId = memberRepository
+        Long memberId = memberRepository
                 .findByMemberIdByServiceIdAndPassword(request.serviceId(), request.password())
-                .orElseThrow(NotFoundMemberException::new)
-                .toString();
+                .orElseThrow(NotFoundMemberException::new);
 
-        String refreshToken = jwtService.createRefreshToken(memberId);
-        String accessToken = jwtService.createAccessTokenByServiceId(memberId);
+        String refreshToken = jwtService.createRefreshTokenById(memberId);
+        String accessToken = jwtService.createAccessTokenById(memberId);
 
         return SignInResponse.builder()
                 .accessToken(accessToken)

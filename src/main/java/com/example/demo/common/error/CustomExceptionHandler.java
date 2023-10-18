@@ -71,7 +71,7 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(BaseException.class)
-    ResponseEntity<CustomErrorResponse> webRequestValidException(
+    ResponseEntity<CustomErrorResponse> handledException(
             BaseException ex
     ) {
         log.info("BaseException {}", ex);
@@ -90,7 +90,7 @@ public class CustomExceptionHandler {
         핸들링하지 못한 예외
      */
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<CustomErrorResponse> webRequestValidException(
+    ResponseEntity<CustomErrorResponse> notHandledException(
             RuntimeException ex
     ) {
         log.warn("RuntimeException - {}", ex);

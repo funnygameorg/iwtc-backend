@@ -133,11 +133,11 @@ public class MemberServiceTest {
 
         then(jwtService)
                 .should(times(1))
-                .createAccessTokenByServiceId(memberId.get().toString());
+                .createAccessTokenById(memberId.get());
 
         then(jwtService)
                 .should(times(1))
-                .createRefreshToken(memberId.get().toString());
+                .createRefreshTokenById(memberId.get());
     }
 
     @Test
@@ -166,11 +166,11 @@ public class MemberServiceTest {
 
         then(jwtService)
                 .should(never())
-                .createAccessTokenByServiceId(any());
+                .createAccessTokenById(any());
 
         then(jwtService)
                 .should(never())
-                .createRefreshToken(any());
+                .createRefreshTokenById(any());
     }
     
     @Test

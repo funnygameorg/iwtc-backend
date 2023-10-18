@@ -1,6 +1,8 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.common.web.MemberDto;
 import com.example.demo.common.web.validation.NoSpace;
+import com.example.demo.member.controller.dto.GetMySummaryResponse;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.common.error.CustomErrorResponse;
@@ -144,6 +146,21 @@ public class MemberController {
         return RestApiResponse.builder()
                 .code(1)
                 .message("닉네임 검증 성공")
+                .data(response)
+                .build();
+    }
+    @GetMapping("/me/summary")
+    @ResponseStatus(OK)
+    public RestApiResponse getMySummary(MemberDto memberDto) {
+        GetMySummaryResponse response = new GetMySummaryResponse(
+                memberDto.id(),
+                memberDto.serviceId(),
+                memberDto.nickname()
+        );
+
+        return RestApiResponse.builder()
+                .code(1)
+                .message("정보 조회 성공")
                 .data(response)
                 .build();
     }
