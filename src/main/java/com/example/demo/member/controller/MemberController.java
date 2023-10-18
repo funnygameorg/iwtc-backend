@@ -12,6 +12,8 @@ import com.example.demo.member.service.dto.SignInResponse;
 import com.example.demo.member.service.dto.VerifyDuplicatedNicknameResponse;
 import com.example.demo.member.service.dto.VerifyDuplicatedServiceIdResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -117,6 +119,22 @@ public class MemberController {
                 .data(null)
                 .build();
     }
+    @Operation(
+            summary = "서비스 아이디 중복 확인",
+            description = "서비스 아이디 중복 확인 합니다. true/false 반환",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "중복 확인에 대한 결과를 true/false 반환",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "validation request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
 
     @GetMapping("/duplicated-check/service-id")
     @ResponseStatus(OK)
@@ -134,6 +152,22 @@ public class MemberController {
                 .build();
     }
 
+    @Operation(
+            summary = "닉네임 중복 확인",
+            description = "닉네임 중복 확인 합니다. true/false 반환",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "중복 확인에 대한 결과를 true/false 반환",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "validation request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
     @GetMapping("/duplicated-check/nickname")
     @ResponseStatus(OK)
     public RestApiResponse verifyDuplicatedNickname(
@@ -149,9 +183,42 @@ public class MemberController {
                 .data(response)
                 .build();
     }
+
+    @Operation(
+            summary = "token의 id를 참조해 자신의 정보를 반환",
+            description = "간략화된 정보를 제공합니다. (access-token을 헤더에 넣어서 요청)",
+            parameters = {
+                    @Parameter(
+                            in = ParameterIn.HEADER,
+                            name = "access-token",
+                            required = true,
+                            description = "Access Token",
+                            schema = @Schema(type = "string")
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "조회 성공",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "토큰으로 인한 예외",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 사용자의 요청",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
     @GetMapping("/me/summary")
     @ResponseStatus(OK)
-    public RestApiResponse getMySummary(MemberDto memberDto) {
+    public RestApiResponse getMySummary(
+            @Parameter(hidden = true) MemberDto memberDto
+    ) {
         GetMySummaryResponse response = new GetMySummaryResponse(
                 memberDto.id(),
                 memberDto.serviceId(),
