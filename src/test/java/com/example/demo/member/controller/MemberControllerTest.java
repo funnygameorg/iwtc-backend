@@ -15,6 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Locale;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -39,6 +44,7 @@ class MemberControllerTest {
 
     private final String SIGN_UP_API = "/members/sign-up";
     private final String LOGIN_API = "/members/sign-in";
+    private final String VERIFY_DUPLICATED_ID_API = "/members/duplicated-check/service-id";
 
     @DisplayName("회원가입 성공")
     @Test
@@ -204,13 +210,54 @@ class MemberControllerTest {
                 .serviceId("AAAA@32fSD")
                 .password(password)
                 .build();
-
+        // when then
         mockMvc.perform(
                         post(LOGIN_API)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "AAAAAAF",
+            "AABAB124",
+            "12345aZ",
+            "123fffFfAA",
+            "aaaaaaa",
+            "1231231231"}
+    )
+    @DisplayName("serviceId 중복 검사 - 성공")
+    public void 서비스_아이디_중복_검사_성공(String serviceId) throws Exception{
+        MultiValueMap<String, String> param = new LinkedMultiValueMap();
+        param.add("serviceId", serviceId);
+
         // when then
+        mockMvc.perform(
+                        get(VERIFY_DUPLICATED_ID_API)
+                                .params(param)
+                )
+                .andExpect(status().isOk());
+    }
+    @ParameterizedTest
+    @CsvSource(value = {
+            "AAAAA",
+            "AAAAAAAAAAAAAAAAAAAA1",
+            " A A B A B A ",
+            "123",
+            "Θ\nΘ\n"}
+    )
+    @DisplayName("serviceId 중복 검사 - 실패")
+    public void 서비스_아이디_중복_검사_실패(String serviceId) throws Exception{
+        MultiValueMap<String, String> param = new LinkedMultiValueMap();
+        param.add("serviceId", serviceId);
+
+        // when then
+        mockMvc.perform(
+                        get(VERIFY_DUPLICATED_ID_API)
+                                .params(param)
+                )
+                .andExpect(status().isBadRequest());
     }
 }

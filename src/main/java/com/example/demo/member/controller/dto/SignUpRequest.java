@@ -9,7 +9,7 @@ import lombok.Builder;
 @Builder
 public record SignUpRequest (
         @Schema(description = "서비스에서 사용하는 아이디")
-        @Size(min=6, max = 20, message = "사용자 아이디 : 6자리 이상, 10자리 이하")
+        @Size(min=6, max = 20, message = "사용자 아이디 : 6자리 이상, 20자리 이하")
         @NoSpace
         String serviceId,
 

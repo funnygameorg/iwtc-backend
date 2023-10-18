@@ -1,6 +1,8 @@
 package com.example.demo.common.error;
 
 import com.example.demo.common.error.exception.BaseException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ public class CustomExceptionHandler {
         사용자가 요청안에 양식에 부합하지 않은 데이터를 포함
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<CustomErrorResponse> webRequestValidException(
+    ResponseEntity<CustomErrorResponse> invalidRequestException(
             MethodArgumentNotValidException ex
     ) {
         String invalidRequestMessage = ex.getBindingResult()
@@ -32,7 +34,7 @@ public class CustomExceptionHandler {
                 .toList()
                 .toString();
 
-        log.info("MethodArgumentNotValidException - {}", invalidRequestMessage);
+        log.info("invalidRequestException - {}", invalidRequestMessage);
         return ResponseEntity
                 .badRequest()
                 .body(
@@ -45,6 +47,28 @@ public class CustomExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    ResponseEntity<CustomErrorResponse> invalidRequestException2(
+            ConstraintViolationException ex
+    ) {
+        String invalidRequestMessage = ex.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .toList()
+                .toString();
+
+        log.info("invalidRequestException - {}", invalidRequestMessage);
+        return ResponseEntity
+                .badRequest()
+                .body(
+                        new CustomErrorResponse(
+                                LocalDateTime.now(),
+                                INVALID_CLIENT_REQUEST_BODY,
+                                invalidRequestMessage,
+                                UUID.randomUUID().toString()
+                        )
+                );
+    }
 
     @ExceptionHandler(BaseException.class)
     ResponseEntity<CustomErrorResponse> webRequestValidException(

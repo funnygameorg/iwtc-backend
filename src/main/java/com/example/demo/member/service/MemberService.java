@@ -9,6 +9,7 @@ import com.example.demo.member.exception.NotFoundMemberException;
 import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
 import com.example.demo.member.service.dto.SignInResponse;
+import com.example.demo.member.service.dto.VerifyDuplicatedServiceIdResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,10 @@ public class MemberService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public VerifyDuplicatedServiceIdResponse existsServiceId(String serviceId) {
+        Boolean isDuplicated = memberRepository.existsServiceId(serviceId);
+        return new VerifyDuplicatedServiceIdResponse(isDuplicated);
     }
 }

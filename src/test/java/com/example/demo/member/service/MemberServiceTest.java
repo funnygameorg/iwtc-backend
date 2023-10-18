@@ -3,6 +3,7 @@ package com.example.demo.member.service;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
+import com.example.demo.member.service.dto.VerifyDuplicatedServiceIdResponse;
 import com.example.demo.member.exception.DuplicatedNicknameException;
 import com.example.demo.member.exception.DuplicatedServiceIdException;
 import com.example.demo.member.exception.NotFoundMemberException;
@@ -166,4 +167,37 @@ public class MemberServiceTest {
                 .should(never())
                 .createRefreshToken(any());
     }
+    
+    @Test
+    @DisplayName("아이디 중복 체크 - 중복된 아이디가 없다.")
+    public void 제공한_아이디가_중복된_아이디인가_중복X() {
+        String serviceId = "testServiceID";
+        given(memberRepository.existsServiceId(serviceId))
+                .willReturn(false);
+
+        VerifyDuplicatedServiceIdResponse response = sut.existsServiceId(serviceId);
+
+        then(memberRepository)
+                .should(times(1))
+                .existsServiceId(serviceId);
+
+        assert !response.isDuplicatedServiceId();
+    }
+
+    @Test
+    @DisplayName("아이디 중복 체크 - 중복된 아이디가 있다.")
+    public void 제공한_아이디가_중복된_아이디인가_중복O() {
+        String serviceId = "testServiceID";
+        given(memberRepository.existsServiceId(serviceId))
+                .willReturn(true);
+
+        VerifyDuplicatedServiceIdResponse response = sut.existsServiceId(serviceId);
+
+        then(memberRepository)
+                .should(times(1))
+                .existsServiceId(serviceId);
+
+        assert response.isDuplicatedServiceId();
+    }
+
 }
