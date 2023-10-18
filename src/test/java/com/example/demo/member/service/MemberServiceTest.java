@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -117,9 +118,10 @@ public class MemberServiceTest {
                 .serviceId("LoginRequesterId")
                 .password("tempPassword")
                 .build();
+        Optional<Long> memberId = Optional.of(1L);
         // 사용자의 정보가 DB에 있다면
-        given(memberRepository.existsMemberWithServiceIdAndPassword(any(), any()))
-                .willReturn(true);
+        given(memberRepository.findByMemberIdByServiceIdAndPassword(any(), any()))
+                .willReturn(memberId);
 
         // when
         sut.signIn(request);
@@ -127,15 +129,15 @@ public class MemberServiceTest {
         // then
         then(memberRepository)
                 .should(times(1))
-                        .existsMemberWithServiceIdAndPassword(any(), any());
+                        .findByMemberIdByServiceIdAndPassword(any(), any());
 
         then(jwtService)
                 .should(times(1))
-                .createAccessTokenByServiceId(any());
+                .createAccessTokenByServiceId(memberId.get().toString());
 
         then(jwtService)
                 .should(times(1))
-                .createRefreshToken(any());
+                .createRefreshToken(memberId.get().toString());
     }
 
     @Test
@@ -146,9 +148,11 @@ public class MemberServiceTest {
                 .serviceId("LoginRequesterId")
                 .password("tempPassword")
                 .build();
+        Optional<Long> memberId = Optional.ofNullable(null);
+
         // 사용자의 정보가 DB에 있다면
-        given(memberRepository.existsMemberWithServiceIdAndPassword(any(), any()))
-                .willReturn(false);
+        given(memberRepository.findByMemberIdByServiceIdAndPassword(any(), any()))
+                .willReturn(memberId);
 
         // when then
         assertThrows(
@@ -158,7 +162,7 @@ public class MemberServiceTest {
 
         then(memberRepository)
                 .should(times(1))
-                .existsMemberWithServiceIdAndPassword(any(), any());
+                .findByMemberIdByServiceIdAndPassword(any(), any());
 
         then(jwtService)
                 .should(never())

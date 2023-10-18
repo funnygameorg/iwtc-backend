@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,18 +46,13 @@ public class MemberService {
     }
 
     public SignInResponse signIn(SignInRequest request) {
-        Boolean existsMember = memberRepository
-                .existsMemberWithServiceIdAndPassword(
-                        request.serviceId(),
-                        request.password()
-                );
+        String memberId = memberRepository
+                .findByMemberIdByServiceIdAndPassword(request.serviceId(), request.password())
+                .orElseThrow(NotFoundMemberException::new)
+                .toString();
 
-        if(!existsMember) {
-            throw new NotFoundMemberException();
-        }
-
-        String refreshToken = jwtService.createRefreshToken(request.serviceId());
-        String accessToken = jwtService.createAccessTokenByServiceId(request.serviceId());
+        String refreshToken = jwtService.createRefreshToken(memberId);
+        String accessToken = jwtService.createAccessTokenByServiceId(memberId);
 
         return SignInResponse.builder()
                 .accessToken(accessToken)

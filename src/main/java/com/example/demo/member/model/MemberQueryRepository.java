@@ -2,10 +2,11 @@ package com.example.demo.member.model;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.Optional;
+
 public interface MemberQueryRepository {
 
     Boolean existsNickname(String nickname);
     Boolean existsServiceId(String serviceId);
-    Boolean existsMemberWithServiceIdAndPassword(String serviceId, String password);
+    Optional<Long> findByMemberIdByServiceIdAndPassword(String serviceId, String password);
 }

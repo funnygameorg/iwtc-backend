@@ -3,6 +3,7 @@ package com.example.demo.member.controller;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
+import com.example.demo.member.model.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,9 @@ class MemberControllerTest {
 
     @MockBean
     private JwtService jwtService;
+
+    @MockBean
+    private MemberRepository memberRepository;
 
     @MockBean
     private MemberService memberService;

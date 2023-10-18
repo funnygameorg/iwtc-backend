@@ -6,6 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,8 +29,14 @@ public class MemberRepositoryImpl implements MemberQueryRepository {
     }
 
     @Override
-    public Boolean existsMemberWithServiceIdAndPassword(String serviceId, String password) {
-        String sql = "SELECT EXISTS ( SELECT 1 FROM member m WHERE m.service_id = ? AND m.password = ?)";
-        return jdbcTemplate.queryForObject(sql, Boolean.class, serviceId, password);
+    public Optional<Long> findByMemberIdByServiceIdAndPassword(String serviceId, String password) {
+        String sql = "SELECT m.id FROM member m WHERE m.service_id = ? AND m.password = ?";
+        List<Long> result = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> rs.getLong("id"),
+                serviceId,
+                password
+        );
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 }

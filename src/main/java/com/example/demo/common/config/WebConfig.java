@@ -2,6 +2,7 @@ package com.example.demo.common.config;
 
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.MemberArgumentResolver;
+import com.example.demo.member.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -14,13 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final JwtService jwtService;
+    private final MemberArgumentResolver memberArgumentResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(
-                new MemberArgumentResolver(jwtService)
-        );
+        resolvers.add(memberArgumentResolver);
     }
 
     @Override
