@@ -9,6 +9,7 @@ import com.example.demo.member.exception.NotFoundMemberException;
 import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
 import com.example.demo.member.service.dto.SignInResponse;
+import com.example.demo.member.service.dto.VerifyDuplicatedNicknameResponse;
 import com.example.demo.member.service.dto.VerifyDuplicatedServiceIdResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +67,10 @@ public class MemberService {
     public VerifyDuplicatedServiceIdResponse existsServiceId(String serviceId) {
         Boolean isDuplicated = memberRepository.existsServiceId(serviceId);
         return new VerifyDuplicatedServiceIdResponse(isDuplicated);
+    }
+
+    public VerifyDuplicatedNicknameResponse existsNickname(String nickname) {
+        Boolean isDuplicatedNickname = memberRepository.existsNickname(nickname);
+        return new VerifyDuplicatedNicknameResponse(isDuplicatedNickname);
     }
 }

@@ -7,6 +7,7 @@ import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
+import com.example.demo.member.service.dto.VerifyDuplicatedNicknameResponse;
 import com.example.demo.member.service.dto.VerifyDuplicatedServiceIdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -126,7 +127,23 @@ public class MemberController {
         VerifyDuplicatedServiceIdResponse response = memberService.existsServiceId(serviceId);
         return RestApiResponse.builder()
                 .code(1)
-                .message("검증 성공")
+                .message("아이디 검증 성공")
+                .data(response)
+                .build();
+    }
+
+    @GetMapping("/duplicated-check/nickname")
+    @ResponseStatus(OK)
+    public RestApiResponse verifyDuplicatedNickname(
+            @Schema(description = "사용자 닉네임")
+            @Size(min = 2, max = 10, message = "사용자 닉네임 : 2자리 이상, 10자리 이하")
+            @NoSpace
+            String nickname
+    ) {
+        VerifyDuplicatedNicknameResponse response = memberService.existsNickname(nickname);
+        return RestApiResponse.builder()
+                .code(1)
+                .message("닉네임 검증 성공")
                 .data(response)
                 .build();
     }

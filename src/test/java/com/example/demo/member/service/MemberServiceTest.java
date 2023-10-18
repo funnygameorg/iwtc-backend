@@ -3,6 +3,7 @@ package com.example.demo.member.service;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
+import com.example.demo.member.service.dto.VerifyDuplicatedNicknameResponse;
 import com.example.demo.member.service.dto.VerifyDuplicatedServiceIdResponse;
 import com.example.demo.member.exception.DuplicatedNicknameException;
 import com.example.demo.member.exception.DuplicatedServiceIdException;
@@ -170,7 +171,7 @@ public class MemberServiceTest {
     
     @Test
     @DisplayName("아이디 중복 체크 - 중복된 아이디가 없다.")
-    public void 제공한_아이디가_중복된_아이디인가_중복X() {
+    public void 제공한_아이디가_중복인가_X() {
         String serviceId = "testServiceID";
         given(memberRepository.existsServiceId(serviceId))
                 .willReturn(false);
@@ -186,7 +187,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("아이디 중복 체크 - 중복된 아이디가 있다.")
-    public void 제공한_아이디가_중복된_아이디인가_중복O() {
+    public void 제공한_아이디가_중복인가_O() {
         String serviceId = "testServiceID";
         given(memberRepository.existsServiceId(serviceId))
                 .willReturn(true);
@@ -200,4 +201,37 @@ public class MemberServiceTest {
         assert response.isDuplicatedServiceId();
     }
 
+    @Test
+    @DisplayName("닉네임 중복 체크 - 중복된 닉네임이 있다.")
+    public void 제공한_닉네임이_중복인가_O() {
+        String nickname = "testNickname";
+
+        given(memberRepository.existsNickname(nickname))
+                .willReturn(true);
+
+        VerifyDuplicatedNicknameResponse response = sut.existsNickname(nickname);
+
+        then(memberRepository)
+                .should(times(1))
+                .existsNickname(nickname);
+
+        assert response.isDuplicatedNickname();
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 체크 - 중복된 닉네임이 없다.")
+    public void 제공한_닉네임이_중복인가_X() {
+        String nickname = "testNickname";
+
+        given(memberRepository.existsNickname(nickname))
+                .willReturn(false);
+
+        VerifyDuplicatedNicknameResponse response = sut.existsNickname(nickname);
+
+        then(memberRepository)
+                .should(times(1))
+                .existsNickname(nickname);
+
+        assert !response.isDuplicatedNickname();
+    }
 }

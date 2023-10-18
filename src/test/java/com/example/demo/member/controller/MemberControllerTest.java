@@ -45,6 +45,8 @@ class MemberControllerTest {
     private final String SIGN_UP_API = "/members/sign-up";
     private final String LOGIN_API = "/members/sign-in";
     private final String VERIFY_DUPLICATED_ID_API = "/members/duplicated-check/service-id";
+    private final String VERIFY_DUPLICATED_NICKNAME_API = "/members/duplicated-check/nickname";
+
 
     @DisplayName("회원가입 성공")
     @Test
@@ -228,7 +230,7 @@ class MemberControllerTest {
             "aaaaaaa",
             "1231231231"}
     )
-    @DisplayName("serviceId 중복 검사 - 성공")
+    @DisplayName("serviceId 중복 검사 성공 - serviceId 검증")
     public void 서비스_아이디_중복_검사_성공(String serviceId) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("serviceId", serviceId);
@@ -240,6 +242,7 @@ class MemberControllerTest {
                 )
                 .andExpect(status().isOk());
     }
+
     @ParameterizedTest
     @CsvSource(value = {
             "AAAAA",
@@ -248,7 +251,8 @@ class MemberControllerTest {
             "123",
             "Θ\nΘ\n"}
     )
-    @DisplayName("serviceId 중복 검사 - 실패")
+    @NullAndEmptySource
+    @DisplayName("serviceId 중복 검사 실패 - serviceId 검증")
     public void 서비스_아이디_중복_검사_실패(String serviceId) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("serviceId", serviceId);
@@ -256,6 +260,48 @@ class MemberControllerTest {
         // when then
         mockMvc.perform(
                         get(VERIFY_DUPLICATED_ID_API)
+                                .params(param)
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "AAAAA",
+            "AAAAAA",
+            "123456",
+            "12"}
+    )
+    @DisplayName("nickname 중복 검사 성공 - nickname 검증")
+    public void 닉네임_중복_검사_성공(String nickname) throws Exception{
+        MultiValueMap<String, String> param = new LinkedMultiValueMap();
+        param.add("nickname", nickname);
+
+        // when then
+        mockMvc.perform(
+                        get(VERIFY_DUPLICATED_NICKNAME_API)
+                                .params(param)
+                )
+                .andExpect(status().isOk());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "A",
+            "AAAAAAAAAAA",
+            "12345678901",
+            "1 2",
+    }
+    )
+    @NullAndEmptySource
+    @DisplayName("nickname 중복 검사 실패 - nickname 검증")
+    public void 닉네임_중복_검사_실패(String nickname) throws Exception{
+        MultiValueMap<String, String> param = new LinkedMultiValueMap();
+        param.add("nickname", nickname);
+
+        // when then
+        mockMvc.perform(
+                        get(VERIFY_DUPLICATED_NICKNAME_API)
                                 .params(param)
                 )
                 .andExpect(status().isBadRequest());
