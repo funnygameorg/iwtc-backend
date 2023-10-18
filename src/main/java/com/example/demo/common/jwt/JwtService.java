@@ -35,7 +35,7 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("serviceId", String.class);
+                .get("id", String.class);
     }
 
     public String createAccessTokenByServiceId(String serviceId) {
