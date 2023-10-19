@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 @RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
@@ -19,7 +20,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
-
+        boolean isResourceHttpRequestHandler = handler instanceof ResourceHttpRequestHandler;
+        if(isResourceHttpRequestHandler) {
+            return true;
+        }
         boolean isRequiredAuthenticationApi = isRequiredAuthenticationApi((HandlerMethod) handler);
         if (!isRequiredAuthenticationApi) {
             return true;
