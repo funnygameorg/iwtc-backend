@@ -230,4 +230,38 @@ public class MemberController {
                 .data(response)
                 .build();
     }
+
+    @Operation(
+            summary = "로그아웃",
+            description = "사용자의 access token 일정 시간동안 무효, 스토리지의 remember 제거",
+            parameters = {
+                    @Parameter(
+                            in = ParameterIn.HEADER,
+                            name = "access-token",
+                            required = true,
+                            description = "Access Token",
+                            schema = @Schema(type = "string")
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "로그아웃 성공",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                    )
+            }
+    )
+    @RequireAuth
+    @GetMapping("/sign-out")
+    @ResponseStatus(NO_CONTENT)
+    public RestApiResponse signOut(
+            @Parameter(hidden = true) MemberDto memberDto
+    ) {
+        memberService.signOut(memberDto.accessToken(), memberDto.id());
+        return RestApiResponse.builder()
+                .code(1)
+                .message("정보 조회 성공")
+                .data(null)
+                .build();
+    }
 }

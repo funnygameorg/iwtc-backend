@@ -249,4 +249,18 @@ public class MemberServiceTest {
 
         assert !response.isDuplicatedNickname();
     }
+
+    @Test
+    @DisplayName("로그아웃 - 성공")
+    public void 로그아웃_성공() {
+
+        String accessToken = "testAccessToken";
+        Long memberId = 1L;
+
+        sut.signOut(accessToken, memberId);
+
+        then(rememberMeRepository)
+                .should(times(1))
+                .signOut(accessToken, memberId);
+    }
 }

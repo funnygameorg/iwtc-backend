@@ -17,9 +17,8 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PRIVATE)
 public abstract class BaseException extends RuntimeException {
 
-    protected BaseException(String message, CustomErrorCode errorCode, HttpStatus httpStatus) {
-
-        this.message = message;
+    protected BaseException(String publicMessage, CustomErrorCode errorCode, HttpStatus httpStatus) {
+        this.publicMessage = publicMessage;
         this.errorCode = errorCode;
         this.errorTime  = LocalDateTime.now();
         this.httpStatus = httpStatus;
@@ -32,7 +31,9 @@ public abstract class BaseException extends RuntimeException {
 
     LocalDateTime errorTime;
     String errorId;
-    String message;
+    String publicMessage;
+
+    String privateMessage; // TODO : 사용자에게 노출되는 내용, 노출되면 안되는 내용 분리하기
     CustomErrorCode errorCode;
     HttpStatus httpStatus;
 }

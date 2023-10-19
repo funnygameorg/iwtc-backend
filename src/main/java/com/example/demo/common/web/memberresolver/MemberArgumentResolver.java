@@ -32,13 +32,13 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
             ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
-    ) throws Exception {
+    ) {
         String accessToken = webRequest.getHeader("access-token");
         Long memberId = jwtService.getPayLoadByToken(accessToken);
         Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(NotFoundMemberException::new);
 
-        return MemberDto.fromEntity(member);
+        return MemberDto.fromEntity(member, accessToken);
     }
 }

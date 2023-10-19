@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface RememberMeRepository {
     Boolean isRemember(Long memberId);
     void save(Long MemberId);
+    void signOut(String accessToken, Long memberId);
+    Boolean containBlacklistedAccessToken(String accessToken);
 }

@@ -41,9 +41,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -66,8 +68,6 @@ class MemberControllerTest {
     private final String LOGIN_API = "/members/sign-in";
     private final String VERIFY_DUPLICATED_ID_API = "/members/duplicated-check/service-id";
     private final String VERIFY_DUPLICATED_NICKNAME_API = "/members/duplicated-check/nickname";
-
-    private final String GET_MY_SUMMARY_API = "/members/me/summary";
 
     @DisplayName("회원가입 성공")
     @Test

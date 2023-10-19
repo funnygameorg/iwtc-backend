@@ -2,11 +2,9 @@ package com.example.demo.common.web.auth;
 
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
-import com.example.demo.common.web.auth.rememberme.impl.RedisRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -27,8 +25,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Long memberId = jwtService.getPayLoadByToken(request.getHeader("access-token"));
+        String accessToken = request.getHeader("access-token");
+        Long memberId = jwtService.getPayLoadByToken(accessToken);
 
+        Boolean isBlackListedAccessToken = rememberMeRepository.containBlacklistedAccessToken(accessToken);
+        if(isBlackListedAccessToken) {
+            throw new RequestWithBlackListedAccessToken(accessToken);
+        }
         boolean isRemember = rememberMeRepository.isRemember(memberId);
         if(!isRemember) {
             throw new ExpiredAuthenticationException();

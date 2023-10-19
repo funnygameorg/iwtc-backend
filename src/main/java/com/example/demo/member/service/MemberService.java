@@ -62,6 +62,10 @@ public class MemberService {
                 .build();
     }
 
+    public void signOut(String accessToken, Long memberId) {
+        rememberMeRepository.signOut(accessToken, memberId);
+    }
+
     public VerifyDuplicatedServiceIdResponse existsServiceId(String serviceId) {
         Boolean isDuplicated = memberRepository.existsServiceId(serviceId);
         return new VerifyDuplicatedServiceIdResponse(isDuplicated);

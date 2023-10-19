@@ -82,7 +82,7 @@ public class CustomExceptionHandler {
                         new CustomErrorResponse(
                                 ex.getErrorTime(),
                                 ex.getErrorCode(),
-                                ex.getMessage(),
+                                ex.getPublicMessage(),
                                 ex.getErrorId()
                         )
                 );
