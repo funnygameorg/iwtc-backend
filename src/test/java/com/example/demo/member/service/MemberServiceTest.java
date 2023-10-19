@@ -1,6 +1,7 @@
 package com.example.demo.member.service;
 
 import com.example.demo.common.jwt.JwtService;
+import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.member.service.dto.VerifyDuplicatedNicknameResponse;
@@ -31,6 +32,8 @@ public class MemberServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private RememberMeRepository rememberMeRepository;
     @Mock
     private JwtService jwtService;
 
@@ -131,6 +134,10 @@ public class MemberServiceTest {
                 .should(times(1))
                         .findByMemberIdByServiceIdAndPassword(any(), any());
 
+        then(rememberMeRepository)
+                .should(times(1))
+                        .save(memberId.get());
+
         then(jwtService)
                 .should(times(1))
                 .createAccessTokenById(memberId.get());
@@ -148,11 +155,11 @@ public class MemberServiceTest {
                 .serviceId("LoginRequesterId")
                 .password("tempPassword")
                 .build();
-        Optional<Long> memberId = Optional.ofNullable(null);
+        Optional<Long> optionalMemberId = Optional.empty();
 
         // 사용자의 정보가 DB에 있다면
         given(memberRepository.findByMemberIdByServiceIdAndPassword(any(), any()))
-                .willReturn(memberId);
+                .willReturn(optionalMemberId);
 
         // when then
         assertThrows(
@@ -163,6 +170,10 @@ public class MemberServiceTest {
         then(memberRepository)
                 .should(times(1))
                 .findByMemberIdByServiceIdAndPassword(any(), any());
+
+        then(rememberMeRepository)
+                .should(never())
+                .save(any());
 
         then(jwtService)
                 .should(never())

@@ -1,4 +1,4 @@
-package com.example.demo.common.web;
+package com.example.demo.common.web.log;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

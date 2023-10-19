@@ -1,6 +1,7 @@
 package com.example.demo.member.controller;
 
-import com.example.demo.common.web.MemberDto;
+import com.example.demo.common.web.auth.RequireAuth;
+import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.common.web.validation.NoSpace;
 import com.example.demo.member.controller.dto.GetMySummaryResponse;
 import com.example.demo.member.controller.dto.SignInRequest;
@@ -21,13 +22,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -203,8 +201,8 @@ public class MemberController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
-                            responseCode = "400",
-                            description = "토큰으로 인한 예외",
+                            responseCode = "401",
+                            description = "인증에 관한 문제로 인한 실패",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     ),
                     @ApiResponse(
@@ -214,6 +212,7 @@ public class MemberController {
                     )
             }
     )
+    @RequireAuth
     @GetMapping("/me/summary")
     @ResponseStatus(OK)
     public RestApiResponse getMySummary(

@@ -1,7 +1,6 @@
-package com.example.demo.common.web;
+package com.example.demo.common.web.memberresolver;
 
 import com.example.demo.member.model.Member;
-import lombok.Builder;
 
 public record MemberDto (
         Long id,

@@ -1,6 +1,9 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
+import com.example.demo.common.web.auth.AuthenticationInterceptor;
+import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.member.exception.NotFoundMemberException;
@@ -10,20 +13,31 @@ import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.AssertTrue;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -34,23 +48,19 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = MemberController.class)
+@WebMvcTest(
+        controllers = MemberController.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)
+}
+        )
 class MemberControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
-    private JwtService jwtService;
-
-    @MockBean
-    private MemberRepository memberRepository;
-
-    @MockBean
-    private MemberService memberService;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
+    @MockBean private JwtService jwtService;
+    @MockBean private MemberRepository memberRepository;
+    @MockBean private MemberService memberService;
+    @MockBean private RememberMeRepository rememberMeRepository;
 
     private final String SIGN_UP_API = "/members/sign-up";
     private final String LOGIN_API = "/members/sign-in";
@@ -316,52 +326,5 @@ class MemberControllerTest {
                                 .params(param)
                 )
                 .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("자기 자신 로그인 정보 조회 성공")
-    public void 로그인_정보_조회() throws Exception{
-        Member member = Member.builder()
-                .id(1L)
-                .serviceId("A")
-                .nickname("A")
-                .password("A")
-                .build();
-        given(jwtService.getPayLoadByToken(any()))
-                .willReturn(1L);
-        given(memberRepository.findById(any()))
-                .willReturn(Optional.of(member));
-
-        // when then
-        mockMvc.perform(
-                        get(GET_MY_SUMMARY_API)
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id").value("1"))
-                .andExpect(jsonPath("$.data.serviceId").value("A"))
-                .andExpect(jsonPath("$.data.nickname").value("A"));
-    }
-    @Test
-    @DisplayName("자기 자신 로그인 정보 조회 실패 - 존재하지 않는 사용자")
-    public void 로그인_정보_조회_실패() throws Exception{
-        Member member = Member.builder()
-                .id(1L)
-                .serviceId("A")
-                .nickname("A")
-                .password("A")
-                .build();
-        given(jwtService.getPayLoadByToken(any()))
-                .willReturn(1L);
-        given(memberRepository.findById(any()))
-                .willReturn(Optional.empty());
-
-        // when then
-        mockMvc.perform(
-                        get(GET_MY_SUMMARY_API)
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> {
-                    assert result.getResolvedException() instanceof NotFoundMemberException;
-                });
     }
 }

@@ -75,8 +75,9 @@ public class CustomExceptionHandler {
             BaseException ex
     ) {
         log.info("BaseException {}", ex);
+
         return ResponseEntity
-                .badRequest()
+                .status(ex.getHttpStatus())
                 .body(
                         new CustomErrorResponse(
                                 ex.getErrorTime(),

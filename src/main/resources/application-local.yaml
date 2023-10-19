@@ -10,6 +10,9 @@ spring:
     url: jdbc:h2:~/test
     username: sa
     password:
+  redis:
+    host: redis
+    port: 6379
   jpa:
     hibernate:
       ddl-auto: create

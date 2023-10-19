@@ -1,13 +1,11 @@
-package com.example.demo.common.web;
+package com.example.demo.common.web.memberresolver;
 
 import com.example.demo.common.jwt.JwtService;
+import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.member.exception.NotFoundMemberException;
 import com.example.demo.member.model.Member;
-import com.example.demo.member.model.MemberQueryRepository;
 import com.example.demo.member.model.MemberRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 
-@Component
 @RequiredArgsConstructor
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
     private final MemberRepository memberRepository;

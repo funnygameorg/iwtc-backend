@@ -1,6 +1,7 @@
 package com.example.demo.member.service;
 
 import com.example.demo.common.jwt.JwtService;
+import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.member.exception.DuplicatedNicknameException;
@@ -26,7 +27,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
-
+    private final RememberMeRepository rememberMeRepository;
     @Transactional
     public void signUp(SignUpRequest request) {
 
@@ -49,6 +50,8 @@ public class MemberService {
         Long memberId = memberRepository
                 .findByMemberIdByServiceIdAndPassword(request.serviceId(), request.password())
                 .orElseThrow(NotFoundMemberException::new);
+
+        rememberMeRepository.save(memberId);
 
         String refreshToken = jwtService.createRefreshTokenById(memberId);
         String accessToken = jwtService.createAccessTokenById(memberId);
