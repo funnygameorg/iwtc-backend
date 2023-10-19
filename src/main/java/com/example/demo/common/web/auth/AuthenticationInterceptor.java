@@ -5,6 +5,7 @@ import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.cors.reactive.PreFlightRequestHandler;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
@@ -20,15 +21,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
-        boolean isResourceHttpRequestHandler = handler instanceof ResourceHttpRequestHandler;
-        if(isResourceHttpRequestHandler) {
+        if(isAllowHandler(handler)) {
             return true;
         }
-        boolean isRequiredAuthenticationApi = isRequiredAuthenticationApi((HandlerMethod) handler);
-        if (!isRequiredAuthenticationApi) {
+        if (!isRequiredAuthenticationApi(handler)) {
             return true;
         }
-
         String accessToken = request.getHeader("access-token");
         Long memberId = jwtService.getPayLoadByToken(accessToken);
 
@@ -43,8 +41,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private boolean isRequiredAuthenticationApi(HandlerMethod handler) {
-        return handler.getMethodAnnotation(RequireAuth.class) != null;
+    private boolean isAllowHandler(Object handler) {
+        return !(handler instanceof HandlerMethod);
+    }
+    private boolean isRequiredAuthenticationApi(Object handler) {
+        return ((HandlerMethod) handler).getMethodAnnotation(RequireAuth.class) != null;
     }
 
 }

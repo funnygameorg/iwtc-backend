@@ -40,4 +40,5 @@ secrets.yml
 .gradletasknamecache
 .sts4-cache
 logs
+LOG_HOME_IS_UNDEFINED
 !gradle/wrapper/gradle-wrapper.jar
