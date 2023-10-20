@@ -1,7 +1,7 @@
-package com.example.demo.idealtype.controller;
+package com.example.demo.worldcup.controller;
 
-import com.example.demo.idealtype.controller.dto.response.GetWorldCupsResponse;
-import com.example.demo.idealtype.controller.vo.WorldCupDateRange;
+import com.example.demo.worldcup.controller.dto.response.GetWorldCupsResponse;
+import com.example.demo.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.common.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "WorldCup", description = "월드컵 게임 제공 API")
 @RestController
 @RequestMapping("/api/ideal-type-world-cups")
-public class WorldCupController {
+public class WorldCupGameController {
 
     @Operation(
             summary = "전체 월드컵 리스트 조회(페이징)",
@@ -48,7 +48,7 @@ public class WorldCupController {
             @PageableDefault(
                     size = 25,
                     direction = Sort.Direction.DESC,
-                    sort = { "LIKE" }
+                    sort = { "LIKE", "PLAY", "TOTAL" }
             ) Pageable pageable
     ) {
         return new RestApiResponse(1, "", null);

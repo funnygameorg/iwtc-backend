@@ -1,7 +1,7 @@
-package com.example.demo.idealtype.controller;
+package com.example.demo.worldcup.controller;
 
-import com.example.demo.idealtype.controller.dto.response.GetMyWorldCupsAllContentsResponse;
-import com.example.demo.idealtype.controller.dto.response.GetWorldCupPlayContentsResponse;
+import com.example.demo.worldcup.controller.dto.response.GetMyWorldCupsAllContentsResponse;
+import com.example.demo.worldcup.controller.dto.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

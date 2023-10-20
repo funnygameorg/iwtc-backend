@@ -1,4 +1,4 @@
-package com.example.demo.idealtype.model.vo;
+package com.example.demo.worldcup.model.vo;
 
 public enum VisibleType {
     PUBLIC, PRIVATE

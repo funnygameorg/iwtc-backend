@@ -1,4 +1,4 @@
-package com.example.demo.idealtype.controller.dto.response;
+package com.example.demo.worldcup.controller.dto.response;
 
 import java.time.LocalDateTime;
 
