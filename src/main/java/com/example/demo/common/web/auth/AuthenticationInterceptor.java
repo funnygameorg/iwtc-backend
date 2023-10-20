@@ -21,6 +21,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
+        if(request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
         if (!isRequiredAuthenticationApi(handler)) {
             return true;
         }
