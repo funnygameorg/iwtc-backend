@@ -17,7 +17,7 @@ import java.util.List;
 
 @Tag(name = "WorldCup contents", description = "월드컵 게임 컨텐츠 제공 API")
 @RestController
-@RequestMapping("/ideal-type-world-cups")
+@RequestMapping("/api/ideal-type-world-cups")
 public class WorldCupContentsController {
 
     @Operation(

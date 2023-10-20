@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "WorldCup", description = "월드컵 게임 제공 API")
 @RestController
-@RequestMapping("/ideal-type-world-cups")
+@RequestMapping("/api/ideal-type-world-cups")
 public class WorldCupController {
 
     @Operation(

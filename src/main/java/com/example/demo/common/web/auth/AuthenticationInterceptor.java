@@ -21,9 +21,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
-        if(isAllowHandler(handler)) {
-            return true;
-        }
         if (!isRequiredAuthenticationApi(handler)) {
             return true;
         }
@@ -41,9 +38,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private boolean isAllowHandler(Object handler) {
-        return !(handler instanceof HandlerMethod);
-    }
     private boolean isRequiredAuthenticationApi(Object handler) {
         return ((HandlerMethod) handler).getMethodAnnotation(RequireAuth.class) != null;
     }

@@ -26,7 +26,7 @@ import java.util.List;
         description = "사용자의 인증이 필수적인 월드컵 관련 API"
 )
 @RestController
-@RequestMapping("/ideal-type-world-cups/me")
+@RequestMapping("/api/ideal-type-world-cups/me")
 public class WorldCupBasedOnAuthController {
 
     @Operation(

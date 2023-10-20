@@ -64,10 +64,11 @@ class MemberControllerTest {
     @MockBean private MemberService memberService;
     @MockBean private RememberMeRepository rememberMeRepository;
 
-    private final String SIGN_UP_API = "/members/sign-up";
-    private final String LOGIN_API = "/members/sign-in";
-    private final String VERIFY_DUPLICATED_ID_API = "/members/duplicated-check/service-id";
-    private final String VERIFY_DUPLICATED_NICKNAME_API = "/members/duplicated-check/nickname";
+    private final String ROOT_PATH = "/api";
+    private final String SIGN_UP_API = ROOT_PATH + "/members/sign-up";
+    private final String LOGIN_API = ROOT_PATH + "/members/sign-in";
+    private final String VERIFY_DUPLICATED_ID_API = ROOT_PATH + "/members/duplicated-check/service-id";
+    private final String VERIFY_DUPLICATED_NICKNAME_API = ROOT_PATH + "/members/duplicated-check/nickname";
 
     @DisplayName("회원가입 성공")
     @Test

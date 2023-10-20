@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "ETC", description = "서비스의 여러 기능에 공통적으로 사용되는 API")
-@RestController
+@RestController("/api")
 @RequiredArgsConstructor
 class ETCController {
     private final JwtService jwtService;
