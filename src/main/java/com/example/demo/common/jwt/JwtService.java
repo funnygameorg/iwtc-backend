@@ -28,13 +28,19 @@ public class JwtService {
         key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-
+    public String removedPrefix(String token) {
+        return token.substring(7);
+    }
+    public String addPrefix(String token) {
+        return "Bearer " + token;
+    }
     public Long getPayLoadByToken(String token) {
         try{
+            String withoutPrefixToken = removedPrefix(token);
             return Jwts.parserBuilder()
                     .setSigningKey(secret)
                     .build()
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(withoutPrefixToken)
                     .getBody()
                     .get("id", Long.class);
         } catch (
@@ -56,7 +62,8 @@ public class JwtService {
     }
 
     public String createAccessTokenByRefreshToken(String refreshToken) {
-        Long id = getPayLoadByToken(refreshToken);
+        String refreshTokenWithoutPrefix = removedPrefix(refreshToken);
+        Long id = getPayLoadByToken(refreshTokenWithoutPrefix);
         return createToken(id, accessTokenValidityMilliSeconds);
     }
 
@@ -64,11 +71,12 @@ public class JwtService {
         long now = System.currentTimeMillis();
         Date validity = new Date(now + tokenValidityMilliSeconds);
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .claim("id", id)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
+        return addPrefix(token);
     }
 
     public boolean validateToken(String token) {
