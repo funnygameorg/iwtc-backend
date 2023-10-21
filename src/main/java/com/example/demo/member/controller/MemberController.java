@@ -251,13 +251,13 @@ public class MemberController {
                     )
             }
     )
-    @RequireAuth
+
     @GetMapping("/sign-out")
     @ResponseStatus(NO_CONTENT)
     public RestApiResponse signOut(
-            @Parameter(hidden = true) MemberDto memberDto
+            @RequestHeader("access-token") String accessToken
     ) {
-        memberService.signOut(memberDto.accessToken(), memberDto.id());
+        memberService.signOut(accessToken);
         return RestApiResponse.builder()
                 .code(1)
                 .message("정보 조회 성공")

@@ -62,7 +62,8 @@ public class MemberService {
                 .build();
     }
 
-    public void signOut(String accessToken, Long memberId) {
+    public void signOut(String accessToken) {
+        Long memberId = jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken);
         rememberMeRepository.signOut(accessToken, memberId);
     }
 

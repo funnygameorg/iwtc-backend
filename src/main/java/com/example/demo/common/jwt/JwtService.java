@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import kotlin.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +54,26 @@ public class JwtService {
             throw new AuthenticationTokenException(e.getMessage());
         }
     }
-
+    public Long getPayLoadByTokenIgnoreExpiredTime(String token) {
+        try{
+            String withoutPrefixToken = removedPrefix(token);
+            return Jwts.parserBuilder()
+                    .setSigningKey(secret)
+                    .setAllowedClockSkewSeconds(Long.MAX_VALUE / 1000)
+                    .build()
+                    .parseClaimsJws(withoutPrefixToken)
+                    .getBody()
+                    .get("id", Long.class);
+        } catch (
+                SecurityException |
+                ExpiredJwtException |
+                MalformedJwtException |
+                UnsupportedJwtException |
+                IllegalArgumentException e
+        ) {
+            throw new AuthenticationTokenException(e.getMessage());
+        }
+    }
     public String createAccessTokenById(Long id) {
         return createToken(id, accessTokenValidityMilliSeconds);
     }

@@ -24,16 +24,15 @@ public class WebConfig implements WebMvcConfigurer {
     private final JwtService jwtService;
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(
-                new MemberArgumentResolver(memberRepository, jwtService)
-        );
+        resolvers.add(new MemberArgumentResolver(memberRepository, jwtService));
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration registration =
-                registry.addInterceptor(new AuthenticationInterceptor(rememberMeRepository, jwtService));
-        registration.addPathPatterns("/api/**");
+        registry
+                .addInterceptor(new AuthenticationInterceptor(rememberMeRepository, jwtService))
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/members/sign-out");
     }
 
     @Override

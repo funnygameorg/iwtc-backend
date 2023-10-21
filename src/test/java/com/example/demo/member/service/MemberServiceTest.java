@@ -257,7 +257,10 @@ public class MemberServiceTest {
         String accessToken = "testAccessToken";
         Long memberId = 1L;
 
-        sut.signOut(accessToken, memberId);
+        given(jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken))
+                .willReturn(memberId);
+
+        sut.signOut(accessToken);
 
         then(rememberMeRepository)
                 .should(times(1))
