@@ -1,7 +1,9 @@
 package com.example.demo.worldcup.service;
 
 import com.example.demo.worldcup.controller.vo.WorldCupDateRange;
-import com.example.demo.worldcup.model.WorldCupGame;
+import com.example.demo.worldcup.model.WorldCupGameRepository;
+import com.example.demo.worldcup.model.entity.WorldCupGame;
+import com.example.demo.worldcup.model.projection.FindWorldCupGamePageProjection;
 import com.example.demo.worldcup.repository.WorldCupGameJpaRepository;
 import com.example.demo.worldcup.service.dto.WorldCupResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,20 +20,18 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class WorldCupGameService {
 
-    private final WorldCupGameJpaRepository worldCupGameJpaRepository;
-    public WorldCupResponse findWorldCupByPageable(
+    private final WorldCupGameRepository worldCupGameRepository;
+    public Page<FindWorldCupGamePageProjection> findWorldCupByPageable(
             Pageable pageable,
             WorldCupDateRange dateRange,
             String worldCupKeyword)
     {
-        LocalDate startDate = LocalDate.now();
+        LocalDate startDate = LocalDate.now().minusDays(3);
         LocalDate endDate = LocalDate.now();
-        Page<WorldCupGame> worldCupGamePage = worldCupGameJpaRepository.findWorldCupGamePage(
-                worldCupKeyword,
+        return worldCupGameRepository.findWorldCupGamePage(
                 startDate,
                 endDate,
                 pageable
         );
-        return new WorldCupResponse();
     }
 }

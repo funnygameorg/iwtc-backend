@@ -3,10 +3,13 @@ package com.example.demo.worldcup.controller;
 import com.example.demo.worldcup.controller.dto.response.GetWorldCupsResponse;
 import com.example.demo.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.common.web.RestApiResponse;
+import com.example.demo.worldcup.model.projection.FindWorldCupGamePageProjection;
+import com.example.demo.worldcup.service.WorldCupGameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,8 +19,11 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "WorldCup", description = "월드컵 게임 제공 API")
 @RestController
-@RequestMapping("/api/ideal-type-world-cups")
+@RequestMapping("/api/world-cups")
+@RequiredArgsConstructor
 public class WorldCupGameController {
+
+    private final WorldCupGameService worldCupGameService;
 
     @Operation(
             summary = "전체 월드컵 리스트 조회(페이징)",
@@ -44,14 +50,19 @@ public class WorldCupGameController {
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<Page<GetWorldCupsResponse>> getWorldCups(
             @RequestParam(name = "dateRange", defaultValue = "ALL") WorldCupDateRange dateRange,
-            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "keyword", required = false) String worldCupKeyword,
             @PageableDefault(
                     size = 25,
                     direction = Sort.Direction.DESC,
-                    sort = { "LIKE", "PLAY", "TOTAL" }
+                    sort = { "id" }
             ) Pageable pageable
     ) {
-        return new RestApiResponse(1, "", null);
+        Page<FindWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
+                pageable,
+                dateRange,
+                worldCupKeyword
+        );
+        return new RestApiResponse(1, "월드컵 페이지 조회 성공", result);
     }
 
 }
