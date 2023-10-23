@@ -2,7 +2,6 @@ package com.example.demo.worldcup.repository;
 
 import com.example.demo.etc.model.MediaFile;
 import com.example.demo.etc.model.MediaFileRepository;
-import com.example.demo.etc.repository.MediaFileJpaRepository;
 import com.example.demo.worldcup.model.WorldCupGameContentsRepository;
 import com.example.demo.worldcup.model.entity.WorldCupGame;
 import com.example.demo.worldcup.model.WorldCupGameRepository;
@@ -13,6 +12,7 @@ import com.example.demo.worldcup.model.projection.FindWorldCupGamePageProjection
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 public class WorldCupGameRepositoryTest {
