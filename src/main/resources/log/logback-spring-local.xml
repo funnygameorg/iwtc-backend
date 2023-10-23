@@ -12,7 +12,19 @@
     <property name="LOG_FILE_NAME" value="logFile" />
     <property name="LOG_PATTERN" value="[%X{request_id:-startup}][%d{HH:mm:ss.SSS}][%thread][%-5level][%logger{36}] -- %msg%n" />
 
-
+    <!-- ERROR 콘솔 어펜더-->
+    <appender name="CONSOLE_ERROR" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>
+                ${LOG_PATTERN}
+            </pattern>
+        </encoder>
+    </appender>
 
     <!-- DEBUG 콘솔 어펜더-->
     <appender name="CONSOLE_DEBUG" class="ch.qos.logback.core.ConsoleAppender">
@@ -145,6 +157,7 @@
     <root level="DEBUG">
         <appender-ref ref="CONSOLE_INFO" />
         <appender-ref ref="CONSOLE_DEBUG" />
+        <appender-ref ref="CONSOLE_ERROR" />
         <appender-ref ref="FILE_WARN" />
         <appender-ref ref="FILE_INFO" />
         <appender-ref ref="FILE_ERROR" />
