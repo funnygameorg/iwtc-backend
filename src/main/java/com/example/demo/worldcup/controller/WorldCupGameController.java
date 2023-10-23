@@ -1,5 +1,6 @@
 package com.example.demo.worldcup.controller;
 
+import com.example.demo.common.web.validation.NoSpace;
 import com.example.demo.worldcup.controller.dto.response.GetWorldCupsResponse;
 import com.example.demo.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.common.web.RestApiResponse;
@@ -9,15 +10,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Tag(name = "WorldCup", description = "월드컵 게임 제공 API")
+@Validated
 @RestController
 @RequestMapping("/api/world-cups")
 @RequiredArgsConstructor
@@ -52,14 +60,21 @@ public class WorldCupGameController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<Page<GetWorldCupsResponse>> getWorldCups(
-            @RequestParam(name = "dateRange", required = false, defaultValue = "ALL") WorldCupDateRange dateRange,
-            @RequestParam(name = "keyword", required = false) String worldCupKeyword,
+
+            @RequestParam(name = "dateRange", required = false, defaultValue = "ALL")
+            WorldCupDateRange dateRange,
+
+            @Size(min = 2, max = 10)
+            @RequestParam(name = "keyword", required = false)
+            String worldCupKeyword,
+
             @PageableDefault(
                     size = 25,
                     direction = Sort.Direction.DESC,
                     sort = { "id" }
             ) Pageable pageable
     ) {
+        log.info(dateRange + ", " + worldCupKeyword + ", " + pageable);
         Page<FindWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,

@@ -3,7 +3,6 @@ package com.example.demo.worldcup.service;
 import com.example.demo.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.worldcup.model.WorldCupGameRepository;
 import com.example.demo.worldcup.model.projection.FindWorldCupGamePageProjection;
-import com.example.demo.worldcup.service.dto.WorldCupResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,7 @@ import java.time.LocalDate;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class WorldGameServiceTest {
+public class WorldCupGameServiceTest {
 
     @InjectMocks
     private WorldCupGameService sut;
