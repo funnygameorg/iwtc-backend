@@ -1,0 +1,30 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/test;MODE=MySQL
+    username: sa
+    password:
+  redis:
+    host: redis
+    port: 6379
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+jwt:
+  secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
+  token-validity-milli-seconds:
+    access: 20000
+    refresh: 21600000
+logging:
+  config: classpath:log/logback-spring-local.xml
