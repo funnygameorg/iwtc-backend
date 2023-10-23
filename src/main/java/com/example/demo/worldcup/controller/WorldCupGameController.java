@@ -35,9 +35,12 @@ public class WorldCupGameController {
                     ),
                     @Parameter(
                             name = "dateRange",
-                            description = "게임 생성 기간",
-                            required = true
+                            description = "게임 생성 기간 [ALL, YEAR, MONTH, WEEK] / 기본 값 : ALL"
                     ),
+                    @Parameter(
+                            name = "direction",
+                            description = "정렬 방향 [ASC, DESC] / 기본 : DESC"
+                    )
             },
             responses = {
                     @ApiResponse(
@@ -49,7 +52,7 @@ public class WorldCupGameController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<Page<GetWorldCupsResponse>> getWorldCups(
-            @RequestParam(name = "dateRange", defaultValue = "ALL") WorldCupDateRange dateRange,
+            @RequestParam(name = "dateRange", required = false, defaultValue = "ALL") WorldCupDateRange dateRange,
             @RequestParam(name = "keyword", required = false) String worldCupKeyword,
             @PageableDefault(
                     size = 25,

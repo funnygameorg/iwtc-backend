@@ -29,9 +29,9 @@ public class WorldGameServiceTest {
     @Test
     @DisplayName("월드컵 리스트 조회 - 성공")
     public void 월드컵_리스트_조회_성공() {
-        WorldCupDateRange dateRange = WorldCupDateRange.MONTH;
-        LocalDate startDate = LocalDate.now().minusDays(3);
+        WorldCupDateRange dateRange = WorldCupDateRange.YEAR;
         LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusYears(1);
         String worldCupGameKeyword = "TestKeyword";
         Pageable pageable = Pageable.ofSize(25);
 

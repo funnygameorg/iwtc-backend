@@ -2,7 +2,7 @@
 
 -- 월드컵 게임 1
 INSERT INTO world_cup_game (created_at, description, member_id, round, soft_delete, title, updated_at, views, visible_type)
-VALUES (DATEADD('HOUR', -12, NOW()), null, 1, 'ROUND_8', false, '역대 K-POP 월드컵', null, 15, 'PUBLIC');
+VALUES (DATEADD('MONTH', -2, NOW()), null, 1, 'ROUND_8', false, '역대 K-POP 월드컵', null, 15, 'PUBLIC');
 
 INSERT INTO media_file (absolute_name, created_at, extension, file_path, original_name, updated_at)
 VALUES ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -12, NOW()), 'JPG', 'https://picsum.photos/seed/awf/400/500', 'null', null),
@@ -24,7 +24,7 @@ VALUES (DATEADD('HOUR', -12, NOW()), 1, '시계와 시계', null, 1),
 
 -- 월드컵 게임 2
 INSERT INTO world_cup_game (created_at, description, member_id, round, soft_delete, title, updated_at, views, visible_type)
-VALUES (DATEADD('HOUR', -8, NOW()), null, 1, 'ROUND_8', false, '힘든 군부대 월드컵', null, 0, 'PUBLIC');
+VALUES (DATEADD('DAY', -8, NOW()), null, 1, 'ROUND_8', false, '힘든 군부대 월드컵', null, 0, 'PUBLIC');
 
 INSERT INTO media_file (absolute_name, created_at, extension, file_path, original_name, updated_at)
 VALUES ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -8, NOW()), 'JPG', 'https://picsum.photos/seed/zv/400/500', '이기자 부대', null),
