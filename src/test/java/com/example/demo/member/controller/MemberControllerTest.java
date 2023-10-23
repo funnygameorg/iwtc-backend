@@ -11,15 +11,19 @@ import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
+import com.example.demo.mock.web.MockArgumentResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.AssertTrue;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -50,25 +54,45 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(
-        controllers = MemberController.class, excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)
-}
-        )
+@ExtendWith(MockitoExtension.class)
 class MemberControllerTest {
 
-    @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
-    @MockBean private JwtService jwtService;
-    @MockBean private MemberRepository memberRepository;
-    @MockBean private MemberService memberService;
-    @MockBean private RememberMeRepository rememberMeRepository;
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper = new ObjectMapper();
+    @InjectMocks
+    private MemberController memberController;
+    @Mock
+    private JwtService jwtService;
+    @Mock
+    private MemberRepository memberRepository;
+    @Mock
+    private MemberService memberService;
+    @Mock
+    private RememberMeRepository rememberMeRepository;
 
     private final String ROOT_PATH = "/api";
+
+    private final String GET_ME_SUMMARY_API = ROOT_PATH + "/members/me/summary";
     private final String SIGN_UP_API = ROOT_PATH + "/members/sign-up";
     private final String LOGIN_API = ROOT_PATH + "/members/sign-in";
     private final String VERIFY_DUPLICATED_ID_API = ROOT_PATH + "/members/duplicated-check/service-id";
     private final String VERIFY_DUPLICATED_NICKNAME_API = ROOT_PATH + "/members/duplicated-check/nickname";
+
+
+
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(memberController)
+                .setCustomArgumentResolvers(new MockArgumentResolver())
+                .build();
+    }
+
+    @Test
+    @DisplayName("자신의 정보 조회")
+    public void getMeSummary() throws Exception {
+        mockMvc.perform(get(GET_ME_SUMMARY_API))
+                .andExpect(status().isOk());
+    }
 
     @DisplayName("회원가입 성공")
     @Test
