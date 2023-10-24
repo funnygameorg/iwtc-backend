@@ -20,6 +20,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -34,14 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(
         value = MemberController.class,
         excludeFilters = {
-                @ComponentScan.Filter(
-                        type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class
-                )
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
         },
         includeFilters = {
-                @ComponentScan.Filter(
-                        type = FilterType.ASSIGNABLE_TYPE, classes = TestWebConfig.class
-                )
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = TestWebConfig.class)
         }
 )
 class MemberControllerTest {
@@ -58,7 +56,8 @@ class MemberControllerTest {
 
     private final String GET_ME_SUMMARY_API = ROOT_PATH + "/members/me/summary";
     private final String SIGN_UP_API = ROOT_PATH + "/members/sign-up";
-    private final String LOGIN_API = ROOT_PATH + "/members/sign-in";
+    private final String SIGN_OUT_API = ROOT_PATH + "/members/sign-out";
+    private final String SIGN_IN_API = ROOT_PATH + "/members/sign-in";
     private final String VERIFY_DUPLICATED_ID_API = ROOT_PATH + "/members/duplicated-check/service-id";
     private final String VERIFY_DUPLICATED_NICKNAME_API = ROOT_PATH + "/members/duplicated-check/nickname";
 
@@ -187,7 +186,7 @@ class MemberControllerTest {
 
         // when then
         mockMvc.perform(
-                post(LOGIN_API)
+                post(SIGN_IN_API)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
         )
@@ -212,7 +211,7 @@ class MemberControllerTest {
                 .build();
 
         mockMvc.perform(
-                        post(LOGIN_API)
+                        post(SIGN_IN_API)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
@@ -236,11 +235,21 @@ class MemberControllerTest {
                 .build();
         // when then
         mockMvc.perform(
-                        post(LOGIN_API)
+                        post(SIGN_IN_API)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("로그아웃 성공")
+    public void 로그아웃_성공() throws Exception{
+        mockMvc.perform(
+                get(SIGN_OUT_API)
+                        .header("access-token", "TestAccessTokenValue")
+        )
+                .andExpect(status().isNoContent());
     }
 
     @ParameterizedTest

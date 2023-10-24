@@ -218,7 +218,6 @@ public class MemberController {
     public RestApiResponse getMySummary(
             @Parameter(hidden = true) MemberDto memberDto
     ) {
-        System.out.println(memberDto);
         GetMySummaryResponse response = new GetMySummaryResponse(
                 memberDto.id(),
                 memberDto.serviceId(),

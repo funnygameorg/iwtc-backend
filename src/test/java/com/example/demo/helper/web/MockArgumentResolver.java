@@ -2,6 +2,7 @@ package com.example.demo.helper.web;
 
 import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.MemberDto;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -16,12 +17,11 @@ public class MockArgumentResolver extends MemberArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(
-            MethodParameter parameter,
-            ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest,
-            WebDataBinderFactory binderFactory
-    ) {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        return getStubMemberDto();
+    }
+    
+    private MemberDto getStubMemberDto() {
         return new MemberDto(
                 1L,
                 "TEST_SERVICE_ID",
