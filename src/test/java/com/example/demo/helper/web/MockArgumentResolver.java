@@ -1,5 +1,6 @@
-package com.example.demo.mock.web;
+package com.example.demo.helper.web;
 
+import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -7,17 +8,11 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-public class MockArgumentResolver implements HandlerMethodArgumentResolver {
-    private boolean isSupportsParameter = false;
+public class MockArgumentResolver extends MemberArgumentResolver {
 
-    public MockArgumentResolver() {}
+    public MockArgumentResolver() {
+        super(null, null);
 
-    public void applyMemberDto() {
-        this.isSupportsParameter = true;
-    }
-    @Override
-    public boolean supportsParameter(MethodParameter parameter) {
-        return isSupportsParameter;
     }
 
     @Override
