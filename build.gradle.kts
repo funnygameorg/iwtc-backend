@@ -51,8 +51,12 @@ dependencies {
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
 	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
 
+	implementation("com.google.guava:guava:32.1.2-jre")
+
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+	testCompileOnly("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

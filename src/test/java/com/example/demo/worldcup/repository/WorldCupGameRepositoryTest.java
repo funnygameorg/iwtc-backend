@@ -2,6 +2,7 @@ package com.example.demo.worldcup.repository;
 
 import com.example.demo.etc.model.MediaFile;
 import com.example.demo.etc.model.MediaFileRepository;
+import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.worldcup.model.WorldCupGameContentsRepository;
 import com.example.demo.worldcup.model.entity.WorldCupGame;
 import com.example.demo.worldcup.model.WorldCupGameRepository;
@@ -9,31 +10,39 @@ import com.example.demo.worldcup.model.entity.WorldCupGameContents;
 import com.example.demo.worldcup.model.entity.vo.WorldCupGameRound;
 import com.example.demo.worldcup.model.entity.vo.VisibleType;
 import com.example.demo.worldcup.model.projection.FindWorldCupGamePageProjection;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@Transactional
 public class WorldCupGameRepositoryTest {
 
-    @Autowired private WorldCupGameRepository sut;
+    @Autowired
+    private WorldCupGameRepository worldCupGameRepository;
+    @Autowired
+    private MediaFileRepository mediaFileRepository;
+    @Autowired
+    private WorldCupGameContentsRepository worldCupGameContentsRepository;
+    @Autowired
+    private DataBaseCleanUp dataBaseCleanUp;
 
-    @Autowired private MediaFileRepository mediaFileRepository;
-
-    @Autowired private WorldCupGameContentsRepository worldCupGameContentsRepository;
+    @AfterEach
+    public void tearDown() {
+        worldCupGameContentsRepository.deleteAllInBatch();
+        mediaFileRepository.deleteAllInBatch();
+        worldCupGameRepository.deleteAllInBatch();
+    }
 
     @Test
     @DisplayName("모든 월드컵 게임, 페이징 조회 성공 - 게임 2개")
@@ -55,7 +64,7 @@ public class WorldCupGameRepositoryTest {
         WorldCupGameContents contents5 = createGameContents(game2, "컨텐츠5", 5);
         WorldCupGameContents contents6 = createGameContents(game2, "컨텐츠6", 6);
 
-        sut.saveAll(List.of(game1, game2));
+        worldCupGameRepository.saveAll(List.of(game1, game2));
         mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4, mediaFile5, mediaFile6));
         worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4, contents5, contents6));
 
@@ -64,7 +73,7 @@ public class WorldCupGameRepositoryTest {
         LocalDate endDate = LocalDate.now();
         Pageable pageable = Pageable.ofSize(25);
 
-        Page<FindWorldCupGamePageProjection> result = sut.findWorldCupGamePage(
+        Page<FindWorldCupGamePageProjection> result = worldCupGameRepository.findWorldCupGamePage(
                 startDate,
                 endDate,
                 pageable
@@ -107,12 +116,14 @@ public class WorldCupGameRepositoryTest {
         LocalDate endDate = LocalDate.now();
         Pageable pageable = Pageable.ofSize(25);
 
-        Page<FindWorldCupGamePageProjection> result = sut.findWorldCupGamePage(
+        Page<FindWorldCupGamePageProjection> result = worldCupGameRepository.findWorldCupGamePage(
                 startDate,
                 endDate,
                 pageable
         );
-
+        result.getContent().forEach(it ->
+                System.out.println(it.getId() + ", " + it.getContentsName1() + ", " + it.getContentsName2())
+        );
         assert result.getTotalPages() == 0;
         assert result.getContent().size() == 0;
         assert result.getNumberOfElements() == 0;

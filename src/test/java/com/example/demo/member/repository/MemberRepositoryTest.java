@@ -2,6 +2,7 @@ package com.example.demo.member.repository;
 
 import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,15 @@ import java.util.Optional;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@Transactional
 public class MemberRepositoryTest {
 
     @Autowired
-    private MemberRepository sut;
+    private MemberRepository memberRepository;
+
+    @AfterEach
+    public void tearDown() {
+        memberRepository.deleteAllInBatch();
+    }
 
     @Test
     @DisplayName("사용자의 서비스 아이디가 있다면 true를 반환한다.")
@@ -29,9 +34,9 @@ public class MemberRepositoryTest {
                 .nickname("A")
                 .password("A")
                 .build();
-        sut.save(member);
+        memberRepository.save(member);
 
-        Boolean result = sut.existsServiceId(member.getServiceId());
+        Boolean result = memberRepository.existsServiceId(member.getServiceId());
 
         assert result;
     }
@@ -44,9 +49,9 @@ public class MemberRepositoryTest {
                 .nickname("A")
                 .password("A")
                 .build();
-        sut.save(member);
+        memberRepository.save(member);
 
-        Boolean result = sut.existsServiceId("ZZ");
+        Boolean result = memberRepository.existsServiceId("ZZ");
 
         assert !result;
     }
@@ -59,9 +64,9 @@ public class MemberRepositoryTest {
                 .nickname("A")
                 .password("A")
                 .build();
-        sut.save(member);
+        memberRepository.save(member);
 
-        Boolean result = sut.existsNickname(member.getNickname());
+        Boolean result = memberRepository.existsNickname(member.getNickname());
 
         assert result;
     }
@@ -74,9 +79,9 @@ public class MemberRepositoryTest {
                 .nickname("A")
                 .password("A")
                 .build();
-        sut.save(member);
+        memberRepository.save(member);
 
-        Boolean result = sut.existsNickname("BZ");
+        Boolean result = memberRepository.existsNickname("BZ");
 
         assert !result;
     }
@@ -89,8 +94,8 @@ public class MemberRepositoryTest {
                 .nickname("A")
                 .password("B")
                 .build();
-        sut.save(member);
-        Optional<Long> result = sut.findByMemberIdByServiceIdAndPassword("A", "B");
+        memberRepository.save(member);
+        Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
 
         assert result.isPresent();
     }
@@ -103,9 +108,9 @@ public class MemberRepositoryTest {
                 .nickname("A")
                 .password("C")
                 .build();
-        sut.save(member);
+        memberRepository.save(member);
 
-        Optional<Long> result = sut.findByMemberIdByServiceIdAndPassword("A", "B");
+        Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
 
         assert result.isEmpty();
     }
