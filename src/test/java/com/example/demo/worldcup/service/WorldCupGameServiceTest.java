@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.*;
 public class WorldCupGameServiceTest {
 
     @InjectMocks
-    private WorldCupGameService sut;
+    private WorldCupGameService worldCupGameService;
 
     @Mock
     private WorldCupGameRepository worldCupGameRepository;
@@ -34,7 +34,7 @@ public class WorldCupGameServiceTest {
         String worldCupGameKeyword = "TestKeyword";
         Pageable pageable = Pageable.ofSize(25);
 
-        Page<FindWorldCupGamePageProjection> response = sut.findWorldCupByPageable(
+        Page<FindWorldCupGamePageProjection> response = worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,
                 worldCupGameKeyword

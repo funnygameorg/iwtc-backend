@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.*;
 public class MemberServiceTest {
 
     @InjectMocks
-    private MemberService sut;
+    private MemberService memberServiceTest;
 
     @Mock
     private MemberRepository memberRepository;
@@ -52,7 +52,7 @@ public class MemberServiceTest {
                 .build();
 
         // When
-        sut.signUp(request);
+        memberServiceTest.signUp(request);
 
         then(memberRepository)
                 .should(times(1))
@@ -78,7 +78,7 @@ public class MemberServiceTest {
         // when then
         assertThrows(
                 DuplicatedNicknameException.class,
-                () -> sut.signUp(request)
+                () -> memberServiceTest.signUp(request)
         );
 
         then(memberRepository)
@@ -105,7 +105,7 @@ public class MemberServiceTest {
         // when then
         assertThrows(
                 DuplicatedServiceIdException.class,
-                () -> sut.signUp(request)
+                () -> memberServiceTest.signUp(request)
         );
 
         then(memberRepository)
@@ -127,7 +127,7 @@ public class MemberServiceTest {
                 .willReturn(memberId);
 
         // when
-        sut.signIn(request);
+        memberServiceTest.signIn(request);
 
         // then
         then(memberRepository)
@@ -164,7 +164,7 @@ public class MemberServiceTest {
         // when then
         assertThrows(
                 NotFoundMemberException.class,
-                () ->sut.signIn(request)
+                () ->memberServiceTest.signIn(request)
         );
 
         then(memberRepository)
@@ -191,7 +191,7 @@ public class MemberServiceTest {
         given(memberRepository.existsServiceId(serviceId))
                 .willReturn(false);
 
-        VerifyDuplicatedServiceIdResponse response = sut.existsServiceId(serviceId);
+        VerifyDuplicatedServiceIdResponse response = memberServiceTest.existsServiceId(serviceId);
 
         then(memberRepository)
                 .should(times(1))
@@ -207,7 +207,7 @@ public class MemberServiceTest {
         given(memberRepository.existsServiceId(serviceId))
                 .willReturn(true);
 
-        VerifyDuplicatedServiceIdResponse response = sut.existsServiceId(serviceId);
+        VerifyDuplicatedServiceIdResponse response = memberServiceTest.existsServiceId(serviceId);
 
         then(memberRepository)
                 .should(times(1))
@@ -224,7 +224,7 @@ public class MemberServiceTest {
         given(memberRepository.existsNickname(nickname))
                 .willReturn(true);
 
-        VerifyDuplicatedNicknameResponse response = sut.existsNickname(nickname);
+        VerifyDuplicatedNicknameResponse response = memberServiceTest.existsNickname(nickname);
 
         then(memberRepository)
                 .should(times(1))
@@ -241,7 +241,7 @@ public class MemberServiceTest {
         given(memberRepository.existsNickname(nickname))
                 .willReturn(false);
 
-        VerifyDuplicatedNicknameResponse response = sut.existsNickname(nickname);
+        VerifyDuplicatedNicknameResponse response = memberServiceTest.existsNickname(nickname);
 
         then(memberRepository)
                 .should(times(1))
@@ -260,7 +260,7 @@ public class MemberServiceTest {
         given(jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken))
                 .willReturn(memberId);
 
-        sut.signOut(accessToken);
+        memberServiceTest.signOut(accessToken);
 
         then(rememberMeRepository)
                 .should(times(1))
