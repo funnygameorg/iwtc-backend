@@ -2,6 +2,7 @@ package com.example.demo.worldcup.repository;
 
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.model.MediaFileRepository;
+import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.domain.worldcup.model.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.model.entity.WorldCupGame;
@@ -9,7 +10,6 @@ import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.model.entity.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.entity.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.model.entity.vo.VisibleType;
-import com.example.demo.domain.worldcup.model.projection.FindWorldCupGamePageProjection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,38 +70,38 @@ public class WorldCupGameRepositoryTest {
         LocalDate endDate = LocalDate.now();
         Pageable pageable = Pageable.ofSize(25);
 
-        Page<FindWorldCupGamePageProjection> result = worldCupGameRepository.findWorldCupGamePage(
+        Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
                 endDate,
                 pageable
         );
 
         result.getContent().forEach(it ->
-                System.out.println(it.getId() + ", " + it.getContentsName1() + ", " + it.getContentsName2())
+                System.out.println(it.id() + ", " + it.contentsName1() + ", " + it.contentsName2())
         );
 
-        FindWorldCupGamePageProjection firstElement = result.getContent().get(0);
-        FindWorldCupGamePageProjection secondElement = result.getContent().get(1);
+        GetWorldCupGamePageProjection firstElement = result.getContent().get(0);
+        GetWorldCupGamePageProjection secondElement = result.getContent().get(1);
 
         assert result.getTotalPages() == 1;
         assert result.getContent().size() == 2;
         assert result.getNumberOfElements() == 2;
         assert result.getNumber() == 0;
 
-        assert firstElement.getId() == 2;
-        assert Objects.equals(game2.getTitle(), firstElement.getTitle());
-        assert Objects.equals(contents6.getName(), firstElement.getContentsName1());
-        assert Objects.equals(contents5.getName(), firstElement.getContentsName2());
-        assert Objects.equals(mediaFile6.getFilePath(), firstElement.getFilePath1());
-        assert Objects.equals(mediaFile5.getFilePath(), firstElement.getFilePath2());
+        assert firstElement.id() == 2;
+        assert Objects.equals(game2.getTitle(), firstElement.title());
+        assert Objects.equals(contents6.getName(), firstElement.contentsName1());
+        assert Objects.equals(contents5.getName(), firstElement.contentsName2());
+        assert Objects.equals(mediaFile6.getFilePath(), firstElement.filePath1());
+        assert Objects.equals(mediaFile5.getFilePath(), firstElement.filePath2());
 
-        assert secondElement.getId() == 1;
-        assert Objects.equals(game1.getTitle(), secondElement.getTitle());
-        assert Objects.equals(game1.getDescription(), secondElement.getDescription());
-        assert Objects.equals(contents4.getName(), secondElement.getContentsName1());
-        assert Objects.equals(contents3.getName(), secondElement.getContentsName2());
-        assert Objects.equals(mediaFile4.getFilePath(), secondElement.getFilePath1());
-        assert Objects.equals(mediaFile3.getFilePath(), secondElement.getFilePath2());
+        assert secondElement.id() == 1;
+        assert Objects.equals(game1.getTitle(), secondElement.title());
+        assert Objects.equals(game1.getDescription(), secondElement.description());
+        assert Objects.equals(contents4.getName(), secondElement.contentsName1());
+        assert Objects.equals(contents3.getName(), secondElement.contentsName2());
+        assert Objects.equals(mediaFile4.getFilePath(), secondElement.filePath1());
+        assert Objects.equals(mediaFile3.getFilePath(), secondElement.filePath2());
 
     }
 
@@ -113,13 +113,13 @@ public class WorldCupGameRepositoryTest {
         LocalDate endDate = LocalDate.now();
         Pageable pageable = Pageable.ofSize(25);
 
-        Page<FindWorldCupGamePageProjection> result = worldCupGameRepository.findWorldCupGamePage(
+        Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
                 endDate,
                 pageable
         );
         result.getContent().forEach(it ->
-                System.out.println(it.getId() + ", " + it.getContentsName1() + ", " + it.getContentsName2())
+                System.out.println(it.id() + ", " + it.contentsName1() + ", " + it.contentsName2())
         );
         assert result.getTotalPages() == 0;
         assert result.getContent().size() == 0;

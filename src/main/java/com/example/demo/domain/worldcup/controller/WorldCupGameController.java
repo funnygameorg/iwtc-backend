@@ -1,6 +1,6 @@
 package com.example.demo.domain.worldcup.controller;
 
-import com.example.demo.domain.worldcup.model.projection.FindWorldCupGamePageProjection;
+import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupsResponse;
 import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
@@ -72,7 +72,7 @@ public class WorldCupGameController {
             ) Pageable pageable
     ) {
         log.info(dateRange + ", " + worldCupKeyword + ", " + pageable);
-        Page<FindWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
+        Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,
                 worldCupKeyword

@@ -3,6 +3,7 @@ package com.example.demo.domain.worldcup.model.entity;
 import com.example.demo.common.jpa.TimeBaseEntity;
 import com.example.demo.domain.worldcup.model.entity.vo.VisibleType;
 import com.example.demo.domain.worldcup.model.entity.vo.WorldCupGameRound;
+import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,23 @@ import java.util.Objects;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
+@SqlResultSetMapping(
+        name = "FindWorldCupGamePageProjectionMapping",
+        classes = {
+                @ConstructorResult(
+                        targetClass = GetWorldCupGamePageProjection.class,
+                        columns = {
+                                @ColumnResult(name = "id", type = Long.class),
+                                @ColumnResult(name = "title", type = String.class),
+                                @ColumnResult(name = "description", type = String.class),
+                                @ColumnResult(name = "contentsName1", type = String.class),
+                                @ColumnResult(name = "filePath1", type = String.class),
+                                @ColumnResult(name = "contentsName2", type = String.class),
+                                @ColumnResult(name = "filePath2", type = String.class)
+                        }
+                )
+        }
+)
 @Getter
 @Entity
 @Builder

@@ -2,7 +2,7 @@ package com.example.demo.worldcup.service;
 
 import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
-import com.example.demo.domain.worldcup.model.projection.FindWorldCupGamePageProjection;
+import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class WorldCupGameServiceTest {
         String worldCupGameKeyword = "TestKeyword";
         Pageable pageable = Pageable.ofSize(25);
 
-        Page<FindWorldCupGamePageProjection> response = worldCupGameService.findWorldCupByPageable(
+        Page<GetWorldCupGamePageProjection> response = worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,
                 worldCupGameKeyword
@@ -43,6 +43,6 @@ public class WorldCupGameServiceTest {
 
         then(worldCupGameRepository)
                 .should(times(1))
-                .findWorldCupGamePage(startDate, endDate, pageable);
+                .getWorldCupGamePage(startDate, endDate, pageable);
     }
 }
