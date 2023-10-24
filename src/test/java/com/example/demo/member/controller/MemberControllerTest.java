@@ -2,7 +2,11 @@ package com.example.demo.member.controller;
 
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
+import com.example.demo.common.web.auth.AuthenticationInterceptor;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
+import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
+import com.example.demo.common.web.memberresolver.MemberDto;
+import com.example.demo.helper.web.MockArgumentResolver;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
 import com.example.demo.member.model.MemberRepository;
@@ -10,20 +14,26 @@ import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
 import com.example.demo.helper.web.TestWebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,13 +45,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(
         value = MemberController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
-        },
-        includeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = TestWebConfig.class)
-        }
+        excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class) }
 )
+@Import(TestWebConfig.class)
 class MemberControllerTest {
 
     @Autowired private MockMvc mockMvc;
@@ -50,7 +56,6 @@ class MemberControllerTest {
     @MockBean private MemberRepository memberRepository;
     @MockBean private MemberService memberService;
     @MockBean private RememberMeRepository rememberMeRepository;
-
 
     private final String ROOT_PATH = "/api";
 
@@ -102,6 +107,7 @@ class MemberControllerTest {
     )
     @NullAndEmptySource
     public void 회원가입_실패_nickname(String nickname) throws Exception {
+
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .serviceId("itwc123")
@@ -209,7 +215,6 @@ class MemberControllerTest {
                 .serviceId(serviceId)
                 .password("AAAA@32fSD")
                 .build();
-
         mockMvc.perform(
                         post(SIGN_IN_API)
                                 .content(objectMapper.writeValueAsString(request))

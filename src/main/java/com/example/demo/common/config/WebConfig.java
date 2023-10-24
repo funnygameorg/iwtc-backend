@@ -19,18 +19,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final MemberRepository memberRepository;
-    private final RememberMeRepository rememberMeRepository;
-    private final JwtService jwtService;
+    private final AuthenticationInterceptor authenticationInterceptor;
+    private final MemberArgumentResolver memberArgumentResolver;
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new MemberArgumentResolver(memberRepository, jwtService));
+        resolvers.add(memberArgumentResolver);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry
-                .addInterceptor(new AuthenticationInterceptor(rememberMeRepository, jwtService))
+                .addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/members/sign-out");
     }
