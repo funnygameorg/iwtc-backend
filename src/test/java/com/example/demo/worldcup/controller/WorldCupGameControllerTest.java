@@ -2,26 +2,20 @@ package com.example.demo.worldcup.controller;
 
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
-import com.example.demo.member.model.MemberRepository;
-import com.example.demo.worldcup.controller.vo.WorldCupDateRange;
-import com.example.demo.worldcup.service.WorldCupGameService;
+import com.example.demo.domain.member.model.MemberRepository;
+import com.example.demo.domain.worldcup.controller.WorldCupGameController;
+import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

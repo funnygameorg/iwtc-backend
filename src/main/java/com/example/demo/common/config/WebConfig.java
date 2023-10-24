@@ -1,15 +1,11 @@
 package com.example.demo.common.config;
 
-import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
 import com.example.demo.common.web.auth.AuthenticationInterceptor;
-import com.example.demo.member.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

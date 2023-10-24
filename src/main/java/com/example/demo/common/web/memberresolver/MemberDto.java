@@ -1,6 +1,6 @@
 package com.example.demo.common.web.memberresolver;
 
-import com.example.demo.member.model.Member;
+import com.example.demo.domain.member.model.Member;
 
 public record MemberDto (
         Long id,

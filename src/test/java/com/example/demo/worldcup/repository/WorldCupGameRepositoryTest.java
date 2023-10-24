@@ -1,15 +1,15 @@
 package com.example.demo.worldcup.repository;
 
-import com.example.demo.etc.model.MediaFile;
-import com.example.demo.etc.model.MediaFileRepository;
+import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.model.MediaFileRepository;
 import com.example.demo.helper.DataBaseCleanUp;
-import com.example.demo.worldcup.model.WorldCupGameContentsRepository;
-import com.example.demo.worldcup.model.entity.WorldCupGame;
-import com.example.demo.worldcup.model.WorldCupGameRepository;
-import com.example.demo.worldcup.model.entity.WorldCupGameContents;
-import com.example.demo.worldcup.model.entity.vo.WorldCupGameRound;
-import com.example.demo.worldcup.model.entity.vo.VisibleType;
-import com.example.demo.worldcup.model.projection.FindWorldCupGamePageProjection;
+import com.example.demo.domain.worldcup.model.WorldCupGameContentsRepository;
+import com.example.demo.domain.worldcup.model.entity.WorldCupGame;
+import com.example.demo.domain.worldcup.model.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.model.entity.WorldCupGameContents;
+import com.example.demo.domain.worldcup.model.entity.vo.WorldCupGameRound;
+import com.example.demo.domain.worldcup.model.entity.vo.VisibleType;
+import com.example.demo.domain.worldcup.model.projection.FindWorldCupGamePageProjection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
