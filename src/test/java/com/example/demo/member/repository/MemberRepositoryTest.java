@@ -1,5 +1,6 @@
 package com.example.demo.member.repository;
 
+import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -21,9 +22,12 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private DataBaseCleanUp dataBaseCleanUp;
+
     @AfterEach
     public void tearDown() {
-        memberRepository.deleteAllInBatch();
+        dataBaseCleanUp.truncateAllEntity();
     }
 
     @Test

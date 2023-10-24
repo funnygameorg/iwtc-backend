@@ -39,9 +39,7 @@ public class WorldCupGameRepositoryTest {
 
     @AfterEach
     public void tearDown() {
-        worldCupGameContentsRepository.deleteAllInBatch();
-        mediaFileRepository.deleteAllInBatch();
-        worldCupGameRepository.deleteAllInBatch();
+        dataBaseCleanUp.truncateAllEntity();
     }
 
     @Test
