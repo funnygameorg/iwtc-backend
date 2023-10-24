@@ -2,59 +2,46 @@ package com.example.demo.member.controller;
 
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.AuthenticationInterceptor;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.member.controller.dto.SignInRequest;
 import com.example.demo.member.controller.dto.SignUpRequest;
-import com.example.demo.member.exception.NotFoundMemberException;
-import com.example.demo.member.model.Member;
 import com.example.demo.member.model.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.dto.SignInResponse;
+import com.example.demo.helper.web.TestWebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.constraints.AssertTrue;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(
-        controllers = MemberController.class, excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)
-}
-        )
+        value = MemberController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
+        },
+        includeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = TestWebConfig.class)
+        }
+)
 class MemberControllerTest {
 
     @Autowired private MockMvc mockMvc;
@@ -64,11 +51,23 @@ class MemberControllerTest {
     @MockBean private MemberService memberService;
     @MockBean private RememberMeRepository rememberMeRepository;
 
+
     private final String ROOT_PATH = "/api";
+
+    private final String GET_ME_SUMMARY_API = ROOT_PATH + "/members/me/summary";
     private final String SIGN_UP_API = ROOT_PATH + "/members/sign-up";
-    private final String LOGIN_API = ROOT_PATH + "/members/sign-in";
+    private final String SIGN_OUT_API = ROOT_PATH + "/members/sign-out";
+    private final String SIGN_IN_API = ROOT_PATH + "/members/sign-in";
     private final String VERIFY_DUPLICATED_ID_API = ROOT_PATH + "/members/duplicated-check/service-id";
     private final String VERIFY_DUPLICATED_NICKNAME_API = ROOT_PATH + "/members/duplicated-check/nickname";
+
+
+    @Test
+    @DisplayName("자신의 정보 조회")
+    public void getMeSummary() throws Exception {
+        mockMvc.perform(get(GET_ME_SUMMARY_API))
+                .andExpect(status().isOk());
+    }
 
     @DisplayName("회원가입 성공")
     @Test
@@ -187,7 +186,7 @@ class MemberControllerTest {
 
         // when then
         mockMvc.perform(
-                post(LOGIN_API)
+                post(SIGN_IN_API)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
         )
@@ -212,7 +211,7 @@ class MemberControllerTest {
                 .build();
 
         mockMvc.perform(
-                        post(LOGIN_API)
+                        post(SIGN_IN_API)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
@@ -236,11 +235,21 @@ class MemberControllerTest {
                 .build();
         // when then
         mockMvc.perform(
-                        post(LOGIN_API)
+                        post(SIGN_IN_API)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("로그아웃 성공")
+    public void 로그아웃_성공() throws Exception{
+        mockMvc.perform(
+                get(SIGN_OUT_API)
+                        .header("access-token", "TestAccessTokenValue")
+        )
+                .andExpect(status().isNoContent());
     }
 
     @ParameterizedTest
