@@ -1,8 +1,8 @@
 package com.example.demo.domain.etc.controller;
-import com.example.demo.domain.etc.controller.dto.request.WriteCommentRequest;
+import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 
-import com.example.demo.domain.etc.controller.dto.response.CreateAccessTokenResponse;
-import com.example.demo.domain.etc.controller.dto.response.MediaFileResponse;
+import com.example.demo.domain.etc.controller.response.CreateAccessTokenResponse;
+import com.example.demo.domain.etc.controller.response.MediaFileResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.RestApiResponse;

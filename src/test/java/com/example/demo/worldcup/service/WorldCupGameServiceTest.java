@@ -1,7 +1,7 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
-import com.example.demo.domain.worldcup.model.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.model.projection.FindWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import org.junit.jupiter.api.DisplayName;

@@ -1,8 +1,8 @@
 package com.example.demo.domain.worldcup.service;
 
 import com.example.demo.domain.worldcup.model.projection.FindWorldCupGamePageProjection;
-import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
-import com.example.demo.domain.worldcup.model.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

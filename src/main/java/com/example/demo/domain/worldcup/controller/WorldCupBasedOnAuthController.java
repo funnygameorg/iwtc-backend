@@ -1,11 +1,11 @@
 package com.example.demo.domain.worldcup.controller;
 
-import com.example.demo.domain.worldcup.controller.dto.request.CreateWorldCupRequest;
-import com.example.demo.domain.worldcup.controller.dto.response.GetMyWorldCupSummariesResponse;
-import com.example.demo.domain.worldcup.controller.dto.response.GetMyWorldCupSummaryRanksResponse;
-import com.example.demo.domain.worldcup.controller.dto.response.GetWorldCupContentsResponse;
-import com.example.demo.domain.worldcup.controller.dto.response.GetWorldCupResponse;
-import com.example.demo.domain.worldcup.controller.vo.MyWorldCupRankSort;
+import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
+import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummariesResponse;
+import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummaryRanksResponse;
+import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
+import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
+import com.example.demo.domain.worldcup.model.entity.vo.MyWorldCupRankSort;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

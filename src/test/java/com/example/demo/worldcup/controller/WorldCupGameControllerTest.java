@@ -2,9 +2,9 @@ package com.example.demo.worldcup.controller;
 
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
-import com.example.demo.domain.member.model.MemberRepository;
+import com.example.demo.domain.member.model.repository.MemberRepository;
 import com.example.demo.domain.worldcup.controller.WorldCupGameController;
-import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

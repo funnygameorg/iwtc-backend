@@ -2,8 +2,8 @@ package com.example.demo.domain.worldcup.controller;
 
 import com.example.demo.domain.worldcup.model.projection.FindWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
-import com.example.demo.domain.worldcup.controller.dto.response.GetWorldCupsResponse;
-import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.controller.response.GetWorldCupsResponse;
+import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
 import com.example.demo.common.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
