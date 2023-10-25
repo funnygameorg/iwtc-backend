@@ -61,7 +61,7 @@ public class WorldCupGameController {
             @RequestParam(name = "dateRange", required = false, defaultValue = "ALL")
             WorldCupDateRange dateRange,
 
-            @Size(min = 2, max = 10)
+            @Size(min = 1, max = 10)
             @RequestParam(name = "keyword", required = false)
             String worldCupKeyword,
 

@@ -68,8 +68,6 @@ public class WorldCupGameControllerTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "A",
-            "1 ",
             "aaaaaaaaaaa"}
     )
     @DisplayName("월드컵 리스트 조회 요청 실패 - keyword")
