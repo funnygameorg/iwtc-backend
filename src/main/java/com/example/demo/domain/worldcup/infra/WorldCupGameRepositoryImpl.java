@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.util.StringUtils.hasText;
 import static org.springframework.util.StringUtils.trimAllWhitespace;
@@ -33,8 +35,11 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
             String worldCupGameKeyword,
             Pageable pageable
     ) {
+        Sort.Order order = getOrderInstance(pageable);
         String likeKeywordCondition = buildWorldCupGameKeywordCondition(worldCupGameKeyword);
-        String sql = getWorldCupGamePagingQuery(likeKeywordCondition);
+        String sortCondition = buildSortCondition(order);
+
+        String sql = getWorldCupGamePagingQuery(likeKeywordCondition, sortCondition);
 
         List result = em.createNativeQuery(sql, "FindWorldCupGamePageProjectionMapping")
                 .setParameter("startDate", startDate)
@@ -48,6 +53,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
         return new PageImpl<>(result, pageable, total);
     }
 
+    // 검색 키워드를 제공하면 쿼리문에 대치할 수 있는 조건문을 반환
     public String buildWorldCupGameKeywordCondition(String worldCupGameKeyword) {
         String likeKeywordDynamicQuery = "";
         if(hasText(worldCupGameKeyword)) {
@@ -55,6 +61,22 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
             likeKeywordDynamicQuery = "AND CONCAT(wcg.title, wcg.description) LIKE '%" + removedWhiteKeyword + "%' ";
         }
         return likeKeywordDynamicQuery;
+    }
+
+    // Order 객체를 제공하면 쿼리문에 대치할 수 있는 조건문을 반환
+    private String buildSortCondition(Sort.Order order) {
+        String orderBy = "id";
+        String orderDirection = order.getDirection().toString();
+
+        if(hasText(order.getProperty())) {
+            orderBy = order.getProperty();
+        }
+
+        return "ORDER BY wcg.%s %s".formatted(orderBy, orderDirection);
+    }
+
+    private Sort.Order getOrderInstance(Pageable pageable) {
+        return pageable.getSort().iterator().next();
     }
 
     private long countByCreatedAtBetween(LocalDate startDate, LocalDate endDate) {
@@ -66,7 +88,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
         query.setParameter("endDate", endDate);
         return ((Number) query.getSingleResult()).longValue();
     }
-    private String getWorldCupGamePagingQuery(String worldCupGameKeyword) {
+    private String getWorldCupGamePagingQuery(String... condition) {
         return """
             SELECT wcg.id AS id, wcg.title AS title, wcg.description AS description, 
             wcgc_max.name AS contentsName1, mf_max.file_path AS filePath1, 
@@ -101,8 +123,8 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
             WHERE DATE(wcg.created_at) BETWEEN :startDate AND :endDate 
             %s
             GROUP BY wcg.id 
-            ORDER BY wcg.id desc
+            %s
             LIMIT :pageSize OFFSET :offset
-            """.formatted(worldCupGameKeyword);
+            """.formatted(condition[0], condition[1]);
     }
 }

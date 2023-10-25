@@ -20,7 +20,9 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
@@ -72,7 +74,7 @@ public class WorldCupGameRepositoryTest {
         String worldCupGameKeyword = "test";
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
-        Pageable pageable = Pageable.ofSize(25);
+        Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
@@ -116,7 +118,7 @@ public class WorldCupGameRepositoryTest {
         String worldCupGameKeyword = "test";
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
-        Pageable pageable = Pageable.ofSize(25);
+        Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
@@ -206,7 +208,7 @@ public class WorldCupGameRepositoryTest {
 
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
-        Pageable pageable = Pageable.ofSize(25);
+        Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
@@ -267,7 +269,7 @@ public class WorldCupGameRepositoryTest {
 
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
-        Pageable pageable = Pageable.ofSize(25);
+        Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
