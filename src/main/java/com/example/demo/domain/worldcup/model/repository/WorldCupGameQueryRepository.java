@@ -11,6 +11,7 @@ public interface WorldCupGameQueryRepository {
     Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
             LocalDate startDate,
             LocalDate endDate,
+            String worldCupGameKeyword,
             Pageable pageable
     );
 }

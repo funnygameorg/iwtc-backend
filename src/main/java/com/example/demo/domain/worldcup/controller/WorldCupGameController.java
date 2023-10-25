@@ -71,7 +71,6 @@ public class WorldCupGameController {
                     sort = { "id" }
             ) Pageable pageable
     ) {
-        log.info(dateRange + ", " + worldCupKeyword + ", " + pageable);
         Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,

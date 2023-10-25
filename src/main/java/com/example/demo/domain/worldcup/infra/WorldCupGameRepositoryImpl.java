@@ -2,16 +2,23 @@ package com.example.demo.domain.worldcup.infra;
 
 import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.model.repository.WorldCupGameQueryRepository;
+import com.google.common.base.CharMatcher;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.util.StringUtils.hasText;
+import static org.springframework.util.StringUtils.trimAllWhitespace;
 
 
 @Repository
@@ -23,9 +30,12 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
     public Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
             LocalDate startDate,
             LocalDate endDate,
+            String worldCupGameKeyword,
             Pageable pageable
     ) {
-        String sql = getWorldCupGamePagingQuery();
+        String likeKeywordCondition = buildWorldCupGameKeywordCondition(worldCupGameKeyword);
+        String sql = getWorldCupGamePagingQuery(likeKeywordCondition);
+
         List result = em.createNativeQuery(sql, "FindWorldCupGamePageProjectionMapping")
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate)
@@ -38,6 +48,15 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
         return new PageImpl<>(result, pageable, total);
     }
 
+    public String buildWorldCupGameKeywordCondition(String worldCupGameKeyword) {
+        String likeKeywordDynamicQuery = "";
+        if(hasText(worldCupGameKeyword)) {
+            String removedWhiteKeyword = trimAllWhitespace(worldCupGameKeyword);
+            likeKeywordDynamicQuery = "AND CONCAT(wcg.title, wcg.description) LIKE '%" + removedWhiteKeyword + "%' ";
+        }
+        return likeKeywordDynamicQuery;
+    }
+
     private long countByCreatedAtBetween(LocalDate startDate, LocalDate endDate) {
         String sql = """
                 SELECT COUNT(*) FROM world_cup_game WHERE DATE(created_at) BETWEEN :startDate AND :endDate
@@ -47,7 +66,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
         query.setParameter("endDate", endDate);
         return ((Number) query.getSingleResult()).longValue();
     }
-    private String getWorldCupGamePagingQuery() {
+    private String getWorldCupGamePagingQuery(String worldCupGameKeyword) {
         return """
             SELECT wcg.id AS id, wcg.title AS title, wcg.description AS description, 
             wcgc_max.name AS contentsName1, mf_max.file_path AS filePath1, 
@@ -80,9 +99,10 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
             INNER JOIN media_file AS mf_max on wcgc_max.media_file_id = mf_max.id 
             INNER JOIN media_file AS mf_min on wcgc_min.media_file_id = mf_min.id 
             WHERE DATE(wcg.created_at) BETWEEN :startDate AND :endDate 
+            %s
             GROUP BY wcg.id 
             ORDER BY wcg.id desc
             LIMIT :pageSize OFFSET :offset
-            """;
+            """.formatted(worldCupGameKeyword);
     }
 }

@@ -35,7 +35,7 @@ public class WorldCupGameServiceTest {
         String worldCupGameKeyword = "TestKeyword";
         Pageable pageable = Pageable.ofSize(25);
 
-        Page<GetWorldCupGamePageProjection> response = worldCupGameService.findWorldCupByPageable(
+        worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,
                 worldCupGameKeyword
@@ -43,6 +43,11 @@ public class WorldCupGameServiceTest {
 
         then(worldCupGameRepository)
                 .should(times(1))
-                .getWorldCupGamePage(startDate, endDate, pageable);
+                .getWorldCupGamePage(
+                        startDate,
+                        endDate,
+                        worldCupGameKeyword,
+                        pageable
+                );
     }
 }

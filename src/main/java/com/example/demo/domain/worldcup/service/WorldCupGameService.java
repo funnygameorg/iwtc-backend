@@ -29,6 +29,7 @@ public class WorldCupGameService {
         return worldCupGameRepository.getWorldCupGamePage(
                 startDate,
                 now,
+                worldCupKeyword,
                 pageable
         );
     }
