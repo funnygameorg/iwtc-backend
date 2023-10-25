@@ -27,6 +27,12 @@ import static org.springframework.util.StringUtils.trimAllWhitespace;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
+
+    private final static String WORLD_CUP_GAME_START_DATE = "startDate";
+    private final static String WORLD_CUP_GAME_END_DATE = "endDate";
+    private final static int PAGING_SIZE = 25;
+    private final static int PAGING_OFFSET = 25;
+    private final static String PAGING_DEFAULT_SORT_BY = "id";
     private final EntityManager em;
 
     public Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
@@ -36,21 +42,37 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
             Pageable pageable
     ) {
         Sort.Order order = getOrderInstance(pageable);
-        String likeKeywordCondition = buildWorldCupGameKeywordCondition(worldCupGameKeyword);
         String sortCondition = buildSortCondition(order);
+        String likeKeywordCondition = buildWorldCupGameKeywordCondition(worldCupGameKeyword);
 
         String sql = getWorldCupGamePagingQuery(likeKeywordCondition, sortCondition);
 
-        List result = em.createNativeQuery(sql, "FindWorldCupGamePageProjectionMapping")
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate)
-                .setParameter("pageSize", pageable.getPageSize())
-                .setParameter("offset", pageable.getOffset())
+        return new PageImpl<>(
+                getWorldCupGamePage(startDate, endDate, pageable, sql),
+                pageable,
+                countByCreatedAtBetween(startDate, endDate)
+        );
+    }
+
+    // 메인 게임 컨텐츠 조회 쿼리
+    private List getWorldCupGamePage(LocalDate startDate, LocalDate endDate, Pageable pageable, String sql) {
+        return em.createNativeQuery(sql, "FindWorldCupGamePageProjectionMapping")
+                .setParameter(WORLD_CUP_GAME_START_DATE, startDate)
+                .setParameter(WORLD_CUP_GAME_END_DATE, endDate)
+                .setParameter(PAGING_SIZE, pageable.getPageSize())
+                .setParameter(PAGING_OFFSET, pageable.getOffset())
                 .getResultList();
+    }
 
-        long total = countByCreatedAtBetween(startDate, endDate);
-
-        return new PageImpl<>(result, pageable, total);
+    // 페이지 카운트 쿼리
+    private long countByCreatedAtBetween(LocalDate startDate, LocalDate endDate) {
+        String sql = """
+                SELECT COUNT(*) FROM world_cup_game WHERE DATE(created_at) BETWEEN :startDate AND :endDate
+                """;
+        Query query = em.createNativeQuery(sql);
+        query.setParameter(WORLD_CUP_GAME_START_DATE, startDate);
+        query.setParameter(WORLD_CUP_GAME_END_DATE, endDate);
+        return ((Number) query.getSingleResult()).longValue();
     }
 
     // 검색 키워드를 제공하면 쿼리문에 대치할 수 있는 조건문을 반환
@@ -65,7 +87,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
 
     // Order 객체를 제공하면 쿼리문에 대치할 수 있는 조건문을 반환
     private String buildSortCondition(Sort.Order order) {
-        String orderBy = "id";
+        String orderBy = PAGING_DEFAULT_SORT_BY;
         String orderDirection = order.getDirection().toString();
 
         if(hasText(order.getProperty())) {
@@ -77,16 +99,6 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
 
     private Sort.Order getOrderInstance(Pageable pageable) {
         return pageable.getSort().iterator().next();
-    }
-
-    private long countByCreatedAtBetween(LocalDate startDate, LocalDate endDate) {
-        String sql = """
-                SELECT COUNT(*) FROM world_cup_game WHERE DATE(created_at) BETWEEN :startDate AND :endDate
-                """;
-        Query query = em.createNativeQuery(sql);
-        query.setParameter("startDate", startDate);
-        query.setParameter("endDate", endDate);
-        return ((Number) query.getSingleResult()).longValue();
     }
     private String getWorldCupGamePagingQuery(String... condition) {
         return """
