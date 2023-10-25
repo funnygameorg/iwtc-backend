@@ -30,8 +30,8 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
 
     private final static String WORLD_CUP_GAME_START_DATE = "startDate";
     private final static String WORLD_CUP_GAME_END_DATE = "endDate";
-    private final static int PAGING_SIZE = 25;
-    private final static int PAGING_OFFSET = 25;
+    private final static String PAGING_SIZE = "pageSize";
+    private final static String PAGING_OFFSET = "offset";
     private final static String PAGING_DEFAULT_SORT_BY = "id";
     private final EntityManager em;
 
