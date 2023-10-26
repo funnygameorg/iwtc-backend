@@ -6,6 +6,7 @@ import com.example.demo.domain.member.model.repository.MemberRepository;
 import com.example.demo.domain.worldcup.controller.WorldCupGameController;
 import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
+import com.example.demo.common.config.WebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

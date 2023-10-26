@@ -1,5 +1,9 @@
-package com.example.demo.helper.web;
+package com.example.demo.common.config;
 
+import com.example.demo.common.MockArgumentResolver;
+import com.example.demo.common.MockAuthenticationInterceptor;
+import com.example.demo.common.web.memberresolver.MemberDto;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -9,7 +13,8 @@ import java.util.List;
 
 
 
-public class TestWebConfig implements WebMvcConfigurer {
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -21,4 +26,14 @@ public class TestWebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new MockAuthenticationInterceptor());
     }
 
+    @Bean
+    public MemberDto memberDto() {
+        return new MemberDto(
+                1L,
+                "TEST_SERVICE_ID",
+                "TEST_NICKNAME",
+                "TEST_PASSWORD",
+                "TEST_ACCESS_TOKEN"
+        );
+    }
 }

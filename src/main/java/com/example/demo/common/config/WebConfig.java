@@ -1,9 +1,12 @@
 package com.example.demo.common.config;
 
 import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
-import com.example.demo.common.web.auth.AuthenticationInterceptor;
+import com.example.demo.common.interceptor.AuthenticationInterceptor;
+import com.example.demo.common.web.memberresolver.MemberDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -17,6 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AuthenticationInterceptor authenticationInterceptor;
     private final MemberArgumentResolver memberArgumentResolver;
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberArgumentResolver);
@@ -38,5 +42,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .exposedHeaders("access-token")
                 .maxAge(3000);
+    }
+
+    /*
+        HttpRequest ~ Response 의 생명주기를 가지는 사용자 정보 bean 생성
+     */
+    @Bean
+    @RequestScope
+    public MemberDto memberDto() {
+        return new MemberDto();
     }
 }

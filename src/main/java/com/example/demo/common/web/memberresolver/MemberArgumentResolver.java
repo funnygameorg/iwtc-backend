@@ -5,6 +5,7 @@ import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.model.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +18,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 @RequiredArgsConstructor
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
-    private final MemberRepository memberRepository;
-    private final JwtService jwtService;
+
+    private final MemberDto memberDto;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -27,18 +28,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     @Transactional
-    public Object resolveArgument(
-            MethodParameter parameter,
-            ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest,
-            WebDataBinderFactory binderFactory
-    ) {
-        String accessToken = webRequest.getHeader("access-token");
-        Long memberId = jwtService.getPayLoadByToken(accessToken);
-        Member member = memberRepository
-                .findById(memberId)
-                .orElseThrow(NotFoundMemberException::new);
-
-        return MemberDto.fromEntity(member, accessToken);
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        return memberDto;
     }
 }

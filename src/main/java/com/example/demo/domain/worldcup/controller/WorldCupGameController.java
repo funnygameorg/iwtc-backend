@@ -1,5 +1,6 @@
 package com.example.demo.domain.worldcup.controller;
 
+import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupsResponse;
