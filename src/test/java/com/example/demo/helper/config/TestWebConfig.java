@@ -8,6 +8,7 @@ import com.example.demo.helper.MockAuthenticationInterceptor;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -33,6 +34,7 @@ public class TestWebConfig extends WebConfig {
     }
 
     @Bean
+    @RequestScope
     public MemberDto memberDto() {
         return new MemberDto(
                 1L,
