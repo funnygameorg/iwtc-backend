@@ -1,19 +1,15 @@
-package com.example.demo.helper.web;
+package com.example.demo.common;
 
 import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.MemberDto;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class MockArgumentResolver extends MemberArgumentResolver {
-
     public MockArgumentResolver() {
-        super(null, null);
-
+        super(null);
     }
 
     @Override

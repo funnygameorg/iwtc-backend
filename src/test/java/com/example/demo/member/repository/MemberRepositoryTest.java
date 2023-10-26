@@ -1,6 +1,6 @@
 package com.example.demo.member.repository;
 
-import com.example.demo.helper.DataBaseCleanUp;
+import com.example.demo.common.DataBaseCleanUp;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.model.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -114,6 +114,10 @@ public class MemberRepositoryTest {
         Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
 
         assert result.isEmpty();
+    }
+
+    public void memeber_저장_성공() {
+
     }
 
 }

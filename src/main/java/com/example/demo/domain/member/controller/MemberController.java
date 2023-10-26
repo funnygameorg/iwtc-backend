@@ -219,9 +219,9 @@ public class MemberController {
             @Parameter(hidden = true) MemberDto memberDto
     ) {
         GetMySummaryResponse response = new GetMySummaryResponse(
-                memberDto.id(),
-                memberDto.serviceId(),
-                memberDto.nickname()
+                memberDto.getId(),
+                memberDto.getServiceId(),
+                memberDto.getNickname()
         );
 
         return RestApiResponse.builder()

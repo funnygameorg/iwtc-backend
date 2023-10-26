@@ -1,8 +1,6 @@
-package com.example.demo.helper.web;
+package com.example.demo.common;
 
-import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.AuthenticationInterceptor;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
+import com.example.demo.common.interceptor.AuthenticationInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

@@ -9,7 +9,6 @@ import com.example.demo.domain.member.controller.request.SignUpRequest;
 import com.example.demo.domain.member.model.repository.MemberRepository;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.member.controller.response.SignInResponse;
-import com.example.demo.helper.web.TestWebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,11 +31,7 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(
-        value = MemberController.class,
-        excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class) }
-)
-@Import(TestWebConfig.class)
+@WebMvcTest(value = MemberController.class)
 class MemberControllerTest {
 
     @Autowired private MockMvc mockMvc;
