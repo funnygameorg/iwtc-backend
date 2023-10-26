@@ -1,11 +1,6 @@
 package com.example.demo.common.web.memberresolver;
 
-import com.example.demo.common.jwt.JwtService;
-import com.example.demo.domain.member.exception.NotFoundMemberException;
-import com.example.demo.domain.member.model.Member;
-import com.example.demo.domain.member.model.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

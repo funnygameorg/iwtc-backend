@@ -1,12 +1,13 @@
 package com.example.demo.worldcup.controller;
 
+import com.example.demo.helper.config.TestWebConfig;
+import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.model.repository.MemberRepository;
 import com.example.demo.domain.worldcup.controller.WorldCupGameController;
 import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
-import com.example.demo.common.config.WebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = WorldCupGameController.class)
+@WebMvcTest(controllers = WorldCupGameController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
+        })
+@Import(TestWebConfig.class)
 public class WorldCupGameControllerTest {
 
     @Autowired private ObjectMapper objectMapper;

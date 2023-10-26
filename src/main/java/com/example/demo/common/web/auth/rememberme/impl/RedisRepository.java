@@ -1,18 +1,11 @@
 package com.example.demo.common.web.auth.rememberme.impl;
 
-import com.example.demo.common.web.auth.rememberme.RememberMe;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import javax.swing.text.html.Option;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.*;
 

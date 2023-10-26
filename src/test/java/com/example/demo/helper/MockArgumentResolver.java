@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package com.example.demo.helper;
 
 import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.MemberDto;

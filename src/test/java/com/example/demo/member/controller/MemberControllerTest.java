@@ -1,5 +1,6 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.helper.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
@@ -17,8 +18,9 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.*;
-import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -31,8 +33,14 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(value = MemberController.class)
+@WebMvcTest(
+        value = MemberController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
+        })
+@Import(TestWebConfig.class)
 class MemberControllerTest {
+
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;

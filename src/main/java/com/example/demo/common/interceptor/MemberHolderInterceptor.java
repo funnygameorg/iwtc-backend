@@ -7,13 +7,9 @@ import com.example.demo.domain.member.model.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.util.Objects;
 import java.util.Optional;
-
-import static java.util.Objects.*;
 
 @RequiredArgsConstructor
 public class MemberHolderInterceptor implements HandlerInterceptor {

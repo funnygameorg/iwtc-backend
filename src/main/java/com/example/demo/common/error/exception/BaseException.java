@@ -2,15 +2,12 @@ package com.example.demo.common.error.exception;
 
 import com.example.demo.common.error.CustomErrorCode;
 import lombok.*;
-import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
-import static lombok.AccessLevel.PROTECTED;
-
 
 
 @Getter

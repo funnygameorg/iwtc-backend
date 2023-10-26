@@ -1,18 +1,16 @@
 package com.example.demo.common.interceptor;
 
-import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.ExpiredAuthenticationException;
 import com.example.demo.common.web.auth.RequestWithBlackListedAccessToken;
 import com.example.demo.common.web.auth.RequireAuth;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
+import com.example.demo.common.jwt.JwtService;
+import com.example.demo.common.web.auth.ExpiredAuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.cors.reactive.PreFlightRequestHandler;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 @Component
 @RequiredArgsConstructor

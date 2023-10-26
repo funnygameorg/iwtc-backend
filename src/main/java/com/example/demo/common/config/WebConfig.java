@@ -1,7 +1,7 @@
 package com.example.demo.common.config;
 
-import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
 import com.example.demo.common.interceptor.AuthenticationInterceptor;
+import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

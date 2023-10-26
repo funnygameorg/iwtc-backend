@@ -3,7 +3,7 @@ package com.example.demo.worldcup.repository;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.model.MediaFileRepository;
 import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
-import com.example.demo.common.DataBaseCleanUp;
+import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.domain.worldcup.model.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.model.entity.WorldCupGame;
 import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
