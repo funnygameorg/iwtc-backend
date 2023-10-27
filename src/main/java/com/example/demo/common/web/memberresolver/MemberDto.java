@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
+@Component
+@RequestScope
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,13 +19,13 @@ public class MemberDto {
         String serviceId;
         String nickname;
         String password;
-        String accessToken;
 
-        public void setAllField(Member member, String accessToken) {
-            this.id = member.getId();
-            this.serviceId = member.getServiceId();
-            this.nickname = member.getNickname();
-            this.password = member.getPassword();
-            this.accessToken = accessToken;
-        }
+    public static MemberDto fromEntity(Member member) {
+        return new MemberDto(
+                member.getId(),
+                member.getServiceId(),
+                member.getNickname(),
+                member.getPassword()
+        );
+    }
 }

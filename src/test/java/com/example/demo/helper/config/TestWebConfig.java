@@ -32,16 +32,4 @@ public class TestWebConfig extends WebConfig {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new MockAuthenticationInterceptor());
     }
-
-    @Bean
-    @RequestScope
-    public MemberDto memberDto() {
-        return new MemberDto(
-                1L,
-                "TEST_SERVICE_ID",
-                "TEST_NICKNAME",
-                "TEST_PASSWORD",
-                "TEST_ACCESS_TOKEN"
-        );
-    }
 }

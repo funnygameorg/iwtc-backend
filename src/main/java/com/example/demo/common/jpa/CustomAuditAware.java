@@ -1,17 +1,23 @@
 package com.example.demo.common.jpa;
 
-import com.example.demo.common.web.memberresolver.MemberDto;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class CustomAuditAware implements AuditorAware<MemberDto> {
+public class CustomAuditAware implements AuditorAware<Long> {
 
-    private final MemberDto memberDto;
+    @NotNull
     @Override
-    public Optional<MemberDto> getCurrentAuditor() {
-        return Optional.ofNullable(memberDto);
+    public Optional<Long> getCurrentAuditor() {
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        Long memberId = ((Number) request).longValue();
+        return Optional.of(memberId);
     }
 }

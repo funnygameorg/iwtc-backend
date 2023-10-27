@@ -44,12 +44,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3000);
     }
 
-    /*
-        HttpRequest ~ Response 의 생명주기를 가지는 사용자 정보 bean 생성
-     */
-    @Bean
-    @RequestScope
-    public MemberDto memberDto() {
-        return new MemberDto();
-    }
 }

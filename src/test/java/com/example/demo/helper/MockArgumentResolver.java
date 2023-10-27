@@ -9,7 +9,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class MockArgumentResolver extends MemberArgumentResolver {
     public MockArgumentResolver() {
-        super(null);
+        super(null, null);
     }
 
     @Override
@@ -22,8 +22,7 @@ public class MockArgumentResolver extends MemberArgumentResolver {
                 1L,
                 "TEST_SERVICE_ID",
                 "TEST_NICKNAME",
-                "TEST_PASSWORD",
-                "TEST_ACCESS_TOKEN"
+                "TEST_PASSWORD"
         );
     }
 }
