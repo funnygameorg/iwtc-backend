@@ -12,7 +12,6 @@ public record GetWorldCupPlayContentsResponse (
             Long contentsId,
             String name,
             String absoluteName,
-            String filePath,
-            String extension
+            String filePath
     ){}
 }
