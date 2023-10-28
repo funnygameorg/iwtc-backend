@@ -7,10 +7,10 @@
             conversionWord="clr"
             converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <!-- 변수 설정 -->
-    <property name="BY_DATE" value="%d{yyyy-MM-dd-HH-mm}.%i" />
+    <property name="BY_DATE" value="%d{yyyy-MM-dd-HH}.%i" />
     <property name="LOG_PATH" value="./logs" />
     <property name="LOG_FILE_NAME" value="logFile" />
-    <property name="LOG_PATTERN" value="[%X{request_id:-startup}][%d{HH:mm:ss.SSS}][%thread][%-5level][%logger{36}] -- %msg%n" />
+    <property name="LOG_PATTERN" value="%green([%thread]) %highlight(%-5level) %blue(%logger{72}) : %msg%n" />
 
     <appender name="console" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
@@ -123,13 +123,9 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="org.springframework.cache" LEVEL="TRACE">
-        <appender-ref ref="CONSOLE_ALL" />
-    </logger>
-
     <!-- 기본 출력-->
     <root level="TRACE">
-        <appender-ref ref="CONSOLE_ALL" />
+        <appender-ref ref="CONSOLE_ALL" />-
         <appender-ref ref="FILE_WARN" />
         <appender-ref ref="FILE_INFO" />
         <appender-ref ref="FILE_ERROR" />
