@@ -36,6 +36,10 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+	// cache
+	implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("com.github.ben-manes.caffeine:caffeine")
+
 	// api docs
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 

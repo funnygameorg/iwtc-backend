@@ -4,6 +4,7 @@ import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProj
 import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import java.time.LocalDate;
 public class WorldCupGameService {
 
     private final WorldCupGameRepository worldCupGameRepository;
+
+    @Cacheable(cacheNames = "findWorldCupByPageable", key = "#dateRange")
     public Page<GetWorldCupGamePageProjection> findWorldCupByPageable(
             Pageable pageable,
             WorldCupDateRange dateRange,
