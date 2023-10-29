@@ -1,32 +1,27 @@
-package com.example.demo.domain.worldcup.infra;
+package com.example.demo.domain.worldcup.repository.impl;
 
-import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
-import com.example.demo.domain.worldcup.model.repository.WorldCupGameQueryRepository;
-import com.google.common.base.CharMatcher;
-import jakarta.persistence.*;
+import com.example.demo.domain.worldcup.repository.WorldCupGameCustomRepository;
+import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 import static org.springframework.util.StringUtils.hasText;
 import static org.springframework.util.StringUtils.trimAllWhitespace;
 
-
 @Repository
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
+@RequiredArgsConstructor
+public class WorldCupGamePageRepositoryImpl {
 
     private final static String WORLD_CUP_GAME_START_DATE = "startDate";
     private final static String WORLD_CUP_GAME_END_DATE = "endDate";
@@ -76,7 +71,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
     }
 
     // 검색 키워드를 제공하면 쿼리문에 대치할 수 있는 조건문을 반환
-    public String buildWorldCupGameKeywordCondition(String worldCupGameKeyword) {
+    private String buildWorldCupGameKeywordCondition(String worldCupGameKeyword) {
         String likeKeywordDynamicQuery = "";
         if(hasText(worldCupGameKeyword)) {
             String removedWhiteKeyword = trimAllWhitespace(worldCupGameKeyword);
@@ -96,7 +91,6 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
 
         return "ORDER BY wcg.%s %s".formatted(orderBy, orderDirection);
     }
-
     private Sort.Order getOrderInstance(Pageable pageable) {
         return pageable.getSort().iterator().next();
     }

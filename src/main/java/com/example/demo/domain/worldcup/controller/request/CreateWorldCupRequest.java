@@ -1,6 +1,6 @@
 package com.example.demo.domain.worldcup.controller.request;
 
-import com.example.demo.domain.worldcup.model.entity.vo.VisibleType;
+import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

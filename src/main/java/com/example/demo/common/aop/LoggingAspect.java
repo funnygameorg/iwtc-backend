@@ -59,7 +59,7 @@ public class LoggingAspect {
         return result;
     }
 
-    @Around(EXECUTION + ROOT_PACKAGE + "domain.*.repository.*.*(..))")
+    @Around(EXECUTION + ROOT_PACKAGE + "domain.*.repository.impl.*.*(..))")
     public Object repositoryAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
         String methodName = joinPoint.getSignature().getName();

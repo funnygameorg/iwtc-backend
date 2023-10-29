@@ -2,14 +2,14 @@ package com.example.demo.worldcup.repository;
 
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.model.MediaFileRepository;
-import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
+import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.helper.DataBaseCleanUp;
-import com.example.demo.domain.worldcup.model.repository.WorldCupGameContentsRepository;
-import com.example.demo.domain.worldcup.model.entity.WorldCupGame;
-import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
-import com.example.demo.domain.worldcup.model.entity.WorldCupGameContents;
-import com.example.demo.domain.worldcup.model.entity.vo.WorldCupGameRound;
-import com.example.demo.domain.worldcup.model.entity.vo.VisibleType;
+import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
+import com.example.demo.domain.worldcup.model.WorldCupGame;
+import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.model.WorldCupGameContents;
+import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
+import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -124,53 +124,15 @@ public class WorldCupGameRepositoryTest {
                 worldCupGameKeyword,
                 pageable
         );
+
         result.getContent().forEach(it ->
                 System.out.println(it.id() + ", " + it.contentsName1() + ", " + it.contentsName2())
         );
+
         assert result.getTotalPages() == 0;
         assert result.getContent().size() == 0;
         assert result.getNumberOfElements() == 0;
         assert result.getNumber() == 0;
-    }
-
-    private WorldCupGame createWorldCupGame(
-            String title,
-            String description,
-            WorldCupGameRound gameRound,
-            VisibleType visibleType,
-            int memberId)
-    {
-        return WorldCupGame.builder()
-                .title(title)
-                .description(description)
-                .round(gameRound)
-                .visibleType(visibleType)
-                .views(0)
-                .softDelete(false)
-                .memberId(memberId)
-                .build();
-    }
-
-    private MediaFile createMediaFile(
-            String fileOriginalName,
-            String fileAbsoluteName,
-            String filePath,
-            String extension)
-    {
-        return MediaFile.builder()
-                .originalName(fileOriginalName)
-                .absoluteName(fileAbsoluteName)
-                .filePath(filePath)
-                .extension(extension)
-                .build();
-    }
-
-    private WorldCupGameContents createGameContents(WorldCupGame game, String name, int mediaFileId) {
-        return WorldCupGameContents.builder()
-                .name(name)
-                .worldCupGame(game)
-                .mediaFileId(mediaFileId)
-                .build();
     }
 
 
@@ -285,5 +247,45 @@ public class WorldCupGameRepositoryTest {
         assert result.getNumberOfElements() == 0;
         assert result.getNumber() == 0;
 
+    }
+
+    private WorldCupGame createWorldCupGame(
+            String title,
+            String description,
+            WorldCupGameRound gameRound,
+            VisibleType visibleType,
+            int memberId)
+    {
+        return WorldCupGame.builder()
+                .title(title)
+                .description(description)
+                .round(gameRound)
+                .visibleType(visibleType)
+                .views(0)
+                .softDelete(false)
+                .memberId(memberId)
+                .build();
+    }
+
+    private MediaFile createMediaFile(
+            String fileOriginalName,
+            String fileAbsoluteName,
+            String filePath,
+            String extension)
+    {
+        return MediaFile.builder()
+                .originalName(fileOriginalName)
+                .absoluteName(fileAbsoluteName)
+                .filePath(filePath)
+                .extension(extension)
+                .build();
+    }
+
+    private WorldCupGameContents createGameContents(WorldCupGame game, String name, int mediaFileId) {
+        return WorldCupGameContents.builder()
+                .name(name)
+                .worldCupGame(game)
+                .mediaFileId(mediaFileId)
+                .build();
     }
 }

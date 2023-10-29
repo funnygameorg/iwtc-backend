@@ -1,6 +1,6 @@
 package com.example.demo.member.controller;
 
-import com.example.demo.helper.config.TestWebConfig;
+import com.example.demo.helper.web.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
@@ -44,10 +44,7 @@ class MemberControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
-    @MockBean private JwtService jwtService;
-    @MockBean private MemberRepository memberRepository;
     @MockBean private MemberService memberService;
-    @MockBean private RememberMeRepository rememberMeRepository;
 
     private final String ROOT_PATH = "/api";
 

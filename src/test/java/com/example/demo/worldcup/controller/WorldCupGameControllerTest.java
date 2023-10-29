@@ -1,12 +1,12 @@
 package com.example.demo.worldcup.controller;
 
-import com.example.demo.helper.config.TestWebConfig;
+import com.example.demo.helper.web.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.model.repository.MemberRepository;
 import com.example.demo.domain.worldcup.controller.WorldCupGameController;
-import com.example.demo.domain.worldcup.model.entity.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.model.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -33,12 +33,6 @@ public class WorldCupGameControllerTest {
 
     @Autowired private ObjectMapper objectMapper;
     @Autowired private MockMvc mockMvc;
-
-    @MockBean private MemberRepository memberRepository;
-
-    @MockBean private RememberMeRepository rememberMeRepository;
-
-    @MockBean private JwtService jwtService;
 
     @MockBean private WorldCupGameService worldCupGameService;
 

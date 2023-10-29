@@ -1,4 +1,4 @@
-package com.example.demo.domain.worldcup.model.projection;
+package com.example.demo.domain.worldcup.repository.projection;
 
 public record GetWorldCupGamePageProjection(
         Long id,
