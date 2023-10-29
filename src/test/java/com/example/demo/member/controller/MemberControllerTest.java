@@ -2,12 +2,9 @@ package com.example.demo.member.controller;
 
 import com.example.demo.helper.web.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
-import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.controller.MemberController;
 import com.example.demo.domain.member.controller.request.SignInRequest;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
-import com.example.demo.domain.member.model.repository.MemberRepository;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.member.controller.response.SignInResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;

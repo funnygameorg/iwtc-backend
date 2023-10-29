@@ -1,7 +1,7 @@
 package com.example.demo.worldcup.repository;
 
 import com.example.demo.domain.etc.model.MediaFile;
-import com.example.demo.domain.etc.model.MediaFileRepository;
+import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;

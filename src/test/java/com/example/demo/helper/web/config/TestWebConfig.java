@@ -3,7 +3,7 @@ package com.example.demo.helper.web.config;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
-import com.example.demo.domain.member.model.repository.MemberRepository;
+import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.helper.web.MockArgumentResolver;
 import com.example.demo.helper.web.MockAuthenticationInterceptor;
 import org.springframework.boot.test.context.TestConfiguration;

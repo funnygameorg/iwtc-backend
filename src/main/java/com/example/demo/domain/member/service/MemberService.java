@@ -8,7 +8,7 @@ import com.example.demo.domain.member.exception.DuplicatedNicknameException;
 import com.example.demo.domain.member.exception.DuplicatedServiceIdException;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.model.Member;
-import com.example.demo.domain.member.model.repository.MemberRepository;
+import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.domain.member.controller.response.SignInResponse;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedNicknameResponse;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedServiceIdResponse;

@@ -1,6 +1,6 @@
-package com.example.demo.domain.member.infra;
+package com.example.demo.domain.member.repository.impl;
 
-import com.example.demo.domain.member.model.repository.MemberQueryRepository;
+import com.example.demo.domain.member.repository.MemberQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

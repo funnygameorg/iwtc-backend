@@ -1,4 +1,4 @@
-package com.example.demo.domain.etc.repository;
+package com.example.demo.domain.etc.repository.impl;
 
 import com.example.demo.domain.etc.model.MediaFile;
 import org.springframework.data.jpa.repository.JpaRepository;

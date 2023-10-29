@@ -10,7 +10,7 @@ import com.example.demo.domain.member.controller.response.VerifyDuplicatedServic
 import com.example.demo.domain.member.exception.DuplicatedNicknameException;
 import com.example.demo.domain.member.exception.DuplicatedServiceIdException;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
-import com.example.demo.domain.member.model.repository.MemberRepository;
+import com.example.demo.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
