@@ -1,4 +1,4 @@
-package com.example.demo.domain.worldcup.model.entity.vo;
+package com.example.demo.domain.worldcup.model.vo;
 
 public enum MyWorldCupRankSort {
     LATEST, POPULARITY

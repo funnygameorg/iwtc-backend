@@ -5,7 +5,7 @@ import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummari
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummaryRanksResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
-import com.example.demo.domain.worldcup.model.entity.vo.MyWorldCupRankSort;
+import com.example.demo.domain.worldcup.model.vo.MyWorldCupRankSort;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

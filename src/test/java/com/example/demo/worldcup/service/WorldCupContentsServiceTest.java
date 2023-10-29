@@ -1,6 +1,6 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
@@ -27,11 +28,14 @@ public class WorldCupContentsServiceTest {
 
         Long worldCupGameId = 1L;
 
+        given(worldCupGameRepository.existsWorldCupGame(worldCupGameId))
+                .willReturn(true);
+
         worldCupGamecontentsService.getAvailableGameRounds(worldCupGameId);
 
         then(worldCupGameRepository)
                 .should(times(1))
-                .existsWorldGame(worldCupGameId);
+                .existsWorldCupGame(worldCupGameId);
 
         then(worldCupGameRepository)
                 .should(times(1))

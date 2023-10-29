@@ -1,6 +1,6 @@
 package com.example.demo.domain.worldcup.controller.response;
 
-import com.example.demo.domain.worldcup.model.entity.vo.VisibleType;
+import com.example.demo.domain.worldcup.model.vo.VisibleType;
 
 import java.time.LocalDateTime;
 

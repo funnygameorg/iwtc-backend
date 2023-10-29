@@ -2,8 +2,8 @@ package com.example.demo.domain.worldcup.service;
 
 import com.example.demo.domain.worldcup.controller.response.getAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGame;
-import com.example.demo.domain.worldcup.model.projection.GetAvailableGameRoundsProjection;
-import com.example.demo.domain.worldcup.model.repository.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
+import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ public class WorldCupGameContentsService {
 
     public getAvailableGameRoundsResponse getAvailableGameRounds(Long worldCupGameId) {
 
-        if(!worldCupGameRepository.existsWorldGame(worldCupGameId)) {
+        if(!worldCupGameRepository.existsWorldCupGame(worldCupGameId)) {
             throw new NotFoundWorldCupGame("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId));
         }
 

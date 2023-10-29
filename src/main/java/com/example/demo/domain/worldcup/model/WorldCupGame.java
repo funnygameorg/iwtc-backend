@@ -1,9 +1,9 @@
-package com.example.demo.domain.worldcup.model.entity;
+package com.example.demo.domain.worldcup.model;
 
 import com.example.demo.common.jpa.TimeBaseEntity;
-import com.example.demo.domain.worldcup.model.entity.vo.VisibleType;
-import com.example.demo.domain.worldcup.model.entity.vo.WorldCupGameRound;
-import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
+import com.example.demo.domain.worldcup.model.vo.VisibleType;
+import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
+import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

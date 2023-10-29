@@ -1,13 +1,13 @@
-package com.example.demo.domain.worldcup.model.repository;
+package com.example.demo.domain.worldcup.repository;
 
-import com.example.demo.domain.worldcup.model.projection.GetAvailableGameRoundsProjection;
-import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
+import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
+import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
-public interface WorldCupGameQueryRepository {
+public interface WorldCupGameCustomRepository {
 
     Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
             LocalDate startDate,
@@ -16,6 +16,7 @@ public interface WorldCupGameQueryRepository {
             Pageable pageable
     );
 
-    Boolean existsWorldGame(Long worldCupGameId);
+    Boolean existsWorldCupGame(Long worldCupGameId);
     GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId);
+    void incrementView(Long worldCupGameId);
 }
