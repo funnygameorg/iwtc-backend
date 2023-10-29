@@ -58,7 +58,7 @@ public class WorldCupContentsServiceTest {
 
         then(worldCupGameRepository)
                 .should(times(1))
-                .incrementView(worldCupGameId);
+                .incrementWorldCupGameViews(worldCupGameId);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class WorldCupContentsServiceTest {
 
         then(worldCupGameRepository)
                 .should(never())
-                .incrementView(worldCupGameId);
+                .incrementWorldCupGameViews(worldCupGameId);
     }
     @Test
     @DisplayName("존재하지 않는 게임의 라운드 수 조회")
@@ -122,6 +122,6 @@ public class WorldCupContentsServiceTest {
 
         then(worldCupGameRepository)
                 .should(never())
-                .incrementView(worldCupGameId);
+                .incrementWorldCupGameViews(worldCupGameId);
     }
 }

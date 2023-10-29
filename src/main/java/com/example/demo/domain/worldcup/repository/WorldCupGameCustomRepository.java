@@ -4,6 +4,7 @@ import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRo
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 
 import java.time.LocalDate;
 
@@ -18,5 +19,6 @@ public interface WorldCupGameCustomRepository {
 
     Boolean existsWorldCupGame(Long worldCupGameId);
     GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId);
-    void incrementView(Long worldCupGameId);
+    @Async
+    void incrementWorldCupGameViews(Long worldCupGameId);
 }

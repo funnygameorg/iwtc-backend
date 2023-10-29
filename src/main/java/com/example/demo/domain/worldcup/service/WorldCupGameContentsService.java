@@ -7,6 +7,7 @@ import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class WorldCupGameContentsService {
             );
         }
 
-        worldCupGameRepository.incrementView(worldCupGameId);
+        worldCupGameRepository.incrementWorldCupGameViews(worldCupGameId);
 
         return new GetAvailableGameRoundsResponse(
                 result.worldCupId(),
