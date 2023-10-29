@@ -20,6 +20,8 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
     private final WorldCupGamePageRepositoryImpl worldCupGamePageRepositoryImpl;
     private final EntityManager em;
 
+    private static final String WORLD_CUP_GAME_TABLE_PK= "worldCupGameId";
+
     @Override
     public Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
             LocalDate startDate,
@@ -33,15 +35,26 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 
     @Override
     public Boolean existsWorldCupGame(Long worldCupGameId) {
-        String sql = "SELECT EXISTS (SELECT 1 FROM WORLD_CUP_GAME WHERE id = :worldCupGameId)";
-        TypedQuery<Boolean> query = em.createQuery(sql, Boolean.class);
-        query.setParameter("worldCupGameId", worldCupGameId);
-        return query.getSingleResult();
+        String nativeQuery = "SELECT EXISTS (SELECT 1 FROM WORLD_CUP_GAME WHERE id = :worldCupGameId)";
+        Query query = em.createNativeQuery(nativeQuery);
+        query.setParameter(
+                WORLD_CUP_GAME_TABLE_PK,
+                worldCupGameId
+        );
+
+        return (Boolean) query.getSingleResult();
     }
 
     @Override
     public GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId) {
-        return null;
+        String nativeQuery = "";
+        Query query = em.createNativeQuery(nativeQuery);
+        query.setParameter(
+                WORLD_CUP_GAME_TABLE_PK,
+                worldCupGameId
+        );
+
+        return (GetAvailableGameRoundsProjection) query.getSingleResult();
     }
 
     @Override
