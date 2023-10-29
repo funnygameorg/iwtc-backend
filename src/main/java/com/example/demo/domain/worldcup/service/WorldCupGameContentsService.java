@@ -1,7 +1,8 @@
 package com.example.demo.domain.worldcup.service;
 
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
-import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGame;
+import com.example.demo.domain.worldcup.exception.NoRoundsAvailableToPlayException;
+import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
 import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
@@ -23,12 +24,17 @@ public class WorldCupGameContentsService {
     public GetAvailableGameRoundsResponse getAvailableGameRounds(Long worldCupGameId) {
 
         if(!worldCupGameRepository.existsWorldCupGame(worldCupGameId)) {
-            throw new NotFoundWorldCupGame("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId));
+            throw new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId));
         }
 
         GetAvailableGameRoundsProjection result = worldCupGameRepository.getAvailableGameRounds(worldCupGameId);
 
         List<Integer> availableGameRounds = generateAvailableRounds(result.totalContentsSize());
+        if(availableGameRounds.size() == 0) {
+            throw new NoRoundsAvailableToPlayException(
+                    "%s 의 응답으로는 게임을 할 수 없습니다.".formatted(result)
+            );
+        }
 
         worldCupGameRepository.incrementView(worldCupGameId);
 
