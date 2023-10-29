@@ -41,6 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .exposedHeaders("access-token")
+                .exposedHeaders("refresh-token")
                 .maxAge(3000);
     }
 
