@@ -44,10 +44,7 @@ class MemberControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
-    @MockBean private JwtService jwtService;
-    @MockBean private MemberRepository memberRepository;
     @MockBean private MemberService memberService;
-    @MockBean private RememberMeRepository rememberMeRepository;
 
     private final String ROOT_PATH = "/api";
 

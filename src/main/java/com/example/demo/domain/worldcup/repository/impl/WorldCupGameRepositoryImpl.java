@@ -29,8 +29,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
             String worldCupGameKeyword,
             Pageable pageable
     ) {
-        worldCupGamePageRepositoryImpl.getWorldCupGamePage(startDate, endDate, worldCupGameKeyword, pageable);
-        return null;
+        return worldCupGamePageRepositoryImpl.getWorldCupGamePage(startDate, endDate, worldCupGameKeyword, pageable);
     }
 
     @Override
@@ -47,14 +46,22 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 
     @Override
     public GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId) {
-        String nativeQuery = "";
-        Query query = em.createNativeQuery(nativeQuery);
+        String sql = """
+                SELECT new com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection(
+                    wcg.id, wcg.title, wcg.description, count(wcgc.id) as count
+                )
+                FROM WorldCupGame wcg 
+                LEFT JOIN WorldCupGameContents wcgc 
+                ON wcg = wcgc.worldCupGame 
+                WHERE wcg.id = :worldCupGameId 
+                GROUP BY wcg.id 
+                """;
+        TypedQuery<GetAvailableGameRoundsProjection> query = em.createQuery(sql, GetAvailableGameRoundsProjection.class);
         query.setParameter(
                 WORLD_CUP_GAME_TABLE_PK,
                 worldCupGameId
         );
-
-        return (GetAvailableGameRoundsProjection) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override

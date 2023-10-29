@@ -2,11 +2,13 @@ package com.example.demo.worldcup.controller;
 
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.worldcup.controller.WorldCupContentsController;
+import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.example.demo.helper.web.config.TestWebConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
@@ -25,6 +27,9 @@ public class WorldCupContentsControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private WorldCupGameContentsService worldCupGameContentsService;
 
     private final static String ROOT_API = "/api/world-cups";
     private final static String GET_AVAILABLE_ROUNDS_API = ROOT_API + "/{worldCupId}/available-rounds";

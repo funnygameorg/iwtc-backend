@@ -34,12 +34,6 @@ public class WorldCupGameControllerTest {
     @Autowired private ObjectMapper objectMapper;
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private MemberRepository memberRepository;
-
-    @MockBean private RememberMeRepository rememberMeRepository;
-
-    @MockBean private JwtService jwtService;
-
     @MockBean private WorldCupGameService worldCupGameService;
 
     private final String ROOT_PATH = "/api";

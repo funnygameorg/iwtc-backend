@@ -1,17 +1,17 @@
 package com.example.demo.domain.worldcup.controller;
 
-import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupsAllContentsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
-import com.example.demo.domain.worldcup.controller.response.getAvailableGameRoundsResponse;
+import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
+import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +21,11 @@ import static org.springframework.http.HttpStatus.*;
 @Tag(name = "WorldCup contents", description = "월드컵 게임 컨텐츠 제공 API")
 @RestController
 @RequestMapping("/api/world-cups")
+@RequiredArgsConstructor
 public class WorldCupContentsController {
+
+    private final WorldCupGameContentsService worldCupGameContentsService;
+
     @Operation(
             summary = "이상형 월드컵 게임 진행에 필요한 정보 제공",
             description = "이상형 월드컵 게임을 위한 이상형 리스트를 제공합니다.",
@@ -97,13 +101,14 @@ public class WorldCupContentsController {
     )
     @GetMapping("/{worldCupId}/available-rounds")
     @ResponseStatus(OK)
-    public RestApiResponse<getAvailableGameRoundsResponse> getAvailableGameRounds(
+    public RestApiResponse<GetAvailableGameRoundsResponse> getAvailableGameRounds(
             @PathVariable Long worldCupId
     ) {
+        GetAvailableGameRoundsResponse result = worldCupGameContentsService.getAvailableGameRounds(worldCupId);
         return new RestApiResponse(
                 1,
                 "",
-                null
+                result
         );
     }
 }
