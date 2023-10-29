@@ -33,5 +33,15 @@ jwt:
   token-validity-milli-seconds:
     access: 20000
     refresh: 21600000
+
 logging:
   config: classpath:log/logback-spring-local.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
