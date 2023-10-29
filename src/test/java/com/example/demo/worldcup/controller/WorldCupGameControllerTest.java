@@ -1,6 +1,6 @@
 package com.example.demo.worldcup.controller;
 
-import com.example.demo.helper.config.TestWebConfig;
+import com.example.demo.helper.web.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;

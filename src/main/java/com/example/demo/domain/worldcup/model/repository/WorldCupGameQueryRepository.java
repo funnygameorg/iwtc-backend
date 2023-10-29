@@ -1,5 +1,6 @@
 package com.example.demo.domain.worldcup.model.repository;
 
+import com.example.demo.domain.worldcup.model.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,7 @@ public interface WorldCupGameQueryRepository {
             String worldCupGameKeyword,
             Pageable pageable
     );
+
+    Boolean existsWorldGame(Long worldCupGameId);
+    GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId);
 }

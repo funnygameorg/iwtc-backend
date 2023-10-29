@@ -1,5 +1,6 @@
 package com.example.demo.domain.worldcup.infra;
 
+import com.example.demo.domain.worldcup.model.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.model.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.model.repository.WorldCupGameQueryRepository;
 import com.google.common.base.CharMatcher;
@@ -35,6 +36,16 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
     private final static String PAGING_DEFAULT_SORT_BY = "id";
     private final EntityManager em;
 
+    @Override
+    public Boolean existsWorldGame(Long worldCupGameId) {
+        return null;
+    }
+
+    @Override
+    public GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId) {
+        return null;
+    }
+
     public Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
             LocalDate startDate,
             LocalDate endDate,
@@ -53,6 +64,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
                 countByCreatedAtBetween(startDate, endDate)
         );
     }
+
 
     // 메인 게임 컨텐츠 조회 쿼리
     private List getWorldCupGamePage(LocalDate startDate, LocalDate endDate, Pageable pageable, String sql) {
@@ -139,4 +151,6 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameQueryRepository {
             LIMIT :pageSize OFFSET :offset
             """.formatted(condition[0], condition[1]);
     }
+
+
 }

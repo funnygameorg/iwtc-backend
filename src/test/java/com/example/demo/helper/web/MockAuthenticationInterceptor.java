@@ -1,4 +1,4 @@
-package com.example.demo.helper;
+package com.example.demo.helper.web;
 
 import com.example.demo.common.interceptor.AuthenticationInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
