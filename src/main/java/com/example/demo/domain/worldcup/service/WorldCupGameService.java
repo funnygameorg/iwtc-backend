@@ -23,7 +23,7 @@ public class WorldCupGameService {
     @Cacheable(
             value = "findWorldCupByPageable",
             key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
-            unless = "#result == null"
+            unless = "#result.isEmpty()"
     )
     public Page<GetWorldCupGamePageProjection> findWorldCupByPageable(
             Pageable pageable,

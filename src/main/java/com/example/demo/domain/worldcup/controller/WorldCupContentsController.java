@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,13 @@ public class WorldCupContentsController {
                             required = true
                     ),
                     @Parameter(
-                            name = "round",
+                            name = "currentRound",
                             description = "현재 게임 진행 라운드",
+                            required = true
+                    ),
+                    @Parameter(
+                            name = "divideContentsSizePerRequest",
+                            description = "현재 게임 진행 라운드 [ 최소 : 1, 최대 : 4 ]",
                             required = true
                     ),
                     @Parameter(
@@ -65,9 +71,18 @@ public class WorldCupContentsController {
     @GetMapping("/{worldCupId}/contents")
     @ResponseStatus(OK)
     public RestApiResponse<GetWorldCupPlayContentsResponse> getPlayContents(
-            @PathVariable Long worldCupId,
-            @RequestParam(name = "round") int round,
-            @RequestParam(name = "alreadyPlayedContentsIds", required = false) List<Long> alreadyPlayedContentsIds
+            @PathVariable
+            Long worldCupId,
+
+            @RequestParam(name = "round")
+            int currentRound,
+
+            @Size(min = 1, max = 4)
+            @RequestParam(name = "divideContentsSizePerRequest")
+            int divideContentsSizePerRequest,
+
+            @RequestParam(name = "alreadyPlayedContentsIds", required = false)
+            List<Long> alreadyPlayedContentsIds
     ) {
         return new RestApiResponse(1, "", null);
     }
