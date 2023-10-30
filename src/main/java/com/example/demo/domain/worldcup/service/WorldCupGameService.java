@@ -20,6 +20,11 @@ public class WorldCupGameService {
 
     private final WorldCupGameRepository worldCupGameRepository;
 
+    @Cacheable(
+            value = "findWorldCupByPageable",
+            key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
+            unless = "#result == null"
+    )
     public Page<GetWorldCupGamePageProjection> findWorldCupByPageable(
             Pageable pageable,
             WorldCupDateRange dateRange,
