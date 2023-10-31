@@ -2,6 +2,7 @@ package com.example.demo.domain.worldcup.controller.response;
 
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public record GetWorldCupPlayContentsResponse (
         );
     }
 
+    @Getter
     public static class PlayImageContents{
             Long contentsId;
             String name;
