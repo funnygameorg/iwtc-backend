@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import java.util.zip.GZIPInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -204,12 +205,16 @@ public class WorldCupContentsServiceTest {
 
         WorldCupGame mockWorldCoupGame = mock(WorldCupGame.class);
 
-        List<GetDividedWorldCupGameContentsProjection> projections = List.of(
-                new GetDividedWorldCupGameContentsProjection(1L, "TEST", "TEST", "TEST"),
-                new GetDividedWorldCupGameContentsProjection(2L, "TEST", "TEST", "TEST"),
-                new GetDividedWorldCupGameContentsProjection(3L, "TEST", "TEST", "TEST"),
-                new GetDividedWorldCupGameContentsProjection(4L, "TEST", "TEST", "TEST")
-        );
+        List<GetDividedWorldCupGameContentsProjection> projections = IntStream.range(1,5)
+                        .mapToObj(idx ->
+                                new GetDividedWorldCupGameContentsProjection(
+                                        idx,
+                                        "TEST",
+                                        "TEST",
+                                        "TEST"
+                                )
+                        ).toList();
+
         given(worldCupGameRepository.findById(worldCupId))
                 .willReturn(Optional.of(mockWorldCoupGame));
 
@@ -234,7 +239,9 @@ public class WorldCupContentsServiceTest {
                         alreadyPlayedContentsIds
                 )
         );
+        
         assert resultException.getPublicMessage().contains("컨텐츠 중복");
+
         then(worldCupGameRepository)
                 .should(times(1))
                 .getDividedWorldCupGameContents(
