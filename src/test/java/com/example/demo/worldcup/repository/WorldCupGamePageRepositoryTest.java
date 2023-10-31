@@ -26,6 +26,10 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static java.util.stream.IntStream.range;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -48,32 +52,44 @@ public class WorldCupGamePageRepositoryTest {
     @Test
     @DisplayName("모든 월드컵 게임, 페이징 조회 성공 - 게임 2개")
     public void 모든_월드컵_게임_페이징_조회_성공() {
-        WorldCupGame game1 = createWorldCupGame("testTitle1", null, WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
-        WorldCupGame game2 = createWorldCupGame("testTitle2", "", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
+        // given
+        List<WorldCupGame> worldCupGames = range(1, 3)
+                .mapToObj(idx -> createWorldCupGame(
+                        "testTitle" + idx,
+                        null,
+                        WorldCupGameRound.ROUND_16,
+                        VisibleType.PRIVATE, idx)
+                )
+                .toList();
 
-        MediaFile mediaFile1 = createMediaFile("originalName1", "A345ytgs32eff1", "https://s3.dsfwwg4fsesef1/aawr.com", ".png");
-        MediaFile mediaFile2 = createMediaFile("originalName2", "A345ytgs32eff2", "https://s3.dsfwwg4fsesef2/aawr.com", ".png");
-        MediaFile mediaFile3 = createMediaFile("originalName3", "A345ytgs32eff3", "https://s3.dsfwwg4fsesef3/aawr.com", ".png");
-        MediaFile mediaFile4 = createMediaFile("originalName4", "A345ytgs32eff4", "https://s3.dsfwwg4fsesef4/aawr.com", ".png");
-        MediaFile mediaFile5 = createMediaFile("originalName5", "A345ytgs32eff5", "https://s3.dsfwwg4fsesef5/aawr.com", ".png");
-        MediaFile mediaFile6 = createMediaFile("originalName6", "A345ytgs32eff6", "https://s3.dsfwwg4fsesef6/aawr.com", ".jpg");
+        List<MediaFile> mediaFiles = range(1,7)
+                .mapToObj(idx ->
+                        createMediaFile("originalName" + idx,
+                                "A345ytgs32eff1",
+                                "https://s3.dsfwwg4fsesef1/aawr.com",
+                                ".png"
+                        )
+                )
+                .toList();
 
-        WorldCupGameContents contents1 = createGameContents(game1, "컨텐츠1", 1);
-        WorldCupGameContents contents2 = createGameContents(game1, "컨텐츠2", 2);
-        WorldCupGameContents contents3 = createGameContents(game1, "컨텐츠3", 3);
-        WorldCupGameContents contents4 = createGameContents(game1, "컨텐츠4", 4);
-        WorldCupGameContents contents5 = createGameContents(game2, "컨텐츠5", 5);
-        WorldCupGameContents contents6 = createGameContents(game2, "컨텐츠6", 6);
+        List<WorldCupGameContents> worldCupGameContentsList1 = range(1, 6)
+                .mapToObj(idx -> createGameContents(worldCupGames.get(0), "컨텐츠" + idx, idx))
+                .toList();
+        List<WorldCupGameContents> worldCupGameContentsList2 = range(5, 7)
+                .mapToObj(idx -> createGameContents(worldCupGames.get(1), "컨텐츠" + idx, idx))
+                .toList();
 
-        worldCupGameRepository.saveAll(List.of(game1, game2));
-        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4, mediaFile5, mediaFile6));
-        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4, contents5, contents6));
+        worldCupGameRepository.saveAll(worldCupGames);
+        mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(worldCupGameContentsList1);
+        worldCupGameContentsRepository.saveAll(worldCupGameContentsList2);
 
         String worldCupGameKeyword = "test";
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
         Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
+        // when
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
                 endDate,
@@ -81,10 +97,7 @@ public class WorldCupGamePageRepositoryTest {
                 pageable
         );
 
-        result.getContent().forEach(it ->
-                System.out.println(it.id() + ", " + it.contentsName1() + ", " + it.contentsName2())
-        );
-
+        // then
         GetWorldCupGamePageProjection firstElement = result.getContent().get(0);
         GetWorldCupGamePageProjection secondElement = result.getContent().get(1);
 
@@ -94,30 +107,32 @@ public class WorldCupGamePageRepositoryTest {
         assert result.getNumber() == 0;
 
         assert firstElement.id() == 2;
-        assert Objects.equals(game2.getTitle(), firstElement.title());
-        assert Objects.equals(contents6.getName(), firstElement.contentsName1());
-        assert Objects.equals(contents5.getName(), firstElement.contentsName2());
-        assert Objects.equals(mediaFile6.getFilePath(), firstElement.filePath1());
-        assert Objects.equals(mediaFile5.getFilePath(), firstElement.filePath2());
+        assert Objects.equals(worldCupGames.get(1).getTitle(), firstElement.title());
+        assert Objects.equals(worldCupGameContentsList2.get(1).getName(), firstElement.contentsName1());
+        assert Objects.equals(worldCupGameContentsList2.get(0).getName(), firstElement.contentsName2());
+        assert Objects.equals(mediaFiles.get(5).getFilePath(), firstElement.filePath1());
+        assert Objects.equals(mediaFiles.get(4).getFilePath(), firstElement.filePath2());
 
         assert secondElement.id() == 1;
-        assert Objects.equals(game1.getTitle(), secondElement.title());
-        assert Objects.equals(game1.getDescription(), secondElement.description());
-        assert Objects.equals(contents4.getName(), secondElement.contentsName1());
-        assert Objects.equals(contents3.getName(), secondElement.contentsName2());
-        assert Objects.equals(mediaFile4.getFilePath(), secondElement.filePath1());
-        assert Objects.equals(mediaFile3.getFilePath(), secondElement.filePath2());
+        assert Objects.equals(worldCupGames.get(0).getTitle(), secondElement.title());
+        assert Objects.equals(worldCupGames.get(0).getDescription(), secondElement.description());
+        assert Objects.equals(worldCupGameContentsList1.get(4).getName(), secondElement.contentsName1());
+        assert Objects.equals(worldCupGameContentsList1.get(3).getName(), secondElement.contentsName2());
+        assert Objects.equals(mediaFiles.get(3).getFilePath(), secondElement.filePath1());
+        assert Objects.equals(mediaFiles.get(2).getFilePath(), secondElement.filePath2());
 
     }
 
     @Test
     @DisplayName("모든 월드컵 게임, 페이징 조회 성공 - 게임 0개")
     public void 모든_월드컵_게임_페이징_조회_성공_컨텐츠_없음() {
+        // given
         String worldCupGameKeyword = "test";
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
         Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
+        // when
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
                 endDate,
@@ -125,10 +140,7 @@ public class WorldCupGamePageRepositoryTest {
                 pageable
         );
 
-        result.getContent().forEach(it ->
-                System.out.println(it.id() + ", " + it.contentsName1() + ", " + it.contentsName2())
-        );
-
+        // then
         assert result.getTotalPages() == 0;
         assert result.getContent().size() == 0;
         assert result.getNumberOfElements() == 0;
@@ -145,42 +157,41 @@ public class WorldCupGamePageRepositoryTest {
     })
     @DisplayName("모든 월드컵 게임, 페이징 조회 성공 - 키워드 조건 적용")
     public void 모든_월드컵_게임_페이징_조회_성공_키워드(String worldCupGameKeyword) {
+        // given
         WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
         WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
 
-        MediaFile mediaFile1 = createMediaFile("originalName1", "A345ytgs32eff1", "https://s3.dsfwwg4fsesef1/aawr.com", ".png");
-        MediaFile mediaFile2 = createMediaFile("originalName2", "A345ytgs32eff2", "https://s3.dsfwwg4fsesef2/aawr.com", ".png");
-        MediaFile mediaFile3 = createMediaFile("originalName3", "A345ytgs32eff3", "https://s3.dsfwwg4fsesef3/aawr.com", ".png");
-        MediaFile mediaFile4 = createMediaFile("originalName4", "A345ytgs32eff4", "https://s3.dsfwwg4fsesef4/aawr.com", ".png");
-        MediaFile mediaFile5 = createMediaFile("originalName5", "A345ytgs32eff5", "https://s3.dsfwwg4fsesef5/aawr.com", ".png");
-        MediaFile mediaFile6 = createMediaFile("originalName6", "A345ytgs32eff6", "https://s3.dsfwwg4fsesef6/aawr.com", ".jpg");
+        List<MediaFile> mediaFiles = range(1,7)
+                .mapToObj(idx ->
+                        createMediaFile("originalName" + idx,
+                                "A345ytgs32eff1",
+                                "https://s3.dsfwwg4fsesef1/aawr.com",
+                                ".png"
+                        )
+                )
+                .toList();
 
-        WorldCupGameContents contents1 = createGameContents(game1, "태양의 후예", 1);
-        WorldCupGameContents contents2 = createGameContents(game1, "태조왕건", 2);
-        WorldCupGameContents contents3 = createGameContents(game1, "도깨비", 3);
-        WorldCupGameContents contents4 = createGameContents(game1, "마스크 걸", 4);
-        WorldCupGameContents contents5 = createGameContents(game2, "맥북 13인치", 5);
-        WorldCupGameContents contents6 = createGameContents(game2, "갤럭시북 2021", 6);
+        List<WorldCupGameContents> worldCupGameContentsList = range(1, 7)
+                .mapToObj(idx -> createGameContents(game1, "컨텐츠" + idx, idx))
+                .toList();
 
         worldCupGameRepository.saveAll(List.of(game1, game2));
-        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4, mediaFile5, mediaFile6));
-        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4, contents5, contents6));
+        mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(worldCupGameContentsList);
 
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
         Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
+        // when
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
                 endDate,
                 worldCupGameKeyword,
                 pageable
         );
-        System.out.println("조회 결과");
-        result.getContent().forEach(it ->
-                System.out.println(it.id() + ", " + it.contentsName1() + ", " + it.contentsName2())
-        );
 
+        // then
         GetWorldCupGamePageProjection firstElement = result.getContent().get(0);
 
         assert result.getTotalPages() == 1;
@@ -189,10 +200,10 @@ public class WorldCupGamePageRepositoryTest {
         assert firstElement.id() == 1;
         assert Objects.equals(game1.getTitle(), firstElement.title());
         assert Objects.equals(game1.getDescription(), firstElement.description());
-        assert Objects.equals(contents4.getName(), firstElement.contentsName1());
-        assert Objects.equals(contents3.getName(), firstElement.contentsName2());
-        assert Objects.equals(mediaFile4.getFilePath(), firstElement.filePath1());
-        assert Objects.equals(mediaFile3.getFilePath(), firstElement.filePath2());
+        assert Objects.equals(worldCupGameContentsList.get(5).getName(), firstElement.contentsName1());
+        assert Objects.equals(worldCupGameContentsList.get(4).getName(), firstElement.contentsName2());
+        assert Objects.equals(mediaFiles.get(5).getFilePath(), firstElement.filePath1());
+        assert Objects.equals(mediaFiles.get(4).getFilePath(), firstElement.filePath2());
 
     }
 
@@ -206,42 +217,41 @@ public class WorldCupGamePageRepositoryTest {
     })
     @DisplayName("모든 월드컵 게임, 페이징 조회 실패 - 키워드 조건 적용")
     public void 모든_월드컵_게임_페이징_조회_실패_키워드(String worldCupGameKeyword) {
+        // given
         WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
         WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
 
-        MediaFile mediaFile1 = createMediaFile("originalName1", "A345ytgs32eff1", "https://s3.dsfwwg4fsesef1/aawr.com", ".png");
-        MediaFile mediaFile2 = createMediaFile("originalName2", "A345ytgs32eff2", "https://s3.dsfwwg4fsesef2/aawr.com", ".png");
-        MediaFile mediaFile3 = createMediaFile("originalName3", "A345ytgs32eff3", "https://s3.dsfwwg4fsesef3/aawr.com", ".png");
-        MediaFile mediaFile4 = createMediaFile("originalName4", "A345ytgs32eff4", "https://s3.dsfwwg4fsesef4/aawr.com", ".png");
-        MediaFile mediaFile5 = createMediaFile("originalName5", "A345ytgs32eff5", "https://s3.dsfwwg4fsesef5/aawr.com", ".png");
-        MediaFile mediaFile6 = createMediaFile("originalName6", "A345ytgs32eff6", "https://s3.dsfwwg4fsesef6/aawr.com", ".jpg");
+        List<MediaFile> mediaFiles = range(1,7)
+                .mapToObj(idx ->
+                        createMediaFile("originalName" + idx,
+                                "A345ytgs32eff1",
+                                "https://s3.dsfwwg4fsesef1/aawr.com",
+                                ".png"
+                        )
+                )
+                .toList();
 
-        WorldCupGameContents contents1 = createGameContents(game1, "태양의 후예", 1);
-        WorldCupGameContents contents2 = createGameContents(game1, "태조왕건", 2);
-        WorldCupGameContents contents3 = createGameContents(game1, "도깨비", 3);
-        WorldCupGameContents contents4 = createGameContents(game1, "마스크 걸", 4);
-        WorldCupGameContents contents5 = createGameContents(game2, "맥북 13인치", 5);
-        WorldCupGameContents contents6 = createGameContents(game2, "갤럭시북 2021", 6);
+        List<WorldCupGameContents> worldCupGameContentsList = range(1, 7)
+                .mapToObj(idx -> createGameContents(game1, "컨텐츠" + idx, idx))
+                .toList();
 
         worldCupGameRepository.saveAll(List.of(game1, game2));
-        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4, mediaFile5, mediaFile6));
-        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4, contents5, contents6));
+        mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(worldCupGameContentsList);
 
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
         Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
+        // when
         Page<GetWorldCupGamePageProjection> result = worldCupGameRepository.getWorldCupGamePage(
                 startDate,
                 endDate,
                 worldCupGameKeyword,
                 pageable
         );
-        System.out.println("조회 결과");
-        result.getContent().forEach(it ->
-                System.out.println(it.id() + ", " + it.contentsName1() + ", " + it.contentsName2())
-        );
 
+        // then
         assert result.getTotalPages() == 1;
         assert result.getContent().size() == 0;
         assert result.getNumberOfElements() == 0;

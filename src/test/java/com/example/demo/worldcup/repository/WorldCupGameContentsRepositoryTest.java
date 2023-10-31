@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -91,17 +92,14 @@ public class WorldCupGameContentsRepositoryTest {
                 VisibleType.PUBLIC,
                 1
         );
-        WorldCupGameContents contents1 = createGameContents(worldCupGame, "CONTENTS_NAME1", 1);
-        WorldCupGameContents contents2 = createGameContents(worldCupGame, "CONTENTS_NAME2", 2);
-        WorldCupGameContents contents3 = createGameContents(worldCupGame, "CONTENTS_NAME3", 3);
-
-        WorldCupGame savedWorldCupGame = worldCupGameRepository.save(worldCupGame);
-        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3));
-
-        Long worldCupGameId = savedWorldCupGame.getId();
+        List<WorldCupGameContents> contentsList = IntStream.range(1,4)
+                .mapToObj(idx -> createGameContents(worldCupGame, "CONTENTS_NAME" + idx, idx))
+                .toList();
+        worldCupGameRepository.save(worldCupGame);
+        worldCupGameContentsRepository.saveAll(contentsList);
 
         // when
-        GetAvailableGameRoundsProjection result = worldCupGameRepository.getAvailableGameRounds(worldCupGameId);
+        GetAvailableGameRoundsProjection result = worldCupGameRepository.getAvailableGameRounds(worldCupGame.getId());
 
         // then
         assert Objects.equals(worldCupGame.getId(), result.worldCupId());
