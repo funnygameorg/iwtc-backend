@@ -1,13 +1,16 @@
 package com.example.demo.domain.worldcup.service;
 
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
+import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
+import com.example.demo.domain.worldcup.exception.IllegalWorldCupGameContentsException;
 import com.example.demo.domain.worldcup.exception.NoRoundsAvailableToPlayException;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
+import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,11 +49,72 @@ public class WorldCupGameContentsService {
                 availableGameRounds
                 );
     }
-
+    // 제공된 컨텐츠 수로 플레이할 수 있는 라운드 수
     private List<Integer> generateAvailableRounds(Long ContentsSize) {
         return stream(WorldCupGameRound.values())
                 .filter(gameRound -> gameRound.isAvailableRound(ContentsSize))
                 .map(availableRound -> availableRound.roundValue)
                 .toList();
     }
+
+
+
+
+
+    public GetWorldCupPlayContentsResponse getPlayContents(
+            Long worldCupGameId,
+            int currentRound,
+            int divideContentsSizePerRequest,
+            List<Long> alreadyPlayedContentsIds
+    ) {
+        WorldCupGame worldCupGame =
+                worldCupGameRepository.findById(worldCupGameId)
+                        .orElseThrow(() ->
+                                new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId))
+                        );
+
+        int getContentsSizePerRequest = WorldCupGameRound
+                .getRoundFromValue(currentRound)
+                .getGameContentsSizePerRequest(divideContentsSizePerRequest);
+
+        List<GetDividedWorldCupGameContentsProjection> contentsProjections =  worldCupGameRepository
+                .getDividedWorldCupGameContents(
+                        worldCupGameId,
+                        getContentsSizePerRequest,
+                        alreadyPlayedContentsIds
+                );
+
+        if(equalsExpectedContentsSize(getContentsSizePerRequest, contentsProjections.size())) {
+            throw new IllegalWorldCupGameContentsException(
+                    "조회 컨텐츠 수가 다름 %s, %s"
+                            .formatted(
+                                    getContentsSizePerRequest,
+                                    contentsProjections.size()
+                            )
+            );
+        }
+
+        if(containsAlreadyContents(alreadyPlayedContentsIds, contentsProjections)) {
+                throw new IllegalWorldCupGameContentsException(
+                        "컨텐츠 중복 : 이미 플레이한 컨텐츠 %s, 조회 성공 컨텐츠 %s"
+                                .formatted(
+                                        alreadyPlayedContentsIds,
+                                        contentsProjections
+                                )
+                );
+        }
+
+        return GetWorldCupPlayContentsResponse.fromProjection(worldCupGame, contentsProjections);
+    }
+    // 조회하기를 원하는 컨텐츠 수만큼 조회했는가?
+    private boolean equalsExpectedContentsSize(int expectedContentsSize, int actualContentsSize) {
+        return expectedContentsSize != actualContentsSize;
+    }
+    // 이미 조회한 컨텐츠를 포함하는가?
+    private boolean containsAlreadyContents(List<Long> alreadyPlayedContentsIds, List<GetDividedWorldCupGameContentsProjection> contentsProjections) {
+        return contentsProjections.stream()
+                .map(GetDividedWorldCupGameContentsProjection::contentsId)
+                .anyMatch(alreadyPlayedContentsIds::contains);
+    }
+
 }

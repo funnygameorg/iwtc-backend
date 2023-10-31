@@ -84,7 +84,11 @@ public class WorldCupContentsController {
             @RequestParam(name = "alreadyPlayedContentsIds", required = false)
             List<Long> alreadyPlayedContentsIds
     ) {
-        return new RestApiResponse(1, "", null);
+        return new RestApiResponse(
+                1,
+                "컨텐츠 조회 성공",
+                worldCupGameContentsService.getPlayContents(worldCupId, currentRound, divideContentsSizePerRequest, alreadyPlayedContentsIds)
+        );
     }
 
     @Operation(
@@ -119,11 +123,10 @@ public class WorldCupContentsController {
     public RestApiResponse<GetAvailableGameRoundsResponse> getAvailableGameRounds(
             @PathVariable Long worldCupId
     ) {
-        GetAvailableGameRoundsResponse result = worldCupGameContentsService.getAvailableGameRounds(worldCupId);
         return new RestApiResponse(
                 1,
-                "",
-                result
+                "플레이 가능한 라운드 조회 성공",
+                worldCupGameContentsService.getAvailableGameRounds(worldCupId)
         );
     }
 }

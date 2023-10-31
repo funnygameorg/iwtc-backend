@@ -2,6 +2,7 @@ package com.example.demo.domain.worldcup.repository.impl;
 
 import com.example.demo.common.web.auth.rememberme.impl.RedisRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
+import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameCustomRepository;
 import jakarta.persistence.*;
@@ -15,7 +16,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sound.midi.SysexMessage;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
     private final EntityManager em;
 
     private static final String WORLD_CUP_GAME_TABLE_PK= "worldCupGameId";
+    private static final String GET_DIVIDED_WORLD_CUP_GAME_CONTENTS_PROJECTION = "new com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection";
 
     @Override
     public Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
@@ -79,6 +85,71 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
         ValueOperations ops = redisTemplate.opsForValue();
         String redisViewsKey = "wcg_views_%s".formatted(worldCupGameId);
         ops.increment(redisViewsKey);
+    }
+
+
+    /**
+     * 게임 플레이에 사용되는 이상형 리스트 조회
+     * @param worldCupId 조회하는 월드컵 게임 Id
+     * @param divideContentsSizePerRequest 조회해야 하는 컨텐츠 수
+     * @param alreadyPlayedContentsIds 제외하는 컨텐츠 아이디
+     * @return
+     */
+    @Override
+    public List<GetDividedWorldCupGameContentsProjection> getDividedWorldCupGameContents(
+            Long worldCupId,
+            int divideContentsSizePerRequest,
+            List<Long> alreadyPlayedContentsIds
+    ) {
+        String NotInAlreadyPlayedContentsIdsDynamicQuery = buildAlreadyPlayedContentsIdsCondition(alreadyPlayedContentsIds);
+        String sql = """
+                    SELECT 
+                        wcgc.ID AS ID, 
+                        wcgc.NAME AS CONTENTS_NAME, 
+                        mf.ABSOLUTE_NAME AS FILE_ABSOLUTE_NAME, 
+                        mf.FILE_PATH AS FILE_PATH
+                    FROM (
+                        SELECT 
+                            inner_wcgc.ID AS id, 
+                            inner_wcgc.NAME AS name, 
+                            inner_wcgc.MEDIA_FILE_ID AS MEDIA_FILE_ID
+                        FROM 
+                            WORLD_CUP_GAME_CONTENTS AS INNER_WCGC
+                        WHERE 
+                            inner_wcgc.WORLD_CUP_GAME_ID = :worldCupGameId
+                        %s
+                    ) AS wcgc
+                    LEFT JOIN 
+                        MEDIA_FILE AS mf ON mf.ID = wcgc.MEDIA_FILE_ID
+                    LIMIT :divideContentsSizePerRequest
+                """
+                .formatted(NotInAlreadyPlayedContentsIdsDynamicQuery);
+
+        Query query = em.createNativeQuery(sql, Tuple.class)
+                .setParameter(WORLD_CUP_GAME_TABLE_PK, worldCupId)
+                .setParameter("divideContentsSizePerRequest", divideContentsSizePerRequest);
+
+        List<Tuple> result = query.getResultList();
+
+        return result.stream()
+                .map(tuple ->
+                        new GetDividedWorldCupGameContentsProjection(
+                                Long.parseLong(String.valueOf(tuple.get("ID"))),
+                                (String) tuple.get("CONTENTS_NAME"),
+                                (String) tuple.get("FILE_ABSOLUTE_NAME"),
+                                (String) tuple.get("FILE_PATH")
+                        )
+                ).collect(Collectors.toList());
+    }
+
+    private String buildAlreadyPlayedContentsIdsCondition(List<Long> alreadyPlayedContentsIds) {
+        if(alreadyPlayedContentsIds.size() == 0)
+            return "";
+        else
+            return " AND inner_wcgc.ID NOT IN (%s)  "
+                    .formatted(alreadyPlayedContentsIds.toString())
+                    .replace("[", "")
+                    .replace("]", "");
     }
 
 }

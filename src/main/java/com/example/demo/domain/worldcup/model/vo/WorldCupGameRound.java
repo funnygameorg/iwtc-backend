@@ -1,6 +1,8 @@
 package com.example.demo.domain.worldcup.model.vo;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.example.demo.domain.worldcup.exception.NotSupportedGameRoundException;
+
+import java.util.Arrays;
 
 public enum WorldCupGameRound {
     ROUND_2(2),
@@ -18,7 +20,20 @@ public enum WorldCupGameRound {
         this.roundValue = roundValue;
     }
 
+    // 게임에서 진행 가능한 라운드 여부 체크
     public boolean isAvailableRound(Long contentsSize) {
         return this.roundValue <= contentsSize;
+    }
+
+    // 해당 라운드의 게임 컨텐츠 조회 단위 나누기
+    public int getGameContentsSizePerRequest(int divide) {
+        return this.roundValue / divide;
+    }
+
+    public static WorldCupGameRound getRoundFromValue(int value) {
+        return Arrays.stream(WorldCupGameRound.values())
+                .filter(round -> round.roundValue == value)
+                .findFirst()
+                .orElseThrow(() -> new NotSupportedGameRoundException(value + "는 해당 게임에서 플레이 불가 라운드입니다."));
     }
 }
