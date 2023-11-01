@@ -43,7 +43,7 @@ public class WorldCupContentsController {
                     ),
                     @Parameter(
                             name = "divideContentsSizePerRequest",
-                            description = "현재 게임 진행 라운드 [ 최소 : 1, 최대 : 4 ]",
+                            description = "컨텐츠 토막 개수 [ 최소 : 1, 최대 : 4 ]",
                             required = true
                     ),
                     @Parameter(
@@ -74,7 +74,7 @@ public class WorldCupContentsController {
             @PathVariable
             Long worldCupId,
 
-            @RequestParam(name = "round")
+            @RequestParam(name = "currentRound")
             int currentRound,
 
             @Size(min = 1, max = 4)
