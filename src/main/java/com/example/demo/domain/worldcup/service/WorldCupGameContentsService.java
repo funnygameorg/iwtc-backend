@@ -73,9 +73,8 @@ public class WorldCupGameContentsService {
                                 new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId))
                         );
 
-        int wantedContentsSize = WorldCupGameRound
-                .getRoundFromValue(currentRound)
-                .getGameContentsSizePerRequest(divideContentsSizePerRequest);
+        WorldCupGameRound worldCupGameRound = WorldCupGameRound.getRoundFromValue(currentRound);
+        int wantedContentsSize = worldCupGameRound.getGameContentsSizePerRequest(divideContentsSizePerRequest);
 
         List<GetDividedWorldCupGameContentsProjection> contentsProjections =  worldCupGameRepository
                 .getDividedWorldCupGameContents(
@@ -104,7 +103,12 @@ public class WorldCupGameContentsService {
                 );
         }
 
-        return GetWorldCupPlayContentsResponse.fromProjection(worldCupGame, contentsProjections);
+        return GetWorldCupPlayContentsResponse.fromProjection(
+                worldCupGame.getId(),
+                worldCupGame.getTitle(),
+                worldCupGameRound.roundValue,
+                contentsProjections
+        );
     }
     // 조회하기를 원하는 컨텐츠 수만큼 조회했는가?
     private boolean equalsExpectedContentsSize(int expectedContentsSize, int actualContentsSize) {

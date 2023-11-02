@@ -147,10 +147,74 @@ public class WorldCupContentsServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회")
+    public void GetPlayContents1() {
+
+        // given
+        WorldCupGame worldCupGame = WorldCupGame
+                .builder()
+                .title("title1")
+                .description("description1")
+                .round(ROUND_32)
+                .visibleType(PUBLIC)
+                .views(0)
+                .softDelete(false)
+                .memberId(1)
+                .build();
+
+        List<MediaFile> mediaFiles = range(1, 10).mapToObj( idx ->
+                MediaFile.builder()
+                        .originalName("fileOriginalName")
+                        .absoluteName("fileAbsoluteName " + idx)
+                        .filePath("/naver/.../ " + idx)
+                        .extension(".png")
+                        .build()
+        ).toList();
+
+        List<WorldCupGameContents> contentsList = range(1, 10).mapToObj( idx ->
+                WorldCupGameContents.builder()
+                        .name("contentsName " + idx)
+                        .worldCupGame(worldCupGame)
+                        .mediaFileId(idx)
+                        .build()
+        ).toList();
+
+        worldCupGameRepository.save(worldCupGame);
+        mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(contentsList);
+
+        // when
+        GetWorldCupPlayContentsResponse result = worldCupGamecontentsService.getPlayContents(
+                1L,
+                8,
+                1,
+                List.of()
+        );
+
+        // then
+        assert result.worldCupId() == 1L;
+        assert result.round() == 8;
+        assert Objects.equals(result.title(), "title1");
+
+        assert result.contentsList().size() == 8;
+
+        assert result.contentsList().get(0).getContentsId() == 1;
+        assert Objects.equals(result.contentsList().get(0).getName(), "contentsName 1");
+        assert Objects.equals(result.contentsList().get(0).getAbsoluteName(), "fileAbsoluteName 1");
+        assert Objects.equals(result.contentsList().get(0).getFilePath(), "/naver/.../ 1");
+
+        assert result.contentsList().get(7).getContentsId() == 8;
+        assert Objects.equals(result.contentsList().get(7).getName(), "contentsName 8");
+        assert Objects.equals(result.contentsList().get(7).getAbsoluteName(), "fileAbsoluteName 8");
+        assert Objects.equals(result.contentsList().get(7).getFilePath(), "/naver/.../ 8");
+
+
+    }
 
     @Test
     @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회 - 예상한 컨텐츠 조회 사이즈와 실제 조회 사이즈가 다르면 안된다. (예외)")
-    public void GetPlayContents1() {
+    public void GetPlayContents2() {
 
         // given
         WorldCupGame worldCupGame = WorldCupGame
@@ -209,7 +273,7 @@ public class WorldCupContentsServiceTest {
 
     @Test
     @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회 - 이미 플레이한 게임 컨텐츠를 조회하면 안된다. (예외)")
-    public void GetPlayContents2() {
+    public void GetPlayContents3() {
 
         // given
         WorldCupGame worldCupGame = WorldCupGame

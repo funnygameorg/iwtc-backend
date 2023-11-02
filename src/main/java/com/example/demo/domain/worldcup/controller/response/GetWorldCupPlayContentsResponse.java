@@ -16,13 +16,15 @@ public record GetWorldCupPlayContentsResponse (
     List<PlayImageContents> contentsList
 ) {
     public static GetWorldCupPlayContentsResponse fromProjection(
-            WorldCupGame worldCupGame,
+            Long worldCupGameId,
+            String WorldCupGameTitle,
+            int worldCupGameRound,
             List<GetDividedWorldCupGameContentsProjection> gameContentsProjections
     ) {
         return new GetWorldCupPlayContentsResponse(
-                worldCupGame.getId(),
-                worldCupGame.getTitle(),
-                worldCupGame.getRound().roundValue,
+                worldCupGameId,
+                WorldCupGameTitle,
+                worldCupGameRound,
                 gameContentsProjections
                         .stream()
                         .map(PlayImageContents::fromProjection)
