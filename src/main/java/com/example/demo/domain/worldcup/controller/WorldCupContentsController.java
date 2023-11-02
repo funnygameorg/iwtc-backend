@@ -58,7 +58,7 @@ public class WorldCupContentsController {
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "플레이 불가능 라운드",
+                            description = "1 : 이미 플레이한 게임 컨텐츠를 조회, 2: 요청한 컨텐츠 사이즈와 실제 조회 사이즈가 다름, 3:플레이 불가능 라운드",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     ),
                     @ApiResponse(
