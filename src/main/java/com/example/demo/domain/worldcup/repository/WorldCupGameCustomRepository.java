@@ -26,7 +26,7 @@ public interface WorldCupGameCustomRepository {
 
     List<GetDividedWorldCupGameContentsProjection> getDividedWorldCupGameContents(
             Long worldCupId,
-            int divideContentsSizePerRequest,
+            int wantedContentsSize,
             List<Long> alreadyPlayedContentsIds
     );
 }

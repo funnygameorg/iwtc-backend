@@ -73,22 +73,22 @@ public class WorldCupGameContentsService {
                                 new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId))
                         );
 
-        int getContentsSizePerRequest = WorldCupGameRound
+        int wantedContentsSize = WorldCupGameRound
                 .getRoundFromValue(currentRound)
                 .getGameContentsSizePerRequest(divideContentsSizePerRequest);
 
         List<GetDividedWorldCupGameContentsProjection> contentsProjections =  worldCupGameRepository
                 .getDividedWorldCupGameContents(
                         worldCupGameId,
-                        getContentsSizePerRequest,
+                        wantedContentsSize,
                         alreadyPlayedContentsIds
                 );
 
-        if(equalsExpectedContentsSize(getContentsSizePerRequest, contentsProjections.size())) {
+        if(equalsExpectedContentsSize(wantedContentsSize, contentsProjections.size())) {
             throw new IllegalWorldCupGameContentsException(
                     "조회 컨텐츠 수가 다름 %s, %s"
                             .formatted(
-                                    getContentsSizePerRequest,
+                                    wantedContentsSize,
                                     contentsProjections.size()
                             )
             );

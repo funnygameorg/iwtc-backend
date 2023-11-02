@@ -91,14 +91,14 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
     /**
      * 게임 플레이에 사용되는 이상형 리스트 조회
      * @param worldCupId 조회하는 월드컵 게임 Id
-     * @param divideContentsSizePerRequest 조회해야 하는 컨텐츠 수
+     * @param wantedContentsSize 조회해야 하는 컨텐츠 수
      * @param alreadyPlayedContentsIds 제외하는 컨텐츠 아이디
      * @return
      */
     @Override
     public List<GetDividedWorldCupGameContentsProjection> getDividedWorldCupGameContents(
             Long worldCupId,
-            int divideContentsSizePerRequest,
+            int wantedContentsSize,
             List<Long> alreadyPlayedContentsIds
     ) {
         String NotInAlreadyPlayedContentsIdsDynamicQuery = buildAlreadyPlayedContentsIdsCondition(alreadyPlayedContentsIds);
@@ -127,7 +127,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 
         Query query = em.createNativeQuery(sql, Tuple.class)
                 .setParameter(WORLD_CUP_GAME_TABLE_PK, worldCupId)
-                .setParameter("divideContentsSizePerRequest", divideContentsSizePerRequest);
+                .setParameter("divideContentsSizePerRequest", wantedContentsSize);
 
         List<Tuple> result = query.getResultList();
 
