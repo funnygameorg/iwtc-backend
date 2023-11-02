@@ -74,7 +74,7 @@ public class WorldCupContentsServiceTest {
 
     @Test
     @DisplayName("월드컵 게임 라운드 수 조회")
-    public void 플레이_가능한_라운드가_존재하는_게임_성공() {
+    public void getAvailableGameRounds1() {
 
         // given
         WorldCupGame worldCupGame = WorldCupGame
@@ -112,7 +112,7 @@ public class WorldCupContentsServiceTest {
 
     @Test
     @DisplayName("월드컵 게임 라운드 수 조회 - 게임에 플레이 가능한 라운드가 존재하지 않음 (예외)")
-    public void 플레이_가능한_라운드가_존재하지_않는_게임() {
+    public void getAvailableGameRounds2() {
 
         // given
         WorldCupGame worldCupGame = WorldCupGame
@@ -136,7 +136,7 @@ public class WorldCupContentsServiceTest {
 
     @Test
     @DisplayName("월드컵 게임 라운드 수 조회 - 존재하지 않는 게임을 조회할 수 없음 (예외)")
-    public void 존재하지_않는_게임의_라운드_수_조회() {
+    public void getAvailableGameRounds3() {
 
         // Not Given
 
@@ -150,7 +150,7 @@ public class WorldCupContentsServiceTest {
 
     @Test
     @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회 - 예상한 컨텐츠 조회 사이즈와 실제 조회 사이즈가 다르면 안된다. (예외)")
-    public void GetPlayContents2() {
+    public void GetPlayContents1() {
 
         // given
         WorldCupGame worldCupGame = WorldCupGame
@@ -209,7 +209,7 @@ public class WorldCupContentsServiceTest {
 
     @Test
     @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회 - 이미 플레이한 게임 컨텐츠를 조회하면 안된다. (예외)")
-    public void GetPlayContents3() {
+    public void GetPlayContents2() {
 
         // given
         WorldCupGame worldCupGame = WorldCupGame
