@@ -269,7 +269,6 @@ public class WorldCupGamePageRepositoryTest {
         return WorldCupGame.builder()
                 .title(title)
                 .description(description)
-                .round(gameRound)
                 .visibleType(visibleType)
                 .views(0)
                 .softDelete(false)

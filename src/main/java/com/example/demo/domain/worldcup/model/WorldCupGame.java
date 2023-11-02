@@ -53,10 +53,6 @@ public class WorldCupGame extends TimeBaseEntity {
 
     @NotNull
     @Enumerated(value = EnumType.STRING)
-    private WorldCupGameRound round;
-
-    @NotNull
-    @Enumerated(value = EnumType.STRING)
     private VisibleType visibleType;
 
     private long views;
