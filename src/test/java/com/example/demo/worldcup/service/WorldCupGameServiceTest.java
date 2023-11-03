@@ -1,51 +1,206 @@
 package com.example.demo.worldcup.service;
 
+import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.repository.MediaFileRepository;
+import com.example.demo.domain.worldcup.model.WorldCupGame;
+import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
+import com.example.demo.helper.DataBaseCleanUp;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
+import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
 import static org.mockito.BDDMockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
 public class WorldCupGameServiceTest {
 
-    @InjectMocks
+    @Autowired
     private WorldCupGameService worldCupGameService;
-
-    @Mock
+    @Autowired
     private WorldCupGameRepository worldCupGameRepository;
+    @Autowired
+    private WorldCupGameContentsRepository worldCupGameContentsRepository;
+    @Autowired
+    private MediaFileRepository mediaFileRepository;
+    @Autowired
+    private DataBaseCleanUp dataBaseCleanUp;
+
+    @AfterEach
+    public void tearDown() {
+        dataBaseCleanUp.truncateAllEntity();
+    }
 
     @Test
-    @DisplayName("월드컵 리스트 조회 - 성공")
-    public void 월드컵_리스트_조회_성공() {
-        WorldCupDateRange dateRange = WorldCupDateRange.YEAR;
-        LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusYears(1);
-        String worldCupGameKeyword = "TestKeyword";
-        Pageable pageable = Pageable.ofSize(25);
+    @DisplayName("월드컵 리스트 조회 - 1개 월드컵 조회")
+    public void findWorldCupByPageable1() {
+        // given
+        WorldCupGame worldCupGame = WorldCupGame
+                .builder()
+                .title("title1")
+                .description("description1")
+                .visibleType(PUBLIC)
+                .views(0)
+                .softDelete(false)
+                .memberId(1)
+                .build();
 
-        worldCupGameService.findWorldCupByPageable(
+        MediaFile mediaFile1 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+        MediaFile mediaFile2 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+
+        WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                .name("contentsName")
+                .worldCupGame(worldCupGame)
+                .mediaFileId(1)
+                .build();
+        WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                .name("contentsName2")
+                .worldCupGame(worldCupGame)
+                .mediaFileId(2)
+                .build();
+
+        worldCupGameRepository.save(worldCupGame);
+        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
+        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
+
+        WorldCupDateRange dateRange = WorldCupDateRange.YEAR;
+        String worldCupGameKeyword = null;
+        Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
+
+        // when
+        Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,
                 worldCupGameKeyword
         );
 
-        then(worldCupGameRepository)
-                .should(times(1))
-                .getWorldCupGamePage(
-                        startDate,
-                        endDate,
-                        worldCupGameKeyword,
-                        pageable
-                );
+        // then
+        assert result.getContent().size() == 1;
+    }
+
+    @Test
+    @DisplayName("월드컵 리스트 조회 - 2개 월드컵 조회")
+    public void findWorldCupByPageable2() {
+        // given
+        WorldCupGame worldCupGame1 = WorldCupGame
+                .builder()
+                .title("title1")
+                .description("description1")
+                .visibleType(PUBLIC)
+                .views(0)
+                .softDelete(false)
+                .memberId(1)
+                .build();
+        WorldCupGame worldCupGame2 = WorldCupGame
+                .builder()
+                .title("title2")
+                .description("description1")
+                .visibleType(PUBLIC)
+                .views(0)
+                .softDelete(false)
+                .memberId(1)
+                .build();
+
+        MediaFile mediaFile1 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+        MediaFile mediaFile2 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+        MediaFile mediaFile3 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+        MediaFile mediaFile4 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+
+        WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                .name("contentsName")
+                .worldCupGame(worldCupGame1)
+                .mediaFileId(1)
+                .build();
+        WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                .name("contentsName2")
+                .worldCupGame(worldCupGame1)
+                .mediaFileId(2)
+                .build();
+        WorldCupGameContents contents3 = WorldCupGameContents.builder()
+                .name("contentsName3")
+                .worldCupGame(worldCupGame2)
+                .mediaFileId(3)
+                .build();
+        WorldCupGameContents contents4 = WorldCupGameContents.builder()
+                .name("contentsName3")
+                .worldCupGame(worldCupGame2)
+                .mediaFileId(4)
+                .build();
+
+        worldCupGameRepository.saveAll(List.of(worldCupGame1, worldCupGame2));
+        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4));
+        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4));
+
+        WorldCupDateRange dateRange = WorldCupDateRange.ALL;
+        String worldCupGameKeyword = null;
+        Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
+
+        // when
+        Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
+                pageable,
+                dateRange,
+                worldCupGameKeyword
+        );
+
+        // then
+        assert result.getContent().size() == 2;
+    }
+
+    @Test
+    @DisplayName("월드컵 리스트 조회 - 1개 월드컵 조회, 컨텐츠 2개 미만 게임은 조회대상에서 제외")
+    public void findWorldCupByPageable3() {
+        // 해당 정책 테스트 코드 추가하기
+        assert false;
     }
 }
