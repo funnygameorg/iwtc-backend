@@ -63,9 +63,9 @@ class MemberControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("회원가입 성공")
+    @DisplayName("회원가입")
     @Test
-    public void 회원가입_성공() throws Exception {
+    public void SIGN_UP_API_1() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .serviceId("itwc123")
@@ -83,7 +83,7 @@ class MemberControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("회원가입 요청 살패 - nickname 검증")
+    @DisplayName("회원가입 - nickname 검증 (예외)")
     @CsvSource(value = {
             "주",
             "트레비주리오12345",
@@ -95,7 +95,7 @@ class MemberControllerTest {
             "a a a a a"}
     )
     @NullAndEmptySource
-    public void 회원가입_실패_nickname(String nickname) throws Exception {
+    public void SIGN_UP_API_2(String nickname) throws Exception {
 
         // given
         SignUpRequest request = SignUpRequest.builder()
@@ -121,8 +121,8 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("회원가입 요청 실패 - password 검증")
-    public void 회원가입_실패_password(String password) throws Exception {
+    @DisplayName("회원가입 - password 검증 (예외)")
+    public void SIGN_UP_API_3(String password) throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .serviceId("itwc123")
@@ -146,8 +146,8 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("회원가입 요청 실패 - serviceId 검증")
-    public void 회원가입_실패_service(String serviceId) throws Exception {
+    @DisplayName("회원가입 - serviceId 검증 (예외)")
+    public void SIGN_UP_API_4(String serviceId) throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .serviceId(serviceId)
@@ -165,8 +165,8 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 요청 성공")
-    public void 로그인요청_성공() throws Exception {
+    @DisplayName("로그인")
+    public void SIGN_IN_API_1() throws Exception {
         // given
         SignInRequest request = SignInRequest.builder()
                 .serviceId("AAAAVEf23")
@@ -198,8 +198,8 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("로그인 실패 - serviceId 검증")
-    public void 로그인요청_실패_service(String serviceId) throws Exception{
+    @DisplayName("로그인 - serviceId 검증 (예외)")
+    public void SIGN_IN_API_2(String serviceId) throws Exception{
         SignInRequest request = SignInRequest.builder()
                 .serviceId(serviceId)
                 .password("AAAA@32fSD")
@@ -221,8 +221,8 @@ class MemberControllerTest {
             "123",
             "Θ\nΘ\n"}
     )
-    @DisplayName("로그인 실패 - password 검증")
-    public void 로그인요청_실패_password(String password) throws Exception{
+    @DisplayName("로그인 - password 검증 (예외)")
+    public void SIGN_IN_API_3(String password) throws Exception{
         SignInRequest request = SignInRequest.builder()
                 .serviceId("AAAA@32fSD")
                 .password(password)
@@ -237,8 +237,8 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("로그아웃 성공")
-    public void 로그아웃_성공() throws Exception{
+    @DisplayName("로그아웃")
+    public void SIGN_OUT_API_1() throws Exception{
         mockMvc.perform(
                 get(SIGN_OUT_API)
                         .header("access-token", "TestAccessTokenValue")
@@ -255,8 +255,8 @@ class MemberControllerTest {
             "aaaaaaa",
             "1231231231"}
     )
-    @DisplayName("serviceId 중복 검사 성공 - serviceId 검증")
-    public void 서비스_아이디_중복_검사_성공(String serviceId) throws Exception{
+    @DisplayName("serviceId 중복 검사 - serviceId 검증")
+    public void VERIFY_DUPLICATED_ID_API_1(String serviceId) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("serviceId", serviceId);
 
@@ -277,8 +277,8 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("serviceId 중복 검사 실패 - serviceId 검증")
-    public void 서비스_아이디_중복_검사_실패(String serviceId) throws Exception{
+    @DisplayName("serviceId 중복 검사 - serviceId 검증 (예외)")
+    public void VERIFY_DUPLICATED_ID_API_2(String serviceId) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("serviceId", serviceId);
 
@@ -297,8 +297,8 @@ class MemberControllerTest {
             "123456",
             "12"}
     )
-    @DisplayName("nickname 중복 검사 성공 - nickname 검증")
-    public void 닉네임_중복_검사_성공(String nickname) throws Exception{
+    @DisplayName("nickname 중복 검사 - nickname 검증")
+    public void VERIFY_DUPLICATED_NICKNAME_API_1(String nickname) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("nickname", nickname);
 
@@ -319,8 +319,8 @@ class MemberControllerTest {
     }
     )
     @NullAndEmptySource
-    @DisplayName("nickname 중복 검사 실패 - nickname 검증")
-    public void 닉네임_중복_검사_실패(String nickname) throws Exception{
+    @DisplayName("nickname 중복 검사 - nickname 검증 (예외)")
+    public void VERIFY_DUPLICATED_NICKNAME_API_2(String nickname) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("nickname", nickname);
 
