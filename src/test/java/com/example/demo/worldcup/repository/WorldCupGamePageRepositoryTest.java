@@ -50,8 +50,8 @@ public class WorldCupGamePageRepositoryTest {
     }
 
     @Test
-    @DisplayName("모든 월드컵 게임, 페이징 조회 성공 - 게임 2개")
-    public void 모든_월드컵_게임_페이징_조회_성공() {
+    @DisplayName("월드컵 게임 페이징 조회 - 게임 2개 조회")
+    public void getWorldCupGamePage1() {
         // given
         List<WorldCupGame> worldCupGames = range(1, 3)
                 .mapToObj(idx -> createWorldCupGame(
@@ -124,8 +124,8 @@ public class WorldCupGamePageRepositoryTest {
     }
 
     @Test
-    @DisplayName("모든 월드컵 게임, 페이징 조회 성공 - 게임 0개")
-    public void 모든_월드컵_게임_페이징_조회_성공_컨텐츠_없음() {
+    @DisplayName("월드컵 게임 페이징 조회 - 게임 0개 조회")
+    public void getWorldCupGamePage2() {
         // given
         String worldCupGameKeyword = "test";
         LocalDate startDate = LocalDate.now().minusDays(2);
@@ -155,8 +155,8 @@ public class WorldCupGamePageRepositoryTest {
             "   한국  드라마   ",
             "한 국 드 라 마",
     })
-    @DisplayName("모든 월드컵 게임, 페이징 조회 성공 - 키워드 조건 적용")
-    public void 모든_월드컵_게임_페이징_조회_성공_키워드(String worldCupGameKeyword) {
+    @DisplayName("월드컵 게임 페이징 조회 - 게임 1개 조회, 키워드 적용")
+    public void getWorldCupGamePage3(String worldCupGameKeyword) {
         // given
         WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
         WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
@@ -215,8 +215,8 @@ public class WorldCupGamePageRepositoryTest {
             "교보문고",
             "동국대학교"
     })
-    @DisplayName("모든 월드컵 게임, 페이징 조회 실패 - 키워드 조건 적용")
-    public void 모든_월드컵_게임_페이징_조회_실패_키워드(String worldCupGameKeyword) {
+    @DisplayName("월드컵 게임 페이징 조회 - 게임 0개 조회, 키워드 적용")
+    public void getWorldCupGamePage4(String worldCupGameKeyword) {
         // given
         WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
         WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);

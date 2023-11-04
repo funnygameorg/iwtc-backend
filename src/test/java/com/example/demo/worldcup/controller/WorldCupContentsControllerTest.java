@@ -42,8 +42,8 @@ public class WorldCupContentsControllerTest {
     private final static String CLEAR_WORLD_CUP_GAME_API = ROOT_API + "/{worldCupId}/clear";
 
     @Test
-    @DisplayName("플레이 가능한 월드컵 게임 라운드 수 조회 - 성공")
-    public void 플레이_가능한_월드컵_게임_라운드_수_조회() throws Exception {
+    @DisplayName("플레이 가능한 월드컵 게임 라운드 수 조회")
+    public void GET_AVAILABLE_ROUNDS_API_1() throws Exception {
         mockMvc.perform(
                 get(GET_AVAILABLE_ROUNDS_API, 1L)
         ).andExpect(
@@ -53,7 +53,7 @@ public class WorldCupContentsControllerTest {
 
     @Test
     @DisplayName("이상형 월드컵 게임 종료")
-    public void clearWorldCupGame() throws Exception {
+    public void CLEAR_WORLD_CUP_GAME_API_1() throws Exception {
         ClearWorldCupGameRequest request = ClearWorldCupGameRequest
                 .builder()
                 .firstWinnerContentsId(1)

@@ -29,18 +29,16 @@ public class MemberServiceTest {
 
     @InjectMocks
     private MemberService memberServiceTest;
-
     @Mock
     private MemberRepository memberRepository;
-
     @Mock
     private RememberMeRepository rememberMeRepository;
     @Mock
     private JwtService jwtService;
 
     @Test
-    @DisplayName("회원가입 성공")
-    public void 회원가입_성공() {
+    @DisplayName("회원가입")
+    public void signUp1() {
         LocalDateTime signUpDate = LocalDateTime.of(2022, 1, 1, 10, 10);
         String serviceId = "A";
         String nickname = "A";
@@ -61,8 +59,8 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 실패 - 닉네임 중복")
-    public void 회원가입_실패_닉네임_중복() {
+    @DisplayName("회원가입 - 닉네임 중복 (예외)")
+    public void signUp2() {
         LocalDateTime signUpDate = LocalDateTime.of(2022, 1, 1, 10, 10);
         String serviceId = "A";
         String nickname = "A";
@@ -88,8 +86,8 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 실패 - 아이디 중복")
-    public void 회원가입_실패_아이디_중복() {
+    @DisplayName("회원가입 - 아이디 중복 (예외)")
+    public void signUp3() {
         LocalDateTime signUpDate = LocalDateTime.of(2022, 1, 1, 10, 10);
         String serviceId = "A";
         String nickname = "A";
@@ -115,8 +113,8 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 성공")
-    public void 로그인_성공() {
+    @DisplayName("로그인")
+    public void signIn1() {
         // given
         SignInRequest request = SignInRequest.builder()
                 .serviceId("LoginRequesterId")
@@ -149,8 +147,8 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - 없는 아이디")
-    public void 로그인_실패_없는_아이디() {
+    @DisplayName("로그인 - 없는 아이디 (예외)")
+    public void signIn2() {
         // given
         SignInRequest request = SignInRequest.builder()
                 .serviceId("LoginRequesterId")
@@ -187,7 +185,7 @@ public class MemberServiceTest {
     
     @Test
     @DisplayName("아이디 중복 체크 - 중복된 아이디가 없다.")
-    public void 제공한_아이디가_중복인가_X() {
+    public void existsServiceId1() {
         String serviceId = "testServiceID";
         given(memberRepository.existsServiceId(serviceId))
                 .willReturn(false);
@@ -203,7 +201,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("아이디 중복 체크 - 중복된 아이디가 있다.")
-    public void 제공한_아이디가_중복인가_O() {
+    public void existsServiceId2() {
         String serviceId = "testServiceID";
         given(memberRepository.existsServiceId(serviceId))
                 .willReturn(true);
@@ -219,7 +217,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("닉네임 중복 체크 - 중복된 닉네임이 있다.")
-    public void 제공한_닉네임이_중복인가_O() {
+    public void existsNickname1() {
         String nickname = "testNickname";
 
         given(memberRepository.existsNickname(nickname))
@@ -236,7 +234,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("닉네임 중복 체크 - 중복된 닉네임이 없다.")
-    public void 제공한_닉네임이_중복인가_X() {
+    public void existsNickname2() {
         String nickname = "testNickname";
 
         given(memberRepository.existsNickname(nickname))
@@ -253,7 +251,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("로그아웃 - 성공")
-    public void 로그아웃_성공() {
+    public void signOut1() {
 
         String accessToken = "testAccessToken";
         Long memberId = 1L;

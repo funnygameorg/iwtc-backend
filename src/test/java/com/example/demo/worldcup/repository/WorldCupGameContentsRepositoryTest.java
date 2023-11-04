@@ -41,8 +41,8 @@ public class WorldCupGameContentsRepositoryTest {
     }
 
     @Test
-    @DisplayName("WorldCupGameId와 일치하는 WorldCupGame이 존재")
-    public void existsWorldCupGame_success() {
+    @DisplayName("월드컵 게임 Id 존재하는지 찾기 - 존재하는 월드컵 Id 존재")
+    public void existsWorldCupGame1() {
         // given
         WorldCupGame worldCupGame = createWorldCupGame(
                 "TITLE",
@@ -61,8 +61,8 @@ public class WorldCupGameContentsRepositoryTest {
     }
 
     @Test
-    @DisplayName("WorldCupGameId와 일치하는 WorldCupGame이 존재하지 않음")
-    public void existsWorldCupGame_failed() {
+    @DisplayName("월드컵 게임 Id 존재하는지 찾기 - 존재하는 월드컵 Id 존재하지 않음")
+    public void existsWorldCupGame2() {
         // given
         WorldCupGame worldCupGame = createWorldCupGame(
                 "TITLE",
@@ -83,7 +83,7 @@ public class WorldCupGameContentsRepositoryTest {
 
     @Test
     @DisplayName("월드컵 게임 1개에 대한 플레이 가능한 라운드 수 조회 - 컨텐츠 개수 3개")
-    public void getAvailableGameRounds_contents_size_3() {
+    public void getAvailableGameRounds1() {
         // given
         WorldCupGame worldCupGame = createWorldCupGame(
                 "TITLE",
@@ -110,7 +110,7 @@ public class WorldCupGameContentsRepositoryTest {
 
     @Test
     @DisplayName("월드컵 게임 1개에 대한 플레이 가능한 라운드 수 조회 - 컨텐츠 개수 0개")
-    public void getAvailableGameRounds_contents_size_0() {
+    public void getAvailableGameRounds2() {
         // given
         WorldCupGame worldCupGame = createWorldCupGame(
                 "TITLE",

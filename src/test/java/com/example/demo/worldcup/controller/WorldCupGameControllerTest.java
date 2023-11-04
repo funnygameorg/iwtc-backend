@@ -38,8 +38,8 @@ public class WorldCupGameControllerTest {
     private final String GET_PAGING_WORLD_CUP_GAME_API = ROOT_PATH + "/world-cups";
 
     @Test
-    @DisplayName("월드컵 리스트 조회 요청 검증 성공")
-    public void 월드컵_리스트_조회_요청_검증() throws Exception {
+    @DisplayName("월드컵 리스트 조회 요청 검증")
+    public void GET_PAGING_WORLD_CUP_GAME_API_1() throws Exception {
         WorldCupDateRange dateRange = WorldCupDateRange.MONTH;
         mockMvc.perform(
                 get(GET_PAGING_WORLD_CUP_GAME_API)
@@ -56,8 +56,8 @@ public class WorldCupGameControllerTest {
             "123",
             "Θ\nΘ\n"}
     )
-    @DisplayName("월드컵 리스트 조회 요청 실패 - dateRange")
-    public void 월드컵_리스트_조회_요청_검증_실패_dateRange(String dateRange) throws Exception {
+    @DisplayName("월드컵 리스트 조회 요청 검증 - invalid dateRange (예외)")
+    public void GET_PAGING_WORLD_CUP_GAME_API_2(String dateRange) throws Exception {
         mockMvc.perform(
                         get(GET_PAGING_WORLD_CUP_GAME_API)
                                 .queryParam("dateRange", dateRange)
@@ -70,8 +70,8 @@ public class WorldCupGameControllerTest {
     @CsvSource(value = {
             "aaaaaaaaaaa"}
     )
-    @DisplayName("월드컵 리스트 조회 요청 실패 - keyword")
-    public void 월드컵_리스트_조회_요청_검증_실패_keyword(String keyword) throws Exception {
+    @DisplayName("월드컵 리스트 조회 요청 검증 - invalid keyword (예외)")
+    public void GET_PAGING_WORLD_CUP_GAME_API_3(String keyword) throws Exception {
         mockMvc.perform(
                         get(GET_PAGING_WORLD_CUP_GAME_API)
                                 .queryParam("keyword", keyword)

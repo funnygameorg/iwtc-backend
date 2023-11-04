@@ -28,8 +28,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("사용자의 서비스 아이디가 있다면 true를 반환한다.")
-    public void Return1_If_ExistsServiceId() {
+    @DisplayName("사용자 serviceId 중복 체크 - 사용자의 서비스 아이디가 있음")
+    public void existsServiceId1() {
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
@@ -43,8 +43,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("사용자의 서비스 아이디가 없다면 false을 반환한다.")
-    public void Return0_If_NotExistsServiceId() {
+    @DisplayName("사용자 serviceId 중복 체크 - 사용자의 서비스 아이디가 없음")
+    public void existsServiceId2() {
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
@@ -58,8 +58,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("사용자의 서비스 아이디가 있다면 true를 반환한다.")
-    public void Return1_If_ExistsNickname() {
+    @DisplayName("사용자 nickname 중복 체크 - 사용자의 닉네임이 있음")
+    public void existsNickname1() {
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
@@ -73,8 +73,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("사용자의 서비스 아이디가 없다면 false를 반환한다.")
-    public void Return0_If_NotExistsNickname() {
+    @DisplayName("사용자 nickname 중복 체크 - 사용자의 서비스 아이디가 없음")
+    public void existsNickname2() {
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
@@ -88,8 +88,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("서비스 아이디와 패스워드에 일치하는 멤버 아이디가 있다.")
-    public void findByMemberIdByServiceIdAndPassword_성공() {
+    @DisplayName("서비스 serviceId, password 중복 체크 - 해당하는 사용자가 존재")
+    public void findByMemberIdByServiceIdAndPassword1() {
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
@@ -102,8 +102,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("서비스 아이디와 패스워드에 일치하는 멤버 아이디가 없다.")
-    public void findByMemberIdByServiceIdAndPassword_실패() {
+    @DisplayName("서비스 serviceId, password 중복 체크 - 해당하는 사용자가 존재하지 않음")
+    public void findByMemberIdByServiceIdAndPassword2() {
         Member member = Member.builder()
                 .serviceId("A")
                 .nickname("A")
