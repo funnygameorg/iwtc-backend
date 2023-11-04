@@ -56,7 +56,7 @@ public class WorldCupGameControllerTest {
             "123",
             "Θ\nΘ\n"}
     )
-    @DisplayName("월드컵 리스트 조회 요청 검증 - invalid dateRange (예외)")
+    @DisplayName("월드컵 리스트 조회 요청 검증 - dateRange [Date 포맷이 아닌 요청 데이터](예외)")
     public void GET_PAGING_WORLD_CUP_GAME_API_2(String dateRange) throws Exception {
         mockMvc.perform(
                         get(GET_PAGING_WORLD_CUP_GAME_API)
@@ -70,7 +70,7 @@ public class WorldCupGameControllerTest {
     @CsvSource(value = {
             "aaaaaaaaaaa"}
     )
-    @DisplayName("월드컵 리스트 조회 요청 검증 - invalid keyword (예외)")
+    @DisplayName("월드컵 리스트 조회 요청 검증 - keyword [길이 11개 초과 불가] (예외)")
     public void GET_PAGING_WORLD_CUP_GAME_API_3(String keyword) throws Exception {
         mockMvc.perform(
                         get(GET_PAGING_WORLD_CUP_GAME_API)

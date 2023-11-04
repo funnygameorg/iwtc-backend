@@ -83,7 +83,7 @@ class MemberControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("회원가입 - nickname 검증 (예외)")
+    @DisplayName("회원가입 - nickname 검증 [2자리 미만, 10자리 초과 불가] (예외)")
     @CsvSource(value = {
             "주",
             "트레비주리오12345",
@@ -121,7 +121,7 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("회원가입 - password 검증 (예외)")
+    @DisplayName("회원가입 - password 검증 [6자리 미만 불가](예외)")
     public void SIGN_UP_API_3(String password) throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
@@ -146,7 +146,7 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("회원가입 - serviceId 검증 (예외)")
+    @DisplayName("회원가입 - serviceId 검증 [2자리 미만, 10자리 초과 불가] (예외)")
     public void SIGN_UP_API_4(String serviceId) throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
@@ -198,7 +198,7 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("로그인 - serviceId 검증 (예외)")
+    @DisplayName("로그인 - serviceId 검증 [6자리 미만, 20자리 초과 불가](예외)")
     public void SIGN_IN_API_2(String serviceId) throws Exception{
         SignInRequest request = SignInRequest.builder()
                 .serviceId(serviceId)
@@ -221,7 +221,7 @@ class MemberControllerTest {
             "123",
             "Θ\nΘ\n"}
     )
-    @DisplayName("로그인 - password 검증 (예외)")
+    @DisplayName("로그인 - password 검증 [5자리 이하 불가] (예외)")
     public void SIGN_IN_API_3(String password) throws Exception{
         SignInRequest request = SignInRequest.builder()
                 .serviceId("AAAA@32fSD")
@@ -277,7 +277,7 @@ class MemberControllerTest {
             "Θ\nΘ\n"}
     )
     @NullAndEmptySource
-    @DisplayName("serviceId 중복 검사 - serviceId 검증 (예외)")
+    @DisplayName("serviceId 중복 검사 - serviceId 검증[6자리 미만, 20자리 초과 불가] (예외)")
     public void VERIFY_DUPLICATED_ID_API_2(String serviceId) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("serviceId", serviceId);
@@ -319,7 +319,7 @@ class MemberControllerTest {
     }
     )
     @NullAndEmptySource
-    @DisplayName("nickname 중복 검사 - nickname 검증 (예외)")
+    @DisplayName("nickname 중복 검사 - nickname 검증 [2자리 미만, 10자리 초과 불가] (예외)")
     public void VERIFY_DUPLICATED_NICKNAME_API_2(String nickname) throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap();
         param.add("nickname", nickname);
