@@ -5,6 +5,7 @@ import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRo
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameCustomRepository;
+import com.google.common.collect.Iterables;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +15,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.sound.midi.SysexMessage;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -143,7 +146,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
     }
 
     private String buildAlreadyPlayedContentsIdsCondition(List<Long> alreadyPlayedContentsIds) {
-        if(alreadyPlayedContentsIds.size() == 0)
+        if(CollectionUtils.isEmpty(alreadyPlayedContentsIds))
             return "";
         else
             return " AND inner_wcgc.ID NOT IN (%s)  "

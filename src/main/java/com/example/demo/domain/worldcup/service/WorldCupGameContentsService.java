@@ -11,6 +11,7 @@ import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
+import com.google.common.collect.Iterables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,9 +72,7 @@ public class WorldCupGameContentsService {
     ) {
         WorldCupGame worldCupGame =
                 worldCupGameRepository.findById(worldCupGameId)
-                        .orElseThrow(() ->
-                                new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId))
-                        );
+                        .orElseThrow(() -> new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId)));
 
         WorldCupGameRound worldCupGameRound = WorldCupGameRound.getRoundFromValue(currentRound);
         int wantedContentsSize = worldCupGameRound.getGameContentsSizePerRequest(divideContentsSizePerRequest);
@@ -85,24 +84,17 @@ public class WorldCupGameContentsService {
                         alreadyPlayedContentsIds
                 );
 
-        if(equalsExpectedContentsSize(wantedContentsSize, contentsProjections.size())) {
-            throw new IllegalWorldCupGameContentsException(
-                    "조회 컨텐츠 수가 다름 %s, %s"
-                            .formatted(
-                                    wantedContentsSize,
-                                    contentsProjections.size()
-                            )
-            );
+
+        boolean isEqualsContentsSize = equalsExpectedContentsSize(wantedContentsSize, contentsProjections.size());
+        if(isEqualsContentsSize) {
+            throw new IllegalWorldCupGameContentsException("조회 컨텐츠 수가 다름 %s, %s"
+                    .formatted(wantedContentsSize, contentsProjections.size()));
         }
 
-        if(containsAlreadyContents(alreadyPlayedContentsIds, contentsProjections)) {
-                throw new IllegalWorldCupGameContentsException(
-                        "컨텐츠 중복 : 이미 플레이한 컨텐츠 %s, 조회 성공 컨텐츠 %s"
-                                .formatted(
-                                        alreadyPlayedContentsIds,
-                                        contentsProjections
-                                )
-                );
+        boolean containsAlreadyContents = containsAlreadyContents(alreadyPlayedContentsIds, contentsProjections);
+        if(containsAlreadyContents) {
+                throw new IllegalWorldCupGameContentsException("컨텐츠 중복 : 이미 플레이한 컨텐츠 %s, 조회 성공 컨텐츠 %s"
+                        .formatted(alreadyPlayedContentsIds, contentsProjections));
         }
 
         return GetWorldCupPlayContentsResponse.fromProjection(
@@ -113,7 +105,10 @@ public class WorldCupGameContentsService {
         );
     }
     // 조회하기를 원하는 컨텐츠 수만큼 조회했는가?
-    private boolean equalsExpectedContentsSize(int expectedContentsSize, int actualContentsSize) {
+    private boolean equalsExpectedContentsSize(
+            int expectedContentsSize,
+            int actualContentsSize
+    ) {
         return expectedContentsSize != actualContentsSize;
     }
     // 이미 조회한 컨텐츠를 포함하는가?

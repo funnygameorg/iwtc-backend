@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,7 +87,7 @@ public class WorldCupContentsController {
             @RequestParam(name = "divideContentsSizePerRequest")
             int divideContentsSizePerRequest,
 
-            @RequestParam(name = "alreadyPlayedContentsIds", required = false)
+            @RequestParam(name = "alreadyPlayedContentsIds", required = false, defaultValue = "")
             List<Long> alreadyPlayedContentsIds
     ) {
         return new RestApiResponse(
