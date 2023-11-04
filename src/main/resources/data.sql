@@ -1,6 +1,7 @@
 -- H2 DB
 
 -- 월드컵 게임 1
+
 INSERT INTO world_cup_game (created_at, description, member_id, soft_delete, title, updated_at, views, visible_type)
 VALUES (DATEADD('MONTH', -2, NOW()), null, 1, false, '역대 K-POP 월드컵', null, 15, 'PUBLIC'),
        (DATEADD('DAY', -8, NOW()), null, 1, false, '힘든 군부대 월드컵', null, 0, 'PUBLIC'),
@@ -44,10 +45,8 @@ VALUES (DATEADD('MONTH', -2, NOW()), null, 1, false, '역대 K-POP 월드컵', n
        (DATEADD('MONTH', -2, NOW()), null, 1, false, '게임 37', null, 15, 'PUBLIC'),
        (DATEADD('MONTH', -2, NOW()), null, 1, false, '게임 38', null, 15, 'PUBLIC'),
        (DATEADD('MONTH', -2, NOW()), null, 1, false, '게임 39', null, 15, 'PUBLIC'),
-       (DATEADD('MONTH', -2, NOW()), null, 1, false, '게임 40', null, 15, 'PUBLIC'),
-       (DATEADD('MONTH', -2, NOW()), null, 1, false, '게임 41', null, 15, 'PUBLIC'),
-       (DATEADD('MONTH', -2, NOW()), null, 1, false, '게임 42', null, 15, 'PUBLIC'),
-       (DATEADD('MONTH', -2, NOW()), null, 1, false, '게임 43', null, 15, 'PUBLIC');
+       (DATEADD('MONTH', -2, NOW()), '2023 기준 20대가 선호하는 월드컵', 1, false, '재미있는 게임 월드컵', null, 15, 'PUBLIC'),
+       (DATEADD('MONTH', -2, NOW()), null, 1, false, '맛있는 음식 월드컵', null, 15, 'PUBLIC');
 
 INSERT INTO media_file (absolute_name, created_at, extension, file_path, original_name, updated_at)
 VALUES ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -12, NOW()), 'JPG', 'https://picsum.photos/seed/awf/400/500', 'null', null),
@@ -97,7 +96,33 @@ VALUES ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -12, NOW()), 'JPG', 'https:
        ('2023-awfe234-23215-aA3', DATEADD('HOUR', -8, NOW()), 'JPEG', 'https://picsum.photos/seed/az/300/400', '청산리 부대', null),
        ('2023-vcxve-23215-5aA', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/fwe/400/500', '이빨 부대', null),
        ('2023-dfew-32sd-a4A', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/gf/600/800', '붉은 피 부대', null),
-       ('2023-sdg43g-zcxv-aafA', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/12ffa/100/200', '해운대 부대', null);
+       ('2023-sdg43g-zcxv-aafA', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/12ffa/100/200', '해운대 부대', null),
+
+       -- 게임 멀티 파일
+       ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -8, NOW()), 'JPG', 'https://picsum.photos/seed/zv/400/500', '이기자 부대', null),
+       ('2023-warklmf389-s-aAs', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/rr/300/400', '정곡골 부대', null),
+       ('2023-awfe234-23215-aA3', DATEADD('HOUR', -8, NOW()), 'JPEG', 'https://picsum.photos/seed/az/300/400', '청산리 부대', null),
+       ('2023-vcxve-23215-5aA', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/fwe/400/500', '이빨 부대', null),
+       ('2023-dfew-32sd-a4A', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/gf/600/800', '붉은 피 부대', null),
+       ('2023-sdg43g-zcxv-aafA', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/12ffa/100/200', '해운대 부대', null),
+
+       ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -8, NOW()), 'JPG', 'https://picsum.photos/seed/zv/400/500', '이기자 부대', null),
+       ('2023-warklmf389-s-aAs', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/rr/300/400', '정곡골 부대', null),
+       ('2023-awfe234-23215-aA3', DATEADD('HOUR', -8, NOW()), 'JPEG', 'https://picsum.photos/seed/az/300/400', '청산리 부대', null),
+       ('2023-vcxve-23215-5aA', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/fwe/400/500', '이빨 부대', null),
+       ('2023-dfew-32sd-a4A', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/gf/600/800', '붉은 피 부대', null),
+
+       ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -8, NOW()), 'JPG', 'https://picsum.photos/seed/zv/400/500', '이기자 부대', null),
+       ('2023-warklmf389-s-aAs', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/rr/300/400', '정곡골 부대', null),
+       ('2023-awfe234-23215-aA3', DATEADD('HOUR', -8, NOW()), 'JPEG', 'https://picsum.photos/seed/az/300/400', '청산리 부대', null),
+       ('2023-vcxve-23215-5aA', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/fwe/400/500', '이빨 부대', null),
+       ('2023-dfew-32sd-a4A', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/gf/600/800', '붉은 피 부대', null),
+
+       ('2023-warklmf389-gzzz-adfA', DATEADD('HOUR', -8, NOW()), 'JPG', 'https://picsum.photos/seed/zv/400/500', '이기자 부대', null),
+       ('2023-warklmf389-s-aAs', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/rr/300/400', '정곡골 부대', null),
+       ('2023-awfe234-23215-aA3', DATEADD('HOUR', -8, NOW()), 'JPEG', 'https://picsum.photos/seed/az/300/400', '청산리 부대', null),
+       ('2023-vcxve-23215-5aA', DATEADD('HOUR', -8, NOW()), 'PNG', 'https://picsum.photos/seed/fwe/400/500', '이빨 부대', null),
+       ('2023-dfew-32sd-a4A', DATEADD('HOUR', -8, NOW()), 'GIF', 'https://picsum.photos/seed/gf/600/800', '붉은 피 부대', null);
 
 INSERT INTO world_cup_game_contents (created_at, media_file_id, name, updated_at, world_cup_game_id)
 VALUES (DATEADD('HOUR', -12, NOW()), 1, '시계와 시계', null, 1),
@@ -222,5 +247,32 @@ VALUES (DATEADD('HOUR', -12, NOW()), 1, '시계와 시계', null, 1),
         (DATEADD('HOUR', -2, NOW()), 14, 'ESTP', null, 42),
         (DATEADD('HOUR', -2, NOW()), 13, 'INFP', null, 42),
 
-        (DATEADD('HOUR', -2, NOW()), 14, 'ESTP', null, 43),
-        (DATEADD('HOUR', -2, NOW()), 13, 'INFP', null, 43);
+        -- 좋아하는 게임 월드컵
+        (DATEADD('HOUR', -2, NOW()), 43, '롤', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 44, 'over watch', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 45, '카스', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 46, '서든', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 47, '어몽어스', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 48, '워록', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 49, '메이플 스토리', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 50, '디아블로2', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 51, '디아블로4', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 52, '바람의 나라', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 53, 'Maduri 54', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 54, 'Left 4 Dead', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 55, '오블리비언 스카이림', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 56, '바이오 하자드 5', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 56, '바이오 하자드 4', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 56, '오토체스', null, 43),
+        (DATEADD('HOUR', -2, NOW()), 56, '히오스', null, 43),
+
+        -- 맛있는 음식 월드컵
+        (DATEADD('HOUR', -2, NOW()), 43, '옥수수 빵', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 44, '치즈 빵', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 45, '마늘 빵', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 46, '빵', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 47, '약 빵', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 48, '고르곤졸라', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 49, '소시지 빵', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 50, '소금 빵', null, 44),
+        (DATEADD('HOUR', -2, NOW()), 51, '빼레로로쉐', null, 44);

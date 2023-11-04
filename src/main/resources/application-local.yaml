@@ -7,10 +7,10 @@ spring:
         web-allow-others: true
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:~/local_db2;MODE=MySQL
+    url: jdbc:h2:~/test;MODE=MySQL
     username: sa
     password:
-#    initialization-mode: always
+    initialization-mode: always
   redis:
     host: redis
     port: 6379
