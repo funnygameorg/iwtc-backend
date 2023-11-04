@@ -1,5 +1,6 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.common.web.memberresolver.AuthenticationUtil;
 import com.example.demo.helper.web.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.member.controller.MemberController;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,6 +58,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("자신의 정보 조회")
     public void getMeSummary() throws Exception {
+
         mockMvc.perform(get(GET_ME_SUMMARY_API))
                 .andExpect(status().isOk());
     }

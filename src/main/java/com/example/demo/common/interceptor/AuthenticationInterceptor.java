@@ -1,10 +1,11 @@
 package com.example.demo.common.interceptor;
 
 import com.example.demo.common.web.auth.RequestWithBlackListedAccessToken;
-import com.example.demo.common.web.auth.RequireAuth;
+import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.ExpiredAuthenticationException;
+import com.example.demo.common.web.memberresolver.AuthenticationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
+
+    private static final String HEADER_TOKEN_NAME = "access-token";
+    private static final String PRE_FLIGHT_HTTP_METHOD = "OPTIONS";
     private final RememberMeRepository rememberMeRepository;
     private final JwtService jwtService;
 
@@ -24,13 +28,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
-        if(request.getMethod().equals("OPTIONS")) {
+        if(request.getMethod().equals(PRE_FLIGHT_HTTP_METHOD)) {
             return true;
         }
-        if (!isRequiredAuthenticationApi(handler)) {
+        if (!isRequiredAuthenticationApi(handler, request)) {
             return true;
         }
-        String accessToken = request.getHeader("access-token");
+        String accessToken = request.getHeader(HEADER_TOKEN_NAME);
         Long memberId = jwtService.getPayLoadByToken(accessToken);
 
         Boolean isBlackListedAccessToken = rememberMeRepository.containBlacklistedAccessToken(accessToken);
@@ -44,8 +48,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private boolean isRequiredAuthenticationApi(Object handler) {
-        return ((HandlerMethod) handler).getMethodAnnotation(RequireAuth.class) != null;
+    private boolean isRequiredAuthenticationApi(Object handler, HttpServletRequest request) {
+        CustomAuthentication customAuthentication = ((HandlerMethod) handler).getMethodAnnotation(CustomAuthentication.class);
+        return customAuthentication != null && request.getHeader(HEADER_TOKEN_NAME) != null;
     }
 
 }

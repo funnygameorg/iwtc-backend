@@ -1,5 +1,6 @@
 package com.example.demo.domain.worldcup.service;
 
+import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.domain.worldcup.exception.IllegalWorldCupGameContentsException;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.Arrays.stream;
@@ -121,4 +123,14 @@ public class WorldCupGameContentsService {
                 .anyMatch(alreadyPlayedContentsIds::contains);
     }
 
+
+
+    @Transactional
+    public void clearWorldCupGame(
+            long worldCupId,
+            ClearWorldCupGameRequest request,
+            LocalDateTime now
+    ) {
+        // TODO : 어떻게 구현할까 고민해보자
+    }
 }

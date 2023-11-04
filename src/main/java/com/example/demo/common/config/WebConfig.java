@@ -1,12 +1,10 @@
 package com.example.demo.common.config;
 
 import com.example.demo.common.interceptor.AuthenticationInterceptor;
-import com.example.demo.common.web.memberresolver.MemberArgumentResolver;
-import com.example.demo.common.web.memberresolver.MemberDto;
+import com.example.demo.common.web.memberresolver.OptionalMemberArgumentResolver;
+import com.example.demo.common.web.memberresolver.RequiredMemberArgumentResolver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -19,11 +17,13 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     private final AuthenticationInterceptor authenticationInterceptor;
-    private final MemberArgumentResolver memberArgumentResolver;
+    private final RequiredMemberArgumentResolver memberArgumentResolver;
+    private final OptionalMemberArgumentResolver optionalMemberArgumentResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberArgumentResolver);
+        resolvers.add(optionalMemberArgumentResolver);
     }
 
     @Override

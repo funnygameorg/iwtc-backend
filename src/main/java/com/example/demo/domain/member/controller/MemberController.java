@@ -1,10 +1,11 @@
 package com.example.demo.domain.member.controller;
 
-import com.example.demo.common.web.auth.RequireAuth;
+import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.common.web.validation.NoSpace;
 import com.example.demo.domain.member.controller.request.GetMySummaryResponse;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
+import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedNicknameResponse;
 import com.example.demo.domain.member.controller.request.SignInRequest;
@@ -26,6 +27,8 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -212,22 +215,20 @@ public class MemberController {
                     )
             }
     )
-    @RequireAuth
+    @CustomAuthentication
     @GetMapping("/me/summary")
     @ResponseStatus(OK)
     public RestApiResponse getMySummary(
-            @Parameter(hidden = true) MemberDto memberDto
+            @Parameter(hidden = true)
+            @CustomAuthentication(required = false)
+            Optional<MemberDto> optionalMemberDto
     ) {
-        GetMySummaryResponse response = new GetMySummaryResponse(
-                memberDto.getId(),
-                memberDto.getServiceId(),
-                memberDto.getNickname()
-        );
+        MemberDto memberDto = optionalMemberDto.orElseThrow(NotFoundMemberException::new);
 
         return RestApiResponse.builder()
                 .code(1)
                 .message("정보 조회 성공")
-                .data(response)
+                .data(new GetMySummaryResponse(memberDto))
                 .build();
     }
 

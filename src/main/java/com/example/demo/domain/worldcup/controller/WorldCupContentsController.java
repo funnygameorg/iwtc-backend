@@ -1,5 +1,8 @@
 package com.example.demo.domain.worldcup.controller;
 
+import com.example.demo.common.web.auth.CustomAuthentication;
+import com.example.demo.common.web.memberresolver.MemberDto;
+import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
@@ -15,7 +18,9 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -128,5 +133,51 @@ public class WorldCupContentsController {
                 "플레이 가능한 라운드 조회 성공",
                 worldCupGameContentsService.getAvailableGameRounds(worldCupId)
         );
+    }
+
+    @Operation(
+            summary = "월드컵 게임 종료",
+            description = "월드컵 게임을 종료, 결과를 저장",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "라운드 수 조회를 원하는 월드컵 게임 id"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "게임 결과 저장 완료"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵 게임",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
+    @PostMapping("/{worldCupId}/clear")
+    @ResponseStatus(CREATED)
+    public RestApiResponse clearWorldCupGame(
+            @PathVariable
+            long worldCupId,
+
+            @RequestBody
+            ClearWorldCupGameRequest request,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication(required = false)
+            Optional<MemberDto> optionalMemberDto
+    ) {
+        worldCupGameContentsService.clearWorldCupGame(
+                worldCupId,
+                request,
+                LocalDateTime.now()
+        );
+        return RestApiResponse.builder()
+                .data(null)
+                .code(1)
+                .message("게임 결과 생성")
+                .build();
     }
 }

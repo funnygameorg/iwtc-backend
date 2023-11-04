@@ -333,4 +333,47 @@ public class WorldCupContentsServiceTest {
         
         assert resultException.getPublicMessage().contains("컨텐츠 중복");
     }
+
+    @Test
+    @DisplayName("게임 클리어")
+    public void clearWorldCupGame1() {
+        // given
+        WorldCupGame worldCupGame = WorldCupGame
+                .builder()
+                .title("title1")
+                .description("description1")
+                .visibleType(PUBLIC)
+                .views(0)
+                .softDelete(false)
+                .memberId(1)
+                .build();
+
+        MediaFile mediaFile1 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+        MediaFile mediaFile2 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+
+        WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                .name("contentsName")
+                .worldCupGame(worldCupGame)
+                .mediaFileId(1)
+                .build();
+        WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                .name("contentsName")
+                .worldCupGame(worldCupGame)
+                .mediaFileId(2)
+                .build();
+
+        worldCupGameRepository.save(worldCupGame);
+        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
+        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
+    }
 }
