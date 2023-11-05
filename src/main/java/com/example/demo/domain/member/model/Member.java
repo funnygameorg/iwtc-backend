@@ -1,11 +1,12 @@
 package com.example.demo.domain.member.model;
 
 import com.example.demo.common.jpa.TimeBaseEntity;
+import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import java.util.Objects;
+import static com.google.common.base.Objects.*;
 
 @Entity
 @Getter
@@ -22,20 +23,6 @@ public class Member extends TimeBaseEntity {
 
     private String password;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
-            return false;
-        Member member = (Member) o;
-        return Objects.equals(serviceId, member.serviceId) && Objects.equals(password, member.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return serviceId.hashCode() + password.hashCode();
-    }
-
     @Builder
     public Member(Long id, String serviceId, String nickname, String password) {
         this.id = id;
@@ -46,5 +33,23 @@ public class Member extends TimeBaseEntity {
 
     public static Member signUp(String serviceId, String nickname, String password) {
         return new Member(null, serviceId, nickname, password);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
+        Member other = (Member) o;
+
+        return Objects.equal(serviceId, other.serviceId)
+                && Objects.equal(password, other.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(serviceId, password);
+
     }
 }

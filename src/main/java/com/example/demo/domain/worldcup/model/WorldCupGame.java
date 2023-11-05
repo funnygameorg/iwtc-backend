@@ -4,13 +4,12 @@ import com.example.demo.common.jpa.TimeBaseEntity;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
+import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
-
-import java.util.Objects;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -69,12 +68,12 @@ public class WorldCupGame extends TimeBaseEntity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
         WorldCupGame worldCupGame = (WorldCupGame) o;
-        return Objects.equals(title, worldCupGame.getTitle());
+        return Objects.equal(title, worldCupGame.getTitle());
     }
 
     @Override
     public int hashCode() {
-        return title.hashCode();
+        return Objects.hashCode(title);
     }
 
 }

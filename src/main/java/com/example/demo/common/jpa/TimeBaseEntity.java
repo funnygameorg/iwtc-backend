@@ -1,6 +1,7 @@
 package com.example.demo.common.jpa;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = PROTECTED)
+@EqualsAndHashCode
 @MappedSuperclass
 public abstract class TimeBaseEntity {
 
