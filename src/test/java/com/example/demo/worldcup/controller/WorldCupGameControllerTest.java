@@ -3,7 +3,7 @@ package com.example.demo.worldcup.controller;
 import com.example.demo.helper.web.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.worldcup.controller.WorldCupGameController;
-import com.example.demo.domain.worldcup.model.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

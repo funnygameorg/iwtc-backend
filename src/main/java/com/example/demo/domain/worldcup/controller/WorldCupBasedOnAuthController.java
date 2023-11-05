@@ -5,9 +5,9 @@ import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummari
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummaryRanksResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
-import com.example.demo.domain.worldcup.model.vo.MyWorldCupRankSort;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
+import com.example.demo.domain.worldcup.controller.vo.WorldCupSort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -121,7 +121,7 @@ public class WorldCupBasedOnAuthController {
     @GetMapping("/summary-ranks")
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<List<GetMyWorldCupSummaryRanksResponse>> getMyWorldCupSummaryRanks(
-            @RequestParam(name = "sort") MyWorldCupRankSort sort
+            @RequestParam(name = "sort") WorldCupSort sort
     ) {
         return new RestApiResponse(1, "", null);
     }

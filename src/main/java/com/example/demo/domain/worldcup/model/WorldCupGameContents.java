@@ -1,6 +1,7 @@
 package com.example.demo.domain.worldcup.model;
 
 import com.example.demo.common.jpa.TimeBaseEntity;
+import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -21,6 +22,13 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
+@Table(
+        name = "WORLD_CUP_GAME_CONTENTS",
+        indexes = {
+                // 게임 랭킹 노출용
+                @Index(name = "VISIBLE_TYPE__GAME_SCORE__INDEX", columnList = "visibleType, gameScore")
+        }
+)
 public class WorldCupGameContents extends TimeBaseEntity {
 
     @Id
@@ -37,6 +45,9 @@ public class WorldCupGameContents extends TimeBaseEntity {
 
     private long mediaFileId;
 
+    private long gameScore;
+
+    private VisibleType visibleType;
 
     @Override
     public boolean equals(Object o) {

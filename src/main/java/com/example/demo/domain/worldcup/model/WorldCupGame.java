@@ -2,7 +2,6 @@ package com.example.demo.domain.worldcup.model;
 
 import com.example.demo.common.jpa.TimeBaseEntity;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
-import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
@@ -11,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -36,9 +36,16 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "WORLD_CUP_GAME", uniqueConstraints = {
-        @UniqueConstraint(name = "title_unique", columnNames = "title")
-})
+@Table(
+        name = "WORLD_CUP_GAME",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "TITLE__UNIQUE", columnNames = "title")
+        },
+        indexes = {
+                // 메인 페이지 노출용
+                @Index(name = "VIEWS__INDEX", columnList = "views")
+        }
+)
 public class WorldCupGame extends TimeBaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,7 +67,8 @@ public class WorldCupGame extends TimeBaseEntity {
 
     private long memberId;
 
-
+    @OneToOne(fetch = LAZY)
+    private WorldCupGameStatistics worldCupGameStatistics;
 
     @Override
     public boolean equals(Object o) {

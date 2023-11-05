@@ -3,7 +3,7 @@ package com.example.demo.domain.worldcup.controller;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupsResponse;
-import com.example.demo.domain.worldcup.model.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.common.web.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

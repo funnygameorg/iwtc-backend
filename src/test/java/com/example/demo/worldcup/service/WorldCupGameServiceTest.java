@@ -4,7 +4,7 @@ import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
-import com.example.demo.domain.worldcup.model.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
@@ -13,10 +13,6 @@ import com.example.demo.helper.DataBaseCleanUp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -25,12 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
-import static org.mockito.BDDMockito.*;
 
 @SpringBootTest
 @ActiveProfiles("test")

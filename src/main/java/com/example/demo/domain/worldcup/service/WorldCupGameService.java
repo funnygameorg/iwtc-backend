@@ -1,7 +1,7 @@
 package com.example.demo.domain.worldcup.service;
 
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
-import com.example.demo.domain.worldcup.model.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
