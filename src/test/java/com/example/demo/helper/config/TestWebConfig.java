@@ -1,4 +1,4 @@
-package com.example.demo.helper.web.config;
+package com.example.demo.helper.config;
 
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;

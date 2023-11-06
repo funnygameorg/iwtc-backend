@@ -8,15 +8,14 @@ import com.example.demo.domain.worldcup.exception.NoRoundsAvailableToPlayExcepti
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
+import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
-import com.google.common.collect.Iterables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.Arrays.stream;
@@ -27,6 +26,7 @@ import static java.util.Arrays.stream;
 public class WorldCupGameContentsService {
 
     private final WorldCupGameRepository worldCupGameRepository;
+    private final WorldCupGameContentsRepository worldCupGameContentsRepository;
 
     public GetAvailableGameRoundsResponse getAvailableGameRounds(Long worldCupGameId) {
 
@@ -105,10 +105,7 @@ public class WorldCupGameContentsService {
         );
     }
     // 조회하기를 원하는 컨텐츠 수만큼 조회했는가?
-    private boolean equalsExpectedContentsSize(
-            int expectedContentsSize,
-            int actualContentsSize
-    ) {
+    private boolean equalsExpectedContentsSize(int expectedContentsSize, int actualContentsSize) {
         return expectedContentsSize != actualContentsSize;
     }
     // 이미 조회한 컨텐츠를 포함하는가?
@@ -119,13 +116,11 @@ public class WorldCupGameContentsService {
     }
 
 
-
-    @Transactional
-    public void clearWorldCupGame(
-            long worldCupId,
-            ClearWorldCupGameRequest request,
-            LocalDateTime now
-    ) {
-        // TODO : 어떻게 구현할까 고민해보자
+    public void clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
+        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.firstWinnerContentsId(), 10);
+        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.secondWinnerContentsId(), 7);
+        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.thirdWinnerContentsId(), 4);
+        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.fourthWinnerContentsId(), 4);
     }
+
 }

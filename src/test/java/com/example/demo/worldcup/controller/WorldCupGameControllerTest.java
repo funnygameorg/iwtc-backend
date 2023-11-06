@@ -1,6 +1,6 @@
 package com.example.demo.worldcup.controller;
 
-import com.example.demo.helper.web.config.TestWebConfig;
+import com.example.demo.helper.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.worldcup.controller.WorldCupGameController;
 import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;

@@ -164,17 +164,9 @@ public class WorldCupContentsController {
             long worldCupId,
 
             @RequestBody
-            ClearWorldCupGameRequest request,
-
-            @Parameter(hidden = true)
-            @CustomAuthentication(required = false)
-            Optional<MemberDto> optionalMemberDto
+            ClearWorldCupGameRequest request
     ) {
-        worldCupGameContentsService.clearWorldCupGame(
-                worldCupId,
-                request,
-                LocalDateTime.now()
-        );
+        worldCupGameContentsService.clearWorldCupGame(worldCupId, request);
         return RestApiResponse.builder()
                 .data(null)
                 .code(1)

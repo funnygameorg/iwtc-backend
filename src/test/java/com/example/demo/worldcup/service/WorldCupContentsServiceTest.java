@@ -2,6 +2,7 @@ package com.example.demo.worldcup.service;
 
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
+import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.domain.worldcup.exception.IllegalWorldCupGameContentsException;
@@ -9,47 +10,27 @@ import com.example.demo.domain.worldcup.exception.NoRoundsAvailableToPlayExcepti
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
-import com.example.demo.domain.worldcup.model.vo.VisibleType;
-import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
-import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.example.demo.helper.DataBaseCleanUp;
-import com.google.common.collect.Lists;
-import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.IntStream;
-import java.util.zip.GZIPInputStream;
 
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
-import static com.example.demo.domain.worldcup.model.vo.WorldCupGameRound.ROUND_32;
 import static java.util.stream.IntStream.range;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -65,6 +46,8 @@ public class WorldCupContentsServiceTest {
     private MediaFileRepository mediaFileRepository;
     @Autowired
     private DataBaseCleanUp dataBaseCleanUp;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @AfterEach
     public void tearDown() {
@@ -337,6 +320,7 @@ public class WorldCupContentsServiceTest {
     @Test
     @DisplayName("게임 클리어")
     public void clearWorldCupGame1() {
+        ValueOperations ops = redisTemplate.opsForValue();
         // given
         WorldCupGame worldCupGame = WorldCupGame
                 .builder()
@@ -371,9 +355,37 @@ public class WorldCupContentsServiceTest {
                 .worldCupGame(worldCupGame)
                 .mediaFileId(2)
                 .build();
+        WorldCupGameContents contents3 = WorldCupGameContents.builder()
+                .name("contentsName")
+                .worldCupGame(worldCupGame)
+                .mediaFileId(2)
+                .build();
+        WorldCupGameContents contents4 = WorldCupGameContents.builder()
+                .name("contentsName")
+                .worldCupGame(worldCupGame)
+                .mediaFileId(2)
+                .build();
 
         worldCupGameRepository.save(worldCupGame);
         mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
-        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
+        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4));
+
+        ClearWorldCupGameRequest request = ClearWorldCupGameRequest.builder()
+                .firstWinnerContentsId(1)
+                .secondWinnerContentsId(2)
+                .thirdWinnerContentsId(3)
+                .fourthWinnerContentsId(4)
+                .build();
+
+        // when
+        worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request);
+
+        Integer firstWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents1.getId());
+        Integer secondWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents2.getId());
+        Integer thirdWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents3.getId());
+        Integer fourthWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents4.getId());
+
+        // TODO Test 환경 Redis 올리기
+        assert false;
     }
 }

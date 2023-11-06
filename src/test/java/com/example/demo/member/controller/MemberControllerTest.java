@@ -1,7 +1,6 @@
 package com.example.demo.member.controller;
 
-import com.example.demo.common.web.memberresolver.AuthenticationUtil;
-import com.example.demo.helper.web.config.TestWebConfig;
+import com.example.demo.helper.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.member.controller.MemberController;
 import com.example.demo.domain.member.controller.request.SignInRequest;

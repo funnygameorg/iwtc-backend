@@ -56,6 +56,10 @@ dependencies {
 	// database
 	runtimeOnly("com.h2database:h2")
 
+	// local redis
+	testImplementation("it.ozimov:embedded-redis:0.7.3")
+
+
 	// logack json
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
 	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")

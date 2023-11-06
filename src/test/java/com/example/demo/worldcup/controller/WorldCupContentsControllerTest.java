@@ -4,7 +4,7 @@ import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.worldcup.controller.WorldCupContentsController;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
-import com.example.demo.helper.web.config.TestWebConfig;
+import com.example.demo.helper.config.TestWebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
