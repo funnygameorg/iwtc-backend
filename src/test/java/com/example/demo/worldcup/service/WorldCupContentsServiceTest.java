@@ -12,8 +12,10 @@ import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
+import com.example.demo.helper.AbstractContainerBaseTest;
 import com.example.demo.helper.DataBaseCleanUp;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,14 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
+import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class WorldCupContentsServiceTest {
+public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
 
     @Autowired
     private WorldCupGameContentsService worldCupGamecontentsService;
@@ -380,12 +383,15 @@ public class WorldCupContentsServiceTest {
         // when
         worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request);
 
-        Integer firstWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents1.getId());
-        Integer secondWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents2.getId());
-        Integer thirdWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents3.getId());
-        Integer fourthWinnerPoint = (Integer) ops.get("CLEAR_POINT" + worldCupGame.getId() + "_" + contents4.getId());
+        // then
+        String firstWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
+        String secondWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 2L));
+        String thirdWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 3L));
+        String fourthWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 4L));
 
-        // TODO Test 환경 Redis 올리기
-        assert false;
+        assert Objects.equals(firstWinnerPoint, "10");
+        assert Objects.equals(secondWinnerPoint, "7");
+        assert Objects.equals(thirdWinnerPoint, "4");
+        assert Objects.equals(fourthWinnerPoint, "4");
     }
 }

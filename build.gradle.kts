@@ -59,6 +59,12 @@ dependencies {
 	// local redis
 	testImplementation("it.ozimov:embedded-redis:0.7.3")
 
+	// test container
+	testImplementation("org.testcontainers:testcontainers:1.16.0") // TC 의존성
+	testImplementation("org.testcontainers:junit-jupiter:1.16.2")  // TC 의존성
+	testImplementation("org.testcontainers:postgresql:1.17.6")     // PostgreSQL 컨테이너 사용
+	testImplementation("org.testcontainers:jdbc:1.16.0")          // DB와의 JDBC connection
+
 
 	// logack json
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
