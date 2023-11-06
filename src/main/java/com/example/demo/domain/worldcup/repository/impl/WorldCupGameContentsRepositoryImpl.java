@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class WorldCupGameContentsRepositoryImpl implements WorldCupGameContentsCustomRepository {
 
     private final RedisTemplate redisTemplate;
-    private static final String WINNER_CONTENTS_SCORE_KEY_FORMAT = "'Game':%s,'Contents':%s";
+    private static final String WINNER_CONTENTS_SCORE_KEY_FORMAT = "'type':'clear', 'game':%s, 'Contents':%s";
 
     @Override
     public void saveWinnerContentsScore(

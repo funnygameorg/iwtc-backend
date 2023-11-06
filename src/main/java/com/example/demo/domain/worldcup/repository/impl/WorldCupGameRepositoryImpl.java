@@ -35,8 +35,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
     private final EntityManager em;
 
     private static final String WORLD_CUP_GAME_TABLE_PK= "worldCupGameId";
-    private static final String GET_DIVIDED_WORLD_CUP_GAME_CONTENTS_PROJECTION = "new com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection";
-
+    private static final String INCREMENT_GAME_VIEWS_KEY_FORMAT = "'type':'gameView', 'game':%s";
     @Override
     public Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
             LocalDate startDate,
@@ -86,7 +85,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
     @Override
     public void incrementWorldCupGameViews(Long worldCupGameId) {
         ValueOperations ops = redisTemplate.opsForValue();
-        String redisViewsKey = "wcg_views_%s".formatted(worldCupGameId);
+        String redisViewsKey = INCREMENT_GAME_VIEWS_KEY_FORMAT.formatted(worldCupGameId);
         ops.increment(redisViewsKey);
     }
 
