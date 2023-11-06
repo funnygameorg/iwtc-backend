@@ -7,26 +7,33 @@ import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
+import com.example.demo.helper.AbstractContainerBaseTest;
 import com.example.demo.helper.DataBaseCleanUp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
+
 @SpringBootTest
 @ActiveProfiles("test")
-public class WorldCupGameContentsRepositoryTest {
+public class WorldCupGameContentsRepositoryTest extends AbstractContainerBaseTest {
 
     @Autowired
     private WorldCupGameRepository worldCupGameRepository;
     @Autowired
     private WorldCupGameContentsRepository worldCupGameContentsRepository;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private DataBaseCleanUp dataBaseCleanUp;
@@ -34,6 +41,7 @@ public class WorldCupGameContentsRepositoryTest {
     @AfterEach
     public void tearDown() {
         dataBaseCleanUp.truncateAllEntity();
+        redisTemplate.getConnectionFactory().getConnection().serverCommands().flushDb();
     }
 
     @Test
@@ -129,6 +137,37 @@ public class WorldCupGameContentsRepositoryTest {
         assert Objects.equals(worldCupGame.getDescription(), result.worldCupDescription());
         assert result.totalContentsSize() == 0;
     }
+
+    @Test
+    @DisplayName("이상형 월드컵 게임 우승자 점수 저장")
+    public void saveWinnerContentsScore() {
+        // given
+        ValueOperations ops = redisTemplate.opsForValue();
+
+        // when
+        worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 10);
+
+        // then
+        String winnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
+        assert Objects.equals(winnerPoint, "10");
+    }
+
+    @Test
+    @DisplayName("이상형 월드컵 게임 우승자 점수 저장 - 동일 컨텐츠 10점 + 7점 + 4점 중첩")
+    public void saveWinnerContentsScore2() {
+        // given
+        ValueOperations ops = redisTemplate.opsForValue();
+
+        // when
+        worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 10);
+        worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 7);
+        worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 4);
+
+        // then
+        String winnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
+        assert Objects.equals(winnerPoint, "21");
+    }
+
 
     private WorldCupGame createWorldCupGame(
             String title,

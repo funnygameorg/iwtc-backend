@@ -55,6 +55,7 @@ public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
     @AfterEach
     public void tearDown() {
         dataBaseCleanUp.truncateAllEntity();
+        redisTemplate.getConnectionFactory().getConnection().serverCommands().flushDb();
     }
 
 
