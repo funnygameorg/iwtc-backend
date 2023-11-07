@@ -8,6 +8,7 @@ import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
+import com.google.common.primitives.Longs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -48,13 +50,13 @@ public class WorldCupContentsController {
                             required = true
                     ),
                     @Parameter(
-                            name = "divideContentsSizePerRequest",
+                            name = "sliceContents",
                             description = "컨텐츠 토막 개수 [ 최소 : 1, 최대 : 4 ]",
                             required = true
                     ),
                     @Parameter(
-                            name = "alreadyPlayedContentsIds",
-                            description = "이미 사용자가 선택한 이상형 컨텐츠 리스트, 해당 컨텐츠 리스트를 제외하고 조회한다."
+                            name = "excludeContentsIds[]",
+                            description = "이미 사용자가 선택 혹은 탈락한 이상형 컨텐츠 리스트, 해당 컨텐츠 리스트를 제외하고 조회한다."
                     )
             },
             responses = {
@@ -84,16 +86,22 @@ public class WorldCupContentsController {
             int currentRound,
 
             @Size(min = 1, max = 4)
-            @RequestParam(name = "divideContentsSizePerRequest")
-            int divideContentsSizePerRequest,
+            @RequestParam(name = "sliceContents")
+            int sliceContents,
 
-            @RequestParam(name = "alreadyPlayedContentsIds", required = false, defaultValue = "")
-            List<Long> alreadyPlayedContentsIds
+            @RequestParam(name = "excludeContentsIds", required = false)
+            long[] excludeContentsIds
     ) {
         return new RestApiResponse(
                 1,
                 "컨텐츠 조회 성공",
-                worldCupGameContentsService.getPlayContents(worldCupId, currentRound, divideContentsSizePerRequest, alreadyPlayedContentsIds)
+                worldCupGameContentsService
+                        .getPlayContents(
+                                worldCupId,
+                                currentRound,
+                                sliceContents,
+                                boxedPrimitiveLongs(excludeContentsIds)
+                        )
         );
     }
 
@@ -172,5 +180,11 @@ public class WorldCupContentsController {
                 .code(1)
                 .message("게임 결과 생성")
                 .build();
+    }
+
+
+    private List<Long> boxedPrimitiveLongs(long[] primitiveLongs) {
+        long[] nullableLongs = primitiveLongs != null ? primitiveLongs : new long[0];
+        return Longs.asList(nullableLongs);
     }
 }
