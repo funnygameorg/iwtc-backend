@@ -43,8 +43,8 @@ public class Member extends TimeBaseEntity {
             return false;
         Member other = (Member) o;
 
-        return Objects.equal(serviceId, other.serviceId)
-                && Objects.equal(password, other.password);
+        return Objects.equal(serviceId, other.getServiceId())
+                && Objects.equal(password, other.getPassword());
     }
 
     @Override

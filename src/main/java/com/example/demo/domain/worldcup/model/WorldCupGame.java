@@ -75,8 +75,9 @@ public class WorldCupGame extends TimeBaseEntity {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
-        WorldCupGame worldCupGame = (WorldCupGame) o;
-        return Objects.equal(title, worldCupGame.getTitle());
+        WorldCupGame other = (WorldCupGame) o;
+
+        return Objects.equal(title, other.getTitle());
     }
 
     @Override

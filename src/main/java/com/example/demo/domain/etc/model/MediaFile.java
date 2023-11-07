@@ -52,9 +52,9 @@ public class MediaFile extends TimeBaseEntity {
             return false;
         MediaFile other = (MediaFile) o;
 
-        return Objects.equal(absoluteName, other.absoluteName)
-                && Objects.equal(filePath, other.filePath)
-                && Objects.equal(extension, other.extension);
+        return Objects.equal(absoluteName, other.getAbsoluteName())
+                && Objects.equal(filePath, other.getFilePath())
+                && Objects.equal(extension, other.getExtension());
     }
 
     @Override
