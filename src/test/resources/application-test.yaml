@@ -28,4 +28,4 @@ jwt:
     access: 20000
     refresh: 21600000
 logging:
-  config: classpath:log/logback-spring-local.xml
+  config: classpath:log/logback-spring-test.xml
