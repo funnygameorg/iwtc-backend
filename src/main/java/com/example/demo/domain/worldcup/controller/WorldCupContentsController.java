@@ -55,7 +55,7 @@ public class WorldCupContentsController {
                             required = true
                     ),
                     @Parameter(
-                            name = "excludeContentsIds[]",
+                            name = "excludeContentsIds",
                             description = "이미 사용자가 선택 혹은 탈락한 이상형 컨텐츠 리스트, 해당 컨텐츠 리스트를 제외하고 조회한다."
                     )
             },
