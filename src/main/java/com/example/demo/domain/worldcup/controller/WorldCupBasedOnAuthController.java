@@ -51,7 +51,7 @@ public class WorldCupBasedOnAuthController {
                     )
             }
     )
-    @GetMapping("/{worldCupId}/contents-images")
+    @GetMapping("/{worldCupId}/contents")
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<List<GetWorldCupContentsResponse>> getContentsImages(
             @PathVariable("worldCupId") Long worldCupId

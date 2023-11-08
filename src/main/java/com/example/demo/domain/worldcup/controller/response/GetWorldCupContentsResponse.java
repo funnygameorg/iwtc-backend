@@ -4,13 +4,19 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record GetWorldCupContentsResponse (
-        Long contentsId,
+        long contentsId,
         String contentsName,
-        BigDecimal winningChange,
-        Integer rank,
-        Long mediaFileId,
+        int rank,
+        int score,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        FileResponse fileResponse
 ) {
 
+    public record FileResponse(
+            long mediaFileId,
+            String filePath,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) { }
 }
