@@ -1,4 +1,4 @@
-package com.example.demo.domain.worldcup.model;
+package com.example.demo.domain.gamestatistics.model;
 
 import com.example.demo.common.jpa.MemberTimeBaseEntity;
 import jakarta.persistence.*;

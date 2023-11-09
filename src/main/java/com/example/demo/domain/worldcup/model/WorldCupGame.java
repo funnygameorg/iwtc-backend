@@ -3,6 +3,7 @@ package com.example.demo.domain.worldcup.model;
 import com.example.demo.common.jpa.TimeBaseEntity;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
+import com.example.demo.domain.gamestatistics.model.WorldCupGameStatistics;
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
