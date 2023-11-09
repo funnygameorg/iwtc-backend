@@ -1,5 +1,7 @@
 package com.example.demo.worldcup.repository;
 
+import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
@@ -32,6 +34,8 @@ public class WorldCupGameContentsRepositoryTest extends AbstractContainerBaseTes
     private WorldCupGameRepository worldCupGameRepository;
     @Autowired
     private WorldCupGameContentsRepository worldCupGameContentsRepository;
+    @Autowired
+    private MediaFileRepository mediaFileRepository;
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -96,10 +100,19 @@ public class WorldCupGameContentsRepositoryTest extends AbstractContainerBaseTes
                 VisibleType.PUBLIC,
                 1
         );
+        List<MediaFile> mediaFiles = IntStream.range(1,4)
+                .mapToObj(idx -> MediaFile.builder()
+                        .originalName("original")
+                        .filePath("filePath")
+                        .absoluteName("absolute")
+                        .extension(".png")
+                        .build())
+                .toList();
         List<WorldCupGameContents> contentsList = IntStream.range(1,4)
-                .mapToObj(idx -> createGameContents(worldCupGame, "CONTENTS_NAME" + idx, idx))
+                .mapToObj(idx -> createGameContents(worldCupGame, "CONTENTS_NAME" + idx, mediaFiles.get(idx - 1)))
                 .toList();
         worldCupGameRepository.save(worldCupGame);
+        mediaFileRepository.saveAll(mediaFiles);
         worldCupGameContentsRepository.saveAll(contentsList);
 
         // when
@@ -189,12 +202,12 @@ public class WorldCupGameContentsRepositoryTest extends AbstractContainerBaseTes
     private WorldCupGameContents createGameContents(
             WorldCupGame game,
             String name,
-            int mediaFileId
+            MediaFile mediaFile
     ) {
         return WorldCupGameContents.builder()
                 .name(name)
                 .worldCupGame(game)
-                .mediaFileId(mediaFileId)
+                .mediaFile(mediaFile)
                 .build();
     }
 }

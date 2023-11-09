@@ -75,12 +75,12 @@ public class WorldCupGameServiceTest {
         WorldCupGameContents contents1 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(1)
+                .mediaFile(mediaFile1)
                 .build();
         WorldCupGameContents contents2 = WorldCupGameContents.builder()
                 .name("contentsName2")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(2)
+                .mediaFile(mediaFile2)
                 .build();
 
         worldCupGameRepository.save(worldCupGame);
@@ -153,22 +153,22 @@ public class WorldCupGameServiceTest {
         WorldCupGameContents contents1 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame1)
-                .mediaFileId(1)
+                .mediaFile(mediaFile1)
                 .build();
         WorldCupGameContents contents2 = WorldCupGameContents.builder()
                 .name("contentsName2")
                 .worldCupGame(worldCupGame1)
-                .mediaFileId(2)
+                .mediaFile(mediaFile2)
                 .build();
         WorldCupGameContents contents3 = WorldCupGameContents.builder()
                 .name("contentsName3")
                 .worldCupGame(worldCupGame2)
-                .mediaFileId(3)
+                .mediaFile(mediaFile3)
                 .build();
         WorldCupGameContents contents4 = WorldCupGameContents.builder()
                 .name("contentsName3")
                 .worldCupGame(worldCupGame2)
-                .mediaFileId(4)
+                .mediaFile(mediaFile4)
                 .build();
 
         worldCupGameRepository.saveAll(List.of(worldCupGame1, worldCupGame2));

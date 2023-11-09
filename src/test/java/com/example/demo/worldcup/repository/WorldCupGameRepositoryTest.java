@@ -60,15 +60,6 @@ public class WorldCupGameRepositoryTest {
         // given
         WorldCupGame worldCupGame = createWorldCupGame("TITLE1", "DESC1", ROUND_32, PUBLIC, 1);
 
-        List<WorldCupGameContents> contentsList = range(1, 4)
-                .mapToObj( idx ->
-                        createGameContents(
-                                worldCupGame,
-                                "NAME"+idx,
-                                idx
-                        ))
-                .collect(toList());
-
         List<MediaFile> mediaFiles = range(1, 4)
                 .mapToObj( idx ->
                         createMediaFile(
@@ -78,9 +69,18 @@ public class WorldCupGameRepositoryTest {
                                 ".png"))
                 .collect(toList());
 
+        List<WorldCupGameContents> contentsList = range(1, 4)
+                .mapToObj( idx ->
+                        createGameContents(
+                                worldCupGame,
+                                "NAME"+idx,
+                                mediaFiles.get(idx - 1)
+                        ))
+                .collect(toList());
+
         worldCupGameRepository.save(worldCupGame);
-        worldCupGameContentsRepository.saveAll(contentsList);
         mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(contentsList);
 
         Long worldCupId = 1L;
         int divideContentsSizePerRequest = 3;
@@ -116,15 +116,6 @@ public class WorldCupGameRepositoryTest {
                 1
         );
 
-        List<WorldCupGameContents> contentsList = range(1, 13)
-                .mapToObj( idx ->
-                        createGameContents(
-                                worldCupGame,
-                                "NAME"+idx,
-                                idx
-                        ))
-                .collect(toList());
-
         List<MediaFile> mediaFiles = range(1, 13)
                 .mapToObj( idx ->
                         createMediaFile(
@@ -134,9 +125,18 @@ public class WorldCupGameRepositoryTest {
                                 ".png"))
                 .collect(toList());
 
+        List<WorldCupGameContents> contentsList = range(1, 13)
+                .mapToObj( idx ->
+                        createGameContents(
+                                worldCupGame,
+                                "NAME"+idx,
+                                mediaFiles.get(idx - 1)
+                        ))
+                .collect(toList());
+
         worldCupGameRepository.save(worldCupGame);
-        worldCupGameContentsRepository.saveAll(contentsList);
         mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(contentsList);
 
         Long worldCupId = 1L;
         int divideContentsSizePerRequest = contentsList.size() / 2;
@@ -163,16 +163,6 @@ public class WorldCupGameRepositoryTest {
                 PUBLIC,
                 1
         );
-
-        List<WorldCupGameContents> contentsList = range(1, 13)
-                .mapToObj( idx ->
-                        createGameContents(
-                                worldCupGame,
-                                "NAME"+idx,
-                                idx
-                        ))
-                .collect(toList());
-
         List<MediaFile> mediaFiles = range(1, 13)
                 .mapToObj( idx ->
                         createMediaFile(
@@ -181,10 +171,18 @@ public class WorldCupGameRepositoryTest {
                                 "s3://abc/",
                                 ".png"))
                 .collect(toList());
+        List<WorldCupGameContents> contentsList = range(1, 13)
+                .mapToObj( idx ->
+                        createGameContents(
+                                worldCupGame,
+                                "NAME"+idx,
+                                mediaFiles.get(idx - 1)
+                        ))
+                .collect(toList());
 
         worldCupGameRepository.save(worldCupGame);
-        worldCupGameContentsRepository.saveAll(contentsList);
         mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(contentsList);
 
         Long worldCupId = 1L;
         int divideContentsSizePerRequest = contentsList.size() / 2;
@@ -232,11 +230,11 @@ public class WorldCupGameRepositoryTest {
                 .build();
     }
 
-    private WorldCupGameContents createGameContents(WorldCupGame game, String name, int mediaFileId) {
+    private WorldCupGameContents createGameContents(WorldCupGame game, String name, MediaFile mediaFile) {
         return WorldCupGameContents.builder()
                 .name(name)
                 .worldCupGame(game)
-                .mediaFileId(mediaFileId)
+                .mediaFile(mediaFile)
                 .build();
     }
 }

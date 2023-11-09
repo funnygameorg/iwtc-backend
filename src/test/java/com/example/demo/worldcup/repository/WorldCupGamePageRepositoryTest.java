@@ -62,7 +62,7 @@ public class WorldCupGamePageRepositoryTest {
                 )
                 .toList();
 
-        List<MediaFile> mediaFiles = range(1,7)
+        List<MediaFile> mediaFiles = range(1,8)
                 .mapToObj(idx ->
                         createMediaFile("originalName" + idx,
                                 "A345ytgs32eff1",
@@ -73,10 +73,10 @@ public class WorldCupGamePageRepositoryTest {
                 .toList();
 
         List<WorldCupGameContents> worldCupGameContentsList1 = range(1, 6)
-                .mapToObj(idx -> createGameContents(worldCupGames.get(0), "컨텐츠" + idx, idx))
+                .mapToObj(idx -> createGameContents(worldCupGames.get(0), "컨텐츠" + idx, mediaFiles.get(idx - 1)))
                 .toList();
-        List<WorldCupGameContents> worldCupGameContentsList2 = range(5, 7)
-                .mapToObj(idx -> createGameContents(worldCupGames.get(1), "컨텐츠" + idx, idx))
+        List<WorldCupGameContents> worldCupGameContentsList2 = range(6, 8)
+                .mapToObj(idx -> createGameContents(worldCupGames.get(1), "컨텐츠" + idx, mediaFiles.get(idx - 1)))
                 .toList();
 
         worldCupGameRepository.saveAll(worldCupGames);
@@ -172,7 +172,7 @@ public class WorldCupGamePageRepositoryTest {
                 .toList();
 
         List<WorldCupGameContents> worldCupGameContentsList = range(1, 7)
-                .mapToObj(idx -> createGameContents(game1, "컨텐츠" + idx, idx))
+                .mapToObj(idx -> createGameContents(game1, "컨텐츠" + idx, mediaFiles.get(idx - 1)))
                 .toList();
 
         worldCupGameRepository.saveAll(List.of(game1, game2));
@@ -232,7 +232,7 @@ public class WorldCupGamePageRepositoryTest {
                 .toList();
 
         List<WorldCupGameContents> worldCupGameContentsList = range(1, 7)
-                .mapToObj(idx -> createGameContents(game1, "컨텐츠" + idx, idx))
+                .mapToObj(idx -> createGameContents(game1, "컨텐츠" + idx, mediaFiles.get(idx - 1)))
                 .toList();
 
         worldCupGameRepository.saveAll(List.of(game1, game2));
@@ -290,11 +290,11 @@ public class WorldCupGamePageRepositoryTest {
                 .build();
     }
 
-    private WorldCupGameContents createGameContents(WorldCupGame game, String name, int mediaFileId) {
+    private WorldCupGameContents createGameContents(WorldCupGame game, String name, MediaFile mediaFile) {
         return WorldCupGameContents.builder()
                 .name(name)
                 .worldCupGame(game)
-                .mediaFileId(mediaFileId)
+                .mediaFile(mediaFile)
                 .build();
     }
 }

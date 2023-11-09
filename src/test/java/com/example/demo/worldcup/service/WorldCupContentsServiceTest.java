@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -73,18 +74,28 @@ public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
                 .softDelete(false)
                 .memberId(1)
                 .build();
-
+        List<MediaFile> mediaFiles = range(1, 10)
+                .mapToObj(idx ->
+                        MediaFile.builder()
+                                .absoluteName("absolute")
+                                .extension(".png")
+                                .filePath("/abc")
+                                .originalName("origin")
+                                .build()
+                )
+                .toList();
 
         List<WorldCupGameContents> contentsList = range(1, 10)
                 .mapToObj(idx ->
                     WorldCupGameContents.builder()
                             .name("contentsName")
                             .worldCupGame(worldCupGame)
-                            .mediaFileId(1)
+                            .mediaFile(mediaFiles.get(idx - 1))
                             .build()
                 )
                 .toList();
         worldCupGameRepository.save(worldCupGame);
+        mediaFileRepository.saveAll(mediaFiles);
         worldCupGameContentsRepository.saveAll(contentsList);
 
         // when
@@ -160,7 +171,7 @@ public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
                 WorldCupGameContents.builder()
                         .name("contentsName " + idx)
                         .worldCupGame(worldCupGame)
-                        .mediaFileId(idx)
+                        .mediaFile(mediaFiles.get(idx - 1))
                         .build()
         ).toList();
 
@@ -223,7 +234,7 @@ public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
                 WorldCupGameContents.builder()
                         .name("contentsName")
                         .worldCupGame(worldCupGame)
-                        .mediaFileId(idx)
+                        .mediaFile(mediaFiles.get(idx - 1))
                         .build()
         ).toList();
 
@@ -285,12 +296,12 @@ public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
         WorldCupGameContents contents1 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(1)
+                .mediaFile(mediaFile1)
                 .build();
         WorldCupGameContents contents2 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(2)
+                .mediaFile(mediaFile2)
                 .build();
 
         List<GetDividedWorldCupGameContentsProjection> ACTUAL_GET_CONTENTS_LIST = List.of(
@@ -348,30 +359,42 @@ public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
                 .filePath("filePath")
                 .extension("extension")
                 .build();
+        MediaFile mediaFile3 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
+        MediaFile mediaFile4 = MediaFile.builder()
+                .originalName("fileOriginalName")
+                .absoluteName("fileAbsoluteName")
+                .filePath("filePath")
+                .extension("extension")
+                .build();
 
         WorldCupGameContents contents1 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(1)
+                .mediaFile(mediaFile1)
                 .build();
         WorldCupGameContents contents2 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(2)
+                .mediaFile(mediaFile2)
                 .build();
         WorldCupGameContents contents3 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(2)
+                .mediaFile(mediaFile3)
                 .build();
         WorldCupGameContents contents4 = WorldCupGameContents.builder()
                 .name("contentsName")
                 .worldCupGame(worldCupGame)
-                .mediaFileId(2)
+                .mediaFile(mediaFile4)
                 .build();
 
         worldCupGameRepository.save(worldCupGame);
-        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
+        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4));
         worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4));
 
         ClearWorldCupGameRequest request = ClearWorldCupGameRequest.builder()
