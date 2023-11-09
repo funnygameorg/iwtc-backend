@@ -1,16 +1,21 @@
 package com.example.demo.member.repository;
 
+import com.example.demo.TestConstant;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
+
+import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
+import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -27,97 +32,111 @@ public class MemberRepositoryTest {
         dataBaseCleanUp.truncateAllEntity();
     }
 
-    @Test
-    @DisplayName("사용자 serviceId 중복 체크 - 사용자의 서비스 아이디가 있음")
-    public void existsServiceId1() {
-        Member member = Member.builder()
-                .serviceId("A")
-                .nickname("A")
-                .password("A")
-                .build();
-        memberRepository.save(member);
+    @Nested
+    @DisplayName("Member Table의 serviceId 중복 체크를 할 수 있다.")
+    public class existsServiceId {
+        @Test
+        @DisplayName(SUCCESS_PREFIX + " serviceId 존재 O")
+        public void success1() {
+            Member member = Member.builder()
+                    .serviceId("A")
+                    .nickname("A")
+                    .password("A")
+                    .build();
+            memberRepository.save(member);
 
-        Boolean result = memberRepository.existsServiceId(member.getServiceId());
+            Boolean result = memberRepository.existsServiceId(member.getServiceId());
 
-        assert result;
+            assert result;
+        }
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX + " serviceId 존재 X")
+        public void success2() {
+            Member member = Member.builder()
+                    .serviceId("A")
+                    .nickname("A")
+                    .password("A")
+                    .build();
+            memberRepository.save(member);
+
+            Boolean result = memberRepository.existsServiceId("ZZ");
+
+            assert !result;
+        }
     }
 
-    @Test
-    @DisplayName("사용자 serviceId 중복 체크 - 사용자의 서비스 아이디가 없음")
-    public void existsServiceId2() {
-        Member member = Member.builder()
-                .serviceId("A")
-                .nickname("A")
-                .password("A")
-                .build();
-        memberRepository.save(member);
+    @Nested
+    @DisplayName("Member Table의 nickname 중복 체크")
+    public class existsNickname {
 
-        Boolean result = memberRepository.existsServiceId("ZZ");
+        @Test
+        @DisplayName(SUCCESS_PREFIX + " nickname 존재 O")
+        public void success1() {
+            Member member = Member.builder()
+                    .serviceId("A")
+                    .nickname("A")
+                    .password("A")
+                    .build();
+            memberRepository.save(member);
 
-        assert !result;
-    }
+            Boolean result = memberRepository.existsNickname(member.getNickname());
 
-    @Test
-    @DisplayName("사용자 nickname 중복 체크 - 사용자의 닉네임이 있음")
-    public void existsNickname1() {
-        Member member = Member.builder()
-                .serviceId("A")
-                .nickname("A")
-                .password("A")
-                .build();
-        memberRepository.save(member);
+            assert result;
+        }
 
-        Boolean result = memberRepository.existsNickname(member.getNickname());
+        @Test
+        @DisplayName(SUCCESS_PREFIX + "nickname 존재 X")
+        public void success2() {
+            Member member = Member.builder()
+                    .serviceId("A")
+                    .nickname("A")
+                    .password("A")
+                    .build();
+            memberRepository.save(member);
 
-        assert result;
-    }
+            Boolean result = memberRepository.existsNickname("BZ");
 
-    @Test
-    @DisplayName("사용자 nickname 중복 체크 - 사용자의 서비스 아이디가 없음")
-    public void existsNickname2() {
-        Member member = Member.builder()
-                .serviceId("A")
-                .nickname("A")
-                .password("A")
-                .build();
-        memberRepository.save(member);
-
-        Boolean result = memberRepository.existsNickname("BZ");
-
-        assert !result;
-    }
-
-    @Test
-    @DisplayName("서비스 serviceId, password 중복 체크 - 해당하는 사용자가 존재")
-    public void findByMemberIdByServiceIdAndPassword1() {
-        Member member = Member.builder()
-                .serviceId("A")
-                .nickname("A")
-                .password("B")
-                .build();
-        memberRepository.save(member);
-        Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
-
-        assert result.isPresent();
-    }
-
-    @Test
-    @DisplayName("서비스 serviceId, password 중복 체크 - 해당하는 사용자가 존재하지 않음")
-    public void findByMemberIdByServiceIdAndPassword2() {
-        Member member = Member.builder()
-                .serviceId("A")
-                .nickname("A")
-                .password("C")
-                .build();
-        memberRepository.save(member);
-
-        Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
-
-        assert result.isEmpty();
-    }
-
-    public void memeber_저장_성공() {
+            assert !result;
+        }
 
     }
+
+    @Nested
+    @DisplayName("Member Table의 serviceId, password를 가진 row가 존재하는지 확인할 수 있다.")
+    public class findByMemberIdByServiceIdAndPassword {
+
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX + "Member 존재 O")
+        public void success1() {
+            Member member = Member.builder()
+                    .serviceId("A")
+                    .nickname("A")
+                    .password("B")
+                    .build();
+            memberRepository.save(member);
+            Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
+
+            assert result.isPresent();
+        }
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX + "Member 존재 X")
+        public void findByMemberIdByServiceIdAndPassword2() {
+            Member member = Member.builder()
+                    .serviceId("A")
+                    .nickname("A")
+                    .password("C")
+                    .build();
+            memberRepository.save(member);
+
+            Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
+
+            assert result.isEmpty();
+        }
+
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.domain.worldcup.model;
 
 import com.example.demo.common.jpa.TimeBaseEntity;
+import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
@@ -43,7 +44,9 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @ManyToOne(fetch = LAZY)
     private WorldCupGame worldCupGame;
 
-    private long mediaFileId;
+    @NotNull
+    @OneToOne(fetch = LAZY)
+    private MediaFile mediaFile;
 
     private long gameScore;
 
@@ -56,14 +59,11 @@ public class WorldCupGameContents extends TimeBaseEntity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
         WorldCupGameContents other = (WorldCupGameContents) o;
-        return Objects.equal(
-                mediaFileId + name,
-                other.getMediaFileId() + other.getName()
-        );
+        return Objects.equal(name, other.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mediaFileId, name);
+        return Objects.hashCode(name);
     }
 }
