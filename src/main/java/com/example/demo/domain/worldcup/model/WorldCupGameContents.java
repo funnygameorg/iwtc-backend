@@ -48,7 +48,8 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @OneToOne(fetch = LAZY)
     private MediaFile mediaFile;
 
-    private long gameScore;
+    private int gameRank;
+    private int gameScore;
 
     private VisibleType visibleType;
 

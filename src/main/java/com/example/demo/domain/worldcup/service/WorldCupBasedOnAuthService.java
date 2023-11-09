@@ -34,35 +34,6 @@ public class WorldCupBasedOnAuthService {
 
         List<WorldCupGameContents> contentsList = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
-
-
-        return List.of(
-                new GetWorldCupContentsResponse(
-                        1,
-                        "컨텐츠1",
-                        1,
-                        10,
-                        null,
-                        null,
-                        new GetWorldCupContentsResponse.FileResponse(
-                                1L,
-                                "https://www.abc.com/BS/1",
-                                LocalDateTime.now(),
-                                LocalDateTime.now()
-                                )),
-                new GetWorldCupContentsResponse(
-                        2,
-                        "컨텐츠2",
-                        2,
-                        4,
-                        null,
-                        null,
-                        new GetWorldCupContentsResponse.FileResponse(
-                                2L,
-                                "https://www.abc.com/BS/2",
-                                LocalDateTime.now(),
-                                LocalDateTime.now()
-                        ))
-        );
+        return contentsList.stream().map(GetWorldCupContentsResponse::fromEntity).toList();
     }
 }

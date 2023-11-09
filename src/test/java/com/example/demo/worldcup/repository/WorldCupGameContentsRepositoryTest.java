@@ -12,6 +12,9 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.helper.AbstractContainerBaseTest;
 import com.example.demo.helper.DataBaseCleanUp;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -28,6 +31,8 @@ import java.util.stream.IntStream;
 
 import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.core.Is.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -197,7 +202,47 @@ public class WorldCupGameContentsRepositoryTest extends AbstractContainerBaseTes
             String winnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
             assert Objects.equals(winnerPoint, "21");
         }
+    }
 
+    @Test
+    @DisplayName("월드컵 게임에 포함된 모든 컨텐츠를 조회할 수 있다.")
+    public void findAllByWorldCupGame() {
+        WorldCupGame worldCupGame = createWorldCupGame(
+                "TITLE",
+                "DESCRIPTION",
+                WorldCupGameRound.ROUND_32,
+                VisibleType.PUBLIC,
+                1
+        );
+        List<MediaFile> mediaFiles = IntStream.range(1,4)
+                .mapToObj(idx -> MediaFile.builder()
+                        .originalName("original")
+                        .filePath("filePath")
+                        .absoluteName("absolute")
+                        .extension(".png")
+                        .build())
+                .toList();
+        List<WorldCupGameContents> contentsList = IntStream.range(1,4)
+                .mapToObj(idx -> createGameContents(worldCupGame, "CONTENTS_NAME" + idx, mediaFiles.get(idx - 1)))
+                .toList();
+        worldCupGameRepository.save(worldCupGame);
+        mediaFileRepository.saveAll(mediaFiles);
+        worldCupGameContentsRepository.saveAll(contentsList);
+
+        // when
+        List<WorldCupGameContents> result = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
+
+        // then
+        assertThat(result.size(), is(3));
+
+        assertThat(result.get(0).getId(), is(1L));
+        assertThat(result.get(0).getMediaFile().getId(), is(1L));
+
+        assertThat(result.get(1).getId(), is(2L));
+        assertThat(result.get(1).getMediaFile().getId(), is(2L));
+
+        assertThat(result.get(2).getId(), is(3L));
+        assertThat(result.get(2).getMediaFile().getId(), is(3L));
     }
 
     private WorldCupGame createWorldCupGame(

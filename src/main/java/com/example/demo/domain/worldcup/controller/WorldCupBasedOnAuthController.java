@@ -1,5 +1,8 @@
 package com.example.demo.domain.worldcup.controller;
 
+import com.example.demo.common.web.auth.CustomAuthentication;
+import com.example.demo.common.web.memberresolver.MemberDto;
+import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummariesResponse;
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummaryRanksResponse;
@@ -8,6 +11,7 @@ import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.worldcup.controller.vo.WorldCupSort;
+import com.example.demo.domain.worldcup.service.WorldCupBasedOnAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,10 +20,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Tag(
         name = "WorldCup based on auth",
@@ -27,12 +33,15 @@ import java.util.List;
 )
 @RestController
 @RequestMapping("/api/world-cups/me")
+@RequiredArgsConstructor
 public class WorldCupBasedOnAuthController {
 
+    private final WorldCupBasedOnAuthService worldCupBasedOnAuthService;
+
     @Operation(
-            summary = "이상형 월드컵 삭제/수정에 사용되는 이미지 조회(디테일)",
-            description = "자신의 월드컵 게임 수정 용도에 사용하는 API, 월드컵에 포함된 컨텐츠의 자세한 내용을 조회합니다.",
-            security = @SecurityRequirement(name = "Authorization"),
+            summary = "이상형 월드컵 삭제/수정에 사용되는 컨텐츠 조회",
+            description = "월드컵 수정/생성 페이지에서 사용되는 컨텐츠 리스트를 조회합니다.",
+            security = @SecurityRequirement(name = "access-token"),
             parameters = {
                     @Parameter(
                             name = "worldCupId",
@@ -45,18 +54,37 @@ public class WorldCupBasedOnAuthController {
                             description = "조회 성공"
                     ),
                     @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자가 작성한 월드컵 게임이 아님",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
                             responseCode = "401",
                             description = "인증 실패",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
-                    )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵 게임",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
             }
     )
     @GetMapping("/{worldCupId}/contents")
     @ResponseStatus(HttpStatus.OK)
-    public RestApiResponse<List<GetWorldCupContentsResponse>> getContentsImages(
-            @PathVariable("worldCupId") Long worldCupId
+    public RestApiResponse<List<GetWorldCupContentsResponse>> getMyWorldCupGameContentsList(
+            @PathVariable("worldCupId")
+            Long worldCupId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
     ) {
-        return new RestApiResponse(1, "", null);
+        return new RestApiResponse(
+                1,
+                "조회 성공",
+                worldCupBasedOnAuthService.getMyWorldCupGameContents(worldCupId, memberDto.get().getId())
+        );
     }
 
     @Operation(
