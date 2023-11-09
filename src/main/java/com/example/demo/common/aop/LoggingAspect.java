@@ -59,7 +59,7 @@ public class LoggingAspect {
         return result;
     }
 
-    @Around(EXECUTION + ROOT_PACKAGE + "domain.*.repository.impl.*.*(..))")
+    // TODO : param name을 못 읽음 수정 필요
     // @Around(EXECUTION + ROOT_PACKAGE + "domain.*.repository.impl.*.*(..))")
     public Object repositoryAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
