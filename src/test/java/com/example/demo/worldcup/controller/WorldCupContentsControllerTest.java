@@ -1,12 +1,15 @@
 package com.example.demo.worldcup.controller;
 
+import com.example.demo.TestConstant;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.worldcup.controller.WorldCupContentsController;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.example.demo.helper.config.TestWebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.checkerframework.checker.units.qual.N;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +19,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,8 +45,8 @@ public class WorldCupContentsControllerTest {
     private final static String CLEAR_WORLD_CUP_GAME_API = ROOT_API + "/{worldCupId}/clear";
 
     @Test
-    @DisplayName("플레이 가능한 월드컵 게임 라운드 수 조회")
-    public void GET_AVAILABLE_ROUNDS_API_1() throws Exception {
+    @DisplayName(SUCCESS_PREFIX + "플레이 가능한 월드컵 게임 라운드 수 조회 요청 검증")
+    public void getAvailableRoundsApi() throws Exception {
         mockMvc.perform(
                 get(GET_AVAILABLE_ROUNDS_API, 1L)
         ).andExpect(
@@ -51,8 +55,8 @@ public class WorldCupContentsControllerTest {
     }
 
     @Test
-    @DisplayName("이상형 월드컵 게임 종료")
-    public void CLEAR_WORLD_CUP_GAME_API_1() throws Exception {
+    @DisplayName(SUCCESS_PREFIX + "이상형 월드컵 게임 종료 요청 검증")
+    public void clearWorldCupGame() throws Exception {
         ClearWorldCupGameRequest request = ClearWorldCupGameRequest
                 .builder()
                 .firstWinnerContentsId(1)

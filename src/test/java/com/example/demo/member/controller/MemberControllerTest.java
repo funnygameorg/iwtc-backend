@@ -1,5 +1,6 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.TestConstant;
 import com.example.demo.helper.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.member.controller.MemberController;
@@ -22,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
+import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,189 +58,200 @@ class MemberControllerTest {
 
 
     @Test
-    @DisplayName("자신의 정보 조회")
+    @DisplayName(SUCCESS_PREFIX + "자신의 정보 조회 요청 검증")
     public void getMeSummary() throws Exception {
 
         mockMvc.perform(get(GET_ME_SUMMARY_API))
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("회원가입")
-    @Test
-    public void SIGN_UP_API_1() throws Exception {
-        // given
-        SignUpRequest request = SignUpRequest.builder()
-                .serviceId("itwc123")
-                .nickname("주다")
-                .password("12341234")
-                .build();
+    @Nested
+    @DisplayName("회웝가입 요청 검증")
+    public class signUpApi {
+        @DisplayName(SUCCESS_PREFIX)
+        @Test
+        public void success1() throws Exception {
+            // given
+            SignUpRequest request = SignUpRequest.builder()
+                    .serviceId("itwc123")
+                    .nickname("주다")
+                    .password("12341234")
+                    .build();
 
-        // when then
-        mockMvc.perform(
-                post(SIGN_UP_API)
-                        .content(objectMapper.writeValueAsString(request))
-                        .contentType(APPLICATION_JSON)
+            // when then
+            mockMvc.perform(
+                            post(SIGN_UP_API)
+                                    .content(objectMapper.writeValueAsString(request))
+                                    .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isCreated());
+        }
+
+        @ParameterizedTest
+        @DisplayName(EXCEPTION_PREFIX + "nickname : 2자리 미만, 10자리 초과 불가")
+        @CsvSource(value = {
+                "주",
+                "트레비주리오12345",
+                "A",
+                "1",
+                "a ",
+                "a a a a a a a a a a a",
+                "aaaaa aaaaa",
+                "a a a a a"}
         )
-                .andExpect(status().isCreated());
-    }
+        @NullAndEmptySource
+        public void fail1(String nickname) throws Exception {
 
-    @ParameterizedTest
-    @DisplayName("회원가입 - nickname 검증 [2자리 미만, 10자리 초과 불가] (예외)")
-    @CsvSource(value = {
-            "주",
-            "트레비주리오12345",
-            "A",
-            "1",
-            "a ",
-            "a a a a a a a a a a a",
-            "aaaaa aaaaa",
-            "a a a a a"}
-    )
-    @NullAndEmptySource
-    public void SIGN_UP_API_2(String nickname) throws Exception {
+            // given
+            SignUpRequest request = SignUpRequest.builder()
+                    .serviceId("itwc123")
+                    .nickname(nickname)
+                    .password("12341234")
+                    .build();
 
-        // given
-        SignUpRequest request = SignUpRequest.builder()
-                .serviceId("itwc123")
-                .nickname(nickname)
-                .password("12341234")
-                .build();
+            // when then
+            mockMvc.perform(
+                            post(SIGN_UP_API)
+                                    .content(objectMapper.writeValueAsString(request))
+                                    .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isBadRequest());
+        }
 
-        // when then
-        mockMvc.perform(
-                post(SIGN_UP_API)
-                        .content(objectMapper.writeValueAsString(request))
-                        .contentType(APPLICATION_JSON)
+        @ParameterizedTest
+        @CsvSource(value = {
+                "AAAAA",
+                " A A B A B A ",
+                "123",
+                "Θ\nΘ\n"}
         )
-                .andExpect(status().isBadRequest());
+        @NullAndEmptySource
+        @DisplayName(EXCEPTION_PREFIX + "password : 6자리 미만 불가")
+        public void fail2(String password) throws Exception {
+            // given
+            SignUpRequest request = SignUpRequest.builder()
+                    .serviceId("itwc123")
+                    .nickname("주다라니")
+                    .password(password)
+                    .build();
+
+            // when then
+            mockMvc.perform(
+                            post(SIGN_UP_API)
+                                    .content(objectMapper.writeValueAsString(request))
+                                    .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isBadRequest());
+        }
+        @ParameterizedTest
+        @CsvSource(value = {
+                "AAAAA",
+                " A A B A B A ",
+                "123",
+                "Θ\nΘ\n"}
+        )
+        @NullAndEmptySource
+        @DisplayName(EXCEPTION_PREFIX + "serviceId : 2자리 미만, 10자리 초과 불가")
+        public void fail3(String serviceId) throws Exception {
+            // given
+            SignUpRequest request = SignUpRequest.builder()
+                    .serviceId(serviceId)
+                    .nickname("주다라니")
+                    .password("password")
+                    .build();
+
+            // when then
+            mockMvc.perform(
+                            post(SIGN_UP_API)
+                                    .content(objectMapper.writeValueAsString(request))
+                                    .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {
-            "AAAAA",
-            " A A B A B A ",
-            "123",
-            "Θ\nΘ\n"}
-    )
-    @NullAndEmptySource
-    @DisplayName("회원가입 - password 검증 [6자리 미만 불가](예외)")
-    public void SIGN_UP_API_3(String password) throws Exception {
-        // given
-        SignUpRequest request = SignUpRequest.builder()
-                .serviceId("itwc123")
-                .nickname("주다라니")
-                .password(password)
-                .build();
+    @Nested
+    @DisplayName("로그인 요청 검증")
+    public class signIn {
 
-        // when then
-        mockMvc.perform(
-                        post(SIGN_UP_API)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isBadRequest());
-    }
-    @ParameterizedTest
-    @CsvSource(value = {
-            "AAAAA",
-            " A A B A B A ",
-            "123",
-            "Θ\nΘ\n"}
-    )
-    @NullAndEmptySource
-    @DisplayName("회원가입 - serviceId 검증 [2자리 미만, 10자리 초과 불가] (예외)")
-    public void SIGN_UP_API_4(String serviceId) throws Exception {
-        // given
-        SignUpRequest request = SignUpRequest.builder()
-                .serviceId(serviceId)
-                .nickname("주다라니")
-                .password("password")
-                .build();
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1() throws Exception {
+            // given
+            SignInRequest request = SignInRequest.builder()
+                    .serviceId("AAAAVEf23")
+                    .password("AAAA@32fSD")
+                    .build();
+            SignInResponse response = SignInResponse.builder()
+                    .accessToken("A")
+                    .refreshToken("A")
+                    .build();
+            given(memberService.signIn(request))
+                    .willReturn(response);
 
-        // when then
-        mockMvc.perform(
-                        post(SIGN_UP_API)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isBadRequest());
+            // when then
+            mockMvc.perform(
+                            post(SIGN_IN_API)
+                                    .content(objectMapper.writeValueAsString(request))
+                                    .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(header().exists("access-token"))
+                    .andExpect(header().exists("refresh-token"));
+        }
+
+        @ParameterizedTest
+        @CsvSource(value = {
+                "AAAAA",
+                " A A B A B A ",
+                "123",
+                "Θ\nΘ\n"}
+        )
+        @NullAndEmptySource
+        @DisplayName(EXCEPTION_PREFIX + "serviceId : 6자리 미만, 20자리 초과 불가")
+        public void fail1(String serviceId) throws Exception{
+            SignInRequest request = SignInRequest.builder()
+                    .serviceId(serviceId)
+                    .password("AAAA@32fSD")
+                    .build();
+            mockMvc.perform(
+                            post(SIGN_IN_API)
+                                    .content(objectMapper.writeValueAsString(request))
+                                    .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isBadRequest());
+            // when then
+        }
+
+        @ParameterizedTest
+        @CsvSource(value = {
+                "AAAAA",
+                "AABAB",
+                "12345",
+                "123",
+                "Θ\nΘ\n"}
+        )
+        @DisplayName(EXCEPTION_PREFIX + "password : 5자리 이하 불가")
+        public void fail2(String password) throws Exception{
+            SignInRequest request = SignInRequest.builder()
+                    .serviceId("AAAA@32fSD")
+                    .password(password)
+                    .build();
+            // when then
+            mockMvc.perform(
+                            post(SIGN_IN_API)
+                                    .content(objectMapper.writeValueAsString(request))
+                                    .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
     @Test
-    @DisplayName("로그인")
-    public void SIGN_IN_API_1() throws Exception {
-        // given
-        SignInRequest request = SignInRequest.builder()
-                .serviceId("AAAAVEf23")
-                .password("AAAA@32fSD")
-                .build();
-        SignInResponse response = SignInResponse.builder()
-                .accessToken("A")
-                .refreshToken("A")
-                .build();
-        given(memberService.signIn(request))
-                .willReturn(response);
-
-        // when then
-        mockMvc.perform(
-                post(SIGN_IN_API)
-                        .content(objectMapper.writeValueAsString(request))
-                        .contentType(APPLICATION_JSON)
-        )
-                .andExpect(status().isOk())
-                .andExpect(header().exists("access-token"))
-                .andExpect(header().exists("refresh-token"));
-    }
-
-    @ParameterizedTest
-    @CsvSource(value = {
-            "AAAAA",
-            " A A B A B A ",
-            "123",
-            "Θ\nΘ\n"}
-    )
-    @NullAndEmptySource
-    @DisplayName("로그인 - serviceId 검증 [6자리 미만, 20자리 초과 불가](예외)")
-    public void SIGN_IN_API_2(String serviceId) throws Exception{
-        SignInRequest request = SignInRequest.builder()
-                .serviceId(serviceId)
-                .password("AAAA@32fSD")
-                .build();
-        mockMvc.perform(
-                        post(SIGN_IN_API)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isBadRequest());
-        // when then
-    }
-
-    @ParameterizedTest
-    @CsvSource(value = {
-            "AAAAA",
-            "AABAB",
-            "12345",
-            "123",
-            "Θ\nΘ\n"}
-    )
-    @DisplayName("로그인 - password 검증 [5자리 이하 불가] (예외)")
-    public void SIGN_IN_API_3(String password) throws Exception{
-        SignInRequest request = SignInRequest.builder()
-                .serviceId("AAAA@32fSD")
-                .password(password)
-                .build();
-        // when then
-        mockMvc.perform(
-                        post(SIGN_IN_API)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("로그아웃")
-    public void SIGN_OUT_API_1() throws Exception{
+    @DisplayName(SUCCESS_PREFIX + "로그아웃")
+    public void signOut() throws Exception{
         mockMvc.perform(
                 get(SIGN_OUT_API)
                         .header("access-token", "TestAccessTokenValue")
@@ -245,89 +259,100 @@ class MemberControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {
-            "AAAAAAF",
-            "AABAB124",
-            "12345aZ",
-            "123fffFfAA",
-            "aaaaaaa",
-            "1231231231"}
-    )
-    @DisplayName("serviceId 중복 검사 - serviceId 검증")
-    public void VERIFY_DUPLICATED_ID_API_1(String serviceId) throws Exception{
-        MultiValueMap<String, String> param = new LinkedMultiValueMap();
-        param.add("serviceId", serviceId);
+    @Nested
+    @DisplayName("serviceId 중복 검사 요청 검증")
+    public class verifyDuplicatedServiceId {
+        @ParameterizedTest
+        @CsvSource(value = {
+                "AAAAAAF",
+                "AABAB124",
+                "12345aZ",
+                "123fffFfAA",
+                "aaaaaaa",
+                "1231231231"}
+        )
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1(String serviceId) throws Exception{
+            MultiValueMap<String, String> param = new LinkedMultiValueMap();
+            param.add("serviceId", serviceId);
 
-        // when then
-        mockMvc.perform(
-                        get(VERIFY_DUPLICATED_ID_API)
-                                .params(param)
-                )
-                .andExpect(status().isOk());
+            // when then
+            mockMvc.perform(
+                            get(VERIFY_DUPLICATED_ID_API)
+                                    .params(param)
+                    )
+                    .andExpect(status().isOk());
+        }
+
+        @ParameterizedTest
+        @CsvSource(value = {
+                "AAAAA",
+                "AAAAAAAAAAAAAAAAAAAA1",
+                " A A B A B A ",
+                "123",
+                "Θ\nΘ\n"}
+        )
+        @NullAndEmptySource
+        @DisplayName(EXCEPTION_PREFIX + "serviceId : 6자리 미만, 20자리 초과 불가")
+        public void fail1(String serviceId) throws Exception{
+            MultiValueMap<String, String> param = new LinkedMultiValueMap();
+            param.add("serviceId", serviceId);
+
+            // when then
+            mockMvc.perform(
+                            get(VERIFY_DUPLICATED_ID_API)
+                                    .params(param)
+                    )
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {
-            "AAAAA",
-            "AAAAAAAAAAAAAAAAAAAA1",
-            " A A B A B A ",
-            "123",
-            "Θ\nΘ\n"}
-    )
-    @NullAndEmptySource
-    @DisplayName("serviceId 중복 검사 - serviceId 검증[6자리 미만, 20자리 초과 불가] (예외)")
-    public void VERIFY_DUPLICATED_ID_API_2(String serviceId) throws Exception{
-        MultiValueMap<String, String> param = new LinkedMultiValueMap();
-        param.add("serviceId", serviceId);
+    @Nested
+    @DisplayName("nickname 중복 검사 요청 검증")
+    public class verifyDuplicatedNickname {
 
-        // when then
-        mockMvc.perform(
-                        get(VERIFY_DUPLICATED_ID_API)
-                                .params(param)
-                )
-                .andExpect(status().isBadRequest());
-    }
+        @ParameterizedTest
+        @CsvSource(value = {
+                "AAAAA",
+                "AAAAAA",
+                "123456",
+                "12"}
+        )
+        @DisplayName(SUCCESS_PREFIX)
+        public void success(String nickname) throws Exception{
+            MultiValueMap<String, String> param = new LinkedMultiValueMap();
+            param.add("nickname", nickname);
 
-    @ParameterizedTest
-    @CsvSource(value = {
-            "AAAAA",
-            "AAAAAA",
-            "123456",
-            "12"}
-    )
-    @DisplayName("nickname 중복 검사 - nickname 검증")
-    public void VERIFY_DUPLICATED_NICKNAME_API_1(String nickname) throws Exception{
-        MultiValueMap<String, String> param = new LinkedMultiValueMap();
-        param.add("nickname", nickname);
+            // when then
+            mockMvc.perform(
+                            get(VERIFY_DUPLICATED_NICKNAME_API)
+                                    .params(param)
+                    )
+                    .andExpect(status().isOk());
+        }
 
-        // when then
-        mockMvc.perform(
-                        get(VERIFY_DUPLICATED_NICKNAME_API)
-                                .params(param)
-                )
-                .andExpect(status().isOk());
-    }
+        @ParameterizedTest
+        @CsvSource(value = {
+                "A",
+                "AAAAAAAAAAA",
+                "12345678901",
+                "1 2",
+        }
+        )
+        @NullAndEmptySource
+        @DisplayName(EXCEPTION_PREFIX + "nickname : 2자리 미만, 10자리 초과 불가")
+        public void fail1(String nickname) throws Exception{
+            MultiValueMap<String, String> param = new LinkedMultiValueMap();
+            param.add("nickname", nickname);
 
-    @ParameterizedTest
-    @CsvSource(value = {
-            "A",
-            "AAAAAAAAAAA",
-            "12345678901",
-            "1 2",
-    }
-    )
-    @NullAndEmptySource
-    @DisplayName("nickname 중복 검사 - nickname 검증 [2자리 미만, 10자리 초과 불가] (예외)")
-    public void VERIFY_DUPLICATED_NICKNAME_API_2(String nickname) throws Exception{
-        MultiValueMap<String, String> param = new LinkedMultiValueMap();
-        param.add("nickname", nickname);
+            // when then
+            mockMvc.perform(
+                            get(VERIFY_DUPLICATED_NICKNAME_API)
+                                    .params(param)
+                    )
+                    .andExpect(status().isBadRequest());
+        }
 
-        // when then
-        mockMvc.perform(
-                        get(VERIFY_DUPLICATED_NICKNAME_API)
-                                .params(param)
-                )
-                .andExpect(status().isBadRequest());
     }
 }

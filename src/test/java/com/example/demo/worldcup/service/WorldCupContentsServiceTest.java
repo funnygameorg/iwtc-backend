@@ -1,5 +1,6 @@
 package com.example.demo.worldcup.service;
 
+import com.example.demo.TestConstant;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
@@ -30,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
+import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static java.util.stream.IntStream.range;
@@ -60,281 +63,291 @@ public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
     }
 
 
-    @Test
-    @DisplayName("월드컵 게임 라운드 수 조회")
-    public void getAvailableGameRounds1() {
+    @Nested
+    @DisplayName("월드컵 게임 라운드 수를 조회할 수 있다.")
+    public class getAvailableGameRounds {
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void success() {
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
 
-        // given
-        WorldCupGame worldCupGame = WorldCupGame
-                .builder()
-                .title("title1")
-                .description("description1")
-                .visibleType(PUBLIC)
-                .views(0)
-                .softDelete(false)
-                .memberId(1)
-                .build();
-        List<MediaFile> mediaFiles = range(1, 10)
-                .mapToObj(idx ->
-                        MediaFile.builder()
-                                .absoluteName("absolute")
-                                .extension(".png")
-                                .filePath("/abc")
-                                .originalName("origin")
-                                .build()
-                )
-                .toList();
+            List<MediaFile> mediaFiles = range(1, 10)
+                    .mapToObj(idx ->
+                            MediaFile.builder()
+                                    .absoluteName("absolute")
+                                    .extension(".png")
+                                    .filePath("/abc")
+                                    .originalName("origin")
+                                    .build()
+                    )
+                    .toList();
 
-        List<WorldCupGameContents> contentsList = range(1, 10)
-                .mapToObj(idx ->
+            List<WorldCupGameContents> contentsList = range(1, 10)
+                    .mapToObj(idx ->
+                            WorldCupGameContents.builder()
+                                    .name("contentsName")
+                                    .worldCupGame(worldCupGame)
+                                    .mediaFile(mediaFiles.get(idx - 1))
+                                    .build()
+                    )
+                    .toList();
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(mediaFiles);
+            worldCupGameContentsRepository.saveAll(contentsList);
+
+            // when
+            GetAvailableGameRoundsResponse result = worldCupGamecontentsService.getAvailableGameRounds(1L);
+
+            // then
+            assert result.worldCupId() == 1;
+            assert Objects.equals(result.worldCupDescription(), "description1");
+            assert result.rounds().equals(List.of(2, 4, 8));
+        }
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "게임에 플레이 가능한 라운드가 존재하지 않음")
+        public void fail1() {
+
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+            worldCupGameRepository.save(worldCupGame);
+
+            // when & then
+            assertThrows(
+                    NoRoundsAvailableToPlayException.class,
+                    () -> worldCupGamecontentsService.getAvailableGameRounds(1L)
+            );
+        }
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 게임을 조회할 수 없음")
+        public void fail2() {
+            // when
+            assertThrows(
+                    NotFoundWorldCupGameException.class,
+                    () -> worldCupGamecontentsService.getAvailableGameRounds(1L)
+            );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠를 조회할 수 있다.")
+    public class getPlayContents {
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void success() {
+
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+
+            List<MediaFile> mediaFiles = range(1, 10).mapToObj( idx ->
+                    MediaFile.builder()
+                            .originalName("fileOriginalName")
+                            .absoluteName("fileAbsoluteName " + idx)
+                            .filePath("/naver/.../ " + idx)
+                            .extension(".png")
+                            .build()
+            ).toList();
+
+            List<WorldCupGameContents> contentsList = range(1, 10).mapToObj( idx ->
+                    WorldCupGameContents.builder()
+                            .name("contentsName " + idx)
+                            .worldCupGame(worldCupGame)
+                            .mediaFile(mediaFiles.get(idx - 1))
+                            .build()
+            ).toList();
+
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(mediaFiles);
+            worldCupGameContentsRepository.saveAll(contentsList);
+
+            // when
+            GetWorldCupPlayContentsResponse result = worldCupGamecontentsService.getPlayContents(
+                    1L,
+                    8,
+                    1,
+                    List.of()
+            );
+
+            // then
+            assert result.worldCupId() == 1L;
+            assert result.round() == 8;
+            assert Objects.equals(result.title(), "title1");
+
+            assert result.contentsList().size() == 8;
+
+            assert result.contentsList().get(0).getContentsId() == 1;
+            assert Objects.equals(result.contentsList().get(0).getName(), "contentsName 1");
+            assert Objects.equals(result.contentsList().get(0).getAbsoluteName(), "fileAbsoluteName 1");
+            assert Objects.equals(result.contentsList().get(0).getFilePath(), "/naver/.../ 1");
+
+            assert result.contentsList().get(7).getContentsId() == 8;
+            assert Objects.equals(result.contentsList().get(7).getName(), "contentsName 8");
+            assert Objects.equals(result.contentsList().get(7).getAbsoluteName(), "fileAbsoluteName 8");
+            assert Objects.equals(result.contentsList().get(7).getFilePath(), "/naver/.../ 8");
+
+
+        }
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "예상한 컨텐츠 조회 사이즈와 실제 조회 사이즈가 다르면 안된다.")
+        public void fail1() {
+
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+
+            List<MediaFile> mediaFiles = range(1, 10).mapToObj(idx ->
+                    MediaFile.builder()
+                            .originalName("fileOriginalName")
+                            .absoluteName("fileAbsoluteName")
+                            .filePath("/naver/.../")
+                            .extension(".png")
+                            .build()
+            ).toList();
+            List<WorldCupGameContents> contentsList = range(1, 10).mapToObj(idx ->
                     WorldCupGameContents.builder()
                             .name("contentsName")
                             .worldCupGame(worldCupGame)
                             .mediaFile(mediaFiles.get(idx - 1))
                             .build()
-                )
-                .toList();
-        worldCupGameRepository.save(worldCupGame);
-        mediaFileRepository.saveAll(mediaFiles);
-        worldCupGameContentsRepository.saveAll(contentsList);
+            ).toList();
 
-        // when
-        GetAvailableGameRoundsResponse result = worldCupGamecontentsService.getAvailableGameRounds(1L);
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(mediaFiles);
+            worldCupGameContentsRepository.saveAll(contentsList);
 
-        // then
-        assert result.worldCupId() == 1;
-        assert Objects.equals(result.worldCupDescription(), "description1");
-        assert result.rounds().equals(List.of(2, 4, 8));
-    }
+            List<GetDividedWorldCupGameContentsProjection> ACTUAL_GET_CONTENTS_LIST = List.of(
+                    new GetDividedWorldCupGameContentsProjection(1, "name", "absoulteName", "filePath"),
+                    new GetDividedWorldCupGameContentsProjection(2, "name", "absoulteName", "filePath")
+            );
+            given(worldCupGameRepository.getDividedWorldCupGameContents(1L, 8, List.of()))
+                    .willReturn(ACTUAL_GET_CONTENTS_LIST);
 
-    @Test
-    @DisplayName("월드컵 게임 라운드 수 조회 - 게임에 플레이 가능한 라운드가 존재하지 않음 (예외)")
-    public void getAvailableGameRounds2() {
 
-        // given
-        WorldCupGame worldCupGame = WorldCupGame
-                .builder()
-                .title("title1")
-                .description("description1")
-                .visibleType(PUBLIC)
-                .views(0)
-                .softDelete(false)
-                .memberId(1)
-                .build();
-        worldCupGameRepository.save(worldCupGame);
+            // when & then
+            IllegalWorldCupGameContentsException resultException =
+                    assertThrows(
+                            IllegalWorldCupGameContentsException.class,
+                            () -> worldCupGamecontentsService.getPlayContents(
+                                    1L,
+                                    8,
+                                    1,
+                                    List.of()
+                            )
+                    );
 
-        // when & then
-        assertThrows(
-                NoRoundsAvailableToPlayException.class,
-                () -> worldCupGamecontentsService.getAvailableGameRounds(1L)
-        );
-    }
+            assert resultException.getPublicMessage().contains("조회 컨텐츠 수가 다름 ");
+        }
 
-    @Test
-    @DisplayName("월드컵 게임 라운드 수 조회 - 존재하지 않는 게임을 조회할 수 없음 (예외)")
-    public void getAvailableGameRounds3() {
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "이미 플레이한 게임 컨텐츠를 조회하면 안된다.")
+        public void fail2() {
 
-        // Not Given
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
 
-        // when
-        assertThrows(
-                NotFoundWorldCupGameException.class,
-                () -> worldCupGamecontentsService.getAvailableGameRounds(1L)
-        );
-    }
+            MediaFile mediaFile1 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
+            MediaFile mediaFile2 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
 
-    @Test
-    @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회")
-    public void GetPlayContents1() {
+            WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                    .name("contentsName")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile1)
+                    .build();
+            WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                    .name("contentsName")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile2)
+                    .build();
 
-        // given
-        WorldCupGame worldCupGame = WorldCupGame
-                .builder()
-                .title("title1")
-                .description("description1")
-                .visibleType(PUBLIC)
-                .views(0)
-                .softDelete(false)
-                .memberId(1)
-                .build();
+            List<GetDividedWorldCupGameContentsProjection> ACTUAL_GET_CONTENTS_LIST = List.of(
+                    new GetDividedWorldCupGameContentsProjection(1, "name", "absoulteName", "filePath"),
+                    new GetDividedWorldCupGameContentsProjection(2, "name", "absoulteName", "filePath")
+            );
+            given(worldCupGameRepository.getDividedWorldCupGameContents(1L, 2, List.of(1L)))
+                    .willReturn(ACTUAL_GET_CONTENTS_LIST);
 
-        List<MediaFile> mediaFiles = range(1, 10).mapToObj( idx ->
-                MediaFile.builder()
-                        .originalName("fileOriginalName")
-                        .absoluteName("fileAbsoluteName " + idx)
-                        .filePath("/naver/.../ " + idx)
-                        .extension(".png")
-                        .build()
-        ).toList();
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
+            worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
 
-        List<WorldCupGameContents> contentsList = range(1, 10).mapToObj( idx ->
-                WorldCupGameContents.builder()
-                        .name("contentsName " + idx)
-                        .worldCupGame(worldCupGame)
-                        .mediaFile(mediaFiles.get(idx - 1))
-                        .build()
-        ).toList();
 
-        worldCupGameRepository.save(worldCupGame);
-        mediaFileRepository.saveAll(mediaFiles);
-        worldCupGameContentsRepository.saveAll(contentsList);
+            // when & then
+            final List<Long> ALREADY_PLAYED_CONTENTS_ID = List.of(1L);
+            IllegalWorldCupGameContentsException resultException =
+                    assertThrows(
+                            IllegalWorldCupGameContentsException.class,
+                            () -> worldCupGamecontentsService.getPlayContents(
+                                    1L,
+                                    2,
+                                    1,
+                                    ALREADY_PLAYED_CONTENTS_ID
+                            )
+                    );
 
-        // when
-        GetWorldCupPlayContentsResponse result = worldCupGamecontentsService.getPlayContents(
-                1L,
-                8,
-                1,
-                List.of()
-        );
-
-        // then
-        assert result.worldCupId() == 1L;
-        assert result.round() == 8;
-        assert Objects.equals(result.title(), "title1");
-
-        assert result.contentsList().size() == 8;
-
-        assert result.contentsList().get(0).getContentsId() == 1;
-        assert Objects.equals(result.contentsList().get(0).getName(), "contentsName 1");
-        assert Objects.equals(result.contentsList().get(0).getAbsoluteName(), "fileAbsoluteName 1");
-        assert Objects.equals(result.contentsList().get(0).getFilePath(), "/naver/.../ 1");
-
-        assert result.contentsList().get(7).getContentsId() == 8;
-        assert Objects.equals(result.contentsList().get(7).getName(), "contentsName 8");
-        assert Objects.equals(result.contentsList().get(7).getAbsoluteName(), "fileAbsoluteName 8");
-        assert Objects.equals(result.contentsList().get(7).getFilePath(), "/naver/.../ 8");
-
+            assert resultException.getPublicMessage().contains("컨텐츠 중복");
+        }
 
     }
 
-    @Test
-    @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회 - 예상한 컨텐츠 조회 사이즈와 실제 조회 사이즈가 다르면 안된다. (예외)")
-    public void GetPlayContents2() {
 
-        // given
-        WorldCupGame worldCupGame = WorldCupGame
-                .builder()
-                .title("title1")
-                .description("description1")
-                .visibleType(PUBLIC)
-                .views(0)
-                .softDelete(false)
-                .memberId(1)
-                .build();
-
-        List<MediaFile> mediaFiles = range(1, 10).mapToObj(idx ->
-                MediaFile.builder()
-                        .originalName("fileOriginalName")
-                        .absoluteName("fileAbsoluteName")
-                        .filePath("/naver/.../")
-                        .extension(".png")
-                        .build()
-        ).toList();
-        List<WorldCupGameContents> contentsList = range(1, 10).mapToObj(idx ->
-                WorldCupGameContents.builder()
-                        .name("contentsName")
-                        .worldCupGame(worldCupGame)
-                        .mediaFile(mediaFiles.get(idx - 1))
-                        .build()
-        ).toList();
-
-        worldCupGameRepository.save(worldCupGame);
-        mediaFileRepository.saveAll(mediaFiles);
-        worldCupGameContentsRepository.saveAll(contentsList);
-
-        List<GetDividedWorldCupGameContentsProjection> ACTUAL_GET_CONTENTS_LIST = List.of(
-                new GetDividedWorldCupGameContentsProjection(1, "name", "absoulteName", "filePath"),
-                new GetDividedWorldCupGameContentsProjection(2, "name", "absoulteName", "filePath")
-        );
-        given(worldCupGameRepository.getDividedWorldCupGameContents(1L, 8, List.of()))
-                .willReturn(ACTUAL_GET_CONTENTS_LIST);
-
-
-        // when & then
-        IllegalWorldCupGameContentsException resultException =
-                assertThrows(
-                        IllegalWorldCupGameContentsException.class,
-                        () -> worldCupGamecontentsService.getPlayContents(
-                                1L,
-                                8,
-                                1,
-                                List.of()
-                )
-        );
-
-        assert resultException.getPublicMessage().contains("조회 컨텐츠 수가 다름 ");
-    }
 
     @Test
-    @DisplayName("이상형 월드컵 게임 플레이를 위한 컨텐츠 조회 - 이미 플레이한 게임 컨텐츠를 조회하면 안된다. (예외)")
-    public void GetPlayContents3() {
-
-        // given
-        WorldCupGame worldCupGame = WorldCupGame
-                .builder()
-                .title("title1")
-                .description("description1")
-                .visibleType(PUBLIC)
-                .views(0)
-                .softDelete(false)
-                .memberId(1)
-                .build();
-
-        MediaFile mediaFile1 = MediaFile.builder()
-                .originalName("fileOriginalName")
-                .absoluteName("fileAbsoluteName")
-                .filePath("filePath")
-                .extension("extension")
-                .build();
-        MediaFile mediaFile2 = MediaFile.builder()
-                .originalName("fileOriginalName")
-                .absoluteName("fileAbsoluteName")
-                .filePath("filePath")
-                .extension("extension")
-                .build();
-
-        WorldCupGameContents contents1 = WorldCupGameContents.builder()
-                .name("contentsName")
-                .worldCupGame(worldCupGame)
-                .mediaFile(mediaFile1)
-                .build();
-        WorldCupGameContents contents2 = WorldCupGameContents.builder()
-                .name("contentsName")
-                .worldCupGame(worldCupGame)
-                .mediaFile(mediaFile2)
-                .build();
-
-        List<GetDividedWorldCupGameContentsProjection> ACTUAL_GET_CONTENTS_LIST = List.of(
-                new GetDividedWorldCupGameContentsProjection(1, "name", "absoulteName", "filePath"),
-                new GetDividedWorldCupGameContentsProjection(2, "name", "absoulteName", "filePath")
-        );
-        given(worldCupGameRepository.getDividedWorldCupGameContents(1L, 2, List.of(1L)))
-                .willReturn(ACTUAL_GET_CONTENTS_LIST);
-
-        worldCupGameRepository.save(worldCupGame);
-        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
-        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
-
-
-        // when & then
-        final List<Long> ALREADY_PLAYED_CONTENTS_ID = List.of(1L);
-        IllegalWorldCupGameContentsException resultException =
-                assertThrows(
-                        IllegalWorldCupGameContentsException.class,
-                        () -> worldCupGamecontentsService.getPlayContents(
-                                1L,
-                                2,
-                                1,
-                                ALREADY_PLAYED_CONTENTS_ID
-                        )
-                );
-        
-        assert resultException.getPublicMessage().contains("컨텐츠 중복");
-    }
-
-    @Test
-    @DisplayName("게임 클리어")
-    public void clearWorldCupGame1() {
+    @DisplayName(SUCCESS_PREFIX + "게임을 클리어할 수 있다.")
+    public void clearWorldCupGame() {
         ValueOperations ops = redisTemplate.opsForValue();
         // given
         WorldCupGame worldCupGame = WorldCupGame
