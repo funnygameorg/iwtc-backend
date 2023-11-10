@@ -12,6 +12,7 @@ import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRo
 import com.example.demo.helper.testbase.ContainerBaseTest;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,8 +27,10 @@ import java.util.stream.IntStream;
 
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.Is.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implements IntegrationBaseTest {
 
@@ -69,7 +72,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             Boolean existsWorldCupGame = worldCupGameRepository.existsWorldCupGame(savedWorldCupGame.getId());
 
             // then
-            assert existsWorldCupGame;
+            assertThat(existsWorldCupGame).isTrue();
         }
 
         @Test
@@ -90,7 +93,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             Boolean existsWorldCupGame = worldCupGameRepository.existsWorldCupGame(plus1Id);
 
             // then
-            assert !existsWorldCupGame;
+            assertThat(existsWorldCupGame).isFalse();
         }
 
     }
@@ -128,10 +131,12 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             GetAvailableGameRoundsProjection result = worldCupGameRepository.getAvailableGameRounds(worldCupGame.getId());
 
             // then
-            assert Objects.equals(worldCupGame.getId(), result.worldCupId());
-            assert Objects.equals(worldCupGame.getTitle(), result.worldCupTitle());
-            assert Objects.equals(worldCupGame.getDescription(), result.worldCupDescription());
-            assert result.totalContentsSize() == 3;
+            assertAll(
+                    () -> assertThat(worldCupGame.getId()).isEqualTo(result.worldCupId()),
+                    () -> assertThat(worldCupGame.getTitle()).isEqualTo(result.worldCupTitle()),
+                    () -> assertThat(worldCupGame.getDescription()).isEqualTo(result.worldCupDescription()),
+                    () -> assertThat(result.totalContentsSize()).isEqualTo(3)
+            );
         }
 
         @Test
@@ -154,10 +159,12 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             GetAvailableGameRoundsProjection result = worldCupGameRepository.getAvailableGameRounds(worldCupGameId);
 
             // then
-            assert Objects.equals(worldCupGame.getId(), result.worldCupId());
-            assert Objects.equals(worldCupGame.getTitle(), result.worldCupTitle());
-            assert Objects.equals(worldCupGame.getDescription(), result.worldCupDescription());
-            assert result.totalContentsSize() == 0;
+            assertAll(
+                    () -> assertThat(worldCupGame.getId()).isEqualTo(result.worldCupId()),
+                    () -> assertThat(worldCupGame.getTitle()).isEqualTo(result.worldCupTitle()),
+                    () -> assertThat(worldCupGame.getDescription()).isEqualTo(result.worldCupDescription()),
+                    () -> assertThat(result.totalContentsSize()).isEqualTo(0)
+            );
         }
 
     }
@@ -175,9 +182,9 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             // when
             worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 10);
 
-            // then
             String winnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
-            assert Objects.equals(winnerPoint, "10");
+            // then
+            assertThat(winnerPoint).isEqualTo("10");
         }
 
         @Test
@@ -191,9 +198,9 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 7);
             worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 4);
 
-            // then
             String winnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
-            assert Objects.equals(winnerPoint, "21");
+            // then
+            assertThat(winnerPoint).isEqualTo("21");
         }
     }
 
@@ -226,16 +233,18 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
         List<WorldCupGameContents> result = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
         // then
-        assertThat(result.size(), is(3));
+        assertAll(
+                () -> assertThat(result.size()).isEqualTo(3),
 
-        assertThat(result.get(0).getId(), is(1L));
-        assertThat(result.get(0).getMediaFile().getId(), is(1L));
+                () -> assertThat(result.get(0).getId()).isEqualTo(1L),
+                () -> assertThat(result.get(0).getMediaFile().getId()).isEqualTo(1L),
 
-        assertThat(result.get(1).getId(), is(2L));
-        assertThat(result.get(1).getMediaFile().getId(), is(2L));
+                () -> assertThat(result.get(1).getId()).isEqualTo(2L),
+                () -> assertThat(result.get(1).getMediaFile().getId()).isEqualTo(2L),
 
-        assertThat(result.get(2).getId(), is(3L));
-        assertThat(result.get(2).getMediaFile().getId(), is(3L));
+                () -> assertThat(result.get(2).getId()).isEqualTo(3L),
+                () -> assertThat(result.get(2).getMediaFile().getId()).isEqualTo(3L)
+        );
     }
 
     private WorldCupGame createWorldCupGame(

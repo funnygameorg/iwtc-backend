@@ -11,10 +11,7 @@ import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,8 @@ import java.util.Objects;
 
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static java.util.stream.IntStream.range;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 
@@ -102,25 +101,27 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
             GetWorldCupGamePageProjection firstElement = result.getContent().get(0);
             GetWorldCupGamePageProjection secondElement = result.getContent().get(1);
 
-            assert result.getTotalPages() == 1;
-            assert result.getContent().size() == 2;
-            assert result.getNumberOfElements() == 2;
-            assert result.getNumber() == 0;
+            assertAll(
+                    () -> assertThat(result.getTotalPages()).isEqualTo(1),
+                    () -> assertThat(result.getContent().size()).isEqualTo(2),
+                    () -> assertThat(result.getNumberOfElements()).isEqualTo(2),
+                    () -> assertThat(result.getNumber()).isEqualTo(0),
 
-            assert firstElement.id() == 2;
-            assert Objects.equals(worldCupGames.get(1).getTitle(), firstElement.title());
-            assert Objects.equals(worldCupGameContentsList2.get(1).getName(), firstElement.contentsName1());
-            assert Objects.equals(worldCupGameContentsList2.get(0).getName(), firstElement.contentsName2());
-            assert Objects.equals(mediaFiles.get(5).getFilePath(), firstElement.filePath1());
-            assert Objects.equals(mediaFiles.get(4).getFilePath(), firstElement.filePath2());
+                    () -> assertThat(firstElement.id()).isEqualTo(2),
+                    () -> assertThat(firstElement.title()).isEqualTo(worldCupGames.get(1).getTitle()),
+                    () -> assertThat(firstElement.contentsName1()).isEqualTo(worldCupGameContentsList2.get(1).getName()),
+                    () -> assertThat(firstElement.contentsName2()).isEqualTo(worldCupGameContentsList2.get(0).getName()),
+                    () -> assertThat(firstElement.filePath1()).isEqualTo(mediaFiles.get(5).getFilePath()),
+                    () -> assertThat(firstElement.filePath2()).isEqualTo(mediaFiles.get(4).getFilePath()),
 
-            assert secondElement.id() == 1;
-            assert Objects.equals(worldCupGames.get(0).getTitle(), secondElement.title());
-            assert Objects.equals(worldCupGames.get(0).getDescription(), secondElement.description());
-            assert Objects.equals(worldCupGameContentsList1.get(4).getName(), secondElement.contentsName1());
-            assert Objects.equals(worldCupGameContentsList1.get(3).getName(), secondElement.contentsName2());
-            assert Objects.equals(mediaFiles.get(3).getFilePath(), secondElement.filePath1());
-            assert Objects.equals(mediaFiles.get(2).getFilePath(), secondElement.filePath2());
+                    () -> assertThat(secondElement.id()).isEqualTo(1),
+                    () -> assertThat(secondElement.title()).isEqualTo(worldCupGames.get(0).getTitle()),
+                    () -> assertThat(secondElement.description()).isEqualTo(worldCupGames.get(0).getDescription()),
+                    () -> assertThat(secondElement.contentsName1()).isEqualTo(worldCupGameContentsList1.get(4).getName()),
+                    () -> assertThat(secondElement.contentsName2()).isEqualTo(worldCupGameContentsList1.get(3).getName()),
+                    () -> assertThat(secondElement.filePath1()).isEqualTo(mediaFiles.get(3).getFilePath()),
+                    () -> assertThat(secondElement.filePath2()).isEqualTo(mediaFiles.get(2).getFilePath())
+            );
 
         }
 
@@ -195,16 +196,18 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
             // then
             GetWorldCupGamePageProjection firstElement = result.getContent().get(0);
 
-            assert result.getTotalPages() == 1;
-            assert result.getContent().size() == 1;
+            assertAll(
+                    () -> assertThat(result.getTotalPages()).isEqualTo(1),
+                    () -> assertThat(result.getContent().size()).isEqualTo(1),
 
-            assert firstElement.id() == 1;
-            assert Objects.equals(game1.getTitle(), firstElement.title());
-            assert Objects.equals(game1.getDescription(), firstElement.description());
-            assert Objects.equals(worldCupGameContentsList.get(5).getName(), firstElement.contentsName1());
-            assert Objects.equals(worldCupGameContentsList.get(4).getName(), firstElement.contentsName2());
-            assert Objects.equals(mediaFiles.get(5).getFilePath(), firstElement.filePath1());
-            assert Objects.equals(mediaFiles.get(4).getFilePath(), firstElement.filePath2());
+                    () -> assertThat(firstElement.id()).isEqualTo(1),
+                    () -> assertThat(firstElement.title()).isEqualTo(game1.getTitle()),
+                    () -> assertThat(firstElement.description()).isEqualTo(game1.getDescription()),
+                    () -> assertThat(firstElement.contentsName1()).isEqualTo(worldCupGameContentsList.get(5).getName()),
+                    () -> assertThat(firstElement.contentsName2()).isEqualTo(worldCupGameContentsList.get(4).getName()),
+                    () -> assertThat(firstElement.filePath1()).isEqualTo(mediaFiles.get(5).getFilePath()),
+                    () -> assertThat(firstElement.filePath2()).isEqualTo(mediaFiles.get(4).getFilePath())
+            );
 
         }
 
@@ -253,11 +256,12 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
             );
 
             // then
-            assert result.getTotalPages() == 1;
-            assert result.getContent().size() == 0;
-            assert result.getNumberOfElements() == 0;
-            assert result.getNumber() == 0;
-
+            assertAll(
+                    () -> assertThat(result.getTotalPages()).isEqualTo(1),
+                    () -> assertThat(result.getContent().size()).isEqualTo(0),
+                    () -> assertThat(result.getNumberOfElements()).isEqualTo(0),
+                    () -> assertThat(result.getNumber()).isEqualTo(0)
+            );
         }
 
     }

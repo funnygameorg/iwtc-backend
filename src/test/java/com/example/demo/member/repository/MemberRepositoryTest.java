@@ -4,6 +4,7 @@ import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
+import static org.assertj.core.api.Assertions.*;
 
 public class MemberRepositoryTest implements IntegrationBaseTest {
 
@@ -39,10 +41,9 @@ public class MemberRepositoryTest implements IntegrationBaseTest {
                     .password("A")
                     .build();
             memberRepository.save(member);
-
-            Boolean result = memberRepository.existsServiceId(member.getServiceId());
-
-            assert result;
+            
+            // when then
+            assertThat(memberRepository.existsServiceId(member.getServiceId())).isTrue();
         }
 
         @Test
@@ -54,10 +55,9 @@ public class MemberRepositoryTest implements IntegrationBaseTest {
                     .password("A")
                     .build();
             memberRepository.save(member);
-
-            Boolean result = memberRepository.existsServiceId("ZZ");
-
-            assert !result;
+            
+            // when then
+            assertThat(memberRepository.existsServiceId("ZZ")).isFalse();
         }
     }
 
@@ -75,9 +75,8 @@ public class MemberRepositoryTest implements IntegrationBaseTest {
                     .build();
             memberRepository.save(member);
 
-            Boolean result = memberRepository.existsNickname(member.getNickname());
-
-            assert result;
+            // when then
+            assertThat(memberRepository.existsNickname(member.getNickname())).isTrue();
         }
 
         @Test
@@ -90,9 +89,8 @@ public class MemberRepositoryTest implements IntegrationBaseTest {
                     .build();
             memberRepository.save(member);
 
-            Boolean result = memberRepository.existsNickname("BZ");
-
-            assert !result;
+            // when then
+            assertThat(memberRepository.existsNickname("BZ")).isFalse();
         }
 
     }
@@ -111,9 +109,12 @@ public class MemberRepositoryTest implements IntegrationBaseTest {
                     .password("B")
                     .build();
             memberRepository.save(member);
-            Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
 
-            assert result.isPresent();
+            // when
+            Optional<Long> optionalResult = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
+
+            // then
+            assertThat(optionalResult.isPresent()).isTrue();
         }
 
         @Test
@@ -126,9 +127,10 @@ public class MemberRepositoryTest implements IntegrationBaseTest {
                     .build();
             memberRepository.save(member);
 
-            Optional<Long> result = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
+            // when
+            Optional<Long> optionalResult = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
 
-            assert result.isEmpty();
+            assertThat(optionalResult.isEmpty()).isTrue();
         }
 
     }

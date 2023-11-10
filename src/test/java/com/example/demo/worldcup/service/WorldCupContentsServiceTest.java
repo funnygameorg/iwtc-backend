@@ -31,6 +31,8 @@ import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static java.util.stream.IntStream.range;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
@@ -101,9 +103,11 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
             GetAvailableGameRoundsResponse result = worldCupGamecontentsService.getAvailableGameRounds(1L);
 
             // then
-            assert result.worldCupId() == 1;
-            assert Objects.equals(result.worldCupDescription(), "description1");
-            assert result.rounds().equals(List.of(2, 4, 8));
+            assertAll(
+                    () -> assertThat(result.worldCupId()).isEqualTo(1),
+                    () -> assertThat(result.worldCupDescription()).isEqualTo("description1"),
+                    () -> assertThat(result.rounds()).isEqualTo(List.of(2, 4, 8))
+            );
         }
 
         @Test
@@ -190,21 +194,23 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
             );
 
             // then
-            assert result.worldCupId() == 1L;
-            assert result.round() == 8;
-            assert Objects.equals(result.title(), "title1");
+            assertAll(
+                    () -> assertThat(result.worldCupId()).isEqualTo(1L),
 
-            assert result.contentsList().size() == 8;
+                    () -> assertThat(result.round()).isEqualTo(8),
+                    () -> assertThat(result.title()).isEqualTo("title1"),
+                    () -> assertThat(result.contentsList().size()).isEqualTo(8),
 
-            assert result.contentsList().get(0).getContentsId() == 1;
-            assert Objects.equals(result.contentsList().get(0).getName(), "contentsName 1");
-            assert Objects.equals(result.contentsList().get(0).getAbsoluteName(), "fileAbsoluteName 1");
-            assert Objects.equals(result.contentsList().get(0).getFilePath(), "/naver/.../ 1");
+                    () -> assertThat(result.contentsList().get(0).getContentsId()).isEqualTo(1),
+                    () -> assertThat(result.contentsList().get(0).getName()).isEqualTo("contentsName 1"),
+                    () -> assertThat(result.contentsList().get(0).getAbsoluteName()).isEqualTo("fileAbsoluteName 1"),
+                    () -> assertThat(result.contentsList().get(0).getFilePath()).isEqualTo("/naver/.../ 1"),
 
-            assert result.contentsList().get(7).getContentsId() == 8;
-            assert Objects.equals(result.contentsList().get(7).getName(), "contentsName 8");
-            assert Objects.equals(result.contentsList().get(7).getAbsoluteName(), "fileAbsoluteName 8");
-            assert Objects.equals(result.contentsList().get(7).getFilePath(), "/naver/.../ 8");
+                    () -> assertThat(result.contentsList().get(7).getContentsId()).isEqualTo(8),
+                    () -> assertThat(result.contentsList().get(7).getName()).isEqualTo("contentsName 8"),
+                    () -> assertThat(result.contentsList().get(7).getAbsoluteName()).isEqualTo("fileAbsoluteName 8"),
+                    () -> assertThat(result.contentsList().get(7).getFilePath()).isEqualTo("/naver/.../ 8")
+            );
 
 
         }
@@ -264,7 +270,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                             )
                     );
 
-            assert resultException.getPublicMessage().contains("조회 컨텐츠 수가 다름 ");
+            assertThat(resultException.getPublicMessage()).contains("조회 컨텐츠 수가 다름 ");
         }
 
         @Test
@@ -330,8 +336,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                                     ALREADY_PLAYED_CONTENTS_ID
                             )
                     );
-
-            assert resultException.getPublicMessage().contains("컨텐츠 중복");
+            assertThat(resultException.getPublicMessage()).contains("컨텐츠 중복");
         }
 
     }
@@ -419,9 +424,12 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
         String thirdWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 3L));
         String fourthWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 4L));
 
-        assert Objects.equals(firstWinnerPoint, "10");
-        assert Objects.equals(secondWinnerPoint, "7");
-        assert Objects.equals(thirdWinnerPoint, "4");
-        assert Objects.equals(fourthWinnerPoint, "4");
+        assertAll(
+                () -> assertThat(firstWinnerPoint).isEqualTo("10"),
+                () -> assertThat(secondWinnerPoint).isEqualTo("7"),
+                () -> assertThat(thirdWinnerPoint).isEqualTo("4"),
+                () -> assertThat(fourthWinnerPoint).isEqualTo("4")
+
+        );
     }
 }

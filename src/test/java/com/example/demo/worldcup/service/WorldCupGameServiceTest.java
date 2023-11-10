@@ -11,17 +11,21 @@ import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePag
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
+import io.jsonwebtoken.lang.Assert;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.testcontainers.shaded.org.hamcrest.MatcherAssert;
 
 import java.util.List;
 
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WorldCupGameServiceTest implements IntegrationBaseTest {
 
@@ -98,7 +102,7 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
             );
 
             // then
-            assert result.getContent().size() == 1;
+            assertThat(result.getContent().size()).isEqualTo(1);
         }
 
         @Test
@@ -186,7 +190,7 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
             );
 
             // then
-            assert result.getContent().size() == 2;
+            assertThat(result.getContent().size()).isEqualTo(2);
         }
 
         @Test

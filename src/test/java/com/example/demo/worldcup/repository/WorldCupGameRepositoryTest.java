@@ -11,10 +11,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -26,6 +23,8 @@ import static com.example.demo.domain.worldcup.model.vo.WorldCupGameRound.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 import static java.util.stream.LongStream.range;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 
@@ -89,15 +88,17 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                     alreadyPlayedContentsIds
             );
 
-            assert result.size() == 3;
+            assertAll(
+                    () -> assertThat(result.size()).isEqualTo(3),
 
-            assert Objects.equals(result.get(0).name(), contentsList.get(0).getName());
-            assert Objects.equals(result.get(1).name(), contentsList.get(1).getName());
-            assert Objects.equals(result.get(2).name(), contentsList.get(2).getName());
+                    () -> assertThat(result.get(0).name()).isEqualTo(contentsList.get(0).getName()),
+                    () -> assertThat(result.get(1).name()).isEqualTo(contentsList.get(1).getName()),
+                    () -> assertThat(result.get(2).name()).isEqualTo(contentsList.get(2).getName()),
 
-            assert Objects.equals(result.get(0).absoluteName(), mediaFiles.get(0).getAbsoluteName());
-            assert Objects.equals(result.get(1).absoluteName(), mediaFiles.get(1).getAbsoluteName());
-            assert Objects.equals(result.get(2).absoluteName(), mediaFiles.get(2).getAbsoluteName());
+                    () -> assertThat(result.get(0).absoluteName()).isEqualTo(mediaFiles.get(0).getAbsoluteName()),
+                    () -> assertThat(result.get(1).absoluteName()).isEqualTo(mediaFiles.get(1).getAbsoluteName()),
+                    () -> assertThat(result.get(2).absoluteName()).isEqualTo(mediaFiles.get(2).getAbsoluteName())
+            );
         }
 
         @Test
@@ -145,7 +146,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                     alreadyPlayedContentsIds
             );
 
-            assert result.size() == 6;
+            assertThat(result.size()).isEqualTo(6);
         }
 
         @Test
@@ -190,8 +191,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                     divideContentsSizePerRequest,
                     alreadyPlayedContentsIds
             );
-
-            assert result.size() == 6;
+            assertThat(result.size()).isEqualTo(6);
         }
 
     }

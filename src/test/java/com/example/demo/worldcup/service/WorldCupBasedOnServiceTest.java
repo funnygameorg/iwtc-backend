@@ -20,9 +20,11 @@ import java.util.List;
 
 import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 
@@ -95,28 +97,31 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
             List<GetWorldCupContentsResponse> response = worldCupBasedOnAuthService.getMyWorldCupGameContents (worldCupId, memberId);
 
             // then
-            assertThat(response.size(), is(2));
 
             GetWorldCupContentsResponse firstElement = response.get(0);
             GetWorldCupContentsResponse secondElement = response.get(1);
 
-            assertThat(firstElement.contentsId(), is(1L));
-            assertThat(firstElement.contentsName(), is("컨텐츠1"));
-            assertThat(firstElement.rank(), is(1));
-            assertThat(firstElement.score(), is(10));
-            assertThat(firstElement.fileResponse().mediaFileId(), is(1L));
-            assertThat(firstElement.fileResponse().filePath(), is("https://www.abc.com/BS/1"));
-            assertThat(firstElement.fileResponse().createdAt(), is(any(LocalDateTime.class)));
-            assertThat(firstElement.fileResponse().updatedAt(), is(any(LocalDateTime.class)));
+            assertAll(
+                    () -> assertThat(response.size(), is(2)),
 
-            assertThat(secondElement.contentsId(), is(2L));
-            assertThat(secondElement.contentsName(), is("컨텐츠2"));
-            assertThat(secondElement.rank(), is(2));
-            assertThat(secondElement.score(), is(5));
-            assertThat(secondElement.fileResponse().mediaFileId(), is(2L));
-            assertThat(secondElement.fileResponse().filePath(), is("https://www.abc.com/BS/2"));
-            assertThat(secondElement.fileResponse().createdAt(), is(is(any(LocalDateTime.class))));
-            assertThat(secondElement.fileResponse().updatedAt(), is(is(any(LocalDateTime.class))));
+                    () -> assertThat(firstElement.contentsId(), is(1L)),
+                    () -> assertThat(firstElement.contentsName(), is("컨텐츠1")),
+                    () -> assertThat(firstElement.rank(), is(1)),
+                    () -> assertThat(firstElement.score(), is(10)),
+                    () -> assertThat(firstElement.fileResponse().mediaFileId(), is(1L)),
+                    () -> assertThat(firstElement.fileResponse().filePath(), is("https://www.abc.com/BS/1")),
+                    () -> assertThat(firstElement.fileResponse().createdAt(), is(any(LocalDateTime.class))),
+                    () -> assertThat(firstElement.fileResponse().updatedAt(), is(any(LocalDateTime.class))),
+
+                    () -> assertThat(secondElement.contentsId(), is(2L)),
+                    () -> assertThat(secondElement.contentsName(), is("컨텐츠2")),
+                    () -> assertThat(secondElement.rank(), is(2)),
+                    () -> assertThat(secondElement.score(), is(5)),
+                    () -> assertThat(secondElement.fileResponse().mediaFileId(), is(2L)),
+                    () -> assertThat(secondElement.fileResponse().filePath(), is("https://www.abc.com/BS/2")),
+                    () -> assertThat(secondElement.fileResponse().createdAt(), is(is(any(LocalDateTime.class)))),
+                    () -> assertThat(secondElement.fileResponse().updatedAt(), is(is(any(LocalDateTime.class))))
+            );
         }
 
         @Test
