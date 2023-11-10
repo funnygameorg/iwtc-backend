@@ -1,15 +1,12 @@
 package com.example.demo.worldcup.controller;
 
-import com.example.demo.TestConstant;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.worldcup.controller.WorldCupContentsController;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.example.demo.helper.config.TestWebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.checkerframework.checker.units.qual.N;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,7 +16,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

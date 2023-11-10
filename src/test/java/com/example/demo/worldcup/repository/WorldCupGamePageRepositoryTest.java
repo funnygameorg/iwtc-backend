@@ -1,6 +1,5 @@
 package com.example.demo.worldcup.repository;
 
-import com.example.demo.TestConstant;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
@@ -19,21 +18,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.security.PublicKey;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static java.util.stream.IntStream.range;
 
 public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {

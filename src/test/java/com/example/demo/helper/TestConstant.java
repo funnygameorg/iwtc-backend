@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.helper;
 
 /*
     테스트에 전역적으로 사용되는 값

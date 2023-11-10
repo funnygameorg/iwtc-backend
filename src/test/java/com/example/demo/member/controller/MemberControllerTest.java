@@ -1,6 +1,5 @@
 package com.example.demo.member.controller;
 
-import com.example.demo.TestConstant;
 import com.example.demo.helper.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.member.controller.MemberController;
@@ -23,8 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;

@@ -1,6 +1,5 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.TestConstant;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
@@ -14,16 +13,14 @@ import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
 
 public class WorldCupGameServiceTest implements IntegrationBaseTest {

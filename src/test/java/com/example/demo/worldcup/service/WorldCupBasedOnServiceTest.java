@@ -1,6 +1,5 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.TestConstant;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
@@ -15,14 +14,12 @@ import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.*;

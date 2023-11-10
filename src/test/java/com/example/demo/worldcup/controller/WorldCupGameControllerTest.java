@@ -1,6 +1,5 @@
 package com.example.demo.worldcup.controller;
 
-import com.example.demo.TestConstant;
 import com.example.demo.helper.config.TestWebConfig;
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.worldcup.controller.WorldCupGameController;
@@ -20,8 +19,8 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

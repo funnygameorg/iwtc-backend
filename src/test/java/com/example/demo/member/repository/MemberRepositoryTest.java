@@ -1,6 +1,5 @@
 package com.example.demo.member.repository;
 
-import com.example.demo.TestConstant;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
@@ -10,13 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 
 public class MemberRepositoryTest implements IntegrationBaseTest {
 

@@ -1,6 +1,5 @@
 package com.example.demo.member.service;
 
-import com.example.demo.TestConstant;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.controller.request.SignInRequest;
@@ -12,7 +11,6 @@ import com.example.demo.domain.member.exception.DuplicatedNicknameException;
 import com.example.demo.domain.member.exception.DuplicatedServiceIdException;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.repository.MemberRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,14 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testcontainers.shaded.org.bouncycastle.pqc.crypto.newhope.NHOtherInfoGenerator;
 
-import java.security.PublicKey;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
-import static com.example.demo.TestConstant.SUCCESS_PREFIX;
+import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
+import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
