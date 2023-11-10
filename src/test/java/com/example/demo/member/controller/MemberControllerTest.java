@@ -7,6 +7,7 @@ import com.example.demo.domain.member.controller.request.SignInRequest;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.member.controller.response.SignInResponse;
+import com.example.demo.helper.testbase.WebMvcBaseTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,27 +34,13 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(
-        value = MemberController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
-        })
-@Import(TestWebConfig.class)
-class MemberControllerTest {
-
-
-    @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
-    @MockBean private MemberService memberService;
-
-    private final String ROOT_PATH = "/api";
-
-    private final String GET_ME_SUMMARY_API = ROOT_PATH + "/members/me/summary";
-    private final String SIGN_UP_API = ROOT_PATH + "/members/sign-up";
-    private final String SIGN_OUT_API = ROOT_PATH + "/members/sign-out";
-    private final String SIGN_IN_API = ROOT_PATH + "/members/sign-in";
-    private final String VERIFY_DUPLICATED_ID_API = ROOT_PATH + "/members/duplicated-check/service-id";
-    private final String VERIFY_DUPLICATED_NICKNAME_API = ROOT_PATH + "/members/duplicated-check/nickname";
+class MemberControllerTest extends WebMvcBaseTest {
+    private final String GET_ME_SUMMARY_API = MEMBER_PATH + "/me/summary";
+    private final String SIGN_UP_API = MEMBER_PATH + "/sign-up";
+    private final String SIGN_OUT_API = MEMBER_PATH + "/sign-out";
+    private final String SIGN_IN_API = MEMBER_PATH + "/sign-in";
+    private final String VERIFY_DUPLICATED_ID_API = MEMBER_PATH + "/duplicated-check/service-id";
+    private final String VERIFY_DUPLICATED_NICKNAME_API = MEMBER_PATH + "/duplicated-check/nickname";
 
 
     @Test

@@ -5,6 +5,7 @@ import com.example.demo.domain.worldcup.controller.WorldCupContentsController;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.example.demo.helper.config.TestWebConfig;
+import com.example.demo.helper.testbase.WebMvcBaseTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,24 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-        controllers = WorldCupContentsController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebConfig.class)
-        })
-@Import(TestWebConfig.class)
-public class WorldCupContentsControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-    @MockBean
-    private WorldCupGameContentsService worldCupGameContentsService;
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    private final static String ROOT_API = "/api/world-cups";
-    private final static String GET_AVAILABLE_ROUNDS_API = ROOT_API + "/{worldCupId}/available-rounds";
-    private final static String CLEAR_WORLD_CUP_GAME_API = ROOT_API + "/{worldCupId}/clear";
+public class WorldCupContentsControllerTest extends WebMvcBaseTest {
+    private final static String GET_AVAILABLE_ROUNDS_API = WORLD_CUPS_PATH + "/{worldCupId}/available-rounds";
+    private final static String CLEAR_WORLD_CUP_GAME_API = WORLD_CUPS_PATH + "/{worldCupId}/clear";
 
     @Test
     @DisplayName(SUCCESS_PREFIX + "플레이 가능한 월드컵 게임 라운드 수 조회 요청 검증")
