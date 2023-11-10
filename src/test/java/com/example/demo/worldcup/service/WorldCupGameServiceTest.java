@@ -11,6 +11,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.helper.DataBaseCleanUp;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,9 +26,7 @@ import java.util.List;
 import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
 
-@SpringBootTest
-@ActiveProfiles("test")
-public class WorldCupGameServiceTest {
+public class WorldCupGameServiceTest implements IntegrationBaseTest {
 
     @Autowired
     private WorldCupGameService worldCupGameService;

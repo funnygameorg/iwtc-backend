@@ -11,6 +11,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepositor
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.example.demo.helper.DataBaseCleanUp;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.apache.logging.log4j.message.ReusableMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,9 +36,7 @@ import static java.util.stream.IntStream.range;
 import static java.util.stream.IntStream.rangeClosed;
 import static java.util.stream.LongStream.range;
 
-@ActiveProfiles("test")
-@SpringBootTest
-public class WorldCupGameRepositoryTest {
+public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 
     @Autowired
     private WorldCupGameRepository worldCupGameRepository;

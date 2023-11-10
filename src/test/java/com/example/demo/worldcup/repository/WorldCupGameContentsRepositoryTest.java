@@ -1,6 +1,5 @@
 package com.example.demo.worldcup.repository;
 
-import com.example.demo.TestConstant;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
@@ -10,20 +9,16 @@ import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
-import com.example.demo.helper.AbstractContainerBaseTest;
+import com.example.demo.helper.testbase.ContainerBaseTest;
 import com.example.demo.helper.DataBaseCleanUp;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,9 +29,7 @@ import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameConte
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.Is.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-public class WorldCupGameContentsRepositoryTest extends AbstractContainerBaseTest {
+public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implements IntegrationBaseTest {
 
     @Autowired
     private WorldCupGameRepository worldCupGameRepository;

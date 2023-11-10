@@ -12,6 +12,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepositor
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.service.WorldCupBasedOnAuthService;
 import com.example.demo.helper.DataBaseCleanUp;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,9 +27,7 @@ import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-public class WorldCupBasedOnServiceTest {
+public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 
     @Autowired
     private WorldCupBasedOnAuthService worldCupBasedOnAuthService;

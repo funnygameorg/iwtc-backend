@@ -4,6 +4,7 @@ import com.example.demo.TestConstant;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,9 +18,7 @@ import java.util.Optional;
 import static com.example.demo.TestConstant.EXCEPTION_PREFIX;
 import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 
-@ActiveProfiles("test")
-@SpringBootTest
-public class MemberRepositoryTest {
+public class MemberRepositoryTest implements IntegrationBaseTest {
 
     @Autowired
     private MemberRepository memberRepository;

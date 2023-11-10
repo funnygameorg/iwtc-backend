@@ -1,6 +1,5 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.TestConstant;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
@@ -13,20 +12,16 @@ import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
-import com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
-import com.example.demo.helper.AbstractContainerBaseTest;
+import com.example.demo.helper.testbase.ContainerBaseTest;
 import com.example.demo.helper.DataBaseCleanUp;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,9 +34,7 @@ import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
-@ActiveProfiles("test")
-public class WorldCupContentsServiceTest extends AbstractContainerBaseTest {
+public class WorldCupContentsServiceTest extends ContainerBaseTest implements IntegrationBaseTest {
 
     @Autowired
     private WorldCupGameContentsService worldCupGamecontentsService;

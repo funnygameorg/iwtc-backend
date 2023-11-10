@@ -11,6 +11,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,9 +36,7 @@ import java.util.stream.IntStream;
 import static com.example.demo.TestConstant.SUCCESS_PREFIX;
 import static java.util.stream.IntStream.range;
 
-@ActiveProfiles("test")
-@SpringBootTest
-public class WorldCupGamePageRepositoryTest {
+public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 
     @Autowired
     private WorldCupGameRepository worldCupGameRepository;

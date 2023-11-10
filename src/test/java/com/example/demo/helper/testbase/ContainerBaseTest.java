@@ -1,4 +1,4 @@
-package com.example.demo.helper;
+package com.example.demo.helper.testbase;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -11,7 +11,7 @@ import org.testcontainers.containers.GenericContainer;
  *
  *
  */
-public abstract class AbstractContainerBaseTest {
+public abstract class ContainerBaseTest {
     static final String REDIS_IMAGE = "redis:6-alpine";
     static final GenericContainer REDIS_CONTAINER;
 
