@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Comment;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -38,21 +39,27 @@ public class WorldCupGameContents extends TimeBaseEntity {
 
     @NotNull
     @NotBlank
+    @Comment("월드컵 컨텐츠 이름")
     private String name;
 
     @NotNull
     @ManyToOne(fetch = LAZY)
+    @Comment("연결된 이상형 월드컵")
     private WorldCupGame worldCupGame;
 
     @NotNull
     @OneToOne(fetch = LAZY)
+    @Comment("연결된 미디어 파일")
     private MediaFile mediaFile;
 
     @Enumerated(value = EnumType.STRING)
+    @Comment("컨텐츠 공개 여부")
     private VisibleType visibleType;
 
+    @Comment("월드컵에서의 컨텐츠 순위")
     private int gameRank;
 
+    @Comment("컨텐츠의 승리 점수")
     private int gameScore;
 
     @Override

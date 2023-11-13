@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Comment;
 
 import static com.example.demo.domain.etc.model.vo.FileType.STATIC_MEDIA_FILE;
 import static lombok.AccessLevel.PRIVATE;
@@ -21,14 +22,17 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class StaticMediaFile extends MediaFile {
 
+    @Comment("파일의 원래 이름")
     @NotNull
     @NotBlank
     private String originalName;
 
+    @Comment("실제 저장하는데 사용한 파일 이름")
     @NotNull
     @NotBlank
     private String absoluteName;
 
+    @Comment("파일 확장자")
     @NotNull
     @NotBlank
     private String extension;

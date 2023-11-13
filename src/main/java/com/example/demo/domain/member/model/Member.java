@@ -5,6 +5,7 @@ import com.google.common.base.Objects;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Comment;
 
 import static com.google.common.base.Objects.*;
 
@@ -17,10 +18,13 @@ public class Member extends TimeBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Comment("사용자 아이디")
     private String serviceId;
 
+    @Comment("사용자 별명")
     private String nickname;
 
+    @Comment("사용자 암호")
     private String password;
 
     @Builder
