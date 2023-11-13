@@ -1,65 +1,30 @@
 package com.example.demo.domain.etc.model;
 
 import com.example.demo.common.jpa.TimeBaseEntity;
-import com.example.demo.domain.member.model.Member;
-import com.google.common.base.Objects;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.Hibernate;
+import com.example.demo.domain.etc.model.vo.FileType;
+import jakarta.persistence.*;
+import lombok.*;
 
-import static lombok.AccessLevel.PRIVATE;
+import static jakarta.persistence.InheritanceType.JOINED;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
-@Builder
-@AllArgsConstructor(access = PRIVATE)
+@Table(name = "MEDIA_FILE")
+@AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
-public class MediaFile extends TimeBaseEntity {
+@Inheritance(strategy = JOINED)
+@DiscriminatorColumn(name = "d_type")
+public abstract class MediaFile extends TimeBaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
-    @NotNull
-    @NotBlank
-    private String originalName;
+    @org.hibernate.annotations.Comment("클라이언트에서 미디어 노출을 위해 참조하기 위한 주소")
+    protected String filePath;
 
-    @NotNull
-    @NotBlank
-    private String absoluteName;
-
-    @NotNull
-    @NotBlank
-    private String filePath;
-
-    @NotNull
-    @NotBlank
-    private String extension;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
-            return false;
-        MediaFile other = (MediaFile) o;
-
-        return Objects.equal(absoluteName, other.getAbsoluteName())
-                && Objects.equal(filePath, other.getFilePath())
-                && Objects.equal(extension, other.getExtension());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(absoluteName, filePath, extension);
-
-    }
+    @org.hibernate.annotations.Comment("미디어 파일의 형태 (저장된 파일, 영상 링크...)")
+    @Enumerated(value = EnumType.STRING)
+    protected FileType fileType;
 }

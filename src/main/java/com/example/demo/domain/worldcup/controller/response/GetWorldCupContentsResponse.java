@@ -3,7 +3,6 @@ package com.example.demo.domain.worldcup.controller.response;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record GetWorldCupContentsResponse (

@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Comment;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PRIVATE;
@@ -54,20 +55,27 @@ public class WorldCupGame extends TimeBaseEntity {
 
     @NotNull
     @NotBlank
+    @Comment("월드컵 이름")
     private String title;
 
+    @Comment("월드컵 설명")
     private String description;
 
+    @Comment("월드컵 공개 여부")
     @NotNull
     @Enumerated(value = EnumType.STRING)
     private VisibleType visibleType;
 
+    @Comment("조회수")
     private long views;
 
+    @Comment("삭제 여부")
     private boolean softDelete;
 
+    @Comment("게임 작성자")
     private long memberId;
 
+    @Comment("해당 월드컵 통계")
     @OneToOne(fetch = LAZY)
     private WorldCupGameStatistics worldCupGameStatistics;
 

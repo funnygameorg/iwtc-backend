@@ -1,6 +1,7 @@
 package com.example.demo.domain.worldcup.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.util.List;
@@ -9,9 +10,13 @@ import java.util.stream.Stream;
 
 @Builder
 public record ClearWorldCupGameRequest (
+        @Schema(description = "1위 컨텐츠 id")
         int firstWinnerContentsId,
+        @Schema(description = "2위 컨텐츠 id")
         int secondWinnerContentsId,
+        @Schema(description = "3, 4위 컨텐츠 id")
         int thirdWinnerContentsId,
+        @Schema(description = "3, 4위 컨텐츠 id")
         int fourthWinnerContentsId
 ) {
 

@@ -1,6 +1,6 @@
 package com.example.demo.worldcup.repository;
 
-import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.helper.DataBaseCleanUp;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static java.util.stream.IntStream.range;
@@ -62,7 +61,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
                     )
                     .toList();
 
-            List<MediaFile> mediaFiles = range(1,8)
+            List<StaticMediaFile> mediaFiles = range(1,8)
                     .mapToObj(idx ->
                             createMediaFile("originalName" + idx,
                                     "A345ytgs32eff1",
@@ -163,7 +162,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
             WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
             WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
 
-            List<MediaFile> mediaFiles = range(1,7)
+            List<StaticMediaFile> mediaFiles = range(1,7)
                     .mapToObj(idx ->
                             createMediaFile("originalName" + idx,
                                     "A345ytgs32eff1",
@@ -225,7 +224,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
             WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
             WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
 
-            List<MediaFile> mediaFiles = range(1,7)
+            List<StaticMediaFile> mediaFiles = range(1,7)
                     .mapToObj(idx ->
                             createMediaFile("originalName" + idx,
                                     "A345ytgs32eff1",
@@ -284,13 +283,13 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
                 .build();
     }
 
-    private MediaFile createMediaFile(
+    private StaticMediaFile createMediaFile(
             String fileOriginalName,
             String fileAbsoluteName,
             String filePath,
             String extension)
     {
-        return MediaFile.builder()
+        return StaticMediaFile.builder()
                 .originalName(fileOriginalName)
                 .absoluteName(fileAbsoluteName)
                 .filePath(filePath)
@@ -298,7 +297,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
                 .build();
     }
 
-    private WorldCupGameContents createGameContents(WorldCupGame game, String name, MediaFile mediaFile) {
+    private WorldCupGameContents createGameContents(WorldCupGame game, String name, StaticMediaFile mediaFile) {
         return WorldCupGameContents.builder()
                 .name(name)
                 .worldCupGame(game)

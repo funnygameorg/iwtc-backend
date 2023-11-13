@@ -2,6 +2,7 @@ package com.example.demo.domain.worldcup.controller.response;
 
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.util.List;
@@ -10,10 +11,14 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 public record GetWorldCupPlayContentsResponse (
+    @Schema(description = "이상형 월드컵 ID")
     Long worldCupId,
+    @Schema(description = "이상형 월드컵 타이틀")
     String title,
+    @Schema(description = "현재 진행중인 라운드")
     Integer round,
-    List<PlayImageContents> contentsList
+    @Schema(description = "플레이하기 위한 이상형 컨텐츠 리스트")
+    List<PlayContents> contentsList
 ) {
     public static GetWorldCupPlayContentsResponse fromProjection(
             Long worldCupGameId,
@@ -27,24 +32,34 @@ public record GetWorldCupPlayContentsResponse (
                 worldCupGameRound,
                 gameContentsProjections
                         .stream()
-                        .map(PlayImageContents::fromProjection)
+                        .map(PlayContents::fromProjection)
                         .collect(toList())
         );
     }
 
     @Getter
-    public static class PlayImageContents{
+    public static class PlayContents{
+            @Schema(description = "미디어 컨텐츠 파일의 타입 (현재 지원 형식 : STATIC_MEDIA_FILE, INTERNET_VIDEO_URL)")
+            String fileType;
+            @Schema(description = "이상형 컨텐츠 ID")
             Long contentsId;
+            @Schema(description = "이상형 컨텐츠 이름")
             String name;
-            String absoluteName;
+            @Schema(description = "미디어 컨텐츠 파일 참조 주소")
             String filePath;
+            @Schema(description = "INTERNET_VIDEO_URL 타입인 경우 재생 시작 시간 포맷 : '00000'(모두 숫자 표현) ")
+            String internetMovieStartPlayTime;
+            @Schema(description = "반복 시간(초)")
+            Integer playDuration;
 
-        public static PlayImageContents fromProjection(GetDividedWorldCupGameContentsProjection projection) {
-            PlayImageContents instance = new PlayImageContents();
+        public static PlayContents fromProjection(GetDividedWorldCupGameContentsProjection projection) {
+            PlayContents instance = new PlayContents();
+            instance.fileType = projection.FileType();
             instance.contentsId = projection.contentsId();
             instance.name = projection.name();
-            instance.absoluteName = projection.absoluteName();
             instance.filePath = projection.filePath();
+            instance.internetMovieStartPlayTime = projection.movieStartTime();
+            instance.playDuration = projection.moviePlayDuration();
             return instance;
         }
     }

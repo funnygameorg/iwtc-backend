@@ -1,6 +1,6 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.exception.NotOwnerGameException;
@@ -20,7 +20,6 @@ import java.util.List;
 
 import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
-import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.*;
@@ -58,13 +57,13 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
                     .visibleType(VisibleType.PUBLIC)
                     .memberId(1)
                     .build();
-            MediaFile mediaFile1 = MediaFile.builder()
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("https://www.abc.com/BS/1")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile2 = MediaFile.builder()
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("https://www.abc.com/BS/2")
@@ -90,14 +89,11 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
             mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
             worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
 
-            long worldCupId = 1;
-            long memberId = 1;
-
             // when
-            List<GetWorldCupContentsResponse> response = worldCupBasedOnAuthService.getMyWorldCupGameContents (worldCupId, memberId);
+            List<GetWorldCupContentsResponse> response = worldCupBasedOnAuthService.getMyWorldCupGameContents(1, 1);
+            List<WorldCupGameContents> ss = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
             // then
-
             GetWorldCupContentsResponse firstElement = response.get(0);
             GetWorldCupContentsResponse secondElement = response.get(1);
 
@@ -134,13 +130,13 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
                     .visibleType(VisibleType.PUBLIC)
                     .memberId(2)
                     .build();
-            MediaFile mediaFile1 = MediaFile.builder()
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile2 = MediaFile.builder()
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")

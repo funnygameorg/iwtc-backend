@@ -1,6 +1,6 @@
 package com.example.demo.worldcup.repository;
 
-import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
@@ -12,7 +12,6 @@ import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRo
 import com.example.demo.helper.testbase.ContainerBaseTest;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,14 +21,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.core.Is.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implements IntegrationBaseTest {
@@ -112,13 +108,13 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                     VisibleType.PUBLIC,
                     1
             );
-            List<MediaFile> mediaFiles = IntStream.range(1,4)
-                    .mapToObj(idx -> MediaFile.builder()
+            List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
+                    .mapToObj(idx -> StaticMediaFile.builder()
                             .originalName("original")
-                            .filePath("filePath")
                             .absoluteName("absolute")
                             .extension(".png")
-                            .build())
+                            .filePath("filePath")
+                            .build() )
                     .toList();
             List<WorldCupGameContents> contentsList = IntStream.range(1,4)
                     .mapToObj(idx -> createGameContents(worldCupGame, "CONTENTS_NAME" + idx, mediaFiles.get(idx - 1)))
@@ -214,8 +210,8 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                 VisibleType.PUBLIC,
                 1
         );
-        List<MediaFile> mediaFiles = IntStream.range(1,4)
-                .mapToObj(idx -> MediaFile.builder()
+        List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
+                .mapToObj(idx -> StaticMediaFile.builder()
                         .originalName("original")
                         .filePath("filePath")
                         .absoluteName("absolute")
@@ -267,7 +263,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
     private WorldCupGameContents createGameContents(
             WorldCupGame game,
             String name,
-            MediaFile mediaFile
+            StaticMediaFile mediaFile
     ) {
         return WorldCupGameContents.builder()
                 .name(name)
