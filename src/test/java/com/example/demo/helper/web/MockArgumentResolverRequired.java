@@ -8,6 +8,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Optional;
+
 public class MockArgumentResolverRequired extends RequiredMemberArgumentResolver {
     public MockArgumentResolverRequired(AuthenticationUtil authenticationUtil) {
         super(
@@ -16,10 +18,10 @@ public class MockArgumentResolverRequired extends RequiredMemberArgumentResolver
                 authenticationUtil
         );
     }
-
+ 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        return getStubMemberDto();
+        return Optional.of(getStubMemberDto());
     }
     
     private MemberDto getStubMemberDto() {

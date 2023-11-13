@@ -73,7 +73,7 @@ public class WorldCupBasedOnAuthController {
     @GetMapping("/{worldCupId}/contents")
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<List<GetWorldCupContentsResponse>> getMyWorldCupGameContentsList(
-            @PathVariable("worldCupId")
+            @PathVariable
             Long worldCupId,
 
             @Parameter(hidden = true)

@@ -29,7 +29,8 @@ public class WorldCupBasedOnAuthControllerTest extends WebMvcBaseTest {
     @DisplayName("사용자는 월드컵 게임에 등록된 후보리스트를 볼 수 있다.")
     public void getMyGameContents1() throws Exception {
 
-        mockMvc.perform(get(GET_MY_GAME_CONTENTS_API, 1))
+        mockMvc.perform(
+                get(GET_MY_GAME_CONTENTS_API, 1))
                 .andExpect(status().isOk());
     }
 }
