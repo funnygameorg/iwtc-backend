@@ -7,6 +7,7 @@ import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayConte
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
+import com.example.demo.domain.worldcup.exception.ClearWorldCupGameResponse;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.google.common.primitives.Longs;
 import io.swagger.v3.oas.annotations.Operation;
@@ -167,19 +168,15 @@ public class WorldCupContentsController {
     )
     @PostMapping("/{worldCupId}/clear")
     @ResponseStatus(CREATED)
-    public RestApiResponse clearWorldCupGame(
-            @PathVariable
-            long worldCupId,
-
-            @RequestBody
-            ClearWorldCupGameRequest request
+    public RestApiResponse<ClearWorldCupGameResponse> clearWorldCupGame(
+            @PathVariable long worldCupId,
+            @RequestBody ClearWorldCupGameRequest request
     ) {
-        worldCupGameContentsService.clearWorldCupGame(worldCupId, request);
-        return RestApiResponse.builder()
-                .data(null)
-                .code(1)
-                .message("게임 결과 생성")
-                .build();
+        return new RestApiResponse(
+                1,
+                "게임 결과 생성",
+                worldCupGameContentsService.clearWorldCupGame(worldCupId, request)
+        );
     }
 
 

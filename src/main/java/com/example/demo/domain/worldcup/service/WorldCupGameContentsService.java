@@ -3,21 +3,24 @@ package com.example.demo.domain.worldcup.service;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
-import com.example.demo.domain.worldcup.exception.IllegalWorldCupGameContentsException;
-import com.example.demo.domain.worldcup.exception.NoRoundsAvailableToPlayException;
-import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
+import com.example.demo.domain.worldcup.exception.*;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
+import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.vo.WorldCupGameRound;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
+import com.google.common.collect.Sets;
+import jakarta.validation.Constraint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.stream;
 
 @Service
@@ -116,11 +119,23 @@ public class WorldCupGameContentsService {
     }
 
 
-    public void clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
+    public ClearWorldCupGameResponse clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
+
+        List<WorldCupGameContents> contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
+
+        if(contents.size() != 4) {
+            throw new NotFoundWorldCupContentsException(
+                    "존재하지 않는 WorldCupContents 가 존재합니다. 조회하지 못한 컨텐츠 개수 %s"
+                    .formatted(4 - contents.size())
+            );
+        }
+
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.firstWinnerContentsId(), 10);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.secondWinnerContentsId(), 7);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.thirdWinnerContentsId(), 4);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.fourthWinnerContentsId(), 4);
+
+        return ClearWorldCupGameResponse.build(contents);
     }
 
 }

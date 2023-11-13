@@ -5,9 +5,7 @@ import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
-import com.example.demo.domain.worldcup.exception.IllegalWorldCupGameContentsException;
-import com.example.demo.domain.worldcup.exception.NoRoundsAvailableToPlayException;
-import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
+import com.example.demo.domain.worldcup.exception.*;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
@@ -24,7 +22,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
@@ -32,6 +29,7 @@ import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -341,95 +339,170 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 
     }
 
+    @Nested
+    @DisplayName("게임을 클리어할 수 있다.")
+    public class clearWorldCupGame {
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void clearWorldCupGame() {
+            ValueOperations ops = redisTemplate.opsForValue();
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
 
+            MediaFile mediaFile1 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
+            MediaFile mediaFile2 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
+            MediaFile mediaFile3 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
+            MediaFile mediaFile4 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
 
-    @Test
-    @DisplayName(SUCCESS_PREFIX + "게임을 클리어할 수 있다.")
-    public void clearWorldCupGame() {
-        ValueOperations ops = redisTemplate.opsForValue();
-        // given
-        WorldCupGame worldCupGame = WorldCupGame
-                .builder()
-                .title("title1")
-                .description("description1")
-                .visibleType(PUBLIC)
-                .views(0)
-                .softDelete(false)
-                .memberId(1)
-                .build();
+            WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                    .name("contentsName1")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile1)
+                    .build();
+            WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                    .name("contentsName2")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile2)
+                    .build();
+            WorldCupGameContents contents3 = WorldCupGameContents.builder()
+                    .name("contentsName3")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile3)
+                    .build();
+            WorldCupGameContents contents4 = WorldCupGameContents.builder()
+                    .name("contentsName4")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile4)
+                    .build();
 
-        MediaFile mediaFile1 = MediaFile.builder()
-                .originalName("fileOriginalName")
-                .absoluteName("fileAbsoluteName")
-                .filePath("filePath")
-                .extension("extension")
-                .build();
-        MediaFile mediaFile2 = MediaFile.builder()
-                .originalName("fileOriginalName")
-                .absoluteName("fileAbsoluteName")
-                .filePath("filePath")
-                .extension("extension")
-                .build();
-        MediaFile mediaFile3 = MediaFile.builder()
-                .originalName("fileOriginalName")
-                .absoluteName("fileAbsoluteName")
-                .filePath("filePath")
-                .extension("extension")
-                .build();
-        MediaFile mediaFile4 = MediaFile.builder()
-                .originalName("fileOriginalName")
-                .absoluteName("fileAbsoluteName")
-                .filePath("filePath")
-                .extension("extension")
-                .build();
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4));
+            worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4));
 
-        WorldCupGameContents contents1 = WorldCupGameContents.builder()
-                .name("contentsName")
-                .worldCupGame(worldCupGame)
-                .mediaFile(mediaFile1)
-                .build();
-        WorldCupGameContents contents2 = WorldCupGameContents.builder()
-                .name("contentsName")
-                .worldCupGame(worldCupGame)
-                .mediaFile(mediaFile2)
-                .build();
-        WorldCupGameContents contents3 = WorldCupGameContents.builder()
-                .name("contentsName")
-                .worldCupGame(worldCupGame)
-                .mediaFile(mediaFile3)
-                .build();
-        WorldCupGameContents contents4 = WorldCupGameContents.builder()
-                .name("contentsName")
-                .worldCupGame(worldCupGame)
-                .mediaFile(mediaFile4)
-                .build();
+            ClearWorldCupGameRequest request = ClearWorldCupGameRequest.builder()
+                    .firstWinnerContentsId(1)
+                    .secondWinnerContentsId(2)
+                    .thirdWinnerContentsId(3)
+                    .fourthWinnerContentsId(4)
+                    .build();
 
-        worldCupGameRepository.save(worldCupGame);
-        mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4));
-        worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4));
+            // when
+            ClearWorldCupGameResponse response = worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request);
 
-        ClearWorldCupGameRequest request = ClearWorldCupGameRequest.builder()
-                .firstWinnerContentsId(1)
-                .secondWinnerContentsId(2)
-                .thirdWinnerContentsId(3)
-                .fourthWinnerContentsId(4)
-                .build();
+            // then
+            String firstWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
+            String secondWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 2L));
+            String thirdWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 3L));
+            String fourthWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 4L));
 
-        // when
-        worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request);
+            assertAll(
+                    () -> assertThat(firstWinnerPoint).isEqualTo("10"),
+                    () -> assertThat(secondWinnerPoint).isEqualTo("7"),
+                    () -> assertThat(thirdWinnerPoint).isEqualTo("4"),
+                    () -> assertThat(fourthWinnerPoint).isEqualTo("4"),
 
-        // then
-        String firstWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
-        String secondWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 2L));
-        String thirdWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 3L));
-        String fourthWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 4L));
+                    () -> assertThat(response.firstWinnerName()).isEqualTo("contentsName1"),
+                    () -> assertThat(response.secondWinnerName()).isEqualTo("contentsName2"),
+                    () -> assertThat(response.thirdWinnerName()).isEqualTo("contentsName3"),
+                    () -> assertThat(response.fourthWinnerName()).isEqualTo("contentsName4")
+            );
+        }
 
-        assertAll(
-                () -> assertThat(firstWinnerPoint).isEqualTo("10"),
-                () -> assertThat(secondWinnerPoint).isEqualTo("7"),
-                () -> assertThat(thirdWinnerPoint).isEqualTo("4"),
-                () -> assertThat(fourthWinnerPoint).isEqualTo("4")
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 컨텐츠가 순위권이다.")
+        public void fail1() {
+            ValueOperations ops = redisTemplate.opsForValue();
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
 
-        );
+            MediaFile mediaFile1 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
+            MediaFile mediaFile2 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
+            MediaFile mediaFile3 = MediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("filePath")
+                    .extension("extension")
+                    .build();
+
+            WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                    .name("contentsName")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile1)
+                    .build();
+            WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                    .name("contentsName")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile2)
+                    .build();
+            WorldCupGameContents contents3 = WorldCupGameContents.builder()
+                    .name("contentsName")
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile3)
+                    .build();
+
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3));
+            worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3));
+
+            ClearWorldCupGameRequest request = ClearWorldCupGameRequest.builder()
+                    .firstWinnerContentsId(1)
+                    .secondWinnerContentsId(2)
+                    .thirdWinnerContentsId(3)
+                    .fourthWinnerContentsId(4)
+                    .build();
+
+            // when then
+            assertThrows(
+                    NotFoundWorldCupContentsException.class,
+                    () -> worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request)
+            );
+        }
     }
+
 }
