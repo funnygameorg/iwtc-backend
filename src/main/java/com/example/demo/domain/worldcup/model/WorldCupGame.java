@@ -12,6 +12,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -77,6 +78,7 @@ public class WorldCupGame extends TimeBaseEntity {
 
     @Comment("해당 월드컵 통계")
     @OneToOne(fetch = LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
     private WorldCupGameStatistics worldCupGameStatistics;
 
     @Override

@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
+import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PRIVATE;
@@ -45,11 +46,12 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @NotNull
     @ManyToOne(fetch = LAZY)
     @Comment("연결된 이상형 월드컵")
+    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
     private WorldCupGame worldCupGame;
 
-    @NotNull
     @OneToOne(fetch = LAZY)
     @Comment("연결된 미디어 파일")
+    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
     private MediaFile mediaFile;
 
     @Enumerated(value = EnumType.STRING)
