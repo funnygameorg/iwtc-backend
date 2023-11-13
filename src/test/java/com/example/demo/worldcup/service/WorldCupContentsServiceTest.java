@@ -1,6 +1,8 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.model.InternetVideoUrl;
+import com.example.demo.domain.etc.model.StaticMediaFile;
+import com.example.demo.domain.etc.repository.AbstractMediaFileRepository;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
@@ -29,7 +31,6 @@ import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -44,6 +45,8 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
     private WorldCupGameContentsRepository worldCupGameContentsRepository;
     @Autowired
     private MediaFileRepository mediaFileRepository;
+    @Autowired
+    private AbstractMediaFileRepository abstractMediaFileRepository;
     @Autowired
     private DataBaseCleanUp dataBaseCleanUp;
     @Autowired
@@ -73,9 +76,9 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .memberId(1)
                     .build();
 
-            List<MediaFile> mediaFiles = range(1, 10)
+            List<StaticMediaFile> mediaFiles = range(1, 10)
                     .mapToObj(idx ->
-                            MediaFile.builder()
+                            StaticMediaFile.builder()
                                     .absoluteName("absolute")
                                     .extension(".png")
                                     .filePath("/abc")
@@ -148,7 +151,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
     public class getPlayContents {
 
         @Test
-        @DisplayName(SUCCESS_PREFIX)
+        @DisplayName(SUCCESS_PREFIX + "8개 조회 (정적 파일 10개)")
         public void success() {
 
             // given
@@ -162,18 +165,18 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .memberId(1)
                     .build();
 
-            List<MediaFile> mediaFiles = range(1, 10).mapToObj( idx ->
-                    MediaFile.builder()
+            List<StaticMediaFile> mediaFiles = range(1, 10).mapToObj(idx ->
+                    StaticMediaFile.builder()
                             .originalName("fileOriginalName")
-                            .absoluteName("fileAbsoluteName " + idx)
-                            .filePath("/naver/.../ " + idx)
+                            .absoluteName("fileAbsoluteName" + idx)
+                            .filePath("/naver/.../" + idx)
                             .extension(".png")
                             .build()
             ).toList();
 
             List<WorldCupGameContents> contentsList = range(1, 10).mapToObj( idx ->
                     WorldCupGameContents.builder()
-                            .name("contentsName " + idx)
+                            .name("contentsName" + idx)
                             .worldCupGame(worldCupGame)
                             .mediaFile(mediaFiles.get(idx - 1))
                             .build()
@@ -200,18 +203,108 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     () -> assertThat(result.contentsList().size()).isEqualTo(8),
 
                     () -> assertThat(result.contentsList().get(0).getContentsId()).isEqualTo(1),
-                    () -> assertThat(result.contentsList().get(0).getName()).isEqualTo("contentsName 1"),
-                    () -> assertThat(result.contentsList().get(0).getAbsoluteName()).isEqualTo("fileAbsoluteName 1"),
-                    () -> assertThat(result.contentsList().get(0).getFilePath()).isEqualTo("/naver/.../ 1"),
+                    () -> assertThat(result.contentsList().get(0).getName()).isEqualTo("contentsName1"),
+                    () -> assertThat(result.contentsList().get(0).getFilePath()).isEqualTo("/naver/.../1"),
+                    () -> assertThat(result.contentsList().get(0).getInternetMovieStartPlayTime()).isEqualTo(null),
+                    () -> assertThat(result.contentsList().get(0).getPlayDuration()).isEqualTo(null),
 
                     () -> assertThat(result.contentsList().get(7).getContentsId()).isEqualTo(8),
-                    () -> assertThat(result.contentsList().get(7).getName()).isEqualTo("contentsName 8"),
-                    () -> assertThat(result.contentsList().get(7).getAbsoluteName()).isEqualTo("fileAbsoluteName 8"),
-                    () -> assertThat(result.contentsList().get(7).getFilePath()).isEqualTo("/naver/.../ 8")
+                    () -> assertThat(result.contentsList().get(7).getName()).isEqualTo("contentsName8"),
+                    () -> assertThat(result.contentsList().get(7).getFilePath()).isEqualTo("/naver/.../8"),
+                    () -> assertThat(result.contentsList().get(0).getInternetMovieStartPlayTime()).isEqualTo(null),
+                    () -> assertThat(result.contentsList().get(0).getPlayDuration()).isEqualTo(null)
             );
 
 
         }
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX + "8개 조회 (인터넷 동영상 URL 5개 + 정적 파일 5개)")
+        public void success2() {
+
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+
+            List<StaticMediaFile> mediaFiles = range(1, 6).mapToObj(idx ->
+                    StaticMediaFile.builder()
+                            .originalName("fileOriginalName")
+                            .absoluteName("fileAbsoluteName" + idx)
+                            .filePath("/naver/.../" + idx)
+                            .extension(".png")
+                            .build()
+            ).toList();
+
+            List<InternetVideoUrl> internetMovieUrls = range(1, 6).mapToObj(idx ->
+                    InternetVideoUrl.builder()
+                            .videoPlayDuration(3)
+                            .videoStartTime("00001")
+                            .filePath("https://uTube.com/" + idx)
+                            .build()
+                    ).toList();
+
+            List<WorldCupGameContents> contentsList1 = range(1, 6).mapToObj( idx ->
+                    WorldCupGameContents.builder()
+                            .name("contentsName" + idx)
+                            .worldCupGame(worldCupGame)
+                            .mediaFile(mediaFiles.get(idx - 1))
+                            .build()
+            ).toList();
+            List<WorldCupGameContents> contentsList2 = range(5, 10).mapToObj( idx ->
+                    WorldCupGameContents.builder()
+                            .name("유튜브 영상 컨텐츠" + idx)
+                            .worldCupGame(worldCupGame)
+                            .mediaFile(internetMovieUrls.get(idx - 5))
+                            .build()
+            ).toList();
+
+            worldCupGameRepository.save(worldCupGame);
+            abstractMediaFileRepository.saveAll(mediaFiles);
+            abstractMediaFileRepository.saveAll(internetMovieUrls);
+            worldCupGameContentsRepository.saveAll(contentsList1);
+            worldCupGameContentsRepository.saveAll(contentsList2);
+
+            // when
+            GetWorldCupPlayContentsResponse result = worldCupGamecontentsService.getPlayContents(
+                    1L,
+                    8,
+                    1,
+                    List.of()
+            );
+
+            // then
+            assertAll(
+                    () -> assertThat(result.worldCupId()).isEqualTo(1L),
+
+                    () -> assertThat(result.round()).isEqualTo(8),
+                    () -> assertThat(result.title()).isEqualTo("title1"),
+                    () -> assertThat(result.contentsList().size()).isEqualTo(8),
+
+                    () -> assertThat(result.contentsList().get(0).getContentsId()).isEqualTo(1),
+                    () -> assertThat(result.contentsList().get(0).getName()).isEqualTo("contentsName1"),
+                    () -> assertThat(result.contentsList().get(0).getFilePath()).isEqualTo("/naver/.../1"),
+                    () -> assertThat(result.contentsList().get(0).getFileType()).isEqualTo("STATIC_MEDIA_FILE"),
+                    () -> assertThat(result.contentsList().get(0).getInternetMovieStartPlayTime()).isEqualTo(null),
+                    () -> assertThat(result.contentsList().get(0).getPlayDuration()).isEqualTo(null),
+
+                    () -> assertThat(result.contentsList().get(7).getContentsId()).isEqualTo(8),
+                    () -> assertThat(result.contentsList().get(7).getName()).isEqualTo("유튜브 영상 컨텐츠7"),
+                    () -> assertThat(result.contentsList().get(7).getFilePath()).isEqualTo("https://uTube.com/3"),
+                    () -> assertThat(result.contentsList().get(7).getFileType()).isEqualTo("INTERNET_VIDEO_URL"),
+                    () -> assertThat(result.contentsList().get(7).getInternetMovieStartPlayTime()).isEqualTo("00001"),
+                    () -> assertThat(result.contentsList().get(7).getPlayDuration()).isEqualTo(3)
+            );
+
+
+        }
+
 
         @Test
         @DisplayName(EXCEPTION_PREFIX + "예상한 컨텐츠 조회 사이즈와 실제 조회 사이즈가 다르면 안된다.")
@@ -228,8 +321,8 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .memberId(1)
                     .build();
 
-            List<MediaFile> mediaFiles = range(1, 10).mapToObj(idx ->
-                    MediaFile.builder()
+            List<StaticMediaFile> mediaFiles = range(1, 10).mapToObj(idx ->
+                    StaticMediaFile.builder()
                             .originalName("fileOriginalName")
                             .absoluteName("fileAbsoluteName")
                             .filePath("/naver/.../")
@@ -249,8 +342,8 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
             worldCupGameContentsRepository.saveAll(contentsList);
 
             List<GetDividedWorldCupGameContentsProjection> ACTUAL_GET_CONTENTS_LIST = List.of(
-                    new GetDividedWorldCupGameContentsProjection(1, "name", "absoulteName", "filePath"),
-                    new GetDividedWorldCupGameContentsProjection(2, "name", "absoulteName", "filePath")
+                    new GetDividedWorldCupGameContentsProjection(1, "name", "filePath", "MEDIA_FILE", null, null),
+                    new GetDividedWorldCupGameContentsProjection(2, "name", "filePath", "MEDIA_FILE", null, null)
             );
             given(worldCupGameRepository.getDividedWorldCupGameContents(1L, 8, List.of()))
                     .willReturn(ACTUAL_GET_CONTENTS_LIST);
@@ -286,13 +379,13 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .memberId(1)
                     .build();
 
-            MediaFile mediaFile1 = MediaFile.builder()
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile2 = MediaFile.builder()
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
@@ -311,8 +404,8 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .build();
 
             List<GetDividedWorldCupGameContentsProjection> ACTUAL_GET_CONTENTS_LIST = List.of(
-                    new GetDividedWorldCupGameContentsProjection(1, "name", "absoulteName", "filePath"),
-                    new GetDividedWorldCupGameContentsProjection(2, "name", "absoulteName", "filePath")
+                    new GetDividedWorldCupGameContentsProjection(1, "name",  "filePath", "MEDIA_FILE", null, null),
+                    new GetDividedWorldCupGameContentsProjection(2, "name", "filePath", "MEDIA_FILE", null, null)
             );
             given(worldCupGameRepository.getDividedWorldCupGameContents(1L, 2, List.of(1L)))
                     .willReturn(ACTUAL_GET_CONTENTS_LIST);
@@ -357,25 +450,25 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .memberId(1)
                     .build();
 
-            MediaFile mediaFile1 = MediaFile.builder()
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile2 = MediaFile.builder()
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile3 = MediaFile.builder()
+            StaticMediaFile mediaFile3 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile4 = MediaFile.builder()
+            StaticMediaFile mediaFile4 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
@@ -451,19 +544,19 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .memberId(1)
                     .build();
 
-            MediaFile mediaFile1 = MediaFile.builder()
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile2 = MediaFile.builder()
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile3 = MediaFile.builder()
+            StaticMediaFile mediaFile3 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")

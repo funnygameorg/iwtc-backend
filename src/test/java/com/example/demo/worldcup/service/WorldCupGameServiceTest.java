@@ -1,31 +1,28 @@
 package com.example.demo.worldcup.service;
 
-import com.example.demo.domain.etc.model.MediaFile;
-import com.example.demo.domain.etc.repository.MediaFileRepository;
+import com.example.demo.domain.etc.model.InternetVideoUrl;
+import com.example.demo.domain.etc.model.StaticMediaFile;
+import com.example.demo.domain.etc.repository.AbstractMediaFileRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
-import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
-import io.jsonwebtoken.lang.Assert;
-import org.hamcrest.core.Is;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.testcontainers.shaded.org.hamcrest.MatcherAssert;
 
 import java.util.List;
 
+import static com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange.*;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.data.domain.Sort.Direction.*;
 
 public class WorldCupGameServiceTest implements IntegrationBaseTest {
 
@@ -36,7 +33,7 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
     @Autowired
     private WorldCupGameContentsRepository worldCupGameContentsRepository;
     @Autowired
-    private MediaFileRepository mediaFileRepository;
+    private AbstractMediaFileRepository abstractMediaFileRepository;
     @Autowired
     private DataBaseCleanUp dataBaseCleanUp;
 
@@ -48,9 +45,10 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
     @Nested
     @DisplayName("월드컵 리스트를 조회할 수 있다.")
     class findWorldCupByPageable {
+
         @Test
         @DisplayName(SUCCESS_PREFIX + "1개 조회")
-        public void find1() {
+        public void success1() {
             // given
             WorldCupGame worldCupGame = WorldCupGame
                     .builder()
@@ -62,13 +60,13 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
                     .memberId(1)
                     .build();
 
-            MediaFile mediaFile1 = MediaFile.builder()
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile2 = MediaFile.builder()
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
@@ -87,18 +85,14 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
                     .build();
 
             worldCupGameRepository.save(worldCupGame);
-            mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
+            abstractMediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
             worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
-
-            WorldCupDateRange dateRange = WorldCupDateRange.YEAR;
-            String worldCupGameKeyword = null;
-            Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
             // when
             Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
-                    pageable,
-                    dateRange,
-                    worldCupGameKeyword
+                    PageRequest.of(0, 25, DESC, "id"),
+                    YEAR,
+                    null
             );
 
             // then
@@ -107,7 +101,7 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 
         @Test
         @DisplayName(SUCCESS_PREFIX + "2개 조회")
-        public void find2() {
+        public void success2() {
             // given
             WorldCupGame worldCupGame1 = WorldCupGame
                     .builder()
@@ -128,25 +122,25 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
                     .memberId(1)
                     .build();
 
-            MediaFile mediaFile1 = MediaFile.builder()
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile2 = MediaFile.builder()
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile3 = MediaFile.builder()
+            StaticMediaFile mediaFile3 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
                     .extension("extension")
                     .build();
-            MediaFile mediaFile4 = MediaFile.builder()
+            StaticMediaFile mediaFile4 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
                     .absoluteName("fileAbsoluteName")
                     .filePath("filePath")
@@ -175,18 +169,14 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
                     .build();
 
             worldCupGameRepository.saveAll(List.of(worldCupGame1, worldCupGame2));
-            mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4));
+            abstractMediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, mediaFile4));
             worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4));
-
-            WorldCupDateRange dateRange = WorldCupDateRange.ALL;
-            String worldCupGameKeyword = null;
-            Pageable pageable = PageRequest.of(0, 25, Sort.Direction.DESC, "id");
 
             // when
             Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
-                    pageable,
-                    dateRange,
-                    worldCupGameKeyword
+                    PageRequest.of(0, 25, DESC, "id"),
+                    ALL,
+                    null
             );
 
             // then
@@ -194,11 +184,119 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
         }
 
         @Test
-        @Disabled
-        @DisplayName(SUCCESS_PREFIX + "1개 조회, 컨텐츠 2개 미만 게임은 조회대상에서 제외")
-        public void find1_exclude2() {
-            // 해당 정책 테스트 코드 추가하기
-            assert false;
+        @DisplayName(SUCCESS_PREFIX + "3개 조회")
+        public void success3() {
+            // given
+            WorldCupGame worldCupGame1 = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+            WorldCupGame worldCupGame2 = WorldCupGame
+                    .builder()
+                    .title("title2")
+                    .description("description2")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+            WorldCupGame worldCupGame3 = WorldCupGame
+                    .builder()
+                    .title("title3")
+                    .description("description3")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("media-filePath")
+                    .extension("extension")
+                    .build();
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("media-filePath")
+                    .extension("extension")
+                    .build();
+            StaticMediaFile mediaFile3 = StaticMediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .absoluteName("fileAbsoluteName")
+                    .filePath("media-filePath")
+                    .extension("extension")
+                    .build();
+
+            InternetVideoUrl internetMovieUrl1 = InternetVideoUrl.builder()
+                    .isPlayableVideo(true)
+                    .videoStartTime("00001")
+                    .videoPlayDuration(3)
+                    .filePath("https://youtube/cats/1")
+                    .build();
+            InternetVideoUrl internetMovieUrl2 = InternetVideoUrl.builder()
+                    .isPlayableVideo(true)
+                    .videoStartTime("00001")
+                    .videoPlayDuration(3)
+                    .filePath("https://youtube/cats/2")
+                    .build();
+            InternetVideoUrl internetMovieUrl3 = InternetVideoUrl.builder()
+                    .isPlayableVideo(true)
+                    .videoStartTime("00001")
+                    .videoPlayDuration(3)
+                    .filePath("https://youtube/cats/3")
+                    .build();
+
+            WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                    .name("컨텐츠 네임 - 1")
+                    .worldCupGame(worldCupGame1)
+                    .mediaFile(mediaFile1)
+                    .build();
+            WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                    .name("컨텐츠 네임 - 2")
+                    .worldCupGame(worldCupGame1)
+                    .mediaFile(mediaFile2)
+                    .build();
+            WorldCupGameContents contents3 = WorldCupGameContents.builder()
+                    .name("컨텐츠 네임 - 3")
+                    .worldCupGame(worldCupGame2)
+                    .mediaFile(internetMovieUrl1)
+                    .build();
+            WorldCupGameContents contents4 = WorldCupGameContents.builder()
+                    .name("컨텐츠 네임 - 4")
+                    .worldCupGame(worldCupGame2)
+                    .mediaFile(internetMovieUrl2)
+                    .build();
+            WorldCupGameContents contents5 = WorldCupGameContents.builder()
+                    .name("컨텐츠 네임 - 5")
+                    .worldCupGame(worldCupGame3)
+                    .mediaFile(mediaFile3)
+                    .build();
+            WorldCupGameContents contents6 = WorldCupGameContents.builder()
+                    .name("컨텐츠 네임 - 6")
+                    .worldCupGame(worldCupGame3)
+                    .mediaFile(internetMovieUrl3)
+                    .build();
+
+            worldCupGameRepository.saveAll(List.of(worldCupGame1, worldCupGame2, worldCupGame3));
+            abstractMediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3, internetMovieUrl1, internetMovieUrl2, internetMovieUrl3));
+            worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3, contents4, contents5, contents6));
+
+            // when
+            Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
+                    PageRequest.of(0, 25, DESC, "id"),
+                    ALL,
+                    null
+            );
+
+            // then
+            assertThat(result.getContent().size()).isEqualTo(3);
         }
     }
 

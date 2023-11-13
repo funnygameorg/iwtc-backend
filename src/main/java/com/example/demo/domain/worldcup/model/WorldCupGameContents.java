@@ -48,10 +48,12 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @OneToOne(fetch = LAZY)
     private MediaFile mediaFile;
 
-    private int gameRank;
-    private int gameScore;
-
+    @Enumerated(value = EnumType.STRING)
     private VisibleType visibleType;
+
+    private int gameRank;
+
+    private int gameScore;
 
     @Override
     public boolean equals(Object o) {

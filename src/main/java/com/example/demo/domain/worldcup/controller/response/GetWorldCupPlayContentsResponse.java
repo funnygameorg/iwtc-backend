@@ -13,7 +13,7 @@ public record GetWorldCupPlayContentsResponse (
     Long worldCupId,
     String title,
     Integer round,
-    List<PlayImageContents> contentsList
+    List<PlayContents> contentsList
 ) {
     public static GetWorldCupPlayContentsResponse fromProjection(
             Long worldCupGameId,
@@ -27,24 +27,28 @@ public record GetWorldCupPlayContentsResponse (
                 worldCupGameRound,
                 gameContentsProjections
                         .stream()
-                        .map(PlayImageContents::fromProjection)
+                        .map(PlayContents::fromProjection)
                         .collect(toList())
         );
     }
 
     @Getter
-    public static class PlayImageContents{
+    public static class PlayContents{
+            String fileType;
             Long contentsId;
             String name;
-            String absoluteName;
             String filePath;
+            String internetMovieStartPlayTime;
+            Integer playDuration;
 
-        public static PlayImageContents fromProjection(GetDividedWorldCupGameContentsProjection projection) {
-            PlayImageContents instance = new PlayImageContents();
+        public static PlayContents fromProjection(GetDividedWorldCupGameContentsProjection projection) {
+            PlayContents instance = new PlayContents();
+            instance.fileType = projection.FileType();
             instance.contentsId = projection.contentsId();
             instance.name = projection.name();
-            instance.absoluteName = projection.absoluteName();
             instance.filePath = projection.filePath();
+            instance.internetMovieStartPlayTime = projection.movieStartTime();
+            instance.playDuration = projection.moviePlayDuration();
             return instance;
         }
     }

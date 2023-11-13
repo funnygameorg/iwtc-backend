@@ -100,6 +100,7 @@ public class WorldCupGamePageRepositoryImpl {
             wcgc_max.name AS contentsName1, mf_max.file_path AS filePath1, 
             wcgc_min.name AS contentsName2, mf_min.file_path AS filePath2 
             FROM world_cup_game AS wcg 
+            
             INNER JOIN world_cup_game_contents AS wcgc_max ON wcgc_max.id = (
                 SELECT MAX(inner_wcgc.id) AS id 
                 FROM world_cup_game_contents AS inner_wcgc 
@@ -111,7 +112,8 @@ public class WorldCupGamePageRepositoryImpl {
                     ORDER BY inner_wcgc_2.id DESC 
                     LIMIT 2
                 )
-            ) 
+            )
+             
             INNER JOIN world_cup_game_contents AS wcgc_min ON wcgc_min.id = (
                 SELECT MIN(inner_wcgc.id) AS id 
                 FROM world_cup_game_contents AS inner_wcgc 
@@ -123,9 +125,10 @@ public class WorldCupGamePageRepositoryImpl {
                     ORDER BY inner_wcgc_2.id DESC 
                     LIMIT 2
                 )
-            ) 
-            INNER JOIN media_file AS mf_max on wcgc_max.media_file_id = mf_max.id 
-            INNER JOIN media_file AS mf_min on wcgc_min.media_file_id = mf_min.id 
+            )
+            INNER JOIN MEDIA_FILE AS mf_max on wcgc_max.media_file_id = mf_max.id 
+            INNER JOIN MEDIA_FILE AS mf_min on wcgc_min.media_file_id = mf_min.id 
+            
             WHERE DATE(wcg.created_at) BETWEEN :startDate AND :endDate 
             %s
             GROUP BY wcg.id 

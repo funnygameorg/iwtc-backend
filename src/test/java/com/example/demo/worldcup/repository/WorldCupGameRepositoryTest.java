@@ -1,7 +1,9 @@
 package com.example.demo.worldcup.repository;
 
 import com.example.demo.domain.etc.model.MediaFile;
-import com.example.demo.domain.etc.repository.MediaFileRepository;
+import com.example.demo.domain.etc.model.InternetVideoUrl;
+import com.example.demo.domain.etc.model.StaticMediaFile;
+import com.example.demo.domain.etc.repository.AbstractMediaFileRepository;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
@@ -15,7 +17,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
@@ -35,8 +36,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
     private WorldCupGameContentsRepository worldCupGameContentsRepository;
 
     @Autowired
-    private MediaFileRepository mediaFileRepository;
-
+    private AbstractMediaFileRepository abstractMediaFileRepository;
 
     @Autowired
     private DataBaseCleanUp dataBaseCleanUp;
@@ -50,59 +50,91 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
     @DisplayName("월드컵 게임 플레이 컨텐츠 리스트 조회할 수 있다.")
     public class getDividedWorldCupGameContents {
         @Test
-        @DisplayName(SUCCESS_PREFIX + "3개 컨텐츠 중 3개 조회")
+        @DisplayName(SUCCESS_PREFIX + "8개 컨텐츠 모두 조회 (정적 파일 4개, 인터넷 동영상 URL 4개)")
         public void success1() {
             // given
             WorldCupGame worldCupGame = createWorldCupGame("TITLE1", "DESC1", ROUND_32, PUBLIC, 1);
 
-            List<MediaFile> mediaFiles = range(1, 4)
+            List<StaticMediaFile> mediaFiles = range(1, 5)
                     .mapToObj( idx ->
                             createMediaFile(
                                     "ORIGINAL"+idx,
                                     "ABSOLUTE"+idx,
                                     "s3://abc/",
                                     ".png"))
-                    .collect(toList());
-
-            List<WorldCupGameContents> contentsList = range(1, 4)
+                    .toList();
+            List<InternetVideoUrl> internetMovieUrls = range(5, 9)
+                    .mapToObj( idx ->
+                            InternetVideoUrl.builder()
+                                    .filePath("www.youtube/dogmovies/" + idx)
+                                    .isPlayableVideo(true)
+                                    .videoStartTime("00000")
+                                    .videoPlayDuration(3)
+                                    .build()
+                            ).toList();
+            List<WorldCupGameContents> contentsListWithMediaFile = range(1, 5)
                     .mapToObj( idx ->
                             createGameContents(
                                     worldCupGame,
                                     "NAME"+idx,
                                     mediaFiles.get(idx - 1)
                             ))
-                    .collect(toList());
+                    .toList();
+            List<WorldCupGameContents> contentsListWithInternetMovie = range(5, 9)
+                    .mapToObj( idx ->
+                            createGameContents(
+                                    worldCupGame,
+                                    "NAME"+idx,
+                                    internetMovieUrls.get(idx - 5)
+                            ))
+                    .toList();
 
             worldCupGameRepository.save(worldCupGame);
-            mediaFileRepository.saveAll(mediaFiles);
-            worldCupGameContentsRepository.saveAll(contentsList);
-
-            Long worldCupId = 1L;
-            int divideContentsSizePerRequest = 3;
-            List<Long> alreadyPlayedContentsIds = List.of();
+            abstractMediaFileRepository.saveAll(mediaFiles);
+            abstractMediaFileRepository.saveAll(internetMovieUrls);
+            worldCupGameContentsRepository.saveAll(contentsListWithMediaFile);
+            worldCupGameContentsRepository.saveAll(contentsListWithInternetMovie);
 
             // when
             List<GetDividedWorldCupGameContentsProjection> result = worldCupGameRepository.getDividedWorldCupGameContents(
-                    worldCupId,
-                    divideContentsSizePerRequest,
-                    alreadyPlayedContentsIds
+                    1L,
+                    8,
+                    List.of()
             );
 
             assertAll(
-                    () -> assertThat(result.size()).isEqualTo(3),
+                    () -> assertThat(result.size()).isEqualTo(8),
 
-                    () -> assertThat(result.get(0).name()).isEqualTo(contentsList.get(0).getName()),
-                    () -> assertThat(result.get(1).name()).isEqualTo(contentsList.get(1).getName()),
-                    () -> assertThat(result.get(2).name()).isEqualTo(contentsList.get(2).getName()),
+                    () -> assertThat(result.get(0).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(0).movieStartTime()).isEqualTo(null),
+                    () -> assertThat(result.get(0).moviePlayDuration()).isEqualTo(null),
+                    () -> assertThat(result.get(1).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(1).movieStartTime()).isEqualTo(null),
+                    () -> assertThat(result.get(1).moviePlayDuration()).isEqualTo(null),
+                    () -> assertThat(result.get(2).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(2).movieStartTime()).isEqualTo(null),
+                    () -> assertThat(result.get(2).moviePlayDuration()).isEqualTo(null),
+                    () -> assertThat(result.get(3).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(3).movieStartTime()).isEqualTo(null),
+                    () -> assertThat(result.get(3).moviePlayDuration()).isEqualTo(null),
 
-                    () -> assertThat(result.get(0).absoluteName()).isEqualTo(mediaFiles.get(0).getAbsoluteName()),
-                    () -> assertThat(result.get(1).absoluteName()).isEqualTo(mediaFiles.get(1).getAbsoluteName()),
-                    () -> assertThat(result.get(2).absoluteName()).isEqualTo(mediaFiles.get(2).getAbsoluteName())
+                    () -> assertThat(result.get(4).filePath()).isEqualTo("www.youtube/dogmovies/5"),
+                    () -> assertThat(result.get(4).movieStartTime()).isEqualTo("00000"),
+                    () -> assertThat(result.get(4).moviePlayDuration()).isEqualTo(3),
+                    () -> assertThat(result.get(5).filePath()).isEqualTo("www.youtube/dogmovies/6"),
+                    () -> assertThat(result.get(5).movieStartTime()).isEqualTo("00000"),
+                    () -> assertThat(result.get(5).moviePlayDuration()).isEqualTo(3),
+                    () -> assertThat(result.get(6).filePath()).isEqualTo("www.youtube/dogmovies/7"),
+                    () -> assertThat(result.get(6).movieStartTime()).isEqualTo("00000"),
+                    () -> assertThat(result.get(6).moviePlayDuration()).isEqualTo(3),
+                    () -> assertThat(result.get(7).filePath()).isEqualTo("www.youtube/dogmovies/8"),
+                    () -> assertThat(result.get(7).movieStartTime()).isEqualTo("00000"),
+                    () -> assertThat(result.get(7).moviePlayDuration()).isEqualTo(3)
             );
         }
 
         @Test
-        @DisplayName(SUCCESS_PREFIX + "12개 컨텐츠 중 6개 조회")
+        @DisplayName(SUCCESS_PREFIX + "12개 컨텐츠 중 6개 조회 (정적 파일 3개, 인터넷 동영상 URL 9개)")
         public void success2() {
             // given
             WorldCupGame worldCupGame = createWorldCupGame(
@@ -113,44 +145,82 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                     1
             );
 
-            List<MediaFile> mediaFiles = range(1, 13)
+            List<StaticMediaFile> mediaFiles = range(1, 4)
                     .mapToObj( idx ->
                             createMediaFile(
                                     "ORIGINAL"+idx,
                                     "ABSOLUTE"+idx,
                                     "s3://abc/",
                                     ".png"))
-                    .collect(toList());
-
-            List<WorldCupGameContents> contentsList = range(1, 13)
+                    .toList();
+            List<InternetVideoUrl> internetMovieUrls = range(5, 14)
+                    .mapToObj( idx ->
+                            InternetVideoUrl.builder()
+                                    .isPlayableVideo(true)
+                                    .videoPlayDuration(3)
+                                    .videoStartTime("00001")
+                                    .filePath("path/" + idx)
+                                    .build())
+                    .toList();
+            List<WorldCupGameContents> contentsListWithMediaFiles = range(1, 4)
                     .mapToObj( idx ->
                             createGameContents(
                                     worldCupGame,
                                     "NAME"+idx,
                                     mediaFiles.get(idx - 1)
                             ))
-                    .collect(toList());
+                    .toList();
+            List<WorldCupGameContents> contentsListWithMovieUrls = range(5, 14)
+                    .mapToObj( idx ->
+                            createGameContents(
+                                    worldCupGame,
+                                    "NAME"+idx,
+                                    internetMovieUrls.get(idx - 5)
+                            ))
+                    .toList();
 
             worldCupGameRepository.save(worldCupGame);
-            mediaFileRepository.saveAll(mediaFiles);
-            worldCupGameContentsRepository.saveAll(contentsList);
-
-            Long worldCupId = 1L;
-            int divideContentsSizePerRequest = contentsList.size() / 2;
-            List<Long> alreadyPlayedContentsIds = List.of();
+            abstractMediaFileRepository.saveAll(mediaFiles);
+            abstractMediaFileRepository.saveAll(internetMovieUrls);
+            worldCupGameContentsRepository.saveAll(contentsListWithMediaFiles);
+            worldCupGameContentsRepository.saveAll(contentsListWithMovieUrls);
 
             // when
             List<GetDividedWorldCupGameContentsProjection> result = worldCupGameRepository.getDividedWorldCupGameContents(
-                    worldCupId,
-                    divideContentsSizePerRequest,
-                    alreadyPlayedContentsIds
+                    1L,
+                    6,
+                    List.of()
             );
 
-            assertThat(result.size()).isEqualTo(6);
+            assertAll(
+                    () -> assertThat(result.get(0).FileType()).isEqualTo("STATIC_MEDIA_FILE"),
+                    () -> assertThat(result.get(0).moviePlayDuration()).isEqualTo(null),
+                    () -> assertThat(result.get(0).movieStartTime()).isEqualTo(null),
+
+                    () -> assertThat(result.get(1).FileType()).isEqualTo("STATIC_MEDIA_FILE"),
+                    () -> assertThat(result.get(1).moviePlayDuration()).isEqualTo(null),
+                    () -> assertThat(result.get(1).movieStartTime()).isEqualTo(null),
+
+                    () -> assertThat(result.get(2).FileType()).isEqualTo("STATIC_MEDIA_FILE"),
+                    () -> assertThat(result.get(2).moviePlayDuration()).isEqualTo(null),
+                    () -> assertThat(result.get(2).movieStartTime()).isEqualTo(null),
+
+                    () -> assertThat(result.get(3).FileType()).isEqualTo("INTERNET_VIDEO_URL"),
+                    () -> assertThat(result.get(3).moviePlayDuration()).isEqualTo(3),
+                    () -> assertThat(result.get(3).movieStartTime()).isEqualTo("00001"),
+
+                    () -> assertThat(result.get(4).FileType()).isEqualTo("INTERNET_VIDEO_URL"),
+                    () -> assertThat(result.get(4).moviePlayDuration()).isEqualTo(3),
+                    () -> assertThat(result.get(4).movieStartTime()).isEqualTo("00001"),
+
+                    () -> assertThat(result.get(5).FileType()).isEqualTo("INTERNET_VIDEO_URL"),
+                    () -> assertThat(result.get(5).moviePlayDuration()).isEqualTo(3),
+                    () -> assertThat(result.get(5).movieStartTime()).isEqualTo("00001")
+            );
         }
 
         @Test
-        @DisplayName(SUCCESS_PREFIX + "12개 컨텐츠 중 6개 조회 (이미 플레이한 이상형 목록 6개 추가)")
+        @DisplayName(SUCCESS_PREFIX + "12개 컨텐츠 중 6개 조회 (이미 플레이한 이상형 목록 6개를 제외) (정적 파일 12개)")
         public void success3() {
             // given
             WorldCupGame worldCupGame = createWorldCupGame(
@@ -160,7 +230,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                     PUBLIC,
                     1
             );
-            List<MediaFile> mediaFiles = range(1, 13)
+            List<StaticMediaFile> mediaFiles = range(1, 13)
                     .mapToObj( idx ->
                             createMediaFile(
                                     "ORIGINAL"+idx,
@@ -178,7 +248,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                     .collect(toList());
 
             worldCupGameRepository.save(worldCupGame);
-            mediaFileRepository.saveAll(mediaFiles);
+            abstractMediaFileRepository.saveAll(mediaFiles);
             worldCupGameContentsRepository.saveAll(contentsList);
 
             Long worldCupId = 1L;
@@ -216,13 +286,13 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                 .build();
     }
 
-    private MediaFile createMediaFile(
+    private StaticMediaFile createMediaFile(
             String fileOriginalName,
             String fileAbsoluteName,
             String filePath,
             String extension)
     {
-        return MediaFile.builder()
+        return StaticMediaFile.builder()
                 .originalName(fileOriginalName)
                 .absoluteName(fileAbsoluteName)
                 .filePath(filePath)
@@ -230,11 +300,11 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                 .build();
     }
 
-    private WorldCupGameContents createGameContents(WorldCupGame game, String name, MediaFile mediaFile) {
+    private WorldCupGameContents createGameContents(WorldCupGame game, String name, MediaFile abstractMediaFile) {
         return WorldCupGameContents.builder()
                 .name(name)
                 .worldCupGame(game)
-                .mediaFile(mediaFile)
+                .mediaFile(abstractMediaFile)
                 .build();
     }
 }

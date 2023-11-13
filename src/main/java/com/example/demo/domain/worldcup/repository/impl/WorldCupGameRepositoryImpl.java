@@ -107,9 +107,11 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
         String sql = """
                     SELECT 
                         wcgc.ID AS ID, 
-                        wcgc.NAME AS CONTENTS_NAME, 
-                        mf.ABSOLUTE_NAME AS FILE_ABSOLUTE_NAME, 
-                        mf.FILE_PATH AS FILE_PATH
+                        wcgc.NAME AS CONTENTS_NAME,  
+                        amf.FILE_PATH AS FILE_PATH,
+                        amf.FILE_TYPE AS FILE_TYPE,
+                        amu.VIDEO_START_TIME AS VIDEO_START_TIME,
+                        amu.VIDEO_PLAY_DURATION AS VIDEO_PLAY_DURATION 
                     FROM (
                         SELECT 
                             inner_wcgc.ID AS id, 
@@ -121,8 +123,8 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                             inner_wcgc.WORLD_CUP_GAME_ID = :worldCupGameId
                         %s
                     ) AS wcgc
-                    LEFT JOIN 
-                        MEDIA_FILE AS mf ON mf.ID = wcgc.MEDIA_FILE_ID
+                    LEFT JOIN MEDIA_FILE AS amf ON amf.ID = wcgc.MEDIA_FILE_ID
+                    LEFT JOIN INTERNET_VIDEO_URL AS amu ON amu.id = amf.ID
                     LIMIT :divideContentsSizePerRequest
                 """
                 .formatted(NotInAlreadyPlayedContentsIdsDynamicQuery);
@@ -138,8 +140,10 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                         new GetDividedWorldCupGameContentsProjection(
                                 Long.parseLong(String.valueOf(tuple.get("ID"))),
                                 (String) tuple.get("CONTENTS_NAME"),
-                                (String) tuple.get("FILE_ABSOLUTE_NAME"),
-                                (String) tuple.get("FILE_PATH")
+                                (String) tuple.get("FILE_PATH"),
+                                (String) tuple.get("FILE_TYPE"),
+                                (String) tuple.get("VIDEO_START_TIME"),
+                                (Integer) tuple.get("VIDEO_PLAY_DURATION")
                         )
                 ).collect(Collectors.toList());
     }
