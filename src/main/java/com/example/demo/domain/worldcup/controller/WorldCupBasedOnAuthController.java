@@ -74,7 +74,7 @@ public class WorldCupBasedOnAuthController {
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<List<GetWorldCupContentsResponse>> getMyWorldCupGameContentsList(
             @PathVariable
-            Long worldCupId,
+            long worldCupId,
 
             @Parameter(hidden = true)
             @CustomAuthentication
@@ -118,7 +118,7 @@ public class WorldCupBasedOnAuthController {
     @GetMapping("/{worldCupId}")
     @ResponseStatus(HttpStatus.OK)
     public RestApiResponse<GetWorldCupResponse> getWorldCup(
-            @PathVariable("worldCupId") Long worldCupId
+            @PathVariable long worldCupId
     ) {
         return new RestApiResponse(1, "", null);
     }

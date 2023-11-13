@@ -41,7 +41,8 @@ public class EntityEqualsHashCode {
 
     @Test
     @DisplayName("실제 엔티티와 프록시 엔티티는 동일하다.")
-    public void proxy1() {
+    public void
+    proxy1() {
         Member newMember = createMember();
         em.persist(newMember);
         em.flush();

@@ -75,7 +75,7 @@ class ETCController {
     @PostMapping("/contents/{contentsId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public RestApiResponse<Object> writeComment(
-            @PathVariable Long contentsId,
+            @PathVariable long contentsId,
             @Valid @RequestBody WriteCommentRequest request
     ) {
         return new RestApiResponse(1, "", null);

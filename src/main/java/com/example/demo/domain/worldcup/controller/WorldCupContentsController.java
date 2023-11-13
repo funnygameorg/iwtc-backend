@@ -81,7 +81,7 @@ public class WorldCupContentsController {
     @ResponseStatus(OK)
     public RestApiResponse<GetWorldCupPlayContentsResponse> getPlayContents(
             @PathVariable
-            Long worldCupId,
+            long worldCupId,
 
             @RequestParam(name = "currentRound")
             int currentRound,
@@ -136,7 +136,7 @@ public class WorldCupContentsController {
     @GetMapping("/{worldCupId}/available-rounds")
     @ResponseStatus(OK)
     public RestApiResponse<GetAvailableGameRoundsResponse> getAvailableGameRounds(
-            @PathVariable Long worldCupId
+            @PathVariable long worldCupId
     ) {
         return new RestApiResponse(
                 1,
