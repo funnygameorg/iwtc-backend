@@ -78,7 +78,7 @@ public class WorldCupGame extends TimeBaseEntity {
 
     @Comment("해당 월드컵 통계")
     @OneToOne(fetch = LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT), nullable = false)
     private WorldCupGameStatistics worldCupGameStatistics;
 
     @Override

@@ -46,12 +46,12 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @NotNull
     @ManyToOne(fetch = LAZY)
     @Comment("연결된 이상형 월드컵")
-    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT), nullable = false)
     private WorldCupGame worldCupGame;
 
     @OneToOne(fetch = LAZY)
     @Comment("연결된 미디어 파일")
-    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT), nullable = false)
     private MediaFile mediaFile;
 
     @Enumerated(value = EnumType.STRING)
