@@ -3,37 +3,42 @@ package com.example.demo.domain.member.model;
 import com.example.demo.common.jpa.TimeBaseEntity;
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
 import static com.google.common.base.Objects.*;
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = PRIVATE)
+@NoArgsConstructor(access = PROTECTED)
+@Table(name = "MEMBER")
 public class Member extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @NotNull
     @Comment("사용자 아이디")
     private String serviceId;
 
+    @NotBlank
+    @NotNull
     @Comment("사용자 별명")
     private String nickname;
 
+    @NotBlank
+    @NotNull
     @Comment("사용자 암호")
     private String password;
-
-    @Builder
-    public Member(Long id, String serviceId, String nickname, String password) {
-        this.id = id;
-        this.serviceId = serviceId;
-        this.nickname = nickname;
-        this.password = password;
-    }
 
     public static Member signUp(String serviceId, String nickname, String password) {
         return new Member(null, serviceId, nickname, password);

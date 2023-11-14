@@ -25,8 +25,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-@Table(
-        name = "WORLD_CUP_GAME_CONTENTS",
+@Table(name = "WORLD_CUP_GAME_CONTENTS",
         indexes = {
                 // 게임 랭킹 노출용
                 @Index(name = "VISIBLE_TYPE__GAME_SCORE__INDEX", columnList = "visibleType, gameScore")

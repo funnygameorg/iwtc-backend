@@ -39,8 +39,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-@Table(
-        name = "WORLD_CUP_GAME",
+@Table(name = "WORLD_CUP_GAME",
         uniqueConstraints = {
                 @UniqueConstraint(name = "TITLE__UNIQUE", columnNames = "title")
         },
@@ -78,7 +77,7 @@ public class WorldCupGame extends TimeBaseEntity {
 
     @Comment("해당 월드컵 통계")
     @OneToOne(fetch = LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT), nullable = false)
+    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
     private WorldCupGameStatistics worldCupGameStatistics;
 
     @Override

@@ -93,6 +93,7 @@ public class EntityEqualsHashCode {
         return Member.builder()
                 .id(null)
                 .serviceId("명수")
+                .nickname("닉네임 1")
                 .password("은밀한 패스워드77")
                 .build();
     }
