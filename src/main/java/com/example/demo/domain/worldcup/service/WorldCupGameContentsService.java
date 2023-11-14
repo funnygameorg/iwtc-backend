@@ -55,7 +55,7 @@ public class WorldCupGameContentsService {
                 availableGameRounds
                 );
     }
-    // 제공된 컨텐츠 수로 플레이할 수 있는 라운드 수
+    // 제공된 컨텐츠 수로 플레이할 수 있는 라운드 수의 크기
     private List<Integer> generateAvailableRounds(Long ContentsSize) {
         return stream(WorldCupGameRound.values())
                 .filter(gameRound -> gameRound.isAvailableRound(ContentsSize))
@@ -87,15 +87,12 @@ public class WorldCupGameContentsService {
                         alreadyPlayedContentsIds
                 );
 
-
-        boolean isEqualsContentsSize = equalsExpectedContentsSize(wantedContentsSize, contentsProjections.size());
-        if(isEqualsContentsSize) {
+        if(equalsExpectedContentsSize(wantedContentsSize, contentsProjections.size())) {
             throw new IllegalWorldCupGameContentsException("조회 컨텐츠 수가 다름 %s, %s"
                     .formatted(wantedContentsSize, contentsProjections.size()));
         }
 
-        boolean containsAlreadyContents = containsAlreadyContents(alreadyPlayedContentsIds, contentsProjections);
-        if(containsAlreadyContents) {
+        if(containsAlreadyContents(alreadyPlayedContentsIds, contentsProjections)) {
                 throw new IllegalWorldCupGameContentsException("컨텐츠 중복 : 이미 플레이한 컨텐츠 %s, 조회 성공 컨텐츠 %s"
                         .formatted(alreadyPlayedContentsIds, contentsProjections));
         }
