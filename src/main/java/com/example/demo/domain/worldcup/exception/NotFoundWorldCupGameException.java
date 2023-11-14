@@ -7,8 +7,9 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class NotFoundWorldCupGameException extends BaseException {
     public NotFoundWorldCupGameException(String publicMessage) {
-        super(publicMessage,
+        super(
+                NOT_FOUND_WORLD_CUP_GAME.getMessage() + " " + publicMessage,
                 NOT_FOUND_WORLD_CUP_GAME,
-                NOT_FOUND);
+                NOT_FOUND_WORLD_CUP_GAME.getHttpStatus());
     }
 }

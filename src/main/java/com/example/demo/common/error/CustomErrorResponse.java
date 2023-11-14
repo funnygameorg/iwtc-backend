@@ -1,8 +1,6 @@
 package com.example.demo.common.error;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -10,23 +8,13 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @ToString
+@Builder
 @NoArgsConstructor(access = PRIVATE)
+@AllArgsConstructor(access = PRIVATE)
 public class CustomErrorResponse {
 
-    public CustomErrorResponse(
-            LocalDateTime errorTime,
-            CustomErrorCode errorCode,
-            String message,
-            String errorId
-    ) {
-        this.customErrorCode = errorCode;
-        this.errorTime = errorTime;
-        this.message = message;
-        this.errorId = errorId;
-    }
-
-    private String message;
     private LocalDateTime errorTime;
-    private CustomErrorCode customErrorCode;
+    private int errorCode;
+    private String message;
     private String errorId;
 }

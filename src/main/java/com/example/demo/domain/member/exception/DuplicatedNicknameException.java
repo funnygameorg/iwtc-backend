@@ -7,6 +7,10 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 
 public class DuplicatedNicknameException extends BaseException {
     public DuplicatedNicknameException() {
-        super("중복된 닉네임", DUPLICATED_MEMBER_NICKNAME, CONFLICT);
+        super(
+                DUPLICATED_MEMBER_NICKNAME.getMessage(),
+                DUPLICATED_MEMBER_NICKNAME,
+                DUPLICATED_MEMBER_NICKNAME.getHttpStatus()
+        );
     }
 }

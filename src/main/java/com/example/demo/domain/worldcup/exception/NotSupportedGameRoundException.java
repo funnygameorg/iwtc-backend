@@ -9,6 +9,10 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 public class NotSupportedGameRoundException extends BaseException {
     public NotSupportedGameRoundException(String publicMessage) {
-        super(publicMessage, NOT_SUPPORTED_GAME_ROUND, BAD_REQUEST);
+        super(
+                NOT_SUPPORTED_GAME_ROUND.getMessage() + " " + publicMessage,
+                NOT_SUPPORTED_GAME_ROUND,
+                NOT_SUPPORTED_GAME_ROUND.getHttpStatus()
+        );
     }
 }

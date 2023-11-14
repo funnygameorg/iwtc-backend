@@ -4,12 +4,14 @@ import com.example.demo.common.error.CustomErrorCode;
 import com.example.demo.common.error.exception.BaseException;
 import org.springframework.http.HttpStatus;
 
+import static com.example.demo.common.error.CustomErrorCode.*;
+
 public class NotFoundDataInRequestException extends BaseException {
     public NotFoundDataInRequestException() {
         super(
-                "http request 에 원하는 정보가 없습니다.",
-                CustomErrorCode.NOT_FOUND_DATA_IN_REQUEST,
-                HttpStatus.INTERNAL_SERVER_ERROR
+                NOT_FOUND_DATA_IN_REQUEST.getMessage(),
+                NOT_FOUND_DATA_IN_REQUEST,
+                NOT_FOUND_DATA_IN_REQUEST.getHttpStatus()
         );
     }
 }

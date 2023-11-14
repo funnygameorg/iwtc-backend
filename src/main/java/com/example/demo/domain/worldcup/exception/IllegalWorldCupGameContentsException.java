@@ -8,9 +8,9 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class IllegalWorldCupGameContentsException extends BaseException {
     public IllegalWorldCupGameContentsException(String publicMessage) {
         super(
-                publicMessage,
+                ILLEGAL_WORLD_CUP_GAME_CONTENTS.getMessage() + " " + publicMessage,
                 ILLEGAL_WORLD_CUP_GAME_CONTENTS,
-                BAD_REQUEST
+                ILLEGAL_WORLD_CUP_GAME_CONTENTS.getHttpStatus()
         );
     }
 }

@@ -9,9 +9,9 @@ public class NotFoundMemberException extends BaseException {
 
     public NotFoundMemberException() {
         super(
-                "존재하지 않는 사용자입니다.",
+                NOT_FOUND_MEMBER.getMessage(),
                 NOT_FOUND_MEMBER,
-                NOT_FOUND
+                NOT_FOUND_MEMBER.getHttpStatus()
         );
     }
 }

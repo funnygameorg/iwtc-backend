@@ -1,8 +1,6 @@
-package com.example.demo.domain.worldcup.exception;
+package com.example.demo.domain.worldcup.controller.response;
 
-import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
-import com.fasterxml.jackson.databind.introspect.DefaultAccessorNamingStrategy;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;

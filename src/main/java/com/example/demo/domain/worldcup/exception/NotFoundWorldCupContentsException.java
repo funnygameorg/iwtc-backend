@@ -9,9 +9,9 @@ import static com.example.demo.common.error.CustomErrorCode.*;
 public class NotFoundWorldCupContentsException extends BaseException {
     public NotFoundWorldCupContentsException(String publicMessage) {
         super(
-                publicMessage,
+                NOT_FOUND_WORLD_CUP_GAME_CONTENTS.getMessage() + " " + publicMessage,
                 NOT_FOUND_WORLD_CUP_GAME_CONTENTS,
-                HttpStatus.NOT_FOUND
+                NOT_FOUND_WORLD_CUP_GAME_CONTENTS.getHttpStatus()
         );
     }
 }

@@ -8,6 +8,10 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 public class DuplicatedServiceIdException extends BaseException {
     public DuplicatedServiceIdException() {
 
-        super("중복된 멤버 아이디", DUPLICATED_MEMBER_SERVICE_ID, CONFLICT);
+        super(
+                DUPLICATED_MEMBER_SERVICE_ID.getMessage(),
+                DUPLICATED_MEMBER_SERVICE_ID,
+                DUPLICATED_MEMBER_SERVICE_ID.getHttpStatus()
+        );
     }
 }

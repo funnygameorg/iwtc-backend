@@ -1,5 +1,16 @@
 package com.example.demo.common.error;
 
+import com.example.demo.common.error.entity.ErrorCodeRepository;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+
+@Getter
+@RequiredArgsConstructor
 public enum CustomErrorCode {
     DUPLICATED_MEMBER_SERVICE_ID,
     DUPLICATED_MEMBER_NICKNAME,
@@ -14,5 +25,31 @@ public enum CustomErrorCode {
     NOT_SUPPORTED_GAME_ROUND,
     ILLEGAL_WORLD_CUP_GAME_CONTENTS,
     NOT_OWNER_GAME,
-    NOT_FOUND_WORLD_CUP_GAME_CONTENTS, EXPIRED_REMEMBER_ME
+    NOT_FOUND_WORLD_CUP_GAME_CONTENTS,
+    EXPIRED_REMEMBER_ME;
+
+    private int code;
+    private String message;
+    private HttpStatus httpStatus;
+
+    @Component
+    @RequiredArgsConstructor
+    public static class ErrorInjector {
+        private final ErrorCodeRepository repository;
+
+        @PostConstruct
+        public void postConstruct() {
+            Arrays.stream(CustomErrorCode.values())
+                    .forEach(errorCode ->
+                            repository.findByName(errorCode.name())
+                                    .ifPresent( e -> {
+                                        errorCode.code = e.getCode();
+                                        errorCode.httpStatus = HttpStatus.valueOf(e.getHttpStatus());
+                                        errorCode.message = e.getMessage();
+                                    }
+                            )
+                    );
+        }
+    }
+
 }

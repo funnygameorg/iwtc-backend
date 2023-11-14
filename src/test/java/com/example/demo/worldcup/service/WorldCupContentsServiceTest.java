@@ -5,6 +5,7 @@ import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.etc.repository.AbstractMediaFileRepository;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
+import com.example.demo.domain.worldcup.controller.response.ClearWorldCupGameResponse;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.domain.worldcup.exception.*;

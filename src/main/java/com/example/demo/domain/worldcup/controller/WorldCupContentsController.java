@@ -1,13 +1,11 @@
 package com.example.demo.domain.worldcup.controller;
 
-import com.example.demo.common.web.auth.CustomAuthentication;
-import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
-import com.example.demo.domain.worldcup.exception.ClearWorldCupGameResponse;
+import com.example.demo.domain.worldcup.controller.response.ClearWorldCupGameResponse;
 import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.google.common.primitives.Longs;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,11 +18,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 

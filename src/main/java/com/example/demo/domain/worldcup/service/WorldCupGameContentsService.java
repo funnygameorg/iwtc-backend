@@ -1,6 +1,7 @@
 package com.example.demo.domain.worldcup.service;
 
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
+import com.example.demo.domain.worldcup.controller.response.ClearWorldCupGameResponse;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.domain.worldcup.exception.*;
@@ -11,14 +12,11 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepositor
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
-import com.google.common.collect.Sets;
-import jakarta.validation.Constraint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.stream;

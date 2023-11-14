@@ -10,9 +10,9 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class NoRoundsAvailableToPlayException extends BaseException {
     public NoRoundsAvailableToPlayException(String publicMessage) {
         super(
-                publicMessage,
+                NO_ROUNDS_AVAILABLE_TO_PLAY.getMessage() + " " +publicMessage,
                 NO_ROUNDS_AVAILABLE_TO_PLAY,
-                BAD_REQUEST
+                NO_ROUNDS_AVAILABLE_TO_PLAY.getHttpStatus()
         );
     }
 }
