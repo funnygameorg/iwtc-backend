@@ -2,6 +2,7 @@ INSERT INTO `ERROR_CODE_ENTITY` (`name`, `code`, `message`, `http_status`)
 VALUES
     ('DUPLICATED_MEMBER_SERVICE_ID', 4001, '이미 존재하는 아이디입니다.', 409),
     ('DUPLICATED_MEMBER_NICKNAME', 4002, '이미 존재하는 닉네임입니다.', 409),
+    ('DUPLICATED_WORLD_CUP_GAME_TITLE', 4003, '이미 존재하는 타이틀입니다.', 409),
     ('INVALID_CLIENT_REQUEST_BODY', 3001, '올바르지 않은 요청입니다.', 400),
     ('INVALID_TOKEN_EXCEPTION', 3002, '올바르지 않은 토큰입니다.', 401),
     ('NOT_FOUND_DATA_IN_REQUEST', 5001, '사용자 요청에 데이터가 없습니다.', 404),

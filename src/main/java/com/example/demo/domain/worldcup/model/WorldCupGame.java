@@ -6,13 +6,13 @@ import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePag
 import com.example.demo.domain.gamestatistics.model.WorldCupGameStatistics;
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -50,7 +50,8 @@ import static lombok.AccessLevel.PROTECTED;
 )
 public class WorldCupGame extends TimeBaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -58,12 +59,13 @@ public class WorldCupGame extends TimeBaseEntity {
     @Comment("월드컵 이름")
     private String title;
 
-    @Comment("월드컵 설명")
+    @Size(max = 100, message = "description 최대 100자")
+    @Comment("월드컵 설명, 최대 100자")
     private String description;
 
     @Comment("월드컵 공개 여부")
     @NotNull
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = STRING)
     private VisibleType visibleType;
 
     @Comment("조회수")
@@ -80,6 +82,27 @@ public class WorldCupGame extends TimeBaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
     private WorldCupGameStatistics worldCupGameStatistics;
 
+
+
+    // [월드컵 생성, 수정] 페이지에서 작성한 내용을 반영한다.
+    public void simpleUpdate(String title, String description, VisibleType visibleType) {
+        this.title = title;
+        this.description = description;
+        this.visibleType = visibleType;
+    }
+
+    public static WorldCupGame createNewGame(String title, String description, VisibleType visibleType, long memberId) {
+        return WorldCupGame.builder()
+                .title(title)
+                .description(description)
+                .visibleType(visibleType)
+                .memberId(memberId)
+                .build();
+    }
+
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,5 +117,4 @@ public class WorldCupGame extends TimeBaseEntity {
     public int hashCode() {
         return Objects.hashCode(title);
     }
-
 }

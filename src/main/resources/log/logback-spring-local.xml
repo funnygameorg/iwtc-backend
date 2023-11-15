@@ -124,7 +124,7 @@
     </appender>
 
     <!-- 기본 출력-->
-    <root level="TRACE">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE_ALL" />-
         <appender-ref ref="FILE_WARN" />
         <appender-ref ref="FILE_INFO" />
