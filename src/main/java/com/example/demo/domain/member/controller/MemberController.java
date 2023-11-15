@@ -219,11 +219,16 @@ public class MemberController {
     @GetMapping("/me/summary")
     @ResponseStatus(OK)
     public RestApiResponse getMySummary(
+
             @Parameter(hidden = true)
             @CustomAuthentication(required = false)
-            Optional<MemberDto> optionalMemberDto
+            Optional<MemberDto> optionalMemberDto,
+
+            HttpServletResponse httpServletResponse
     ) {
         MemberDto memberDto = optionalMemberDto.orElseThrow(NotFoundMemberException::new);
+
+        httpServletResponse.setHeader("Cache-Control", "max-age=60");
 
         return RestApiResponse.builder()
                 .code(1)
