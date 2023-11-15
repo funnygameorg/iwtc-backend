@@ -63,6 +63,10 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @Comment("컨텐츠의 승리 점수")
     private int gameScore;
 
+
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -73,8 +77,14 @@ public class WorldCupGameContents extends TimeBaseEntity {
         return Objects.equal(name, other.getName());
     }
 
+
+
+
     @Override
     public int hashCode() {
         return Objects.hashCode(name);
     }
+
+
+
 }

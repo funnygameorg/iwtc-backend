@@ -20,6 +20,8 @@ public class WorldCupGameService {
 
     private final WorldCupGameRepository worldCupGameRepository;
 
+
+
     @Cacheable(
             value = "findWorldCupByPageable",
             key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
@@ -30,7 +32,9 @@ public class WorldCupGameService {
             WorldCupDateRange dateRange,
             String worldCupKeyword)
     {
+
         LocalDate now = LocalDate.now();
+
         LocalDate startDate = calculatePagingStartDate(dateRange, now);
 
         return worldCupGameRepository.getWorldCupGamePage(
@@ -40,6 +44,9 @@ public class WorldCupGameService {
                 pageable
         );
     }
+
+
+
 
     private LocalDate calculatePagingStartDate(WorldCupDateRange dateRange, LocalDate today) {
         return switch (dateRange) {

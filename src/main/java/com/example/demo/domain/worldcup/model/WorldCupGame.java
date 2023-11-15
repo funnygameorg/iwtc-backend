@@ -84,12 +84,16 @@ public class WorldCupGame extends TimeBaseEntity {
 
 
 
+
+
     // [월드컵 생성, 수정] 페이지에서 작성한 내용을 반영한다.
     public void simpleUpdate(String title, String description, VisibleType visibleType) {
         this.title = title;
         this.description = description;
         this.visibleType = visibleType;
     }
+
+
 
     public static WorldCupGame createNewGame(String title, String description, VisibleType visibleType, long memberId) {
         return WorldCupGame.builder()
@@ -99,7 +103,6 @@ public class WorldCupGame extends TimeBaseEntity {
                 .memberId(memberId)
                 .build();
     }
-
 
 
 
@@ -113,8 +116,14 @@ public class WorldCupGame extends TimeBaseEntity {
         return Objects.equal(title, other.getTitle());
     }
 
+
+
     @Override
     public int hashCode() {
         return Objects.hashCode(title);
     }
+
+
+
+
 }

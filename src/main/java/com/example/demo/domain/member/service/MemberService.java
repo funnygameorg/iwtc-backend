@@ -24,6 +24,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
     private final RememberMeRepository rememberMeRepository;
+
+
+
+
     @Transactional
     public void signUp(SignUpRequest request) {
 
@@ -42,7 +46,11 @@ public class MemberService {
         memberRepository.save(newMember);
     }
 
+
+
+
     public SignInResponse signIn(SignInRequest request) {
+
         Long memberId = memberRepository
                 .findByMemberIdByServiceIdAndPassword(request.serviceId(), request.password())
                 .orElseThrow(NotFoundMemberException::new);
@@ -58,18 +66,36 @@ public class MemberService {
                 .build();
     }
 
+
+
+
     public void signOut(String accessToken) {
+
         Long memberId = jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken);
+
         rememberMeRepository.signOut(accessToken, memberId);
+
     }
+
+
+
 
     public VerifyDuplicatedServiceIdResponse existsServiceId(String serviceId) {
+
         Boolean isDuplicated = memberRepository.existsServiceId(serviceId);
+
         return new VerifyDuplicatedServiceIdResponse(isDuplicated);
+
     }
 
+
+
+
     public VerifyDuplicatedNicknameResponse existsNickname(String nickname) {
+
         Boolean isDuplicatedNickname = memberRepository.existsNickname(nickname);
+
         return new VerifyDuplicatedNicknameResponse(isDuplicatedNickname);
+
     }
 }

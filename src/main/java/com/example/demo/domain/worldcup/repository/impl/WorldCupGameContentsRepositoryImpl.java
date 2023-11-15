@@ -14,6 +14,8 @@ public class WorldCupGameContentsRepositoryImpl implements WorldCupGameContentsC
     private final RedisTemplate redisTemplate;
     public static final String WINNER_CONTENTS_SCORE_KEY_FORMAT = "'type':'clear', 'game':%s, 'Contents':%s";
 
+
+
     @Override
     public void saveWinnerContentsScore(
             long worldCupGameId,
@@ -24,4 +26,7 @@ public class WorldCupGameContentsRepositoryImpl implements WorldCupGameContentsC
 
         redisTemplate.opsForValue().increment(redisKey, score);
     }
+
+
+
 }

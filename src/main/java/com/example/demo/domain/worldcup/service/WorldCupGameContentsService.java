@@ -29,19 +29,26 @@ public class WorldCupGameContentsService {
     private final WorldCupGameRepository worldCupGameRepository;
     private final WorldCupGameContentsRepository worldCupGameContentsRepository;
 
+
+
+
+
     public GetAvailableGameRoundsResponse getAvailableGameRounds(Long worldCupGameId) {
 
         if(!worldCupGameRepository.existsWorldCupGame(worldCupGameId)) {
-            throw new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId));
+
+            throw new NotFoundWorldCupGameException(worldCupGameId);
+
         }
 
         GetAvailableGameRoundsProjection result = worldCupGameRepository.getAvailableGameRounds(worldCupGameId);
-
         List<Integer> availableGameRounds = generateAvailableRounds(result.totalContentsSize());
+
+
         if(availableGameRounds.size() == 0) {
-            throw new NoRoundsAvailableToPlayException(
-                    "%s 의 응답으로는 게임을 할 수 없습니다.".formatted(result)
-            );
+
+            throw new NoRoundsAvailableToPlayException(result.toString());
+
         }
 
         worldCupGameRepository.incrementWorldCupGameViews(worldCupGameId);
@@ -51,15 +58,23 @@ public class WorldCupGameContentsService {
                 result.worldCupTitle(),
                 result.worldCupDescription(),
                 availableGameRounds
-                );
+        );
     }
+
+
+
+
+
     // 제공된 컨텐츠 수로 플레이할 수 있는 라운드 수의 크기
     private List<Integer> generateAvailableRounds(Long ContentsSize) {
+
         return stream(WorldCupGameRound.values())
                 .filter(gameRound -> gameRound.isAvailableRound(ContentsSize))
                 .map(availableRound -> availableRound.roundValue)
                 .toList();
+
     }
+
 
 
 
@@ -71,11 +86,13 @@ public class WorldCupGameContentsService {
             int divideContentsSizePerRequest,
             List<Long> alreadyPlayedContentsIds
     ) {
-        WorldCupGame worldCupGame =
-                worldCupGameRepository.findById(worldCupGameId)
-                        .orElseThrow(() -> new NotFoundWorldCupGameException("%s 는 존재하지 않는 월드컵 게임입니다. ".formatted(worldCupGameId)));
+
+        WorldCupGame worldCupGame = worldCupGameRepository
+                .findById(worldCupGameId)
+                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupGameId));
 
         WorldCupGameRound worldCupGameRound = WorldCupGameRound.getRoundFromValue(currentRound);
+
         int wantedContentsSize = worldCupGameRound.getGameContentsSizePerRequest(divideContentsSizePerRequest);
 
         List<GetDividedWorldCupGameContentsProjection> contentsProjections =  worldCupGameRepository
@@ -86,13 +103,19 @@ public class WorldCupGameContentsService {
                 );
 
         if(equalsExpectedContentsSize(wantedContentsSize, contentsProjections.size())) {
-            throw new IllegalWorldCupGameContentsException("조회 컨텐츠 수가 다름 %s, %s"
-                    .formatted(wantedContentsSize, contentsProjections.size()));
+
+            throw new IllegalWorldCupGameContentsException(
+                    "조회 컨텐츠 수가 다름 %s, %s".formatted(wantedContentsSize, contentsProjections.size())
+            );
+
         }
 
         if(containsAlreadyContents(alreadyPlayedContentsIds, contentsProjections)) {
+
                 throw new IllegalWorldCupGameContentsException("컨텐츠 중복 : 이미 플레이한 컨텐츠 %s, 조회 성공 컨텐츠 %s"
-                        .formatted(alreadyPlayedContentsIds, contentsProjections));
+                        .formatted(alreadyPlayedContentsIds, contentsProjections)
+                );
+
         }
 
         return GetWorldCupPlayContentsResponse.fromProjection(
@@ -101,17 +124,38 @@ public class WorldCupGameContentsService {
                 worldCupGameRound.roundValue,
                 contentsProjections
         );
+
     }
+
+
+
+
+
+
+
     // 조회하기를 원하는 컨텐츠 수만큼 조회했는가?
     private boolean equalsExpectedContentsSize(int expectedContentsSize, int actualContentsSize) {
         return expectedContentsSize != actualContentsSize;
     }
+
+
+
+
+
     // 이미 조회한 컨텐츠를 포함하는가?
-    private boolean containsAlreadyContents(List<Long> alreadyPlayedContentsIds, List<GetDividedWorldCupGameContentsProjection> contentsProjections) {
+    private boolean containsAlreadyContents(
+            List<Long> alreadyPlayedContentsIds,
+            List<GetDividedWorldCupGameContentsProjection> contentsProjections
+    ) {
+
         return contentsProjections.stream()
                 .map(GetDividedWorldCupGameContentsProjection::contentsId)
                 .anyMatch(alreadyPlayedContentsIds::contains);
+
     }
+
+    
+
 
 
     public ClearWorldCupGameResponse clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
@@ -119,10 +163,7 @@ public class WorldCupGameContentsService {
         List<WorldCupGameContents> contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
 
         if(contents.size() != 4) {
-            throw new NotFoundWorldCupContentsException(
-                    "존재하지 않는 WorldCupContents 가 존재합니다. 조회하지 못한 컨텐츠 개수 %s"
-                    .formatted(4 - contents.size())
-            );
+            throw new NotFoundWorldCupContentsException("조회 실패 개수 " + (4 - contents.size()));
         }
 
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.firstWinnerContentsId(), 10);
@@ -132,5 +173,7 @@ public class WorldCupGameContentsService {
 
         return ClearWorldCupGameResponse.build(contents);
     }
+
+
 
 }

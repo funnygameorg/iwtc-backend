@@ -24,6 +24,10 @@ public class WorldCupBasedOnAuthService {
     private final WorldCupGameContentsRepository worldCupGameContentsRepository;
 
 
+
+
+
+
     public List<GetWorldCupContentsResponse> getMyWorldCupGameContents(long worldCupId, long memberId) {
 
         WorldCupGame worldCupGame = worldCupGameRepository
@@ -44,6 +48,9 @@ public class WorldCupBasedOnAuthService {
     }
 
 
+
+
+
     @Transactional
     public void createMyWorldCup(CreateWorldCupRequest request, Long memberId) {
 
@@ -56,6 +63,10 @@ public class WorldCupBasedOnAuthService {
         worldCupGameRepository.save(newGame);
 
     }
+
+
+
+
 
     @Transactional
     public void putMyWorldCup(CreateWorldCupRequest request, Long worldCupId, Long memberId) {
@@ -81,12 +92,18 @@ public class WorldCupBasedOnAuthService {
     }
 
 
+
+
+
     // 해당 `WorldCupGame`의 작성자인가?
     private boolean isGameOwner(Long memberId, WorldCupGame worldCupGame) {
 
         return worldCupGame.getMemberId() != memberId;
 
     }
+
+
+
 
     // 이미 존재하는 `WorldCupGame Title`인가?
     private boolean existsGameTitle(CreateWorldCupRequest request) {
