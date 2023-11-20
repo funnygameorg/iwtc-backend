@@ -3,6 +3,7 @@ package com.example.demo.domain.worldcup.controller;
 import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.domain.member.model.Member;
+import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummariesResponse;
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummaryRanksResponse;
@@ -281,6 +282,35 @@ public class WorldCupBasedOnAuthController {
 
         worldCupBasedOnAuthService.createMyWorldCup(
                 request,
+                memberDto.get().getId()
+        );
+
+        return new RestApiResponse(
+                1,
+                "게임 생성",
+                null
+        );
+
+    }
+
+    @ResponseStatus(CREATED)
+    @PostMapping("/{worldCupId}/contents")
+    public RestApiResponse<Object> createMyWorldCupContents(
+            @Valid
+            @RequestBody
+            CreateWorldCupContentsRequest request,
+
+            @PathVariable
+            long worldCupId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
+    ) {
+
+        worldCupBasedOnAuthService.createMyWorldCupContents(
+                request,
+                worldCupId,
                 memberDto.get().getId()
         );
 

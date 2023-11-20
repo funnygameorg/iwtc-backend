@@ -38,7 +38,7 @@ public class StaticMediaFile extends MediaFile {
     private String extension;
 
     @Builder
-    public StaticMediaFile(String originalName, String absoluteName, String extension, long id, String filePath) {
+    public StaticMediaFile(String originalName, String absoluteName, String extension, Long id, String filePath) {
         super(id, filePath, STATIC_MEDIA_FILE);
         this.originalName = originalName;
         this.absoluteName = absoluteName;

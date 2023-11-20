@@ -82,8 +82,9 @@ public class WorldCupGame extends TimeBaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
     private WorldCupGameStatistics worldCupGameStatistics;
 
-
-
+    public boolean isOwner(long memberId) {
+        return memberId == this.memberId;
+    }
 
 
     // [월드컵 생성, 수정] 페이지에서 작성한 내용을 반영한다.

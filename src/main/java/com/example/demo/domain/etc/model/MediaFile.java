@@ -27,4 +27,6 @@ public abstract class MediaFile extends TimeBaseEntity {
     @org.hibernate.annotations.Comment("미디어 파일의 형태 (저장된 파일, 영상 링크...)")
     @Enumerated(value = EnumType.STRING)
     protected FileType fileType;
+
+
 }

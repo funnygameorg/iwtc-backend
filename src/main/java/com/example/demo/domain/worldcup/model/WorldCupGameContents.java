@@ -65,6 +65,22 @@ public class WorldCupGameContents extends TimeBaseEntity {
 
 
 
+    public static WorldCupGameContents createNewContents(
+            WorldCupGame worldCupGame,
+            MediaFile mediaFile,
+            String contentsName,
+            VisibleType visibleType
+    ) {
+        return WorldCupGameContents.builder()
+                .name(contentsName)
+                .worldCupGame(worldCupGame)
+                .mediaFile(mediaFile)
+                .visibleType(visibleType)
+                .gameRank(0)
+                .gameScore(0)
+                .build();
+    }
+
 
 
     @Override

@@ -25,23 +25,8 @@ public record CreateWorldCupRequest (
     @NotNull(message = "월드컵 공개 여부: 필수 값")
     VisibleType visibleType
 
-//    @Schema(description = "월드컵 컨텐츠 리스트")
-//    List<Contents> contentsList
 ) {
 
-    @Schema
-    public record Contents(
-            @Schema(description = "월드컵 컨텐츠 식별자")
-            Long contentsId,
-
-            @Schema(description = "월드컵 컨텐츠 이름")
-            @NotBlank(message = "월드컵 컨텐츠 이름: 필수 값")
-            String name,
-
-            @Schema(description = "월드컵 컨텐츠 파일명")
-            @NotBlank(message = "월드컵 컨텐츠 파일 이름: 필수 값")
-            String filePullName
-    ) { }
 
     public WorldCupGame toEntity(long memberId) {
         return WorldCupGame.createNewGame(
