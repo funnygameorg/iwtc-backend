@@ -5,6 +5,7 @@ import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.ToString;
@@ -54,9 +55,9 @@ public record CreateWorldCupContentsRequest (
             // MOVIE URL TYPE
             String videoStartTime,
 
-            int videoPlayDuration
+            Integer videoPlayDuration
 
-    ) {}
+    ) { }
 
 
 

@@ -31,7 +31,7 @@ spring:
 jwt:
   secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
   token-validity-milli-seconds:
-    access: 20000
+    access: 200000000
     refresh: 21600000
 
 logging:

@@ -30,7 +30,7 @@ public class MediaFileFactory {
             String mediaPath,
             String originalName,
             String absoluteName,
-            int videoPlayDuration,
+            Integer videoPlayDuration,
             String videoStartTime
     ) {
 

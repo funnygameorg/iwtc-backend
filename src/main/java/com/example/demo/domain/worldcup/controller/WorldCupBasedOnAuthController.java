@@ -280,7 +280,7 @@ public class WorldCupBasedOnAuthController {
             Optional<MemberDto> memberDto
     ) {
 
-        worldCupBasedOnAuthService.createMyWorldCup(
+        long worldCupId = worldCupBasedOnAuthService.createMyWorldCup(
                 request,
                 memberDto.get().getId()
         );
@@ -288,7 +288,7 @@ public class WorldCupBasedOnAuthController {
         return new RestApiResponse(
                 1,
                 "게임 생성",
-                null
+                worldCupId
         );
 
     }

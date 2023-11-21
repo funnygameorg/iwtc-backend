@@ -13,6 +13,7 @@ import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
+import com.example.demo.infra.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,9 @@ public class WorldCupBasedOnAuthService {
     private final WorldCupGameRepository worldCupGameRepository;
     private final WorldCupGameContentsRepository worldCupGameContentsRepository;
     private final MediaFileRepository mediaFileRepository;
-
     private final MediaFileFactory mediaFileFactory;
 
+    private final S3Service s3Service;
 
 
 
@@ -60,7 +61,7 @@ public class WorldCupBasedOnAuthService {
 
 
     @Transactional
-    public void createMyWorldCup(CreateWorldCupRequest request, Long memberId) {
+    public long createMyWorldCup(CreateWorldCupRequest request, Long memberId) {
 
         if(existsGameTitle(request)) {
             throw new DuplicatedWorldCupGameTitleException(request.title());
@@ -68,8 +69,9 @@ public class WorldCupBasedOnAuthService {
 
         WorldCupGame newGame = request.toEntity(memberId);
 
-        worldCupGameRepository.save(newGame);
+        WorldCupGame savedGame = worldCupGameRepository.save(newGame);
 
+        return savedGame.getId();
     }
 
 
@@ -157,9 +159,11 @@ public class WorldCupBasedOnAuthService {
                             CreateWorldCupContentsRequest.CreateMediaFileRequest mediaFileRequest =
                                     contentsRequest.createMediaFileRequest();
 
+                            String mediaPath = s3Service.uploadFile(mediaFileRequest.mediaPath());
+
                             MediaFile newMediaFile = mediaFileFactory.createMediaFile(
                                     mediaFileRequest.fileType(),
-                                    mediaFileRequest.mediaPath(),
+                                    mediaPath,
                                     mediaFileRequest.originalName(),
                                     mediaFileRequest.absoluteName(),
                                     mediaFileRequest.videoPlayDuration(),
