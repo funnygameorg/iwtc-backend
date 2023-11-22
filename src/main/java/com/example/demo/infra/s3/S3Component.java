@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -44,28 +45,19 @@ public class S3Component {
 
 
 
-    public String getBase64Object(String objectKey) {
+    public String getObject(String objectKey) throws IOException {
 
         S3Object object = s3Client.getObject(bucket, objectKey);
 
-        log.info(" 조회 오브젝트 {}", object);
 
-        S3ObjectInputStream ois = object.getObjectContent();
-
-        try {
+        try (S3ObjectInputStream ois = object.getObjectContent()) {
 
             byte[] readBytes = ois.readAllBytes();
-            log.info("바이트 결과 {}", readBytes);
 
-            String result = Base64.encodeAsString(readBytes);
-            log.info("이미지 결과 {}", result);
-            return result;
+            return new String(readBytes, UTF_8);
 
         } catch (IOException e) {
-
-            log.info("이미지 실패 {}", e.getMessage());
-            throw new RuntimeException(e);
-
+            throw e;
         }
 
     }

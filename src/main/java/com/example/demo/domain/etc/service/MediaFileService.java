@@ -1,5 +1,8 @@
 package com.example.demo.domain.etc.service;
 
+import com.example.demo.domain.etc.component.MediaFileComponent;
+import com.example.demo.domain.etc.component.MediaFileComponent.AllFieldMediaFileDto;
+import com.example.demo.domain.etc.controller.response.MediaFileResponse;
 import com.example.demo.domain.etc.exception.NotFoundMediaFIleException;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
@@ -8,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -15,15 +20,23 @@ public class MediaFileService {
 
     private final MediaFileRepository mediaFileRepository;
     private final S3Component s3Component;
+    private final MediaFileComponent mediaFileComponent;
 
 
-    public String getMediaFile(long mediaFileId) {
+
+    public MediaFileResponse getMediaFile(long mediaFileId) throws IOException {
+
         MediaFile mediaFile = mediaFileRepository
                 .findById(mediaFileId)
                 .orElseThrow(() -> new NotFoundMediaFIleException(mediaFileId));
 
-        return s3Component.getBase64Object(mediaFile.getFilePath());
+        String mediaFileBody = s3Component.getObject(mediaFile.getFilePath());
 
+        AllFieldMediaFileDto allFieldMediaFileDto = mediaFileComponent.convertToTotalDataMediaFile(mediaFile);
+
+        return MediaFileResponse.fromEntity(allFieldMediaFileDto, mediaFileBody);
     }
+
+
 
 }
