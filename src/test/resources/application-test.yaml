@@ -29,3 +29,16 @@ jwt:
     refresh: 21600000
 logging:
   config: classpath:log/logback-spring-test.xml
+
+cloud:
+  aws:
+    credentials:
+      access-key: localstack-access-key
+      secret-key: localstack-secret-key
+    region:
+      static: us-east-1
+    end-point: http://localstack:4566
+    s3:
+      bucket: media
+    stack:
+      auto: false
