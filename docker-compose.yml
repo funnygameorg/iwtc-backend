@@ -10,10 +10,12 @@ services:
     environment:
       H2_OPTIONS: -ifNotExists
       restart: always
+
   redis:
     image: redis
     ports:
       - "6379:6379"
+
   localstack:
     image: localstack/localstack
     ports:
@@ -21,15 +23,14 @@ services:
     environment:
       - SERVICES=s3
       - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
       - AWS_ACCESS_KEY_ID=localstack-access-key
       - AWS_SECRET_ACCESS_KEY=localstack-secret-key
       - LS_LOG=WARN
       - AWS_DEFAULT_REGION=us-east-1
       - HOSTNAME=localstack
-      - HOSTNAME_EXTERNAL=localstack
-#    command:
-#      - awslocal s3api create-bucket --bucket media
+    volumes:
+      - ./script/create-local-s3-bucket.sh:/etc/localstack/init/ready.d/init-aws.sh
+
   itwc-back:
     container_name: itwc-back
     build:

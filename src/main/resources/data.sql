@@ -9,6 +9,7 @@ VALUES
     ('NOT_FOUND_WORLD_CUP_GAME', 5002, '존재하지 않는 월드컵 게임입니다.', 404),
     ('NOT_FOUND_MEMBER', 5003, '존재하지 않는 사용자입니다.', 404),
     ('NOT_FOUND_WORLD_CUP_GAME_CONTENTS', 5004, '존재하지 않는 월드컵 게임 컨텐츠입니다.', 404),
+    ('NOT_FOUND_MEDIA_FILE', 5005, '존재하지 않는 미디어 파일입니다.', 404),
     ('NO_ROUNDS_AVAILABLE_TO_PLAY', 10001, '컨텐츠 부족으로 플레이할 수 없습니다.', 400),
     ('ILLEGAL_WORLD_CUP_GAME_CONTENTS', 10002, '올바르지 않은 월드컵 게임 컨텐츠입니다.', 400),
     ('EXPIRED_REMEMBER_ME', 10003, '만료된 사용자 인증입니다.', 401),

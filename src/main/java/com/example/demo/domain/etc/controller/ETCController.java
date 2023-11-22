@@ -6,6 +6,8 @@ import com.example.demo.domain.etc.controller.response.MediaFileResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.RestApiResponse;
+import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.service.MediaFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,36 +21,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "ETC", description = "서비스의 여러 기능에 공통적으로 사용되는 API")
-@RestController("/api")
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 class ETCController {
     private final JwtService jwtService;
+    private final MediaFileService mediaFileService;
 
-    @Operation(
-            summary = "미디어 파일 조회",
-            description = "파라미터로 받은 식별자에 해당하는 미디어 파일을 조회합니다. (다건과 단건을 모두 사용)",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "조회 성공"
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "미디어 파일 없음",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = CustomErrorResponse.class)
-                            )
-                    )
-            }
-    )
-    @GetMapping("/media-files/{mediaFileIds}")
-    @ResponseStatus(HttpStatus.OK)
-    public RestApiResponse<List<MediaFileResponse>> getMediaFiles(
-            @PathVariable List<Long> mediaFileIds
-    ) {
-        return new RestApiResponse(1, "", null);
-    }
+//    @Operation(
+//            summary = "미디어 파일 조회",
+//            description = "파라미터로 받은 식별자에 해당하는 미디어 파일을 조회합니다. (다건과 단건을 모두 사용)",
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "200",
+//                            description = "조회 성공"
+//                    ),
+//                    @ApiResponse(
+//                            responseCode = "404",
+//                            description = "미디어 파일 없음",
+//                            content = @Content(
+//                                    mediaType = "application/json",
+//                                    schema = @Schema(implementation = CustomErrorResponse.class)
+//                            )
+//                    )
+//            }
+//    )
+//    @GetMapping("/media-files/{mediaFileIds}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public RestApiResponse<List<MediaFileResponse>> getMediaFiles(
+//            @PathVariable List<Long> mediaFileIds
+//    ) {
+//        return new RestApiResponse(1, "", null);
+//    }
 
     @Operation(
             summary = "컨텐츠(여러 게임, 아이돌...)에 의견 작성",
@@ -112,6 +116,21 @@ class ETCController {
                 1,
                 "엑세스 토큰 생성",
                 new CreateAccessTokenResponse(newAccessToken)
+        );
+    }
+
+    @GetMapping("/media-files/{mediaFileId}")
+    @ResponseStatus(HttpStatus.OK)
+    public RestApiResponse<String> getMediaFile(
+            @PathVariable long mediaFileId
+    ) {
+
+        String result = mediaFileService.getMediaFile(mediaFileId);
+
+        return new RestApiResponse(
+                1,
+                "미디어 파일 조회",
+                result
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.domain.worldcup.service;
 
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.example.demo.domain.etc.component.MediaFileFactory;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
@@ -13,14 +14,16 @@ import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
-import com.example.demo.infra.S3Component;
+import com.example.demo.infra.s3.S3Component;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -159,7 +162,7 @@ public class WorldCupBasedOnAuthService {
                                     contentsRequest.createMediaFileRequest();
 
                             String objectKey = UUID.randomUUID().toString();
-                            s3Service.uploadFile(mediaFileRequest.mediaPath(), objectKey);
+                            s3Service.putObject(mediaFileRequest.mediaPath(), objectKey);
 
                             MediaFile newMediaFile = mediaFileFactory.createMediaFile(
                                     mediaFileRequest.fileType(),
