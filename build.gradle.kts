@@ -26,11 +26,13 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	// validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+
 
 	// ???
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -63,7 +65,6 @@ dependencies {
 	testImplementation("org.testcontainers:testcontainers:1.16.0") // TC 의존성
 	testImplementation("org.testcontainers:junit-jupiter:1.16.2")  // TC 의존성
 	testImplementation("org.testcontainers:jdbc:1.16.0")          // DB와의 JDBC connection
-
 
 	// logack json
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")

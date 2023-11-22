@@ -5,15 +5,31 @@ services:
     image: oscarfonts/h2:latest
     restart: always
     ports:
-      - 1521:1521
-      - 8081:81
+      - "1521:1521"
+      - "8081:81"
     environment:
       H2_OPTIONS: -ifNotExists
       restart: always
   redis:
     image: redis
     ports:
-      - 6379:6379
+      - "6379:6379"
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - AWS_ACCESS_KEY_ID=localstack-access-key
+      - AWS_SECRET_ACCESS_KEY=localstack-secret-key
+      - LS_LOG=WARN
+      - AWS_DEFAULT_REGION=us-east-1
+      - HOSTNAME=localstack
+      - HOSTNAME_EXTERNAL=localstack
+#    command:
+#      - awslocal s3api create-bucket --bucket media
   itwc-back:
     container_name: itwc-back
     build:
