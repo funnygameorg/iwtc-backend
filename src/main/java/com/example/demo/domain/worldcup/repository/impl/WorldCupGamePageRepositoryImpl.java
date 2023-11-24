@@ -1,5 +1,6 @@
 package com.example.demo.domain.worldcup.repository.impl;
 
+import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.worldcup.repository.WorldCupGameCustomRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import jakarta.persistence.EntityManager;
@@ -38,20 +39,28 @@ public class WorldCupGamePageRepositoryImpl {
             LocalDate startDate,
             LocalDate endDate,
             String worldCupGameKeyword,
-            Pageable pageable
+            Pageable pageable,
+            Long memberId
     ) {
         Sort.Order order = getOrderInstance(pageable);
+
 
         String sortCondition = buildSortCondition(order);
 
         String likeKeywordCondition = buildWorldCupGameKeywordCondition(worldCupGameKeyword);
 
-        String sql = getWorldCupGamePagingQuery(likeKeywordCondition, sortCondition);
+        String isMemberCondition = buildMemberIdCondition(memberId);
+
+
+
+        String sql = getWorldCupGamePagingQuery(likeKeywordCondition, isMemberCondition, sortCondition);
+
         return new PageImpl<>(
                 getWorldCupGamePage(startDate, endDate, pageable, sql),
                 pageable,
                 countByCreatedAtBetween(startDate, endDate)
         );
+
     }
 
 
@@ -59,7 +68,7 @@ public class WorldCupGamePageRepositoryImpl {
 
 
     // 메인 게임 컨텐츠 조회 쿼리
-    private List getWorldCupGamePage(LocalDate startDate, LocalDate endDate, Pageable pageable, String sql) {
+    private List  getWorldCupGamePage(LocalDate startDate, LocalDate endDate, Pageable pageable, String sql) {
 
         return em.createNativeQuery(sql, "FindWorldCupGamePageProjectionMapping")
                 .setParameter(WORLD_CUP_GAME_START_DATE, startDate)
@@ -91,6 +100,18 @@ public class WorldCupGamePageRepositoryImpl {
     }
 
 
+
+    // 검색 키워드를 제공하면 쿼리문에 대치할 수 있는 조건문을 반환
+    private String buildMemberIdCondition(Long memberId) {
+
+        String isMemberIdDynamicQuery = "";
+
+        if(memberId != null) {
+            isMemberIdDynamicQuery = "AND wcg.member_id = " + memberId;
+        }
+
+        return isMemberIdDynamicQuery;
+    }
 
 
 
@@ -184,10 +205,11 @@ public class WorldCupGamePageRepositoryImpl {
             
             WHERE DATE(wcg.created_at) BETWEEN :startDate AND :endDate 
             %s
+            %s
             GROUP BY wcg.id 
             %s
             LIMIT :pageSize OFFSET :offset
-            """.formatted(condition[0], condition[1]);
+            """.formatted(condition[0], condition[1], condition[2]);
     }
 
 

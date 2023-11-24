@@ -22,16 +22,18 @@ public class WorldCupGameService {
 
 
 
-    @Cacheable(
-            value = "findWorldCupByPageable",
-            key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
-            unless = "#result.isEmpty()"
-    )
+    // TODO : 캐시 파라미터 수정하기
+//    @Cacheable(
+//            value = "findWorldCupByPageable",
+//            key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
+//            unless = "#result.isEmpty()"
+//    )
     public Page<GetWorldCupGamePageProjection> findWorldCupByPageable(
             Pageable pageable,
             WorldCupDateRange dateRange,
-            String worldCupKeyword)
-    {
+            String worldCupKeyword,
+            Long memberId
+    ) {
 
         LocalDate now = LocalDate.now();
 
@@ -41,7 +43,8 @@ public class WorldCupGameService {
                 startDate,
                 now,
                 worldCupKeyword,
-                pageable
+                pageable,
+                memberId
         );
     }
 

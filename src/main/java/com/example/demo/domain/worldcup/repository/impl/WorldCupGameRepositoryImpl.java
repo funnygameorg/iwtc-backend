@@ -41,9 +41,10 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
             LocalDate startDate,
             LocalDate endDate,
             String worldCupGameKeyword,
-            Pageable pageable
+            Pageable pageable,
+            Long memberId
     ) {
-        return worldCupGamePageRepositoryImpl.getWorldCupGamePage(startDate, endDate, worldCupGameKeyword, pageable);
+        return worldCupGamePageRepositoryImpl.getWorldCupGamePage(startDate, endDate, worldCupGameKeyword, pageable, memberId);
     }
 
     @Override
