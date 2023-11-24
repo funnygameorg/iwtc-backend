@@ -101,7 +101,7 @@ public class WorldCupBasedOnAuthControllerTest extends WebMvcBaseTest {
                         .createMediaFileRequest(
                                 CreateMediaFileRequest.builder()
                                         .fileType(FileType.INTERNET_VIDEO_URL)
-                                        .mediaPath("https://www.naver.com/apples/13")
+                                        .mediaData("https://www.naver.com/apples/13")
                                         .videoPlayDuration(3)
                                         .videoStartTime("00011")
                                         .build()
@@ -114,7 +114,7 @@ public class WorldCupBasedOnAuthControllerTest extends WebMvcBaseTest {
                         .createMediaFileRequest(
                                 CreateMediaFileRequest.builder()
                                         .fileType(FileType.INTERNET_VIDEO_URL)
-                                        .mediaPath("https://www.naver.com/apples/13")
+                                        .mediaData("https://www.naver.com/apples/13")
                                         .videoPlayDuration(3)
                                         .videoStartTime("00011")
                                         .build()

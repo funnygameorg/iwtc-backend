@@ -108,7 +108,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                     SELECT 
                         wcgc.ID AS ID, 
                         wcgc.NAME AS CONTENTS_NAME,  
-                        amf.FILE_PATH AS FILE_PATH,
+                        amf.ID AS MEDIA_FILE_ID,
                         amf.FILE_TYPE AS FILE_TYPE,
                         amu.VIDEO_START_TIME AS VIDEO_START_TIME,
                         amu.VIDEO_PLAY_DURATION AS VIDEO_PLAY_DURATION 
@@ -140,7 +140,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                         new GetDividedWorldCupGameContentsProjection(
                                 Long.parseLong(String.valueOf(tuple.get("ID"))),
                                 (String) tuple.get("CONTENTS_NAME"),
-                                (String) tuple.get("FILE_PATH"),
+                                (Long) tuple.get("MEDIA_FILE_ID"),
                                 (String) tuple.get("FILE_TYPE"),
                                 (String) tuple.get("VIDEO_START_TIME"),
                                 (Integer) tuple.get("VIDEO_PLAY_DURATION")

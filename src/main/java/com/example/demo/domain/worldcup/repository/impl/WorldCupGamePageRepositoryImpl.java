@@ -145,11 +145,15 @@ public class WorldCupGamePageRepositoryImpl {
 
     private String getWorldCupGamePagingQuery(String... condition) {
         return """
-            SELECT wcg.id AS id, wcg.title AS title, wcg.description AS description, 
-            wcgc_max.name AS contentsName1, mf_max.file_path AS filePath1, 
-            wcgc_min.name AS contentsName2, mf_min.file_path AS filePath2 
+            SELECT 
+                wcg.id AS id, 
+                wcg.title AS title, 
+                wcg.description AS description, 
+                wcgc_max.name AS contentsName1, 
+                mf_max.id AS mediaFileId1, 
+                wcgc_min.name AS contentsName2, 
+                mf_min.id AS mediaFileId2 
             FROM world_cup_game AS wcg 
-            
             INNER JOIN world_cup_game_contents AS wcgc_max ON wcgc_max.id = (
                 SELECT MAX(inner_wcgc.id) AS id 
                 FROM world_cup_game_contents AS inner_wcgc 

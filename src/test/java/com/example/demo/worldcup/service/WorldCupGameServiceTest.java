@@ -62,14 +62,12 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 
             StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("filePath")
+                    .objectKey("filePath")
                     .extension("extension")
                     .build();
             StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
 
@@ -124,26 +122,22 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 
             StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
             StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
             StaticMediaFile mediaFile3 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
             StaticMediaFile mediaFile4 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
 
@@ -217,20 +211,17 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 
             StaticMediaFile mediaFile1 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("media-filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
             StaticMediaFile mediaFile2 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("media-filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
             StaticMediaFile mediaFile3 = StaticMediaFile.builder()
                     .originalName("fileOriginalName")
-                    .absoluteName("fileAbsoluteName")
-                    .filePath("media-filePath")
+                    .objectKey("fileAbsoluteName")
                     .extension("extension")
                     .build();
 

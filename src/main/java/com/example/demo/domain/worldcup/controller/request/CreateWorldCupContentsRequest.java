@@ -45,12 +45,10 @@ public record CreateWorldCupContentsRequest (
 
             @Schema(description = "월드컵 컨텐츠 파일명")
             @NotBlank(message = "월드컵 컨텐츠 파일 이름: 필수 값")
-            String mediaPath,
+            String mediaData,
 
             // STATIC FILE TYPE
             String originalName,
-
-            String absoluteName,
 
             // MOVIE URL TYPE
             String videoStartTime,

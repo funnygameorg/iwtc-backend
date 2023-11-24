@@ -28,7 +28,9 @@ public enum CustomErrorCode {
     ILLEGAL_WORLD_CUP_GAME_CONTENTS,
     NOT_OWNER_GAME,
     NOT_FOUND_WORLD_CUP_GAME_CONTENTS,
-    EXPIRED_REMEMBER_ME;
+    EXPIRED_REMEMBER_ME,
+
+    NOT_EXISTS_S3_MEDIA_FILE;
 
     private int code;
     private String message;

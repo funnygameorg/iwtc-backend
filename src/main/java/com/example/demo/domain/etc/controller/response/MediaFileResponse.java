@@ -9,9 +9,8 @@ import java.time.LocalDateTime;
 public record MediaFileResponse(
         long mediaFileId,
         FileType fileType,
-        String mediaPath,
+        String mediaData,
         String originalName,
-        String absoluteName,
         String videoStartTime,
         Integer videoPlayDuration,
         LocalDateTime createdAt,
@@ -28,7 +27,6 @@ public record MediaFileResponse(
                 mediaFile.fileType(),
                 mediaFileBody,
                 mediaFile.originalName(),
-                mediaFile.absoluteName(),
                 mediaFile.videoStartTime(),
                 mediaFile.videoPlayDuration(),
                 mediaFile.createdAt(),

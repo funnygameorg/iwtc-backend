@@ -5,7 +5,7 @@ public record GetWorldCupGamePageProjection(
         String title,
         String description,
         String contentsName1,
-        String filePath1,
+        Long mediaFileId1,
         String contentsName2,
-        String filePath2
+        Long mediaFileId2
 ) {}

@@ -45,7 +45,7 @@ public class S3Component {
 
 
 
-    public String getObject(String objectKey) throws IOException {
+    public String getObject(String objectKey) throws IOException, AmazonS3Exception {
 
         S3Object object = s3Client.getObject(bucket, objectKey);
 
@@ -55,9 +55,6 @@ public class S3Component {
             byte[] readBytes = ois.readAllBytes();
 
             return new String(readBytes, UTF_8);
-
-        } catch (IOException e) {
-            throw e;
         }
 
     }

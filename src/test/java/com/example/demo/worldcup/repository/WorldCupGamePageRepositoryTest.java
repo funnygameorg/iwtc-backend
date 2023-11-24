@@ -23,6 +23,9 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.example.demo.domain.worldcup.model.vo.VisibleType.PRIVATE;
+import static com.example.demo.domain.worldcup.model.vo.WorldCupGameRound.*;
+import static com.example.demo.domain.worldcup.model.vo.WorldCupGameRound.ROUND_16;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.*;
@@ -56,8 +59,8 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
                     .mapToObj(idx -> createWorldCupGame(
                             "testTitle" + idx,
                             null,
-                            WorldCupGameRound.ROUND_16,
-                            VisibleType.PRIVATE, idx)
+                            ROUND_16,
+                            PRIVATE, idx)
                     )
                     .toList();
 
@@ -110,16 +113,16 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
                     () -> assertThat(firstElement.title()).isEqualTo(worldCupGames.get(1).getTitle()),
                     () -> assertThat(firstElement.contentsName1()).isEqualTo(worldCupGameContentsList2.get(1).getName()),
                     () -> assertThat(firstElement.contentsName2()).isEqualTo(worldCupGameContentsList2.get(0).getName()),
-                    () -> assertThat(firstElement.filePath1()).isEqualTo(mediaFiles.get(5).getFilePath()),
-                    () -> assertThat(firstElement.filePath2()).isEqualTo(mediaFiles.get(4).getFilePath()),
+                    () -> assertThat(firstElement.mediaFileId1()).isEqualTo(7),
+                    () -> assertThat(firstElement.mediaFileId2()).isEqualTo(6),
 
                     () -> assertThat(secondElement.id()).isEqualTo(1),
                     () -> assertThat(secondElement.title()).isEqualTo(worldCupGames.get(0).getTitle()),
                     () -> assertThat(secondElement.description()).isEqualTo(worldCupGames.get(0).getDescription()),
                     () -> assertThat(secondElement.contentsName1()).isEqualTo(worldCupGameContentsList1.get(4).getName()),
                     () -> assertThat(secondElement.contentsName2()).isEqualTo(worldCupGameContentsList1.get(3).getName()),
-                    () -> assertThat(secondElement.filePath1()).isEqualTo(mediaFiles.get(3).getFilePath()),
-                    () -> assertThat(secondElement.filePath2()).isEqualTo(mediaFiles.get(2).getFilePath())
+                    () -> assertThat(secondElement.mediaFileId1()).isEqualTo(5),
+                    () -> assertThat(secondElement.mediaFileId2()).isEqualTo(4)
             );
 
         }
@@ -159,8 +162,20 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
         @DisplayName(SUCCESS_PREFIX + "게임 1개 조회, 키워드 적용")
         public void success3(String worldCupGameKeyword) {
             // given
-            WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
-            WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
+            WorldCupGame game1 = createWorldCupGame(
+                    "한국 드라마 월드컵(2000~23.10.04)",
+                    "2000년부터 현재까지 한국드라마...",
+                    ROUND_16,
+                    PRIVATE,
+                    1
+            );
+            WorldCupGame game2 = createWorldCupGame(
+                    "2022 좋은 노트북 월드컵",
+                    "2022년 월드컵 []",
+                    ROUND_4,
+                    PRIVATE,
+                    1
+            );
 
             List<StaticMediaFile> mediaFiles = range(1,7)
                     .mapToObj(idx ->
@@ -173,7 +188,11 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
                     .toList();
 
             List<WorldCupGameContents> worldCupGameContentsList = range(1, 7)
-                    .mapToObj(idx -> createGameContents(game1, "컨텐츠" + idx, mediaFiles.get(idx - 1)))
+                    .mapToObj(idx -> createGameContents(
+                            game1,
+                            "컨텐츠" + idx,
+                            mediaFiles.get(idx - 1))
+                    )
                     .toList();
 
             worldCupGameRepository.saveAll(List.of(game1, game2));
@@ -204,8 +223,8 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
                     () -> assertThat(firstElement.description()).isEqualTo(game1.getDescription()),
                     () -> assertThat(firstElement.contentsName1()).isEqualTo(worldCupGameContentsList.get(5).getName()),
                     () -> assertThat(firstElement.contentsName2()).isEqualTo(worldCupGameContentsList.get(4).getName()),
-                    () -> assertThat(firstElement.filePath1()).isEqualTo(mediaFiles.get(5).getFilePath()),
-                    () -> assertThat(firstElement.filePath2()).isEqualTo(mediaFiles.get(4).getFilePath())
+                    () -> assertThat(firstElement.mediaFileId1()).isEqualTo(6),
+                    () -> assertThat(firstElement.mediaFileId2()).isEqualTo(5)
             );
 
         }
@@ -221,8 +240,8 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
         @DisplayName(SUCCESS_PREFIX + "게임 0개 조회, 키워드 적용")
         public void success4(String worldCupGameKeyword) {
             // given
-            WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", WorldCupGameRound.ROUND_16, VisibleType.PRIVATE, 1);
-            WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", WorldCupGameRound.ROUND_4, VisibleType.PRIVATE, 1);
+            WorldCupGame game1 = createWorldCupGame("한국 드라마 월드컵(2000~23.10.04)", "2000년부터 현재까지 한국드라마...", ROUND_16, PRIVATE, 1);
+            WorldCupGame game2 = createWorldCupGame("2022 좋은 노트북 월드컵", "2022년 월드컵 []", ROUND_4, PRIVATE, 1);
 
             List<StaticMediaFile> mediaFiles = range(1,7)
                     .mapToObj(idx ->
@@ -291,8 +310,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
     {
         return StaticMediaFile.builder()
                 .originalName(fileOriginalName)
-                .absoluteName(fileAbsoluteName)
-                .filePath(filePath)
+                .objectKey(filePath)
                 .extension(extension)
                 .build();
     }
