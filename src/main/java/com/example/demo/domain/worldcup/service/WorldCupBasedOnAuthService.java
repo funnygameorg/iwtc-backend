@@ -1,12 +1,12 @@
 package com.example.demo.domain.worldcup.service;
 
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.example.demo.domain.etc.component.MediaFileFactory;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.component.RandomDataGeneratorInterface;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
+import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.exception.DuplicatedWorldCupGameTitleException;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -185,6 +184,18 @@ public class WorldCupBasedOnAuthService {
                 ).toList();
 
     }
+
+
+
+
+    public List<GetMyWorldCupResponse> getMyWorldCupContentsList(Long memberId) {
+
+        return worldCupGameRepository.findAllByMemberId(memberId).stream()
+                .map(GetMyWorldCupResponse::fromEntity)
+                .toList();
+
+    }
+
 
 
 }

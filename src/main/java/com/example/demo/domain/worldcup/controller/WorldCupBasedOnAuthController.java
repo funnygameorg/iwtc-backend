@@ -2,13 +2,9 @@ package com.example.demo.domain.worldcup.controller;
 
 import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.memberresolver.MemberDto;
-import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
-import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummariesResponse;
-import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummaryRanksResponse;
-import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
-import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
+import com.example.demo.domain.worldcup.controller.response.*;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.worldcup.controller.vo.WorldCupSort;
@@ -28,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.*;
 
 @Tag(
         name = "WorldCup based on auth",
@@ -318,6 +313,23 @@ public class WorldCupBasedOnAuthController {
                 1,
                 "게임 생성",
                 null
+        );
+
+    }
+
+
+    @ResponseStatus(OK)
+    @GetMapping
+    public RestApiResponse<List<GetMyWorldCupResponse>> getMyWorldCupContents(
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
+    ) {
+
+        return new RestApiResponse(
+                1,
+                "자신의 게임 리스트 조회",
+                worldCupBasedOnAuthService.getMyWorldCupContentsList(memberDto.get().getId())
         );
 
     }
