@@ -65,6 +65,9 @@ public class WorldCupGameController {
             @RequestParam(name = "keyword", required = false)
             String worldCupKeyword,
 
+            @RequestParam(name = "memberId", required = false)
+            Long memberId,
+
             @PageableDefault(
                     size = 25,
                     direction = Sort.Direction.DESC,
@@ -74,7 +77,8 @@ public class WorldCupGameController {
         Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
                 pageable,
                 dateRange,
-                worldCupKeyword
+                worldCupKeyword,
+                memberId
         );
         return new RestApiResponse(1, "월드컵 페이지 조회 성공", result);
     }

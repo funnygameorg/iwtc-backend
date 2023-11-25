@@ -27,9 +27,9 @@ import static lombok.AccessLevel.PROTECTED;
                                 @ColumnResult(name = "title", type = String.class),
                                 @ColumnResult(name = "description", type = String.class),
                                 @ColumnResult(name = "contentsName1", type = String.class),
-                                @ColumnResult(name = "filePath1", type = String.class),
+                                @ColumnResult(name = "mediaFileId1", type = Long.class),
                                 @ColumnResult(name = "contentsName2", type = String.class),
-                                @ColumnResult(name = "filePath2", type = String.class)
+                                @ColumnResult(name = "mediaFileId2", type = Long.class)
                         }
                 )
         }

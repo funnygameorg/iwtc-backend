@@ -16,6 +16,7 @@ VALUES
     ('REQUEST_WITH_BLACK_LIST_TOKEN', 10004, '사용할 수 없는 토큰입니다.', 401),
     ('NOT_SUPPORTED_GAME_ROUND', 10005, '진행할 수 없는 게임 라운드입니다.', 400),
     ('NOT_OWNER_GAME', 10006, '월드컵 게임 작성자가 아닙니다.', 400),
+    ('NOT_EXISTS_S3_MEDIA_FILE', 10007, '미디어 파일 저장소에 문제가 생겼습니다.', 400),
     ('SERVER_INTERNAL_ERROR', 444, '서버에 문제가 생겼습니다.', 500);
 
 
@@ -67,7 +68,7 @@ VALUES
     (DATEADD('MONTH', -2, NOW()), '2023 기준 20대가 선호하는 월드컵', 1, false, '재미있는 게임 월드컵', null, 15, 'PUBLIC'),
     (DATEADD('MONTH', -2, NOW()), null, 1, false, '맛있는 음식 월드컵', null, 15, 'PUBLIC');
 
-INSERT INTO `MEDIA_FILE`(`file_path`, `file_type`, `d_type`, `created_at`, `updated_at`)
+INSERT INTO `MEDIA_FILE`(`object_key`, `file_type`, `d_type`, `created_at`, `updated_at`)
 VALUES
     ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
@@ -83,15 +84,15 @@ VALUES
     ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('/f2fawfawf?=wxz', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()));
 
-INSERT INTO `STATIC_MEDIA_FILE` (`absolute_name`, `extension`, `original_name`, `id`)
+INSERT INTO `STATIC_MEDIA_FILE` (`extension`, `original_name`, `id`)
 VALUES
-    ('absoulteName1', 'png', 'originalName1', 1),
-    ('absoulteName2', 'png', 'originalName2', 2),
-    ('absoulteName3', 'jpeg', 'originalName3', 3),
-    ('absoulteName4', 'gif', 'originalName4', 4),
-    ('absoulteName5', 'gif', 'originalName5', 8),
-    ('absoulteName6', 'gif', 'originalName6', 9),
-    ('absoulteName7', 'JPEG', 'originalName7', 12);
+    ('png', 'originalName1', 1),
+    ('png', 'originalName2', 2),
+    ('jpeg', 'originalName3', 3),
+    ('gif', 'originalName4', 4),
+    ('gif', 'originalName5', 8),
+    ('gif', 'originalName6', 9),
+    ('JPEG', 'originalName7', 12);
 
 INSERT INTO `INTERNET_VIDEO_URL`(`id`, `is_playable_video`, `video_start_time`, `video_play_duration`)
 VALUES

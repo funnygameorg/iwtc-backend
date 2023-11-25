@@ -36,8 +36,8 @@ public class InternetVideoUrl extends MediaFile {
     private int videoPlayDuration;
 
     @Builder
-    private InternetVideoUrl(Long id, String filePath, boolean isPlayableVideo, String videoStartTime, int videoPlayDuration) {
-        super(id, filePath, INTERNET_VIDEO_URL);
+    private InternetVideoUrl(Long id, String filePath, boolean isPlayableVideo, String videoStartTime, int videoPlayDuration, String bucketName) {
+        super(id, filePath, INTERNET_VIDEO_URL, bucketName);
         this.isPlayableVideo = isPlayableVideo;
         this.videoStartTime = videoStartTime;
         this.videoPlayDuration = videoPlayDuration;

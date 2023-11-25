@@ -26,9 +26,8 @@ public class MediaFileComponent {
         return new AllFieldMediaFileDto(
                 mediaFile.getId(),
                 mediaFile.getFileType(),
-                mediaFile.getFilePath(),
+                mediaFile.getObjectKey(),
                 mediaFile instanceof StaticMediaFile ? ((StaticMediaFile)mediaFile).getOriginalName() : null,
-                mediaFile instanceof StaticMediaFile ? ((StaticMediaFile)mediaFile).getAbsoluteName() : null,
                 mediaFile instanceof InternetVideoUrl ? ((InternetVideoUrl)mediaFile).getVideoStartTime() : null,
                 mediaFile instanceof InternetVideoUrl ? ((InternetVideoUrl)mediaFile).getVideoPlayDuration() : null,
                 mediaFile.getCreatedAt(),
@@ -42,9 +41,9 @@ public class MediaFileComponent {
     public record AllFieldMediaFileDto (
         long id,
         FileType fileType,
+        
         String mediaPath,
         String originalName,
-        String absoluteName,
         String videoStartTime,
         Integer videoPlayDuration,
         LocalDateTime createdAt,

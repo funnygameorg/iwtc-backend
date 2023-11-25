@@ -111,9 +111,8 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
                     .mapToObj(idx -> StaticMediaFile.builder()
                             .originalName("original")
-                            .absoluteName("absolute")
                             .extension(".png")
-                            .filePath("filePath")
+                            .objectKey("filePath")
                             .build() )
                     .toList();
             List<WorldCupGameContents> contentsList = IntStream.range(1,4)
@@ -213,8 +212,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
         List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
                 .mapToObj(idx -> StaticMediaFile.builder()
                         .originalName("original")
-                        .filePath("filePath")
-                        .absoluteName("absolute")
+                        .objectKey("filePath")
                         .extension(".png")
                         .build())
                 .toList();

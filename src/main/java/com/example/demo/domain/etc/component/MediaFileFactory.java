@@ -18,45 +18,42 @@ public class MediaFileFactory {
      * `mediaFile`의 모든 구현체에 생성에 필요한 모든 정보를 받습니다.
      *
      * @param fileType 생성되는 미디어 파일의 타입
-     * @param mediaPath 미디어 파일 주소
+     * @param objectKey 오브젝트 키
      * @param originalName 사용자가 제공한 원래 파일 이름 (`staticMediaFile`에서 사용)
-     * @param absoluteName S3에 저장되는 파일 이름 (`staticMediaFile`에서 사용)
      * @param videoPlayDuration 영상 반복 구간 (`InternetVideoUrl`에서 사용)
      * @param videoStartTime 영상 시작 시간 (`InternetVideoUrl`에서 사용)
      * @return `MediaFile` 구현체
      */
     public MediaFile createMediaFile(
             FileType fileType,
-            String mediaPath,
+            String objectKey,
             String originalName,
-            String absoluteName,
             Integer videoPlayDuration,
             String videoStartTime
     ) {
 
         return switch (fileType) {
-            case STATIC_MEDIA_FILE -> createStaticMediaFile(mediaPath, originalName, absoluteName);
-            case INTERNET_VIDEO_URL -> createInternetVideoUrl(mediaPath, videoPlayDuration, videoStartTime);
+            case STATIC_MEDIA_FILE -> createStaticMediaFile(objectKey, originalName);
+            case INTERNET_VIDEO_URL -> createInternetVideoUrl(objectKey, videoPlayDuration, videoStartTime);
         };
 
     }
 
 
 
-    private StaticMediaFile createStaticMediaFile(String mediaPath, String originalName, String absoluteName) {
+    private StaticMediaFile createStaticMediaFile(String objectKey, String originalName) {
         return StaticMediaFile.builder()
-                .filePath(mediaPath)
+                .objectKey(objectKey)
                 .extension("tempExtension")
                 .originalName(originalName)
-                .absoluteName(absoluteName)
                 .build();
     }
 
 
 
-    private InternetVideoUrl createInternetVideoUrl(String mediaPath, int videoPlayDuration, String videoStartTime) {
+    private InternetVideoUrl createInternetVideoUrl(String objectKey, int videoPlayDuration, String videoStartTime) {
         return InternetVideoUrl.builder()
-                .filePath(mediaPath)
+                .filePath(objectKey)
                 .isPlayableVideo(true)
                 .videoPlayDuration(videoPlayDuration)
                 .videoStartTime(videoStartTime)

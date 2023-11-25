@@ -16,7 +16,8 @@ public interface WorldCupGameCustomRepository {
             LocalDate startDate,
             LocalDate endDate,
             String worldCupGameKeyword,
-            Pageable pageable
+            Pageable pageable,
+            Long memberId
     );
 
     Boolean existsWorldCupGame(Long worldCupGameId);

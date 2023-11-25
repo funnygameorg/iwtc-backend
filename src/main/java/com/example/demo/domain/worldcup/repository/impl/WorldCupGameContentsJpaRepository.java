@@ -12,4 +12,6 @@ public interface WorldCupGameContentsJpaRepository extends JpaRepository<WorldCu
 
     @EntityGraph(attributePaths = {"mediaFile"})
     List<WorldCupGameContents> findAllByWorldCupGame(WorldCupGame worldCupGame);
+
+
 }

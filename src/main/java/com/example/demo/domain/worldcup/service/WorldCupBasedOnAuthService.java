@@ -1,11 +1,12 @@
 package com.example.demo.domain.worldcup.service;
 
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.example.demo.domain.etc.component.MediaFileFactory;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
+import com.example.demo.domain.worldcup.component.RandomDataGeneratorInterface;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
+import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.exception.DuplicatedWorldCupGameTitleException;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -33,6 +33,7 @@ public class WorldCupBasedOnAuthService {
     private final MediaFileRepository mediaFileRepository;
     private final MediaFileFactory mediaFileFactory;
 
+    private final RandomDataGeneratorInterface randomDataGenerator;
     private final S3Component s3Service;
 
 
@@ -159,30 +160,42 @@ public class WorldCupBasedOnAuthService {
                 .map(contentsRequest -> {
 
                     CreateWorldCupContentsRequest.CreateMediaFileRequest mediaFileRequest =
-                                    contentsRequest.createMediaFileRequest();
+                            contentsRequest.createMediaFileRequest();
 
-                            String objectKey = UUID.randomUUID().toString();
-                            s3Service.putObject(mediaFileRequest.mediaPath(), objectKey);
+                    String objectKey = randomDataGenerator.generate();
 
-                            MediaFile newMediaFile = mediaFileFactory.createMediaFile(
-                                    mediaFileRequest.fileType(),
-                                    objectKey,
-                                    mediaFileRequest.originalName(),
-                                    mediaFileRequest.absoluteName(),
-                                    mediaFileRequest.videoPlayDuration(),
-                                    mediaFileRequest.videoStartTime()
-                            );
+                    s3Service.putObject(mediaFileRequest.mediaData(), objectKey);
 
-                            return WorldCupGameContents.createNewContents(
-                                    worldCupGame,
-                                    newMediaFile,
-                                    contentsRequest.contentsName(),
-                                    contentsRequest.visibleType()
-                            );
-                        }
+                    MediaFile newMediaFile = mediaFileFactory.createMediaFile(
+                            mediaFileRequest.fileType(),
+                            objectKey,
+                            mediaFileRequest.originalName(),
+                            mediaFileRequest.videoPlayDuration(),
+                            mediaFileRequest.videoStartTime()
+                    );
+
+                    return WorldCupGameContents.createNewContents(
+                            worldCupGame,
+                            newMediaFile,
+                            contentsRequest.contentsName(),
+                            contentsRequest.visibleType()
+                    );
+                }
                 ).toList();
 
     }
+
+
+
+
+    public List<GetMyWorldCupResponse> getMyWorldCupContentsList(Long memberId) {
+
+        return worldCupGameRepository.findAllByMemberId(memberId).stream()
+                .map(GetMyWorldCupResponse::fromEntity)
+                .toList();
+
+    }
+
 
 
 }
