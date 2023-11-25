@@ -6,8 +6,10 @@ import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.component.RandomDataGeneratorInterface;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
+import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
+import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
 import com.example.demo.domain.worldcup.exception.DuplicatedWorldCupGameTitleException;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
 import com.example.demo.domain.worldcup.exception.NotOwnerGameException;
@@ -188,12 +190,45 @@ public class WorldCupBasedOnAuthService {
 
 
 
-    public List<GetMyWorldCupResponse> getMyWorldCupContentsList(Long memberId) {
+    public List<GetMyWorldCupResponse> getMyWorldCupList(Long memberId) {
 
         return worldCupGameRepository.findAllByMemberId(memberId).stream()
                 .map(GetMyWorldCupResponse::fromEntity)
                 .toList();
 
+    }
+
+
+
+    public GetWorldCupResponse getMyWorldCup(long worldCupId, Long memberId) {
+
+        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
+
+        if(!worldCupGame.isOwner(memberId)) {
+            throw new NotOwnerGameException();
+        }
+
+        return GetWorldCupResponse.fromEntity(worldCupGame);
+
+    }
+
+
+
+
+    public List<GetMyWorldCupContentsResponse> getMyWorldCupContentsList(Long worldCupId, Long memberId) {
+
+        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
+
+        if(!worldCupGame.isOwner(memberId)) {
+            throw new NotOwnerGameException();
+        }
+
+        return worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame)
+                .stream()
+                .map(GetMyWorldCupContentsResponse::fromEntity)
+                .toList();
     }
 
 

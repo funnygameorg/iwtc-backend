@@ -70,7 +70,7 @@ public class WorldCupBasedOnAuthController {
             }
     )
     @GetMapping("/{worldCupId}/contents")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(OK)
     public RestApiResponse<List<GetWorldCupContentsResponse>> getMyWorldCupGameContentsList(
             @PathVariable
             long worldCupId,
@@ -115,11 +115,19 @@ public class WorldCupBasedOnAuthController {
             }
     )
     @GetMapping("/{worldCupId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(OK)
     public RestApiResponse<GetWorldCupResponse> getWorldCup(
-            @PathVariable long worldCupId
+            @PathVariable long worldCupId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
     ) {
-        return new RestApiResponse(1, "", null);
+        return new RestApiResponse(
+                1,
+                "자신의 월드컵 조회",
+                worldCupBasedOnAuthService.getMyWorldCup(worldCupId, memberDto.get().getId())
+        );
     }
 
     @Operation(
@@ -146,7 +154,7 @@ public class WorldCupBasedOnAuthController {
             }
     )
     @GetMapping("/summary-ranks")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(OK)
     public RestApiResponse<List<GetMyWorldCupSummaryRanksResponse>> getMyWorldCupSummaryRanks(
             @RequestParam(name = "sort") WorldCupSort sort
     ) {
@@ -170,7 +178,7 @@ public class WorldCupBasedOnAuthController {
             }
     )
     @GetMapping("/summaries")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(OK)
     public RestApiResponse<List<GetMyWorldCupSummariesResponse>> getMyWorldCupSummaries() {
         return new RestApiResponse(1, "", null);
     }
@@ -320,7 +328,7 @@ public class WorldCupBasedOnAuthController {
 
     @ResponseStatus(OK)
     @GetMapping
-    public RestApiResponse<List<GetMyWorldCupResponse>> getMyWorldCupContents(
+    public RestApiResponse<List<GetMyWorldCupResponse>> getMyWorldCups(
             @Parameter(hidden = true)
             @CustomAuthentication
             Optional<MemberDto> memberDto
@@ -329,8 +337,30 @@ public class WorldCupBasedOnAuthController {
         return new RestApiResponse(
                 1,
                 "자신의 게임 리스트 조회",
-                worldCupBasedOnAuthService.getMyWorldCupContentsList(memberDto.get().getId())
+                worldCupBasedOnAuthService.getMyWorldCupList(memberDto.get().getId())
         );
 
     }
+
+
+    @ResponseStatus(OK)
+    @GetMapping("/{worldCupId}/manage-contents")
+    public RestApiResponse<List<GetMyWorldCupContentsResponse>> getMyWorldCupContentList(
+            @PathVariable
+            Long worldCupId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
+    ) {
+
+        return new RestApiResponse(
+                1,
+                "자신의 게임 컨텐츠 리스트 조회",
+                worldCupBasedOnAuthService.getMyWorldCupContentsList(worldCupId, memberDto.get().getId())
+        );
+
+    }
+
+
 }

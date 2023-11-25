@@ -130,4 +130,9 @@
         <appender-ref ref="FILE_INFO" />
         <appender-ref ref="FILE_ERROR" />
     </root>
+
+    <!-- S3와 통신할 때 정보 출력에 사용, 데이터가 너무 커서 로그 읽기가 힘들다.-->
+    <logger name="org.apache.http">
+        <level value="warn" />
+    </logger>
 </configuration>

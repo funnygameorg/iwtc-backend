@@ -1,6 +1,7 @@
 package com.example.demo.common.aop;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.apache.commons.lang3.StringUtils.abbreviate;
 
 
 @Slf4j
@@ -21,6 +24,10 @@ public class LoggingAspect {
     private static final String METHOD_CALL_LOG_PATTERN = "method call name: [{}] : args: {}";
     private static final String METHOD_RETURN_LOG_PATTERN = "method return name: [{}], return value: {}";
 
+
+
+
+
     // 호출 메소드의 파라미터를 'key', 'value'를 배열로 반환한다.
     private List<String> getParams(ProceedingJoinPoint joinPoint) {
 
@@ -28,9 +35,21 @@ public class LoggingAspect {
         String[] paramNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
 
         return Arrays.stream(joinPoint.getArgs())
-                .map(arg -> paramNames[index.getAndIncrement()] + "=" + arg)
+                .map(arg -> paramNames[index.getAndIncrement()] + "=" + abbreviate(String.valueOf(arg),20))
                 .toList();
     }
+
+
+
+    // `argument`의 값이 20자 이상이면 20번째 문자에서 자른 후 `...(reduce)`를 연결한다.
+    private String reduceLongArgument(String arg) {
+        if(arg.length() >= 20) {
+            return arg.substring(0, 20) + "...(reduce)";
+        }
+        return arg;
+    }
+
+
 
 
     @Around(EXECUTION + ROOT_PACKAGE + "domain.*.controller.*.*(..))")

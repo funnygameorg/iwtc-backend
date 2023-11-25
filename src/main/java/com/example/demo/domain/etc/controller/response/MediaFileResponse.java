@@ -1,7 +1,6 @@
 package com.example.demo.domain.etc.controller.response;
 
 import com.example.demo.domain.etc.component.MediaFileComponent;
-import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.model.vo.FileType;
 
 import java.time.LocalDateTime;
