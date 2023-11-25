@@ -34,7 +34,7 @@ public record GetWorldCupContentsResponse (
                 contents.getUpdatedAt(),
                 new FileResponse(
                         mediaFile.getId(),
-                        mediaFile.getFilePath(),
+                        mediaFile.getObjectKey(),
                         mediaFile.getCreatedAt(),
                         mediaFile.getUpdatedAt()
                 )

@@ -27,21 +27,15 @@ public class StaticMediaFile extends MediaFile {
     @NotBlank
     private String originalName;
 
-    @Comment("실제 저장하는데 사용한 파일 이름")
-    @NotNull
-    @NotBlank
-    private String absoluteName;
-
     @Comment("파일 확장자")
     @NotNull
     @NotBlank
     private String extension;
 
     @Builder
-    public StaticMediaFile(String originalName, String absoluteName, String extension, long id, String filePath) {
-        super(id, filePath, STATIC_MEDIA_FILE);
+    public StaticMediaFile(String originalName, String extension, Long id, String objectKey, String bucketName) {
+        super(id, objectKey, STATIC_MEDIA_FILE, bucketName);
         this.originalName = originalName;
-        this.absoluteName = absoluteName;
         this.extension = extension;
     }
 
@@ -53,14 +47,14 @@ public class StaticMediaFile extends MediaFile {
             return false;
         StaticMediaFile other = (StaticMediaFile) o;
 
-        return Objects.equal(absoluteName, other.getAbsoluteName())
-                && Objects.equal(getFilePath(), other.getFilePath())
+        return Objects.equal(objectKey, other.getObjectKey())
+                && Objects.equal(getObjectKey(), other.getObjectKey())
                 && Objects.equal(extension, other.getExtension());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(absoluteName, getFilePath(), extension);
+        return Objects.hashCode(objectKey, getObjectKey(), extension);
 
     }
 }

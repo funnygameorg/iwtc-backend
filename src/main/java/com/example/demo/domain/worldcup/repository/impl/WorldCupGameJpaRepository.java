@@ -1,6 +1,14 @@
 package com.example.demo.domain.worldcup.repository.impl;
 
 import com.example.demo.domain.worldcup.model.WorldCupGame;
+import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface WorldCupGameJpaRepository extends JpaRepository<WorldCupGame, Long> { }
+import java.util.List;
+
+public interface WorldCupGameJpaRepository extends JpaRepository<WorldCupGame, Long> {
+
+    boolean existsByTitle(String title);
+
+    List<WorldCupGame> findAllByMemberId(Long memberId);
+}

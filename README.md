@@ -1,7 +1,5 @@
 ## "HELLO, ITWC Backend 🥇️" 
 
-안내 사항
-1. Docker Container 종료 시 로그 파일이 프로젝트 "/logs" 경로에 바인딩 됩니다.
 
 <BR><BR>
 

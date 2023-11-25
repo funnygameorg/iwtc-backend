@@ -63,6 +63,26 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @Comment("컨텐츠의 승리 점수")
     private int gameScore;
 
+
+
+    public static WorldCupGameContents createNewContents(
+            WorldCupGame worldCupGame,
+            MediaFile mediaFile,
+            String contentsName,
+            VisibleType visibleType
+    ) {
+        return WorldCupGameContents.builder()
+                .name(contentsName)
+                .worldCupGame(worldCupGame)
+                .mediaFile(mediaFile)
+                .visibleType(visibleType)
+                .gameRank(0)
+                .gameScore(0)
+                .build();
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -73,8 +93,14 @@ public class WorldCupGameContents extends TimeBaseEntity {
         return Objects.equal(name, other.getName());
     }
 
+
+
+
     @Override
     public int hashCode() {
         return Objects.hashCode(name);
     }
+
+
+
 }

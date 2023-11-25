@@ -105,31 +105,31 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
             assertAll(
                     () -> assertThat(result.size()).isEqualTo(8),
 
-                    () -> assertThat(result.get(0).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(0).mediaFileId()).isEqualTo(1),
                     () -> assertThat(result.get(0).movieStartTime()).isEqualTo(null),
                     () -> assertThat(result.get(0).moviePlayDuration()).isEqualTo(null),
-                    () -> assertThat(result.get(1).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(1).mediaFileId()).isEqualTo(2),
                     () -> assertThat(result.get(1).movieStartTime()).isEqualTo(null),
                     () -> assertThat(result.get(1).moviePlayDuration()).isEqualTo(null),
-                    () -> assertThat(result.get(2).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(2).mediaFileId()).isEqualTo(3),
                     () -> assertThat(result.get(2).movieStartTime()).isEqualTo(null),
                     () -> assertThat(result.get(2).moviePlayDuration()).isEqualTo(null),
-                    () -> assertThat(result.get(3).filePath()).isEqualTo("s3://abc/"),
+                    () -> assertThat(result.get(3).mediaFileId()).isEqualTo(4),
                     () -> assertThat(result.get(3).movieStartTime()).isEqualTo(null),
                     () -> assertThat(result.get(3).moviePlayDuration()).isEqualTo(null),
 
-                    () -> assertThat(result.get(4).filePath()).isEqualTo("www.youtube/dogmovies/5"),
+                    () -> assertThat(result.get(4).mediaFileId()).isEqualTo(5),
                     () -> assertThat(result.get(4).movieStartTime()).isEqualTo("00000"),
                     () -> assertThat(result.get(4).moviePlayDuration()).isEqualTo(3),
-                    () -> assertThat(result.get(5).filePath()).isEqualTo("www.youtube/dogmovies/6"),
+                    () -> assertThat(result.get(5).mediaFileId()).isEqualTo(6),
                     () -> assertThat(result.get(5).movieStartTime()).isEqualTo("00000"),
                     () -> assertThat(result.get(5).moviePlayDuration()).isEqualTo(3),
-                    () -> assertThat(result.get(6).filePath()).isEqualTo("www.youtube/dogmovies/7"),
+                    () -> assertThat(result.get(6).mediaFileId()).isEqualTo(7),
                     () -> assertThat(result.get(6).movieStartTime()).isEqualTo("00000"),
                     () -> assertThat(result.get(6).moviePlayDuration()).isEqualTo(3),
-                    () -> assertThat(result.get(7).filePath()).isEqualTo("www.youtube/dogmovies/8"),
+                    () -> assertThat(result.get(7).mediaFileId()).isEqualTo(8),
                     () -> assertThat(result.get(7).movieStartTime()).isEqualTo("00000"),
-                    () -> assertThat(result.get(7).moviePlayDuration()).isEqualTo(3)
+                    () -> assertThat(result.get(7).moviePlayDuration()).isEqualTo( 3)
             );
         }
 
@@ -196,26 +196,32 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                     () -> assertThat(result.get(0).FileType()).isEqualTo("STATIC_MEDIA_FILE"),
                     () -> assertThat(result.get(0).moviePlayDuration()).isEqualTo(null),
                     () -> assertThat(result.get(0).movieStartTime()).isEqualTo(null),
+                    () -> assertThat(result.get(0).mediaFileId()).isEqualTo(1),
 
                     () -> assertThat(result.get(1).FileType()).isEqualTo("STATIC_MEDIA_FILE"),
                     () -> assertThat(result.get(1).moviePlayDuration()).isEqualTo(null),
                     () -> assertThat(result.get(1).movieStartTime()).isEqualTo(null),
+                    () -> assertThat(result.get(1).mediaFileId()).isEqualTo(2),
 
                     () -> assertThat(result.get(2).FileType()).isEqualTo("STATIC_MEDIA_FILE"),
                     () -> assertThat(result.get(2).moviePlayDuration()).isEqualTo(null),
                     () -> assertThat(result.get(2).movieStartTime()).isEqualTo(null),
+                    () -> assertThat(result.get(2).mediaFileId()).isEqualTo(3),
 
                     () -> assertThat(result.get(3).FileType()).isEqualTo("INTERNET_VIDEO_URL"),
                     () -> assertThat(result.get(3).moviePlayDuration()).isEqualTo(3),
                     () -> assertThat(result.get(3).movieStartTime()).isEqualTo("00001"),
+                    () -> assertThat(result.get(3).mediaFileId()).isEqualTo(4),
 
                     () -> assertThat(result.get(4).FileType()).isEqualTo("INTERNET_VIDEO_URL"),
                     () -> assertThat(result.get(4).moviePlayDuration()).isEqualTo(3),
                     () -> assertThat(result.get(4).movieStartTime()).isEqualTo("00001"),
+                    () -> assertThat(result.get(4).mediaFileId()).isEqualTo(5),
 
                     () -> assertThat(result.get(5).FileType()).isEqualTo("INTERNET_VIDEO_URL"),
                     () -> assertThat(result.get(5).moviePlayDuration()).isEqualTo(3),
-                    () -> assertThat(result.get(5).movieStartTime()).isEqualTo("00001")
+                    () -> assertThat(result.get(5).movieStartTime()).isEqualTo("00001"),
+                    () -> assertThat(result.get(5).mediaFileId()).isEqualTo(6)
             );
         }
 
@@ -294,8 +300,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
     {
         return StaticMediaFile.builder()
                 .originalName(fileOriginalName)
-                .absoluteName(fileAbsoluteName)
-                .filePath(filePath)
+                .objectKey(filePath)
                 .extension(extension)
                 .build();
     }

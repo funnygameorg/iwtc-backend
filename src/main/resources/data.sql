@@ -2,18 +2,21 @@ INSERT INTO `ERROR_CODE_ENTITY` (`name`, `code`, `message`, `http_status`)
 VALUES
     ('DUPLICATED_MEMBER_SERVICE_ID', 4001, '이미 존재하는 아이디입니다.', 409),
     ('DUPLICATED_MEMBER_NICKNAME', 4002, '이미 존재하는 닉네임입니다.', 409),
+    ('DUPLICATED_WORLD_CUP_GAME_TITLE', 4003, '이미 존재하는 타이틀입니다.', 409),
     ('INVALID_CLIENT_REQUEST_BODY', 3001, '올바르지 않은 요청입니다.', 400),
     ('INVALID_TOKEN_EXCEPTION', 3002, '올바르지 않은 토큰입니다.', 401),
     ('NOT_FOUND_DATA_IN_REQUEST', 5001, '사용자 요청에 데이터가 없습니다.', 404),
     ('NOT_FOUND_WORLD_CUP_GAME', 5002, '존재하지 않는 월드컵 게임입니다.', 404),
     ('NOT_FOUND_MEMBER', 5003, '존재하지 않는 사용자입니다.', 404),
     ('NOT_FOUND_WORLD_CUP_GAME_CONTENTS', 5004, '존재하지 않는 월드컵 게임 컨텐츠입니다.', 404),
+    ('NOT_FOUND_MEDIA_FILE', 5005, '존재하지 않는 미디어 파일입니다.', 404),
     ('NO_ROUNDS_AVAILABLE_TO_PLAY', 10001, '컨텐츠 부족으로 플레이할 수 없습니다.', 400),
     ('ILLEGAL_WORLD_CUP_GAME_CONTENTS', 10002, '올바르지 않은 월드컵 게임 컨텐츠입니다.', 400),
     ('EXPIRED_REMEMBER_ME', 10003, '만료된 사용자 인증입니다.', 401),
     ('REQUEST_WITH_BLACK_LIST_TOKEN', 10004, '사용할 수 없는 토큰입니다.', 401),
     ('NOT_SUPPORTED_GAME_ROUND', 10005, '진행할 수 없는 게임 라운드입니다.', 400),
     ('NOT_OWNER_GAME', 10006, '월드컵 게임 작성자가 아닙니다.', 400),
+    ('NOT_EXISTS_S3_MEDIA_FILE', 10007, '미디어 파일 저장소에 문제가 생겼습니다.', 400),
     ('SERVER_INTERNAL_ERROR', 444, '서버에 문제가 생겼습니다.', 500);
 
 
@@ -65,7 +68,7 @@ VALUES
     (DATEADD('MONTH', -2, NOW()), '2023 기준 20대가 선호하는 월드컵', 1, false, '재미있는 게임 월드컵', null, 15, 'PUBLIC'),
     (DATEADD('MONTH', -2, NOW()), null, 1, false, '맛있는 음식 월드컵', null, 15, 'PUBLIC');
 
-INSERT INTO `MEDIA_FILE`(`file_path`, `file_type`, `d_type`, `created_at`, `updated_at`)
+INSERT INTO `MEDIA_FILE`(`object_key`, `file_type`, `d_type`, `created_at`, `updated_at`)
 VALUES
     ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
@@ -81,15 +84,15 @@ VALUES
     ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('/f2fawfawf?=wxz', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()));
 
-INSERT INTO `STATIC_MEDIA_FILE` (`absolute_name`, `extension`, `original_name`, `id`)
+INSERT INTO `STATIC_MEDIA_FILE` (`extension`, `original_name`, `id`)
 VALUES
-    ('absoulteName1', 'png', 'originalName1', 1),
-    ('absoulteName2', 'png', 'originalName2', 2),
-    ('absoulteName3', 'jpeg', 'originalName3', 3),
-    ('absoulteName4', 'gif', 'originalName4', 4),
-    ('absoulteName5', 'gif', 'originalName5', 8),
-    ('absoulteName6', 'gif', 'originalName6', 9),
-    ('absoulteName7', 'JPEG', 'originalName7', 12);
+    ('png', 'originalName1', 1),
+    ('png', 'originalName2', 2),
+    ('jpeg', 'originalName3', 3),
+    ('gif', 'originalName4', 4),
+    ('gif', 'originalName5', 8),
+    ('gif', 'originalName6', 9),
+    ('JPEG', 'originalName7', 12);
 
 INSERT INTO `INTERNET_VIDEO_URL`(`id`, `is_playable_video`, `video_start_time`, `video_play_duration`)
 VALUES

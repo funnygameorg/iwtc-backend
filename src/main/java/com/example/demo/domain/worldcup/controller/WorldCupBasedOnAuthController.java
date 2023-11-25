@@ -2,12 +2,9 @@ package com.example.demo.domain.worldcup.controller;
 
 import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.memberresolver.MemberDto;
-import com.example.demo.domain.member.model.Member;
+import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
-import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummariesResponse;
-import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupSummaryRanksResponse;
-import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
-import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
+import com.example.demo.domain.worldcup.controller.response.*;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.worldcup.controller.vo.WorldCupSort;
@@ -26,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Tag(
         name = "WorldCup based on auth",
@@ -177,8 +176,79 @@ public class WorldCupBasedOnAuthController {
     }
 
     @Operation(
-            summary = "자신의 월드컵 1개 생성/수정",
-            description = "자신의 월드컵 1개를 생성/수정 합니다.",
+            summary = "자신의 월드컵 1개 수정",
+            description = "자신의 월드컵 1개를 수정 합니다.",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "조회하고 싶은 컨텐츠의 월드컵 식별자",
+                            required = true
+                    )
+            },
+            security = @SecurityRequirement(name = "Authorization"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "월드컵 수정",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자가 작성한 월드컵이 아님",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "중복된 월드컵 타이틀을 사용하려고 함",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
+    @ResponseStatus(NO_CONTENT)
+    @PutMapping("/{worldCupId}")
+    public RestApiResponse<Object> putMyWorldCup(
+            @Valid
+            @RequestBody
+            CreateWorldCupRequest request,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto,
+
+            @PathVariable(required = false)
+            Long worldCupId
+    ) {
+
+        worldCupBasedOnAuthService.putMyWorldCup(
+                request,
+                worldCupId,
+                memberDto.get().getId()
+        );
+
+        return new RestApiResponse(
+                1,
+                "게임 수정",
+                null
+        );
+
+    }
+
+
+    @Operation(
+            summary = "자신의 월드컵 1개 생성",
+            description = "월드컵 1개를 생성 합니다.",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "조회하고 싶은 컨텐츠의 월드컵 식별자",
+                            required = true
+                    )
+            },
             security = @SecurityRequirement(name = "Authorization"),
             responses = {
                     @ApiResponse(
@@ -187,26 +257,80 @@ public class WorldCupBasedOnAuthController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
-                            responseCode = "204",
-                            description = "월드컵 수정",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "월드컵 없음",
+                            responseCode = "409",
+                            description = "중복된 월드컵 타이틀을 사용하려고 함",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
                     )
             }
     )
-    @PutMapping
-    public RestApiResponse<Object> replaceWorldCup(
-            @Valid @RequestBody CreateWorldCupRequest request
+    @ResponseStatus(CREATED)
+    @PostMapping
+    public RestApiResponse<Object> createMyWorldCup(
+            @Valid
+            @RequestBody
+            CreateWorldCupRequest request,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
     ) {
-        return new RestApiResponse(1, "", null);
+
+        long worldCupId = worldCupBasedOnAuthService.createMyWorldCup(
+                request,
+                memberDto.get().getId()
+        );
+
+        return new RestApiResponse(
+                1,
+                "게임 생성",
+                worldCupId
+        );
+
+    }
+
+    @ResponseStatus(CREATED)
+    @PostMapping("/{worldCupId}/contents")
+    public RestApiResponse<Object> createMyWorldCupContents(
+            @Valid
+            @RequestBody
+            CreateWorldCupContentsRequest request,
+
+            @PathVariable
+            long worldCupId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
+    ) {
+
+        worldCupBasedOnAuthService.createMyWorldCupContents(
+                request,
+                worldCupId,
+                memberDto.get().getId()
+        );
+
+        return new RestApiResponse(
+                1,
+                "게임 생성",
+                null
+        );
+
+    }
+
+
+    @ResponseStatus(OK)
+    @GetMapping
+    public RestApiResponse<List<GetMyWorldCupResponse>> getMyWorldCupContents(
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
+    ) {
+
+        return new RestApiResponse(
+                1,
+                "자신의 게임 리스트 조회",
+                worldCupBasedOnAuthService.getMyWorldCupContentsList(memberDto.get().getId())
+        );
+
     }
 }

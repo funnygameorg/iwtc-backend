@@ -45,8 +45,8 @@ public record GetWorldCupPlayContentsResponse (
             Long contentsId;
             @Schema(description = "이상형 컨텐츠 이름")
             String name;
-            @Schema(description = "미디어 컨텐츠 파일 참조 주소")
-            String filePath;
+            @Schema(description = "미디어 파일 ID")
+            Long mediaFileId;
             @Schema(description = "INTERNET_VIDEO_URL 타입인 경우 재생 시작 시간 포맷 : '00000'(모두 숫자 표현) ")
             String internetMovieStartPlayTime;
             @Schema(description = "반복 시간(초)")
@@ -57,10 +57,11 @@ public record GetWorldCupPlayContentsResponse (
             instance.fileType = projection.FileType();
             instance.contentsId = projection.contentsId();
             instance.name = projection.name();
-            instance.filePath = projection.filePath();
+            instance.mediaFileId = projection.mediaFileId();
             instance.internetMovieStartPlayTime = projection.movieStartTime();
             instance.playDuration = projection.moviePlayDuration();
             return instance;
         }
+
     }
 }
