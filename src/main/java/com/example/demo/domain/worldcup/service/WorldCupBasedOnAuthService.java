@@ -52,7 +52,7 @@ public class WorldCupBasedOnAuthService {
                         new NotFoundWorldCupGameException("%s 는 존재하지 않는 게임입니다.".formatted(worldCupId))
                 );
 
-        if(worldCupGame.getMemberId() != memberId) {
+        if(!worldCupGame.isOwner(memberId)) {
             throw new NotOwnerGameException();
         }
 
@@ -96,7 +96,7 @@ public class WorldCupBasedOnAuthService {
                 .findById(worldCupId)
                 .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
 
-        if(isGameOwner(memberId, worldCupGame)) {
+        if(!isGameOwner(memberId, worldCupGame)) {
             throw new NotOwnerGameException();
         }
 

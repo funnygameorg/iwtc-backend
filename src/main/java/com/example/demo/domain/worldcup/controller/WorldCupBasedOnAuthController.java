@@ -36,7 +36,13 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public class WorldCupBasedOnAuthController {
 
+
+
+
     private final WorldCupBasedOnAuthService worldCupBasedOnAuthService;
+
+
+
 
     @Operation(
             summary = "이상형 월드컵 삭제/수정에 사용되는 컨텐츠 조회",
@@ -87,6 +93,10 @@ public class WorldCupBasedOnAuthController {
         );
     }
 
+
+
+
+
     @Operation(
             summary = "나의 월드컵 1개 조회 (생성, 수정용도)",
             description = "자신의 월드컵 게임 1개에 대하여 조회합니다. (생성, 수정용도)",
@@ -131,58 +141,12 @@ public class WorldCupBasedOnAuthController {
         );
     }
 
-    @Operation(
-            summary = "마이페이지 월드컵 리스트 (순위 정렬)",
-            description = "자신의 월드컵을 [조회, 댓글순...]같은 값을 사용하여 정렬하여 조회합니다.",
-            security = @SecurityRequirement(name = "Authorization"),
-            parameters = {
-                    @Parameter(
-                            name = "sort",
-                            description = "순위 정렬 근거 [LATEST, POPULARITY]",
-                            required = true
-                    )
-            },
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "조회 성공"
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
-                    )
-            }
-    )
-    @GetMapping("/summary-ranks")
-    @ResponseStatus(OK)
-    public RestApiResponse<List<GetMyWorldCupSummaryRanksResponse>> getMyWorldCupSummaryRanks(
-            @RequestParam(name = "sort") WorldCupSort sort
-    ) {
-        return new RestApiResponse(1, "", null);
-    }
 
-    @Operation(
-            summary = "마이페이지 리스트용",
-            description = "자신의 월드컵의 리스트를 간략화된 정보 형태로 조회합니다.",
-            security = @SecurityRequirement(name = "Authorization"),
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "조회 성공"
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "인증 실패",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
-                    )
-            }
-    )
-    @GetMapping("/summaries")
-    @ResponseStatus(OK)
-    public RestApiResponse<List<GetMyWorldCupSummariesResponse>> getMyWorldCupSummaries() {
-        return new RestApiResponse(1, "", null);
-    }
+
+
+
+
+
 
     @Operation(
             summary = "자신의 월드컵 1개 수정",
@@ -202,14 +166,14 @@ public class WorldCupBasedOnAuthController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
-                            responseCode = "404",
-                            description = "존재하지 않는 월드컵",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
-                    ),
-                    @ApiResponse(
                             responseCode = "400",
                             description = "사용자가 작성한 월드컵이 아님",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestApiResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "409",
@@ -246,6 +210,9 @@ public class WorldCupBasedOnAuthController {
         );
 
     }
+
+
+
 
 
     @Operation(
@@ -297,6 +264,34 @@ public class WorldCupBasedOnAuthController {
 
     }
 
+
+
+
+    @Operation(
+            summary = "월드컵 컨텐츠 1건 이상 생성",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "생성하고 싶은 컨텐츠를 포함한 월드컵",
+                            required = true
+                    )
+            },
+            description = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
+            security = @SecurityRequirement(name = "Authorization"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "월드컵 게임 작성자가 아님",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+
+            }
+    )
     @ResponseStatus(CREATED)
     @PostMapping("/{worldCupId}/contents")
     public RestApiResponse<Object> createMyWorldCupContents(
@@ -326,6 +321,40 @@ public class WorldCupBasedOnAuthController {
 
     }
 
+
+
+
+
+    @Operation(
+            summary = "월드컵 컨텐츠 1건 수정",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "수정하고 싶은 컨텐츠를 포함한 월드컵",
+                            required = true
+                    ),
+                    @Parameter(
+                            name = "contentsId",
+                            description = "수정하고 싶은 컨텐츠 식별자",
+                            required = true
+                    )
+            },
+            description = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
+            security = @SecurityRequirement(name = "Authorization"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "월드컵 게임 작성자가 아님",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "[존재하지 않는 월드컵, 존재하지 않는 월드컵 컨텐츠]",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+
+            }
+    )
     @ResponseStatus(NO_CONTENT)
     @PutMapping("/{worldCupId}/contents/{contentsId}")
     public RestApiResponse<Object> updateMyWorldCupContents(
@@ -360,6 +389,40 @@ public class WorldCupBasedOnAuthController {
     }
 
 
+
+
+
+
+    @Operation(
+            summary = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "조회하고 싶은 컨텐츠의 월드컵 식별자",
+                            required = true
+                    ),
+                    @Parameter(
+                            name = "contentsId",
+                            description = "조회하고 싶은 컨텐츠의 월드컵 컨텐츠 식별자",
+                            required = true
+                    )
+            },
+            description = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
+            security = @SecurityRequirement(name = "Authorization"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "월드컵 게임 작성자가 아님",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "[존재하지 않는 월드컵, 존재하지 않는 월드컵 컨텐츠]",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+
+            }
+    )
     @ResponseStatus(NO_CONTENT)
     @DeleteMapping("/{worldCupId}/contents/{contentsId}")
     public RestApiResponse<Object> deleteMyWorldCupContents(
@@ -392,6 +455,14 @@ public class WorldCupBasedOnAuthController {
 
 
 
+
+
+
+    @Operation(
+            summary = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
+            description = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
+            security = @SecurityRequirement(name = "Authorization")
+    )
     @ResponseStatus(OK)
     @GetMapping
     public RestApiResponse<List<GetMyWorldCupResponse>> getMyWorldCups(
@@ -409,6 +480,39 @@ public class WorldCupBasedOnAuthController {
     }
 
 
+
+
+
+
+    @Operation(
+            summary = "월드컵 관리페이지에서 표시되는 컨텐츠 리스트 조회",
+            description = "월드컵 관리페이지에서 표시되는 컨텐츠 리스트 조회",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "조회하고 싶은 컨텐츠의 월드컵 식별자",
+                            required = true
+                    )
+            },
+            security = @SecurityRequirement(name = "Authorization"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "월드컵 게임 작성자가 아님",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "중복된 월드컵 타이틀을 사용하려고 함",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
     @ResponseStatus(OK)
     @GetMapping("/{worldCupId}/manage-contents")
     public RestApiResponse<List<GetMyWorldCupContentsResponse>> getMyWorldCupContentList(
@@ -427,6 +531,7 @@ public class WorldCupBasedOnAuthController {
         );
 
     }
+
 
 
 }

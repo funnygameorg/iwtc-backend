@@ -38,7 +38,7 @@ public class S3Component {
      * @return
      */
     public PutObjectResult putObject(String stringFormatFile, String key) {
-        log.info("널인가? {}", stringFormatFile);
+
         InputStream inputStream = new ByteArrayInputStream(stringFormatFile.getBytes(UTF_8));
 
         ObjectMetadata metadata = new ObjectMetadata();
