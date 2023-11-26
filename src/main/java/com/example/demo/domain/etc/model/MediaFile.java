@@ -31,4 +31,6 @@ public abstract class MediaFile extends TimeBaseEntity {
     @org.hibernate.annotations.Comment("저장 버킷명")
     private String bucket;
 
+
+
 }

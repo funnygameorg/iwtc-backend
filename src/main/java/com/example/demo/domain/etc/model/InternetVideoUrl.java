@@ -35,11 +35,28 @@ public class InternetVideoUrl extends MediaFile {
     @Max(value = 5, message = "영상 재생 시간은 2 ~ 5초 입니다.")
     private int videoPlayDuration;
 
+
+
+
+
+    public void update(String objectKey, String videoStartTime, int videoPlayDuration) {
+
+        super.objectKey = objectKey;
+        this.videoStartTime = videoStartTime;
+        this.videoPlayDuration = videoPlayDuration;
+
+    }
+
+
+
+
     @Builder
     private InternetVideoUrl(Long id, String filePath, boolean isPlayableVideo, String videoStartTime, int videoPlayDuration, String bucketName) {
+
         super(id, filePath, INTERNET_VIDEO_URL, bucketName);
         this.isPlayableVideo = isPlayableVideo;
         this.videoStartTime = videoStartTime;
         this.videoPlayDuration = videoPlayDuration;
+
     }
 }

@@ -103,18 +103,18 @@ VALUES
     (11, true, '00030', 2),
     (13, true, '00525', 4);
 
-INSERT INTO `WORLD_CUP_GAME_CONTENTS` (`media_file_id`, `name`, `world_cup_game_id`, `game_score`, `game_rank`, `visible_type`, `created_at`, `updated_at`)
+INSERT INTO `WORLD_CUP_GAME_CONTENTS` (`media_file_id`, `name`, `world_cup_game_id`, `game_score`, `game_rank`, `visible_type`, `created_at`, `updated_at`, `soft_delete`)
 VALUES
-    (1, '익명의 컨텐츠명1', 1, 10, 6, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (2, '익명의 컨텐츠명2', 1, 300, 4, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (3, '익명의 컨텐츠명3', 1, 1000, 1, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (4, '익명의 컨텐츠명4', 1, 500, 3, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (5, '익명의 컨텐츠명5', 1, 600, 2, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (6, '익명의 컨텐츠명6', 1, 30, 5, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (7, '익명의 컨텐츠명7', 1, 0, 7, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (8, '익명의 컨텐츠명8', 1, 0, 8, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (9, '익명의 컨텐츠명9', 2, 30, 1, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (10, '익명의 컨텐츠명10', 2, 7, 5, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (11, '익명의 컨텐츠명11', 2, 10, 4, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (12, '익명의 컨텐츠명12', 2, 15, 2, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    (13, '익명의 컨텐츠명13', 2, 12, 3, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()));
+    (1, '익명의 컨텐츠명1', 1, 10, 6, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (2, '익명의 컨텐츠명2', 1, 300, 4, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (3, '익명의 컨텐츠명3', 1, 1000, 1, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (4, '익명의 컨텐츠명4', 1, 500, 3, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (5, '익명의 컨텐츠명5', 1, 600, 2, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (6, '익명의 컨텐츠명6', 1, 30, 5, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (7, '익명의 컨텐츠명7', 1, 0, 7, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (8, '익명의 컨텐츠명8', 1, 0, 8, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (9, '익명의 컨텐츠명9', 2, 30, 1, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (10, '익명의 컨텐츠명10', 2, 7, 5, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (11, '익명의 컨텐츠명11', 2, 10, 4, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (12, '익명의 컨텐츠명12', 2, 15, 2, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false),
+    (13, '익명의 컨텐츠명13', 2, 12, 3, 'PUBLIC', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()), false);

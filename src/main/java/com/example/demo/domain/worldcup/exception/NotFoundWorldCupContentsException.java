@@ -14,4 +14,12 @@ public class NotFoundWorldCupContentsException extends BaseException {
                 NOT_FOUND_WORLD_CUP_GAME_CONTENTS.getHttpStatus()
         );
     }
+
+    public NotFoundWorldCupContentsException(long worldCupContentsId) {
+        super(
+                NOT_FOUND_WORLD_CUP_GAME_CONTENTS.getMessage() + " " + worldCupContentsId,
+                NOT_FOUND_WORLD_CUP_GAME_CONTENTS,
+                NOT_FOUND_WORLD_CUP_GAME_CONTENTS.getHttpStatus()
+        );
+    }
 }

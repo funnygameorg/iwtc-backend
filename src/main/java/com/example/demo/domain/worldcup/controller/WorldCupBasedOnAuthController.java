@@ -4,6 +4,7 @@ import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
+import com.example.demo.domain.worldcup.controller.request.UpdateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.response.*;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
@@ -324,6 +325,71 @@ public class WorldCupBasedOnAuthController {
         );
 
     }
+
+    @ResponseStatus(NO_CONTENT)
+    @PutMapping("/{worldCupId}/contents/{contentsId}")
+    public RestApiResponse<Object> updateMyWorldCupContents(
+            @Valid
+            @RequestBody
+            UpdateWorldCupContentsRequest request,
+
+            @PathVariable
+            long worldCupId,
+
+            @PathVariable
+            long contentsId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
+    ) {
+
+        var updateContentsId = worldCupBasedOnAuthService.updateMyWorldCupContents(
+                request,
+                worldCupId,
+                contentsId,
+                memberDto.get().getId()
+            );
+
+        return new RestApiResponse(
+                1,
+                "게임 생성",
+                updateContentsId
+        );
+
+    }
+
+
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/{worldCupId}/contents/{contentsId}")
+    public RestApiResponse<Object> deleteMyWorldCupContents(
+
+            @PathVariable
+            long worldCupId,
+
+            @PathVariable
+            long contentsId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication
+            Optional<MemberDto> memberDto
+    ) {
+
+        var deletedContentsId = worldCupBasedOnAuthService.deleteMyWorldCupContents(
+                worldCupId,
+                contentsId,
+                memberDto.get().getId()
+        );
+
+        return new RestApiResponse(
+                1,
+                "게임 삭제",
+                deletedContentsId
+        );
+
+    }
+
+
 
 
     @ResponseStatus(OK)

@@ -1,7 +1,9 @@
 package com.example.demo.domain.worldcup.model;
 
 import com.example.demo.common.jpa.TimeBaseEntity;
+import com.example.demo.domain.etc.model.InternetVideoUrl;
 import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import com.google.common.base.Objects;
 import jakarta.persistence.*;
@@ -14,6 +16,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
+import static com.example.demo.domain.etc.model.vo.FileType.*;
+import static com.google.common.base.Objects.equal;
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -63,6 +67,41 @@ public class WorldCupGameContents extends TimeBaseEntity {
     @Comment("컨텐츠의 승리 점수")
     private int gameScore;
 
+    @Comment("삭제 여부")
+    private boolean softDelete = false;
+
+
+
+    public void updateByCommonManage(
+            String contentsName,
+            String originalName,
+            String videoStartTime,
+            Integer videoPlayDuration,
+            VisibleType visibleType,
+            String objectKey
+    ) {
+
+        this.name = contentsName;
+        this.visibleType = visibleType;
+
+        mediaFile = (MediaFile) Hibernate.unproxy(mediaFile);
+
+        if(mediaFile instanceof StaticMediaFile) {
+
+            StaticMediaFile staticMediaFile = (StaticMediaFile) mediaFile;
+            staticMediaFile.update(objectKey, originalName);
+
+        } else {
+
+            InternetVideoUrl internetVideoUrl = (InternetVideoUrl) mediaFile;
+            internetVideoUrl.update(objectKey, videoStartTime, videoPlayDuration);
+
+        }
+
+    }
+
+
+
 
 
     public static WorldCupGameContents createNewContents(
@@ -90,7 +129,7 @@ public class WorldCupGameContents extends TimeBaseEntity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
         WorldCupGameContents other = (WorldCupGameContents) o;
-        return Objects.equal(name, other.getName());
+        return equal(name, other.getName());
     }
 
 
@@ -101,6 +140,7 @@ public class WorldCupGameContents extends TimeBaseEntity {
         return Objects.hashCode(name);
     }
 
-
-
+    public void softDelete() {
+        this.softDelete = true;
+    }
 }

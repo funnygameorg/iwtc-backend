@@ -6,11 +6,13 @@ import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.worldcup.component.RandomDataGeneratorInterface;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
+import com.example.demo.domain.worldcup.controller.request.UpdateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetMyWorldCupResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupResponse;
 import com.example.demo.domain.worldcup.exception.DuplicatedWorldCupGameTitleException;
+import com.example.demo.domain.worldcup.exception.NotFoundWorldCupContentsException;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
 import com.example.demo.domain.worldcup.exception.NotOwnerGameException;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
@@ -30,13 +32,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class WorldCupBasedOnAuthService {
+
+
     private final WorldCupGameRepository worldCupGameRepository;
     private final WorldCupGameContentsRepository worldCupGameContentsRepository;
     private final MediaFileRepository mediaFileRepository;
     private final MediaFileFactory mediaFileFactory;
-
     private final RandomDataGeneratorInterface randomDataGenerator;
-    private final S3Component s3Service;
+    private final S3Component s3Component;
 
 
 
@@ -166,7 +169,7 @@ public class WorldCupBasedOnAuthService {
 
                     String objectKey = randomDataGenerator.generate();
 
-                    s3Service.putObject(mediaFileRequest.mediaData(), objectKey);
+                            s3Component.putObject(mediaFileRequest.mediaData(), objectKey);
 
                     MediaFile newMediaFile = mediaFileFactory.createMediaFile(
                             mediaFileRequest.fileType(),
@@ -229,6 +232,64 @@ public class WorldCupBasedOnAuthService {
                 .stream()
                 .map(GetMyWorldCupContentsResponse::fromEntity)
                 .toList();
+    }
+
+
+
+
+
+    @Transactional
+    public long updateMyWorldCupContents(UpdateWorldCupContentsRequest request, Long worldCupId, Long worldCupContentsId, Long memberId) {
+
+        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
+
+        if(!worldCupGame.isOwner(memberId)) {
+            throw new NotOwnerGameException();
+        }
+
+        WorldCupGameContents contents = worldCupGameContentsRepository.findById(worldCupContentsId)
+                .orElseThrow(() -> new NotFoundWorldCupContentsException(worldCupContentsId));
+
+
+
+        String objectKey = randomDataGenerator.generate();
+
+        s3Component.putObject(request.mediaData(), objectKey);
+
+
+        contents.updateByCommonManage(
+                request.contentsName(),
+                request.originalName(),
+                request.videoStartTime(),
+                request.videoPlayDuration(),
+                request.visibleType(),
+                objectKey
+        );
+
+        return contents.getId();
+    }
+
+
+
+
+
+    @Transactional
+    public long deleteMyWorldCupContents(long worldCupId, long worldCupContentsId, Long memberId) {
+
+        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
+
+        if(!worldCupGame.isOwner(memberId)) {
+            throw new NotOwnerGameException();
+        }
+
+        WorldCupGameContents contents = worldCupGameContentsRepository.findById(worldCupContentsId)
+                .orElseThrow(() -> new NotFoundWorldCupContentsException(worldCupContentsId));
+
+        contents.softDelete();
+
+        return contents.getId();
     }
 
 
