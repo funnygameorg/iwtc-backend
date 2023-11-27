@@ -28,7 +28,16 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public class WorldCupContentsController {
 
+
+
+
+
     private final WorldCupGameContentsService worldCupGameContentsService;
+
+
+
+
+
 
     @Operation(
             summary = "이상형 월드컵 게임 진행에 필요한 정보 제공",
@@ -100,6 +109,10 @@ public class WorldCupContentsController {
         );
     }
 
+
+
+
+
     @Operation(
             summary = "플레이 가능한 월드컵 게임 라운드 수 조회",
             description = "월드컵 게임이 포함하는 컨텐츠 수에서 진행할 수 있는 라운드 수를 제공",
@@ -130,7 +143,9 @@ public class WorldCupContentsController {
     @GetMapping("/{worldCupId}/available-rounds")
     @ResponseStatus(OK)
     public RestApiResponse<GetAvailableGameRoundsResponse> getAvailableGameRounds(
+
             @PathVariable long worldCupId
+
     ) {
         return new RestApiResponse(
                 1,
@@ -138,6 +153,10 @@ public class WorldCupContentsController {
                 worldCupGameContentsService.getAvailableGameRounds(worldCupId)
         );
     }
+
+
+
+
 
     @Operation(
             summary = "월드컵 게임 종료",
@@ -163,8 +182,13 @@ public class WorldCupContentsController {
     @PostMapping("/{worldCupId}/clear")
     @ResponseStatus(CREATED)
     public RestApiResponse<ClearWorldCupGameResponse> clearWorldCupGame(
-            @PathVariable long worldCupId,
-            @RequestBody ClearWorldCupGameRequest request
+
+            @PathVariable
+            long worldCupId,
+
+            @RequestBody
+            ClearWorldCupGameRequest request
+
     ) {
         return new RestApiResponse(
                 1,
@@ -172,6 +196,8 @@ public class WorldCupContentsController {
                 worldCupGameContentsService.clearWorldCupGame(worldCupId, request)
         );
     }
+
+
 
 
     private List<Long> boxedPrimitiveLongs(long[] primitiveLongs) {

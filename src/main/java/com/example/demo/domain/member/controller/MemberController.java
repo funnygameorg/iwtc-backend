@@ -5,6 +5,8 @@ import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.common.web.validation.NoSpace;
 import com.example.demo.domain.member.controller.request.GetMySummaryResponse;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
+import com.example.demo.domain.member.controller.validator.VerifyMemberNickname;
+import com.example.demo.domain.member.controller.validator.VerifyMemberServiceId;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedNicknameResponse;
@@ -44,6 +46,11 @@ public class MemberController {
 
     private final MemberService memberService;
 
+
+
+
+
+
     @Operation(
             summary = "일반 회원가입",
             description = "아무런 조건없이 가입이 가능합니다.",
@@ -68,8 +75,11 @@ public class MemberController {
     @PostMapping("/sign-up")
     @ResponseStatus(CREATED)
     public RestApiResponse signUp(
+
             @Valid @RequestBody SignUpRequest request
+
     ) {
+
         memberService.signUp(request);
         return RestApiResponse.builder()
                 .code(1)
@@ -77,6 +87,12 @@ public class MemberController {
                 .data(null)
                 .build();
     }
+
+
+
+
+
+
 
     @Operation(
             summary = "로그인",
@@ -120,6 +136,12 @@ public class MemberController {
                 .data(null)
                 .build();
     }
+
+
+
+
+
+
     @Operation(
             summary = "서비스 아이디 중복 확인",
             description = "서비스 아이디 중복 확인 합니다. true/false 반환",
@@ -136,13 +158,11 @@ public class MemberController {
                     )
             }
     )
-
     @GetMapping("/duplicated-check/service-id")
     @ResponseStatus(OK)
     public RestApiResponse verifyDuplicatedServiceId(
-            @NoSpace
+            @VerifyMemberServiceId
             @RequestParam
-            @Size(min=6, max = 20, message = "사용자 아이디 : 6자리 이상, 20자리 이하")
             String serviceId
     ) {
         VerifyDuplicatedServiceIdResponse response = memberService.existsServiceId(serviceId);
@@ -152,6 +172,11 @@ public class MemberController {
                 .data(response)
                 .build();
     }
+
+
+
+
+
 
     @Operation(
             summary = "닉네임 중복 확인",
@@ -172,11 +197,13 @@ public class MemberController {
     @GetMapping("/duplicated-check/nickname")
     @ResponseStatus(OK)
     public RestApiResponse verifyDuplicatedNickname(
-            @Schema(description = "사용자 닉네임")
-            @Size(min = 2, max = 10, message = "사용자 닉네임 : 2자리 이상, 10자리 이하")
-            @NoSpace
+
+            @RequestParam
+            @VerifyMemberNickname
             String nickname
+
     ) {
+
         VerifyDuplicatedNicknameResponse response = memberService.existsNickname(nickname);
         return RestApiResponse.builder()
                 .code(1)
@@ -184,6 +211,12 @@ public class MemberController {
                 .data(response)
                 .build();
     }
+
+
+
+
+
+
 
     @Operation(
             summary = "token의 id를 참조해 자신의 정보를 반환",
@@ -226,6 +259,7 @@ public class MemberController {
 
             HttpServletResponse httpServletResponse
     ) {
+
         MemberDto memberDto = optionalMemberDto.orElseThrow(NotFoundMemberException::new);
 
         httpServletResponse.setHeader("Cache-Control", "max-age=60");
@@ -236,6 +270,10 @@ public class MemberController {
                 .data(new GetMySummaryResponse(memberDto))
                 .build();
     }
+
+
+
+
 
     @Operation(
             summary = "로그아웃",
@@ -261,7 +299,9 @@ public class MemberController {
     @GetMapping("/sign-out")
     @ResponseStatus(NO_CONTENT)
     public RestApiResponse signOut(
+
             @RequestHeader("access-token") String accessToken
+
     ) {
         memberService.signOut(accessToken);
         return RestApiResponse.builder()

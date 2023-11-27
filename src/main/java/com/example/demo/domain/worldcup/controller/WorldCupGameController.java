@@ -1,5 +1,6 @@
 package com.example.demo.domain.worldcup.controller;
 
+import com.example.demo.domain.worldcup.controller.validator.worldcup.VerifyWorldCupKeyword;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupsResponse;
@@ -28,7 +29,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class WorldCupGameController {
 
+
+
+
+
     private final WorldCupGameService worldCupGameService;
+
+
+
+
+
 
     @Operation(
             summary = "전체 월드컵 리스트 조회(페이징)",
@@ -61,7 +71,7 @@ public class WorldCupGameController {
             @RequestParam(name = "dateRange", required = false, defaultValue = "ALL")
             WorldCupDateRange dateRange,
 
-            @Size(min = 1, max = 10)
+            @VerifyWorldCupKeyword
             @RequestParam(name = "keyword", required = false)
             String worldCupKeyword,
 
@@ -82,5 +92,8 @@ public class WorldCupGameController {
         );
         return new RestApiResponse(1, "월드컵 페이지 조회 성공", result);
     }
+
+
+
 
 }

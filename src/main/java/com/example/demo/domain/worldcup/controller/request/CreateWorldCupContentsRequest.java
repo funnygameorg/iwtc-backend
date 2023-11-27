@@ -1,18 +1,14 @@
 package com.example.demo.domain.worldcup.controller.request;
 
 import com.example.demo.domain.etc.model.vo.FileType;
-import com.example.demo.domain.worldcup.model.WorldCupGame;
-import com.example.demo.domain.worldcup.model.WorldCupGameContents;
+import com.example.demo.domain.worldcup.controller.validator.VerifyVisibleType;
+import com.example.demo.domain.worldcup.controller.validator.worldcupcontents.VerifyWorldCupContentsName;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.ToString;
 
 import java.util.List;
-
-import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
 
 @Builder
 @Schema
@@ -26,10 +22,10 @@ public record CreateWorldCupContentsRequest (
     @Builder
     @Schema
     public record CreateContentsRequest(
-            @Schema(description = "월드컵 컨텐츠 이름")
-            @NotBlank(message = "월드컵 컨텐츠 이름: 필수 값")
+            @VerifyWorldCupContentsName
             String contentsName,
 
+            @VerifyVisibleType
             VisibleType visibleType,
 
             CreateMediaFileRequest createMediaFileRequest
