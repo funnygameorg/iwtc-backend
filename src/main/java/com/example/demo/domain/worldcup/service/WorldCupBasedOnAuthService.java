@@ -115,7 +115,7 @@ public class WorldCupBasedOnAuthService {
     // 해당 `WorldCupGame`의 작성자인가?
     private boolean isGameOwner(Long memberId, WorldCupGame worldCupGame) {
 
-        return worldCupGame.getMemberId() != memberId;
+        return worldCupGame.getMemberId() == memberId;
 
     }
 

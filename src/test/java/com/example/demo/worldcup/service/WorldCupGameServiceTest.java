@@ -401,7 +401,7 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
             );
 
             // then
-            assertThat(result.getContent().size()).isEqualTo(2);
+            assertThat(result.getContent().size()).isEqualTo(1);
         }
     }
 
