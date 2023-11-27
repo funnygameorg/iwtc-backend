@@ -80,19 +80,19 @@ VALUES
 
 INSERT INTO `MEDIA_FILE`(`object_key`, `file_type`, `d_type`, `created_at`, `updated_at`)
 VALUES
-    ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('/watch?v=HqzUFulMwyQ', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('/watch?v=mvQHqxmdYV0', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('/watch?v=ivOm8atZK34', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('awfgGGg', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('/watch?v=oB_vJ1VPRbc', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('/watch?v=xMEpQ56RpH0', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('https://picsum.photos/seed/gf/600/800', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('/f2fawfawf?=wxz', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()));
+    ('a', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('b', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('c', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('d', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('e', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('f', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('g', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('h', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('i', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('j', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('k', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('l', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('m', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()));
 
 INSERT INTO `STATIC_MEDIA_FILE` (`extension`, `original_name`, `id`)
 VALUES
