@@ -1,5 +1,6 @@
 package com.example.demo.domain.etc.model;
 
+import com.example.demo.common.error.exception.NotNullArgumentException;
 import com.google.common.base.Objects;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -12,6 +13,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
 import static com.example.demo.domain.etc.model.vo.FileType.STATIC_MEDIA_FILE;
+import static java.util.Objects.isNull;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
@@ -33,6 +35,10 @@ public class StaticMediaFile extends MediaFile {
 
 
     public void update(String objectKey, String originalName) {
+
+        if(isNull(objectKey) || isNull(originalName)) {
+            throw new NotNullArgumentException(objectKey, originalName);
+        }
 
         super.objectKey = objectKey;
         this.originalName = originalName;

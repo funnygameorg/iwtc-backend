@@ -66,7 +66,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
             List<InternetVideoUrl> internetMovieUrls = range(5, 9)
                     .mapToObj( idx ->
                             InternetVideoUrl.builder()
-                                    .filePath("www.youtube/dogmovies/" + idx)
+                                    .objectKey("www.youtube/dogmovies/" + idx)
                                     .isPlayableVideo(true)
                                     .videoStartTime("00000")
                                     .videoPlayDuration(3)
@@ -159,7 +159,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
                                     .isPlayableVideo(true)
                                     .videoPlayDuration(3)
                                     .videoStartTime("00001")
-                                    .filePath("path/" + idx)
+                                    .objectKey("path/" + idx)
                                     .build())
                     .toList();
             List<WorldCupGameContents> contentsListWithMediaFiles = range(1, 4)

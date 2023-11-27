@@ -53,7 +53,7 @@ public class MediaFileFactory {
 
     private InternetVideoUrl createInternetVideoUrl(String objectKey, int videoPlayDuration, String videoStartTime) {
         return InternetVideoUrl.builder()
-                .filePath(objectKey)
+                .objectKey(objectKey)
                 .isPlayableVideo(true)
                 .videoPlayDuration(videoPlayDuration)
                 .videoStartTime(videoStartTime)

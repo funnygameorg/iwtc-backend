@@ -30,7 +30,7 @@ public enum CustomErrorCode {
     NOT_FOUND_WORLD_CUP_GAME_CONTENTS,
     EXPIRED_REMEMBER_ME,
 
-    NOT_EXISTS_S3_MEDIA_FILE;
+    NOT_EXISTS_S3_MEDIA_FILE, NOT_NULL_ARGUMENT;
 
     private int code;
     private String message;

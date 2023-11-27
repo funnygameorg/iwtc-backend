@@ -229,19 +229,19 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
                     .isPlayableVideo(true)
                     .videoStartTime("00001")
                     .videoPlayDuration(3)
-                    .filePath("https://youtube/cats/1")
+                    .objectKey("https://youtube/cats/1")
                     .build();
             InternetVideoUrl internetMovieUrl2 = InternetVideoUrl.builder()
                     .isPlayableVideo(true)
                     .videoStartTime("00001")
                     .videoPlayDuration(3)
-                    .filePath("https://youtube/cats/2")
+                    .objectKey("https://youtube/cats/2")
                     .build();
             InternetVideoUrl internetMovieUrl3 = InternetVideoUrl.builder()
                     .isPlayableVideo(true)
                     .videoStartTime("00001")
                     .videoPlayDuration(3)
-                    .filePath("https://youtube/cats/3")
+                    .objectKey("https://youtube/cats/3")
                     .build();
 
             WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -342,19 +342,19 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
                     .isPlayableVideo(true)
                     .videoStartTime("00001")
                     .videoPlayDuration(3)
-                    .filePath("https://youtube/cats/1")
+                    .objectKey("https://youtube/cats/1")
                     .build();
             InternetVideoUrl internetMovieUrl2 = InternetVideoUrl.builder()
                     .isPlayableVideo(true)
                     .videoStartTime("00001")
                     .videoPlayDuration(3)
-                    .filePath("https://youtube/cats/2")
+                    .objectKey("https://youtube/cats/2")
                     .build();
             InternetVideoUrl internetMovieUrl3 = InternetVideoUrl.builder()
                     .isPlayableVideo(true)
                     .videoStartTime("00001")
                     .videoPlayDuration(3)
-                    .filePath("https://youtube/cats/3")
+                    .objectKey("https://youtube/cats/3")
                     .build();
 
             WorldCupGameContents contents1 = WorldCupGameContents.builder()

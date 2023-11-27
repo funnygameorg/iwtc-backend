@@ -244,7 +244,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     InternetVideoUrl.builder()
                             .videoPlayDuration(3)
                             .videoStartTime("00001")
-                            .filePath("https://uTube.com/" + idx)
+                            .objectKey("https://uTube.com/" + idx)
                             .build()
                     ).toList();
 
