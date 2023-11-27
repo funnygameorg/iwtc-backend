@@ -67,8 +67,8 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                 )
                 FROM WorldCupGame wcg 
                 LEFT JOIN WorldCupGameContents wcgc 
-                ON wcg = wcgc.worldCupGame 
-                WHERE wcg.id = :worldCupGameId 
+                ON wcgc.softDelete != true AND wcg = wcgc.worldCupGame
+                WHERE wcg.id = :worldCupGameId
                 GROUP BY wcg.id 
                 """;
         TypedQuery<GetAvailableGameRoundsProjection> query = em.createQuery(sql, GetAvailableGameRoundsProjection.class);
@@ -121,7 +121,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                         FROM 
                             WORLD_CUP_GAME_CONTENTS AS INNER_WCGC
                         WHERE 
-                            inner_wcgc.WORLD_CUP_GAME_ID = :worldCupGameId
+                            INNER_WCGC.WORLD_CUP_GAME_ID = :worldCupGameId AND INNER_WCGC.SOFT_DELETE = false 
                         %s
                     ) AS wcgc
                     LEFT JOIN MEDIA_FILE AS amf ON amf.ID = wcgc.MEDIA_FILE_ID

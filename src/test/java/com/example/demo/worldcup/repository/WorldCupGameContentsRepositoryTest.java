@@ -52,7 +52,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
     @DisplayName("id를 사용해서 존재하는 월드컵 게임인지 찾을 수 있다.")
     public class existsWorldCupGame {
         @Test
-        @DisplayName(SUCCESS_PREFIX + "월드컵 게임 존재 O")
+        @DisplayName(SUCCESS_PREFIX)
         public void success() {
             // given
             WorldCupGame worldCupGame = createWorldCupGame(
@@ -199,48 +199,94 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
         }
     }
 
-    @Test
+    @Nested
     @DisplayName("월드컵 게임에 포함된 모든 컨텐츠를 조회할 수 있다.")
-    public void findAllByWorldCupGame() {
-        WorldCupGame worldCupGame = createWorldCupGame(
-                "TITLE",
-                "DESCRIPTION",
-                WorldCupGameRound.ROUND_32,
-                VisibleType.PUBLIC,
-                1
-        );
-        List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
-                .mapToObj(idx -> StaticMediaFile.builder()
-                        .originalName("original")
-                        .objectKey("filePath")
-                        .extension(".png")
-                        .build())
-                .toList();
-        List<WorldCupGameContents> contentsList = IntStream.range(1,4)
-                .mapToObj(idx -> createGameContents(worldCupGame, "CONTENTS_NAME" + idx, mediaFiles.get(idx - 1)))
-                .toList();
-        worldCupGameRepository.save(worldCupGame);
-        mediaFileRepository.saveAll(mediaFiles);
-        worldCupGameContentsRepository.saveAll(contentsList);
+    class FindAllByWorldCupGame {
 
-        // when
-        List<WorldCupGameContents> result = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
-        // then
-        assertAll(
-                () -> assertThat(result.size()).isEqualTo(3),
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void findAllByWorldCupGame() {
+            WorldCupGame worldCupGame = createWorldCupGame(
+                    "TITLE",
+                    "DESCRIPTION",
+                    WorldCupGameRound.ROUND_32,
+                    VisibleType.PUBLIC,
+                    1
+            );
+            List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
+                    .mapToObj(idx -> StaticMediaFile.builder()
+                            .originalName("original")
+                            .objectKey("filePath")
+                            .extension(".png")
+                            .build())
+                    .toList();
+            List<WorldCupGameContents> contentsList = IntStream.range(1,4)
+                    .mapToObj(idx -> createGameContents(worldCupGame, "CONTENTS_NAME" + idx, mediaFiles.get(idx - 1)))
+                    .toList();
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(mediaFiles);
+            worldCupGameContentsRepository.saveAll(contentsList);
 
-                () -> assertThat(result.get(0).getId()).isEqualTo(1L),
-                () -> assertThat(result.get(0).getMediaFile().getId()).isEqualTo(1L),
+            // when
+            List<WorldCupGameContents> result = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
-                () -> assertThat(result.get(1).getId()).isEqualTo(2L),
-                () -> assertThat(result.get(1).getMediaFile().getId()).isEqualTo(2L),
+            // then
+            assertAll(
+                    () -> assertThat(result.size()).isEqualTo(3),
 
-                () -> assertThat(result.get(2).getId()).isEqualTo(3L),
-                () -> assertThat(result.get(2).getMediaFile().getId()).isEqualTo(3L)
-        );
+                    () -> assertThat(result.get(0).getId()).isEqualTo(1L),
+                    () -> assertThat(result.get(0).getMediaFile().getId()).isEqualTo(1L),
+
+                    () -> assertThat(result.get(1).getId()).isEqualTo(2L),
+                    () -> assertThat(result.get(1).getMediaFile().getId()).isEqualTo(2L),
+
+                    () -> assertThat(result.get(2).getId()).isEqualTo(3L),
+                    () -> assertThat(result.get(2).getMediaFile().getId()).isEqualTo(3L)
+            );
+        }
+
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX + "모든 컨텐츠의 상태가 softDeleted 상태, 결과 0건")
+        public void success2() {
+            WorldCupGame worldCupGame = createWorldCupGame(
+                    "TITLE",
+                    "DESCRIPTION",
+                    WorldCupGameRound.ROUND_32,
+                    VisibleType.PUBLIC,
+                    1
+            );
+            List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
+                    .mapToObj(idx -> StaticMediaFile.builder()
+                            .originalName("original")
+                            .objectKey("filePath")
+                            .extension(".png")
+                            .build())
+                    .toList();
+            List<WorldCupGameContents> contentsList = IntStream.range(1,4)
+                    .mapToObj(idx ->
+                            WorldCupGameContents.builder()
+                                    .name("CONTENTS_NAME" + idx)
+                                    .mediaFile(mediaFiles.get(idx - 1))
+                                    .worldCupGame(worldCupGame)
+                                    .softDelete(true)
+                                    .build()
+                    )
+                    .toList();
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(mediaFiles);
+            worldCupGameContentsRepository.saveAll(contentsList);
+
+            // when
+            List<WorldCupGameContents> result = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
+
+            // then
+            assertThat(result.size()).isEqualTo(0);
+
+        }
+
     }
-
     private WorldCupGame createWorldCupGame(
             String title,
             String description,

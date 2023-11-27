@@ -178,16 +178,16 @@ public class WorldCupGamePageRepositoryImpl {
             INNER JOIN world_cup_game_contents AS wcgc_max ON wcgc_max.id = (
                 SELECT MAX(inner_wcgc.id) AS id 
                 FROM world_cup_game_contents AS inner_wcgc 
-                WHERE inner_wcgc.world_cup_game_id = wcg.id 
+                WHERE inner_wcgc.world_cup_game_id = wcg.id
                 AND inner_wcgc.id IN (
                     SELECT inner_wcgc_2.id 
                     FROM world_cup_game_contents AS inner_wcgc_2 
-                    WHERE inner_wcgc_2.world_cup_game_id = wcg.id 
+                    WHERE inner_wcgc_2.world_cup_game_id = wcg.id AND inner_wcgc_2.soft_delete = false 
                     ORDER BY inner_wcgc_2.id DESC 
                     LIMIT 2
                 )
             )
-             
+            
             INNER JOIN world_cup_game_contents AS wcgc_min ON wcgc_min.id = (
                 SELECT MIN(inner_wcgc.id) AS id 
                 FROM world_cup_game_contents AS inner_wcgc 
@@ -195,7 +195,7 @@ public class WorldCupGamePageRepositoryImpl {
                 AND inner_wcgc.id IN (
                     SELECT inner_wcgc_2.id 
                     FROM world_cup_game_contents AS inner_wcgc_2 
-                    WHERE inner_wcgc_2.world_cup_game_id = wcg.id 
+                    WHERE inner_wcgc_2.world_cup_game_id = wcg.id AND inner_wcgc_2.soft_delete = false 
                     ORDER BY inner_wcgc_2.id DESC 
                     LIMIT 2
                 )

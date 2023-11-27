@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.Where;
 
 import static com.example.demo.domain.etc.model.vo.FileType.*;
 import static com.google.common.base.Objects.equal;
@@ -27,6 +28,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Entity
 @Builder
+@Where(clause = "SOFT_DELETE = false")
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 @Table(name = "WORLD_CUP_GAME_CONTENTS",

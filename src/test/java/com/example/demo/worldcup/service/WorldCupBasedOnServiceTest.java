@@ -117,7 +117,6 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 
             // when
             List<GetWorldCupContentsResponse> response = worldCupBasedOnAuthService.getMyWorldCupGameContents(1, 1);
-            List<WorldCupGameContents> ss = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
             // then
             GetWorldCupContentsResponse firstElement = response.get(0);
