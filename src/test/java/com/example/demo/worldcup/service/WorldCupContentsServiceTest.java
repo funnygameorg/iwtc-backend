@@ -499,13 +499,18 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .build();
 
             // when
-            ClearWorldCupGameResponse response = worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request);
+            List<ClearWorldCupGameResponse> response = worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request);
 
             // then
             String firstWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
             String secondWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 2L));
             String thirdWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 3L));
             String fourthWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 4L));
+
+            ClearWorldCupGameResponse firstWinner = response.stream().filter(winner -> winner.rank() == 1).toList().get(0);
+            ClearWorldCupGameResponse secondWinner = response.stream().filter(winner -> winner.rank() == 2).toList().get(0);
+            ClearWorldCupGameResponse thirdWinner = response.stream().filter(winner -> winner.rank() == 3).toList().get(0);
+            ClearWorldCupGameResponse fourthWinner = response.stream().filter(winner -> winner.rank() == 4).toList().get(0);
 
             assertAll(
                     () -> assertThat(firstWinnerPoint).isEqualTo("10"),
@@ -514,21 +519,21 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     () -> assertThat(fourthWinnerPoint).isEqualTo("4"),
 
 
-                    () -> assertThat(response.firstWinner().contentsName()).isEqualTo("contentsName1"),
-                    () -> assertThat(response.firstWinner().contentsId()).isEqualTo(1),
-                    () -> assertThat(response.firstWinner().mediaFileId()).isEqualTo(1),
+                    () -> assertThat(firstWinner.contentsName()).isEqualTo("contentsName1"),
+                    () -> assertThat(firstWinner.contentsId()).isEqualTo(1),
+                    () -> assertThat(firstWinner.mediaFileId()).isEqualTo(1),
 
-                    () -> assertThat(response.secondWinner().contentsName()).isEqualTo("contentsName2"),
-                    () -> assertThat(response.secondWinner().contentsId()).isEqualTo(2),
-                    () -> assertThat(response.secondWinner().mediaFileId()).isEqualTo(2),
+                    () -> assertThat(secondWinner.contentsName()).isEqualTo("contentsName2"),
+                    () -> assertThat(secondWinner.contentsId()).isEqualTo(2),
+                    () -> assertThat(secondWinner.mediaFileId()).isEqualTo(2),
 
-                    () -> assertThat(response.thirdWinner().contentsName()).isEqualTo("contentsName3"),
-                    () -> assertThat(response.thirdWinner().contentsId()).isEqualTo(3),
-                    () -> assertThat(response.thirdWinner().mediaFileId()).isEqualTo(3),
+                    () -> assertThat(thirdWinner.contentsName()).isEqualTo("contentsName3"),
+                    () -> assertThat(thirdWinner.contentsId()).isEqualTo(3),
+                    () -> assertThat(thirdWinner.mediaFileId()).isEqualTo(3),
 
-                    () -> assertThat(response.fourthWinner().contentsName()).isEqualTo("contentsName4"),
-                    () -> assertThat(response.fourthWinner().contentsId()).isEqualTo(4),
-                    () -> assertThat(response.fourthWinner().mediaFileId()).isEqualTo(4)
+                    () -> assertThat(fourthWinner.contentsName()).isEqualTo("contentsName4"),
+                    () -> assertThat(fourthWinner.contentsId()).isEqualTo(4),
+                    () -> assertThat(fourthWinner.mediaFileId()).isEqualTo(4)
             );
         }
 

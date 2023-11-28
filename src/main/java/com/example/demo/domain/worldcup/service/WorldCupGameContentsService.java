@@ -17,9 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.stream;
+import static java.util.stream.IntStream.range;
 
 @Service
 @RequiredArgsConstructor
@@ -158,9 +161,9 @@ public class WorldCupGameContentsService {
 
 
 
-    public ClearWorldCupGameResponse clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
+    public List<ClearWorldCupGameResponse> clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
 
-        List<WorldCupGameContents> contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
+        var contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
 
         if(contents.size() != 4) {
             throw new NotFoundWorldCupContentsException("조회 실패 개수 " + (4 - contents.size()));
@@ -171,7 +174,16 @@ public class WorldCupGameContentsService {
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.thirdWinnerContentsId(), 4);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.fourthWinnerContentsId(), 4);
 
-        return ClearWorldCupGameResponse.build(contents);
+
+        return range(0, contents.size())
+                .mapToObj(index -> {
+
+                    var rank = index + 1;
+                    return ClearWorldCupGameResponse.fromEntity(contents.get(index), rank);
+
+                })
+                .toList();
+
     }
 
 
