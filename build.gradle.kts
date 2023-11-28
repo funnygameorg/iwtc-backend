@@ -72,6 +72,9 @@ dependencies {
 
 	implementation("com.google.guava:guava:32.1.2-jre")
 
+
+	implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
+
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testCompileOnly("org.projectlombok:lombok")

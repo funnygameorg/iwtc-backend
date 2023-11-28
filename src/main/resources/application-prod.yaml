@@ -1,0 +1,56 @@
+jasypt:
+  encryptor:
+    bean: jasyptEncryptorAES
+
+spring:
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: ENC(DB)
+    username: ENC(UserName)
+    password: ENC(Password)
+  redis:
+    host: redis # PROD 변경
+    port: 6379
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop # PROD 변경
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect # PROD 변경
+
+jwt:
+  secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
+  token-validity-milli-seconds:
+    access: 200000000 # PROD 변경
+    refresh: 21600000
+
+logging:
+  config: classpath:log/logback-spring-local.xml # PROD 변경
+
+cloud:
+  aws:
+    credentials:
+      access-key: localstack-access-key
+      secret-key: localstack-secret-key
+    region:
+      static: us-east-1
+    end-point: http://localstack:4566
+    s3:
+      bucket: media # PROD 변경
+    stack:
+      auto: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
