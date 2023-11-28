@@ -513,12 +513,27 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     () -> assertThat(thirdWinnerPoint).isEqualTo("4"),
                     () -> assertThat(fourthWinnerPoint).isEqualTo("4"),
 
-                    () -> assertThat(response.firstWinnerName()).isEqualTo("contentsName1"),
-                    () -> assertThat(response.secondWinnerName()).isEqualTo("contentsName2"),
-                    () -> assertThat(response.thirdWinnerName()).isEqualTo("contentsName3"),
-                    () -> assertThat(response.fourthWinnerName()).isEqualTo("contentsName4")
+
+                    () -> assertThat(response.firstWinner().contentsName()).isEqualTo("contentsName1"),
+                    () -> assertThat(response.firstWinner().contentsId()).isEqualTo(1),
+                    () -> assertThat(response.firstWinner().mediaFileId()).isEqualTo(1),
+
+                    () -> assertThat(response.secondWinner().contentsName()).isEqualTo("contentsName2"),
+                    () -> assertThat(response.secondWinner().contentsId()).isEqualTo(2),
+                    () -> assertThat(response.secondWinner().mediaFileId()).isEqualTo(2),
+
+                    () -> assertThat(response.thirdWinner().contentsName()).isEqualTo("contentsName3"),
+                    () -> assertThat(response.thirdWinner().contentsId()).isEqualTo(3),
+                    () -> assertThat(response.thirdWinner().mediaFileId()).isEqualTo(3),
+
+                    () -> assertThat(response.fourthWinner().contentsName()).isEqualTo("contentsName4"),
+                    () -> assertThat(response.fourthWinner().contentsId()).isEqualTo(4),
+                    () -> assertThat(response.fourthWinner().mediaFileId()).isEqualTo(4)
             );
         }
+
+
+
 
         @Test
         @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 컨텐츠가 순위권이다.")
