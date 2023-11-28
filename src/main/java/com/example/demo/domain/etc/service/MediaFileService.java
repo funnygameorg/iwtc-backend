@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.print.attribute.standard.Media;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.LongStream;
 
 import static com.example.demo.common.error.CustomErrorCode.NOT_EXISTS_S3_MEDIA_FILE;
@@ -53,6 +54,26 @@ public class MediaFileService {
 
 
 
+    public List<MediaFileResponse> getMediaFile(List<Long> mediaFileIds) {
+
+        List<MediaFile> mediaFiles = mediaFileRepository
+                .findAllById(mediaFileIds);
+
+
+        return mediaFiles.stream().map( mediaFile -> {
+
+            var mediaFileBody = getMediaFileBody(mediaFile);
+
+            var allFieldMediaFileDto = mediaFileComponent.convertToTotalDataMediaFile(mediaFile);
+
+            return MediaFileResponse.fromEntity(allFieldMediaFileDto, mediaFileBody);
+
+        }).toList();
+
+    }
+
+
+
     private String getMediaFileBody(MediaFile mediaFile) {
 
         String mediaFileBody = null;
@@ -71,8 +92,5 @@ public class MediaFileService {
         }
         return mediaFileBody;
     }
-
-
-
 
 }
