@@ -1,6 +1,9 @@
 package com.example.demo.helper.testbase;
 
 import com.example.demo.common.config.WebConfig;
+import com.example.demo.domain.etc.controller.ETCController;
+import com.example.demo.domain.etc.service.CommentService;
+import com.example.demo.domain.etc.service.MediaFileService;
 import com.example.demo.domain.member.controller.MemberController;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.worldcup.controller.WorldCupBasedOnAuthController;
@@ -27,8 +30,8 @@ import static org.springframework.context.annotation.FilterType.*;
                 WorldCupBasedOnAuthController.class,
                 WorldCupContentsController.class,
                 WorldCupGameController.class,
-
                 MemberController.class,
+                ETCController.class,
         },
         excludeFilters = {
                 @Filter(type = ASSIGNABLE_TYPE, classes = WebConfig.class)
@@ -43,6 +46,11 @@ public abstract class WebMvcBaseTest {
         protected ObjectMapper objectMapper;
 
 
+
+        @MockBean
+        protected CommentService commentService;
+        @MockBean
+        protected MediaFileService mediaFileService;
         @MockBean
         protected MemberService memberService;
         @MockBean
@@ -54,7 +62,7 @@ public abstract class WebMvcBaseTest {
 
 
 
-        private static final String ROOT_PATH = "/api";
+        protected static final String ROOT_PATH = "/api";
         protected static final String WORLD_CUPS_PATH = ROOT_PATH + "/world-cups";
         protected static final String MEMBER_PATH = ROOT_PATH + "/members";
 

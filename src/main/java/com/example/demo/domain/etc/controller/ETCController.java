@@ -1,12 +1,13 @@
 package com.example.demo.domain.etc.controller;
 import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 
+import com.example.demo.domain.etc.controller.response.GetCommentsListResponse;
 import com.example.demo.domain.etc.controller.response.CreateAccessTokenResponse;
 import com.example.demo.domain.etc.controller.response.MediaFileResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.RestApiResponse;
-import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.etc.service.MediaFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,9 +28,10 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-class ETCController {
+public class ETCController {
     private final JwtService jwtService;
     private final MediaFileService mediaFileService;
+    private final CommentService commentService;
 
     @Operation(
             summary = "컨텐츠(여러 게임, 아이돌...)에 의견 작성",
@@ -143,6 +145,36 @@ class ETCController {
                 mediaFileService.getMediaFile(mediaFileIds)
         );
     }
+
+
+
+
+    @Operation(
+            summary = "미디어 파일 리스트 반환",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "미디어 파일 조회"
+                    ),
+            }
+    )
+    @ResponseStatus(OK)
+    @GetMapping("/world-cups/{worldCupId}/comments")
+    public RestApiResponse<List<GetCommentsListResponse>> getComments(
+            @PathVariable Long worldCupId,
+            @RequestParam Integer offset
+    ) {
+
+        var response = commentService.getComments(worldCupId, offset);
+
+        return new RestApiResponse(
+                1,
+                "코멘트 조회 성공",
+                response
+        );
+
+    }
+
 
 
 }
