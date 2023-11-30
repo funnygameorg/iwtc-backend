@@ -48,11 +48,11 @@ public class ETCControllerTest extends WebMvcBaseTest {
                 .build();
 
         mockMvc.perform(
-                        post(WRITE_COMMENT_API, 1L)
+                        post(WRITE_COMMENT_API, 1L, 1L)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
 

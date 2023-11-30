@@ -182,11 +182,11 @@ public class ETCController {
 
 
     @Operation(
-            summary = "미디어 파일 리스트 반환",
+            summary = "컨텐츠 리스트 반환",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "미디어 파일 조회"
+                            description = "컨텐츠 리스트 조회"
                     ),
             }
     )

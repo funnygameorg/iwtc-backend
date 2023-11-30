@@ -32,6 +32,7 @@ import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -605,5 +606,122 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
             );
         }
     }
+
+
+
+
+
+    @Nested
+    @DisplayName("월드컵 게임에 포함된 컨텐츠를 순위로 정렬해서 조회할 수 있다.")
+    public class GetGameResultContentsList {
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1() {
+
+            // given
+            WorldCupGame worldCupGame = WorldCupGame
+                    .builder()
+                    .title("title1")
+                    .description("description1")
+                    .visibleType(PUBLIC)
+                    .views(0)
+                    .softDelete(false)
+                    .memberId(1)
+                    .build();
+
+            StaticMediaFile mediaFile1 = StaticMediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .objectKey("fileAbsoluteName")
+                    .extension("extension")
+                    .build();
+            StaticMediaFile mediaFile2 = StaticMediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .objectKey("fileAbsoluteName")
+                    .extension("extension")
+                    .build();
+            StaticMediaFile mediaFile3 = StaticMediaFile.builder()
+                    .originalName("fileOriginalName")
+                    .objectKey("fileAbsoluteName")
+                    .extension("extension")
+                    .build();
+
+            WorldCupGameContents contents1 = WorldCupGameContents.builder()
+                    .name("컨텐츠1")
+                    .worldCupGame(worldCupGame)
+                    .gameRank(3)
+                    .gameScore(150)
+                    .mediaFile(mediaFile1)
+                    .build();
+            WorldCupGameContents contents2 = WorldCupGameContents.builder()
+                    .name("컨텐츠2")
+                    .worldCupGame(worldCupGame)
+                    .gameRank(5)
+                    .gameScore(112)
+                    .mediaFile(mediaFile2)
+                    .build();
+            WorldCupGameContents contents3 = WorldCupGameContents.builder()
+                    .name("컨텐츠3")
+                    .worldCupGame(worldCupGame)
+                    .gameRank(1)
+                    .gameScore(320)
+                    .mediaFile(mediaFile3)
+                    .build();
+
+
+
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2, mediaFile3));
+            worldCupGameContentsRepository.saveAll(List.of(contents1, contents2, contents3));
+
+
+            // when
+            var result = worldCupGamecontentsService.getGameResultContentsList(1L);
+
+
+            // then
+            assertAll(
+                    () -> assertThat(result.size()).isEqualTo(3),
+
+                    () -> assertThat(result.get(0).contentsName()).isEqualTo("컨텐츠3"),
+                    () -> assertThat(result.get(0).gameRank()).isEqualTo(1),
+                    () -> assertThat(result.get(0).gameScore()).isEqualTo(320),
+                    () -> assertThat(result.get(0).mediaFileId()).isEqualTo(3),
+
+                    () -> assertThat(result.get(1).contentsName()).isEqualTo("컨텐츠1"),
+                    () -> assertThat(result.get(1).gameRank()).isEqualTo(3),
+                    () -> assertThat(result.get(1).gameScore()).isEqualTo(150),
+                    () -> assertThat(result.get(1).mediaFileId()).isEqualTo(1),
+
+                    () -> assertThat(result.get(2).contentsName()).isEqualTo("컨텐츠2"),
+                    () -> assertThat(result.get(2).gameRank()).isEqualTo(5),
+                    () -> assertThat(result.get(2).gameScore()).isEqualTo(112),
+                    () -> assertThat(result.get(2).mediaFileId()).isEqualTo(2)
+
+
+            );
+
+
+        }
+
+
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 월드컵은 조회할 수 없다.")
+        public void fail1() {
+
+            // when & then
+            assertThrows(
+                    NotFoundWorldCupGameException.class,
+                    () -> worldCupGamecontentsService.getGameResultContentsList(1L)
+            );
+
+
+
+        }
+
+
+    }
+
 
 }
