@@ -1,14 +1,18 @@
 package com.example.demo.domain.etc.controller;
+import com.example.demo.common.web.auth.CustomAuthentication;
+import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 
+import com.example.demo.domain.etc.controller.response.GetCommentsListResponse;
 import com.example.demo.domain.etc.controller.response.CreateAccessTokenResponse;
 import com.example.demo.domain.etc.controller.response.MediaFileResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.RestApiResponse;
-import com.example.demo.domain.etc.model.MediaFile;
+import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.etc.service.MediaFileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,24 +24,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @Tag(name = "ETC", description = "서비스의 여러 기능에 공통적으로 사용되는 API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-class ETCController {
+public class ETCController {
     private final JwtService jwtService;
     private final MediaFileService mediaFileService;
+    private final CommentService commentService;
+
+
+
+
 
     @Operation(
-            summary = "컨텐츠(여러 게임, 아이돌...)에 의견 작성",
-            description = "서비스에 사용되는 컨텐츠의 의견 작성",
+            summary = "월드컵 컨텐츠에 댓글 작성",
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "의견 작성",
+                            description = "댓글 작성",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = RestApiResponse.class)
@@ -45,7 +54,7 @@ class ETCController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "존재하지 않는 컨텐츠",
+                            description = "[존재하지 않는 월드컵, 존재하지 않는 컨텐츠]",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = CustomErrorResponse.class)
@@ -53,14 +62,38 @@ class ETCController {
                     )
             }
     )
-    @PostMapping("/contents/{contentsId}/comments")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/world-cups/{worldCupId}/contents/{contentsId}/comments")
+    @ResponseStatus(CREATED)
     public RestApiResponse<Object> writeComment(
-            @PathVariable long contentsId,
-            @Valid @RequestBody WriteCommentRequest request
+
+            @PathVariable
+            Long worldCupId,
+
+            @PathVariable
+            Long contentsId,
+
+            @Valid
+            @RequestBody
+            WriteCommentRequest request,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication(required = false)
+            Optional<MemberDto> optionalMemberDto
+
     ) {
-        return new RestApiResponse(1, "", null);
+        commentService.writeComment(
+                request,
+                optionalMemberDto.get().getId(),
+                worldCupId,
+                contentsId
+        );
+
+        return new RestApiResponse(1, "댓글 작성", null);
     }
+
+
+
+
 
     @Operation(
             summary = "새로운 액세스 토큰 반환",
@@ -97,10 +130,19 @@ class ETCController {
     }
 
 
+    @Operation(
+            summary = "미디어 파일 1건 반환",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "미디어 파일 조회"
+                    ),
+            }
+    )
     @GetMapping("/media-files/{mediaFileId}")
     @ResponseStatus(OK)
-    public RestApiResponse<MediaFileResponse> getMediaFile(
-            @PathVariable long mediaFileId
+    public RestApiResponse<MediaFileResponse> getMediaFiles(
+            @PathVariable Long mediaFileId
     ) throws IOException {
 
         return new RestApiResponse(
@@ -109,4 +151,87 @@ class ETCController {
                 mediaFileService.getMediaFile(mediaFileId)
         );
     }
+
+
+
+
+    @Operation(
+            summary = "미디어 파일 리스트 반환",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "미디어 파일 조회"
+                    ),
+            }
+    )
+    @GetMapping("/media-files")
+    @ResponseStatus(OK)
+    public RestApiResponse<List<MediaFileResponse>> getMediaFiles(
+            @RequestParam List<Long> mediaFileIds
+    ) throws IOException {
+
+        return new RestApiResponse(
+                1,
+                "미디어 파일 조회",
+                mediaFileService.getMediaFile(mediaFileIds)
+        );
+    }
+
+
+
+
+    @Operation(
+            summary = "컨텐츠 리스트 반환",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "컨텐츠 리스트 조회"
+                    ),
+            }
+    )
+    @ResponseStatus(OK)
+    @GetMapping("/world-cups/{worldCupId}/comments")
+    public RestApiResponse<List<GetCommentsListResponse>> getComments(
+            @PathVariable Long worldCupId,
+            @RequestParam Integer offset
+    ) {
+
+        var response = commentService.getComments(worldCupId, offset);
+
+        return new RestApiResponse(
+                1,
+                "코멘트 조회 성공",
+                response
+        );
+
+    }
+
+
+
+
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/comments/{commentId}")
+    public RestApiResponse deleteComment(
+
+            @PathVariable Long commentId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication(required = false)
+            Optional<MemberDto> optionalMemberDto
+
+    ) {
+
+        commentService.deleteComment(commentId, optionalMemberDto.get().getId());
+
+        return new RestApiResponse(
+                1,
+                "코멘트 삭제 성공",
+                null
+        );
+
+    }
+
+
+
+
 }

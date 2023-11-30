@@ -3,6 +3,7 @@ package com.example.demo.domain.worldcup.service;
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
 import com.example.demo.domain.worldcup.controller.response.ClearWorldCupGameResponse;
 import com.example.demo.domain.worldcup.controller.response.GetAvailableGameRoundsResponse;
+import com.example.demo.domain.worldcup.controller.response.GetGameResultContentsListResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.domain.worldcup.exception.*;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
@@ -16,10 +17,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.stream;
+import static java.util.Comparator.comparing;
+import static java.util.stream.IntStream.range;
 
 @Service
 @RequiredArgsConstructor
@@ -142,6 +146,8 @@ public class WorldCupGameContentsService {
 
 
 
+
+
     // 이미 조회한 컨텐츠를 포함하는가?
     private boolean containsAlreadyContents(
             List<Long> alreadyPlayedContentsIds,
@@ -158,9 +164,9 @@ public class WorldCupGameContentsService {
 
 
 
-    public ClearWorldCupGameResponse clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
+    public List<ClearWorldCupGameResponse> clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
 
-        List<WorldCupGameContents> contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
+        var contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
 
         if(contents.size() != 4) {
             throw new NotFoundWorldCupContentsException("조회 실패 개수 " + (4 - contents.size()));
@@ -171,8 +177,36 @@ public class WorldCupGameContentsService {
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.thirdWinnerContentsId(), 4);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.fourthWinnerContentsId(), 4);
 
-        return ClearWorldCupGameResponse.build(contents);
+
+        return range(0, contents.size())
+                .mapToObj(index -> {
+
+                    var rank = index + 1;
+                    return ClearWorldCupGameResponse.fromEntity(contents.get(index), rank);
+
+                })
+                .toList();
+
     }
+
+
+
+
+
+    public List<GetGameResultContentsListResponse> getGameResultContentsList(Long worldCupId) {
+
+        var worldCupGame = worldCupGameRepository.findById(worldCupId)
+                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
+
+        var contentsList = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
+
+        return contentsList.stream()
+                .sorted(comparing(WorldCupGameContents::getGameRank))
+                .map(GetGameResultContentsListResponse::fromEntity)
+                .toList();
+
+    }
+
 
 
 

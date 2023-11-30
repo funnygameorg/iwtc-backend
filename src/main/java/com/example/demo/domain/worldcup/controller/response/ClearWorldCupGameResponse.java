@@ -6,24 +6,30 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 public record ClearWorldCupGameResponse(
-        @Schema(description = "1위 컨텐츠 이름")
-        String firstWinnerName,
-        @Schema(description = "2위 컨텐츠 이름")
-        String secondWinnerName,
-        @Schema(description = "3, 4위 컨텐츠 이름")
-        String thirdWinnerName,
-        @Schema(description = "3, 4위 컨텐츠 이름")
-        String fourthWinnerName
+
+        @Schema(description = "컨텐츠 이름")
+        String contentsName,
+
+        @Schema(description = "컨텐츠 아이디")
+        Long contentsId,
+
+        @Schema(description = "미디어 파일 아이디")
+        Long mediaFileId,
+
+        @Schema(description = "등수 [ 범위 1 ~ 4 ]")
+        int rank
 ) {
 
-        public static ClearWorldCupGameResponse build(
-                List<WorldCupGameContents> contents
+
+        public static ClearWorldCupGameResponse fromEntity(
+                WorldCupGameContents contents,
+                Integer rank
         ) {
                 return new ClearWorldCupGameResponse(
-                        contents.get(0).getName(),
-                        contents.get(1).getName(),
-                        contents.get(2).getName(),
-                        contents.get(3).getName()
+                        contents.getName(),
+                        contents.getId(),
+                        contents.getMediaFile().getId(),
+                        rank
                 );
         }
 }

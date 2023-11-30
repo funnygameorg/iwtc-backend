@@ -1,6 +1,7 @@
 package com.example.demo.domain.worldcup.controller;
 
 import com.example.demo.domain.worldcup.controller.request.ClearWorldCupGameRequest;
+import com.example.demo.domain.worldcup.controller.response.GetGameResultContentsListResponse;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.web.RestApiResponse;
@@ -33,6 +34,7 @@ public class WorldCupContentsController {
 
 
     private final WorldCupGameContentsService worldCupGameContentsService;
+
 
 
 
@@ -108,6 +110,46 @@ public class WorldCupContentsController {
                         )
         );
     }
+
+
+
+
+
+
+    @Operation(
+            summary = "이상형 월드컵 게임의 모든 컨텐츠 조회 (랭크 정렬)",
+            description = "이상형 월드컵 게임 결과 페이지에서 사용됩니다.",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "확인하고 싶은 월드컵",
+                            required = true
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "조회 성공"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵 게임",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+                    )
+            }
+    )
+    @GetMapping("/{worldCupId}/game-result-contents")
+    @ResponseStatus(OK)
+    public RestApiResponse<List<GetGameResultContentsListResponse>> getGameResultContentsList(
+            @PathVariable Long worldCupId
+    ) {
+            return new RestApiResponse(
+                    1,
+                    "게임 결과 컨텐츠 리스트 조회 성공",
+                    worldCupGameContentsService.getGameResultContentsList(worldCupId)
+            );
+    }
+
 
 
 
@@ -200,8 +242,12 @@ public class WorldCupContentsController {
 
 
 
+
     private List<Long> boxedPrimitiveLongs(long[] primitiveLongs) {
         long[] nullableLongs = primitiveLongs != null ? primitiveLongs : new long[0];
         return Longs.asList(nullableLongs);
     }
+
+
+
 }
