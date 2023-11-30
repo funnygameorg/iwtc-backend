@@ -13,6 +13,7 @@ VALUES
     ('NOT_FOUND_MEMBER', 5003, '존재하지 않는 사용자입니다.', 404),
     ('NOT_FOUND_WORLD_CUP_GAME_CONTENTS', 5004, '존재하지 않는 월드컵 게임 컨텐츠입니다.', 404),
     ('NOT_FOUND_MEDIA_FILE', 5005, '존재하지 않는 미디어 파일입니다.', 404),
+    ('NOT_FOUND_COMMENT', 5006, '존재하지 않는 댓글입니다.', 404),
 
     ('NO_ROUNDS_AVAILABLE_TO_PLAY', 10001, '컨텐츠 부족으로 플레이할 수 없습니다.', 400),
     ('ILLEGAL_WORLD_CUP_GAME_CONTENTS', 10002, '올바르지 않은 월드컵 게임 컨텐츠입니다.', 400),
@@ -21,6 +22,7 @@ VALUES
     ('NOT_SUPPORTED_GAME_ROUND', 10005, '진행할 수 없는 게임 라운드입니다.', 400),
     ('NOT_OWNER_GAME', 10006, '월드컵 게임 작성자가 아닙니다.', 400),
     ('NOT_EXISTS_S3_MEDIA_FILE', 10007, '미디어 파일 저장소에 문제가 생겼습니다.', 400),
+    ('NOT_OWNER_COMMENT', 10006, '댓글 작성자가 아닙니다.', 400),
 
 
     ('SERVER_INTERNAL_ERROR', 444, '서버에 문제가 생겼습니다.', 500);

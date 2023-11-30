@@ -12,14 +12,14 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ETCControllerTest extends WebMvcBaseTest {
 
     private static final String GET_COMMENTS_LIST_API = ROOT_PATH + "/world-cups/{worldCupId}/comments";
     private static final String WRITE_COMMENT_API = ROOT_PATH + "/world-cups/{worldCupId}/contents/{contentsId}/comments";
+    private static final String DELETE_COMMENT_API = ROOT_PATH + "/comments/{commentId}";
 
 
 
@@ -53,6 +53,18 @@ public class ETCControllerTest extends WebMvcBaseTest {
                                 .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isCreated());
+    }
+
+
+
+    @Test
+    @DisplayName(SUCCESS_PREFIX + "월드컵의 댓글 삭제")
+    public void deleteComment() throws Exception{
+
+        mockMvc.perform(
+                        delete(DELETE_COMMENT_API, 1L, 1L)
+                )
+                .andExpect(status().isNoContent());
     }
 
 

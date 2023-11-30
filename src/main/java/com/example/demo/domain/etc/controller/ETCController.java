@@ -26,8 +26,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @Tag(name = "ETC", description = "서비스의 여러 기능에 공통적으로 사용되는 API")
 @RestController
@@ -206,6 +205,32 @@ public class ETCController {
         );
 
     }
+
+
+
+
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/comments/{commentId}")
+    public RestApiResponse deleteComment(
+
+            @PathVariable Long commentId,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication(required = false)
+            Optional<MemberDto> optionalMemberDto
+
+    ) {
+
+        commentService.deleteComment(commentId, optionalMemberDto.get().getId());
+
+        return new RestApiResponse(
+                1,
+                "코멘트 삭제 성공",
+                null
+        );
+
+    }
+
 
 
 

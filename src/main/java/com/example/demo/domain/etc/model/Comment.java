@@ -6,6 +6,9 @@ import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
+
+import java.util.Objects;
 
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 import static jakarta.persistence.FetchType.LAZY;
@@ -18,6 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
+@Where(clause = "soft_delete = false")
 @Table(name = "COMMENT")
 public class Comment extends MemberTimeBaseEntity {
 
@@ -46,6 +50,24 @@ public class Comment extends MemberTimeBaseEntity {
 
 
 
+
+    public void softDelete() {
+        this.softDelete = true;
+    }
+
+
+
+
+
+    public boolean isOwner(Long memberId) {
+        return Objects.equals(member.getId(), memberId);
+    }
+
+
+
+
+
+
     public static Comment writeWorldCupGameResult(
             WorldCupGame worldCupGame,
             WorldCupGameContents worldCupGameContents,
@@ -63,7 +85,6 @@ public class Comment extends MemberTimeBaseEntity {
                 .build();
 
     }
-
 
 
 }

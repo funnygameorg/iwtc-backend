@@ -2,6 +2,8 @@ package com.example.demo.domain.etc.service;
 
 import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 import com.example.demo.domain.etc.controller.response.GetCommentsListResponse;
+import com.example.demo.domain.etc.exception.NotFoundCommentException;
+import com.example.demo.domain.etc.exception.NotOwnerCommentException;
 import com.example.demo.domain.etc.model.Comment;
 import com.example.demo.domain.etc.repository.CommentRepository;
 import com.example.demo.domain.member.repository.MemberRepository;
@@ -67,4 +69,25 @@ public class CommentService {
         commentRepository.save(newComment);
 
     }
+
+
+
+
+    @Transactional
+    public void deleteComment(Long commentId, Long memberId) {
+
+        var comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundCommentException(commentId));
+
+        if(!comment.isOwner(memberId)) {
+            throw new NotOwnerCommentException(memberId);
+        }
+
+        comment.softDelete();
+
+    }
+
+
+
+
 }

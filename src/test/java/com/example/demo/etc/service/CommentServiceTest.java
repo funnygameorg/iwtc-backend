@@ -1,6 +1,8 @@
 package com.example.demo.etc.service;
 
 import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
+import com.example.demo.domain.etc.exception.NotFoundCommentException;
+import com.example.demo.domain.etc.exception.NotOwnerCommentException;
 import com.example.demo.domain.etc.model.Comment;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.model.StaticMediaFile;
@@ -410,6 +412,151 @@ public class CommentServiceTest implements IntegrationBaseTest {
                     NotFoundWorldCupGameException.class,
                     () -> commentService.writeComment(request, 1L, 1L, 1L)
             );
+        }
+
+
+
+
+    }
+
+
+
+
+    @Nested
+    @DisplayName("월드컵 게임의 댓글을 삭제할 수 있다.")
+    class deleteComment {
+
+
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1() {
+
+            // given
+            var mediaFile = StaticMediaFile.builder()
+                    .originalName("a")
+                    .bucketName("a")
+                    .objectKey("a")
+                    .extension("A")
+                    .build();
+
+            var worldCup = WorldCupGame.builder()
+                    .title("타이틀1")
+                    .description("디스크립션1")
+                    .memberId(1)
+                    .visibleType(PUBLIC)
+                    .build();
+
+            var contents = WorldCupGameContents.builder()
+                    .name("콘텐츠명 1")
+                    .softDelete(false)
+                    .visibleType(PUBLIC)
+                    .worldCupGame(worldCup)
+                    .mediaFile(mediaFile)
+                    .build();
+
+            var member = Member.builder()
+                    .serviceId("world-id123")
+                    .password("world-pass123")
+                    .nickname("날아라 호박")
+                    .build();
+
+            var comment = Comment.builder()
+                    .body("내용 1")
+                    .nickname("제로")
+                    .softDelete(false)
+                    .contents(contents)
+                    .worldCupGame(worldCup)
+                    .member(member)
+                    .build();
+
+            memberRepository.save(member);
+            mediaFileRepository.save(mediaFile);
+            worldCupGameRepository.save(worldCup);
+            worldCupGameContentsRepository.save(contents);
+            commentRepository.save(comment);
+
+            // when
+            commentService.deleteComment(1L, 1L);
+
+            // then
+            var deletedComment = commentRepository.findById(1L);
+
+            assertThat(deletedComment.isEmpty()).isTrue();
+
+        }
+
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 댓글을 삭제할 수 없다.")
+        public void fail1() {
+
+            // when then
+            assertThrows(
+                    NotFoundCommentException.class,
+                    ()-> commentService.deleteComment(1L, 1L)
+            );
+        }
+
+
+
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "자신의 댓글이 아니면 삭제할 수 없다.")
+        public void fail2() {
+
+
+            // given
+            var mediaFile = StaticMediaFile.builder()
+                    .originalName("a")
+                    .bucketName("a")
+                    .objectKey("a")
+                    .extension("A")
+                    .build();
+
+            var worldCup = WorldCupGame.builder()
+                    .title("타이틀1")
+                    .description("디스크립션1")
+                    .memberId(1)
+                    .visibleType(PUBLIC)
+                    .build();
+
+            var contents = WorldCupGameContents.builder()
+                    .name("콘텐츠명 1")
+                    .softDelete(false)
+                    .visibleType(PUBLIC)
+                    .worldCupGame(worldCup)
+                    .mediaFile(mediaFile)
+                    .build();
+
+            var member = Member.builder()
+                    .serviceId("world-id123")
+                    .password("world-pass123")
+                    .nickname("날아라 호박")
+                    .build();
+
+            var comment = Comment.builder()
+                    .body("내용 1")
+                    .nickname("제로")
+                    .softDelete(false)
+                    .contents(contents)
+                    .worldCupGame(worldCup)
+                    .member(member)
+                    .build();
+
+            memberRepository.save(member);
+            mediaFileRepository.save(mediaFile);
+            worldCupGameRepository.save(worldCup);
+            worldCupGameContentsRepository.save(contents);
+            commentRepository.save(comment);
+
+            // when then
+            assertThrows(
+                    NotOwnerCommentException.class,
+                    () -> commentService.deleteComment(1L, 2L)
+            );
+
+
         }
 
 
