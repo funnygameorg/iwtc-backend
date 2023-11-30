@@ -1,12 +1,15 @@
 package com.example.demo.etc.service;
 
+import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 import com.example.demo.domain.etc.model.Comment;
+import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.etc.repository.CommentRepository;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
+import com.example.demo.domain.worldcup.exception.NotFoundWorldCupContentsException;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
@@ -14,6 +17,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepositor
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
+import io.lettuce.core.output.ValueOutput;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -102,11 +106,13 @@ public class CommentServiceTest implements IntegrationBaseTest {
                     .body("코멘트 1")
                     .member(member)
                     .worldCupGame(worldCupGame)
+                    .contents(worldCupGameContents)
                     .build();
             var comment2 = Comment.builder()
                     .body("코멘트 2")
                     .member(member)
                     .worldCupGame(worldCupGame)
+                    .contents(worldCupGameContents)
                     .build();
 
             memberRepository.save(member);
@@ -161,17 +167,20 @@ public class CommentServiceTest implements IntegrationBaseTest {
                     .objectKey("a")
                     .extension("A")
                     .build();
+
             var worldCupGameContents = WorldCupGameContents.builder()
                     .name("name 1")
                     .worldCupGame(worldCupGame)
                     .mediaFile(mediaFile)
                     .build();
+
             var commentList = IntStream.range(1, 19)
                     .mapToObj(idx ->
                             Comment.builder()
                                     .body("코멘트 " + idx)
                                     .member(member)
                                     .worldCupGame(worldCupGame)
+                                    .contents(worldCupGameContents)
                                     .build()
                     ).toList();
 
@@ -238,7 +247,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
                             Comment.builder()
                                     .body("코멘트 " + idx)
                                     .member(member)
-                                    .worldCupGame(worldCupGame)
+                                    .contents(worldCupGameContents)
                                     .build()
                     ).toList();
 
@@ -275,5 +284,137 @@ public class CommentServiceTest implements IntegrationBaseTest {
 
     }
 
+    @Nested
+    @DisplayName("댓글을 작성할 수 있다.")
+    class WriteComment {
+
+
+
+        @Test
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1() {
+
+            // given
+            var mediaFile = StaticMediaFile.builder()
+                    .originalName("a")
+                    .bucketName("a")
+                    .objectKey("a")
+                    .extension("A")
+                    .build();
+
+            var worldCup = WorldCupGame.builder()
+                    .title("타이틀1")
+                    .description("디스크립션1")
+                    .memberId(1)
+                    .visibleType(PUBLIC)
+                    .build();
+
+            var contents = WorldCupGameContents.builder()
+                    .name("콘텐츠명 1")
+                    .softDelete(false)
+                    .visibleType(PUBLIC)
+                    .worldCupGame(worldCup)
+                    .mediaFile(mediaFile)
+                    .build();
+
+            var member = Member.builder()
+                    .serviceId("world-id123")
+                    .password("world-pass123")
+                    .nickname("날아라 호박")
+                    .build();
+
+            var request= WriteCommentRequest.builder()
+                    .nickname("날아라 호박")
+                    .body("댓글의 내용이야!")
+                    .build();
+
+            mediaFileRepository.save(mediaFile);
+            memberRepository.save(member);
+            worldCupGameRepository.save(worldCup);
+            worldCupGameContentsRepository.save(contents);
+
+
+            // when
+            commentService.writeComment(request, 1L, 1L, 1L);
+
+            // then
+            var comment = commentRepository.findById(1L).get();
+
+            assertAll(
+                    () -> assertThat(comment.getBody()).isEqualTo("댓글의 내용이야!"),
+                    () -> assertThat(comment.getMember().getId()).isEqualTo(1L),
+                    () -> assertThat(comment.getContents().getId()).isEqualTo(1L),
+                    () -> assertThat(comment.getNickname()).isEqualTo("날아라 호박")
+            );
+        }
+
+
+
+
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 월드컵에 댓글을 작성할 수 없다.")
+        public void fail1() {
+            // given
+            var request= WriteCommentRequest.builder()
+                    .nickname("날아라 호박")
+                    .body("댓글의 내용이야!")
+                    .build();
+
+            var mediaFile = StaticMediaFile.builder()
+                    .originalName("a")
+                    .bucketName("a")
+                    .objectKey("a")
+                    .extension("A")
+                    .build();
+
+            var worldCup = WorldCupGame.builder()
+                    .title("타이틀1")
+                    .description("디스크립션1")
+                    .memberId(1)
+                    .visibleType(PUBLIC)
+                    .build();
+
+            var member = Member.builder()
+                    .serviceId("world-id123")
+                    .password("world-pass123")
+                    .nickname("날아라 호박")
+                    .build();
+
+            mediaFileRepository.save(mediaFile);
+            memberRepository.save(member);
+            worldCupGameRepository.save(worldCup);
+
+            // when
+            assertThrows(
+                    NotFoundWorldCupContentsException.class,
+                    () -> commentService.writeComment(request, 1L, 1L, 1L)
+            );
+        }
+
+
+
+
+
+        @Test
+        @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 월드컵 컨텐츠에 댓글을 작성할 수 없다.")
+        public void fail2() {
+            // given
+            var request= WriteCommentRequest.builder()
+                    .nickname("날아라 호박")
+                    .body("댓글의 내용이야!")
+                    .build();
+
+            // when
+            assertThrows(
+                    NotFoundWorldCupGameException.class,
+                    () -> commentService.writeComment(request, 1L, 1L, 1L)
+            );
+        }
+
+
+
+
+    }
 
 }

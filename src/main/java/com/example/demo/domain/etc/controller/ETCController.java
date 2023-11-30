@@ -1,4 +1,6 @@
 package com.example.demo.domain.etc.controller;
+import com.example.demo.common.web.auth.CustomAuthentication;
+import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 
 import com.example.demo.domain.etc.controller.response.GetCommentsListResponse;
@@ -10,6 +12,7 @@ import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.etc.service.MediaFileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "ETC", description = "서비스의 여러 기능에 공통적으로 사용되는 API")
@@ -33,13 +38,16 @@ public class ETCController {
     private final MediaFileService mediaFileService;
     private final CommentService commentService;
 
+
+
+
+
     @Operation(
-            summary = "컨텐츠(여러 게임, 아이돌...)에 의견 작성",
-            description = "서비스에 사용되는 컨텐츠의 의견 작성",
+            summary = "월드컵 컨텐츠에 댓글 작성",
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "의견 작성",
+                            description = "댓글 작성",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = RestApiResponse.class)
@@ -47,7 +55,7 @@ public class ETCController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "존재하지 않는 컨텐츠",
+                            description = "[존재하지 않는 월드컵, 존재하지 않는 컨텐츠]",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = CustomErrorResponse.class)
@@ -55,14 +63,38 @@ public class ETCController {
                     )
             }
     )
-    @PostMapping("/contents/{contentsId}/comments")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/world-cups/{worldCupId}/contents/{contentsId}/comments")
+    @ResponseStatus(CREATED)
     public RestApiResponse<Object> writeComment(
-            @PathVariable long contentsId,
-            @Valid @RequestBody WriteCommentRequest request
+
+            @PathVariable
+            Long worldCupId,
+
+            @PathVariable
+            Long contentsId,
+
+            @Valid
+            @RequestBody
+            WriteCommentRequest request,
+
+            @Parameter(hidden = true)
+            @CustomAuthentication(required = false)
+            Optional<MemberDto> optionalMemberDto
+
     ) {
-        return new RestApiResponse(1, "", null);
+        commentService.writeComment(
+                request,
+                optionalMemberDto.get().getId(),
+                worldCupId,
+                contentsId
+        );
+
+        return new RestApiResponse(1, "댓글 작성", null);
     }
+
+
+
+
 
     @Operation(
             summary = "새로운 액세스 토큰 반환",

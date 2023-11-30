@@ -1,5 +1,6 @@
 package com.example.demo.etc.controller;
 
+import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 import com.example.demo.domain.member.controller.request.SignInRequest;
 import com.example.demo.helper.testbase.WebMvcBaseTest;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ETCControllerTest extends WebMvcBaseTest {
 
     private static final String GET_COMMENTS_LIST_API = ROOT_PATH + "/world-cups/{worldCupId}/comments";
+    private static final String WRITE_COMMENT_API = ROOT_PATH + "/world-cups/{worldCupId}/contents/{contentsId}/comments";
+
+
+
 
     @Test
     @DisplayName(SUCCESS_PREFIX + "월드컵의 댓글 리스트 조회")
@@ -29,4 +34,27 @@ public class ETCControllerTest extends WebMvcBaseTest {
                 )
                 .andExpect(status().isOk());
     }
+
+
+
+
+    @Test
+    @DisplayName(SUCCESS_PREFIX + "월드컵의 댓글 작성")
+    public void writeComment() throws Exception{
+
+        var request = WriteCommentRequest.builder()
+                .body("ABC")
+                .nickname("손님1")
+                .build();
+
+        mockMvc.perform(
+                        post(WRITE_COMMENT_API, 1L)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+    }
+
+
+
 }
