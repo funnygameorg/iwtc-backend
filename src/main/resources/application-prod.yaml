@@ -5,10 +5,10 @@ jasypt:
 spring:
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: ENC(DB)
-    username: ENC(UserName)
-    password: ENC(Password)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(db-url)
+    username: ENC(db-username)
+    password: ENC(db-pass)
   redis:
     host: redis # PROD 변경
     port: 6379
@@ -25,7 +25,7 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect # PROD 변경
 
 jwt:
-  secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
+  secret: ENC(token)
   token-validity-milli-seconds:
     access: 200000000 # PROD 변경
     refresh: 21600000
