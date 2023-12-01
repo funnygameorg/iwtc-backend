@@ -74,7 +74,7 @@ jobs:
           # push it to ECR so that it can
           # be deployed to ECS.
           echo "step check1"
-          docker build --build-arg SPRING_PROFILES_ACTIVE=local -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build --build-arg SPRING_PROFILES_ACTIVE=local -t $ECR_REGISTRY/abcd_test:$IMAGE_TAG .
           echo "step check2"
           docker push $ECR_REGISTRY/abcd_test:$IMAGE_TAG
           echo "step check3"
