@@ -61,6 +61,8 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'false'
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -71,6 +73,9 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          echo "step check1"
+          docker build --build-arg SPRING_PROFILES_ACTIVE=local -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          echo "step check2"
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "step check3"
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
