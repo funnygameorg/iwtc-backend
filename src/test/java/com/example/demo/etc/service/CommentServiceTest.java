@@ -108,11 +108,13 @@ public class CommentServiceTest implements IntegrationBaseTest {
                     .body("코멘트 1")
                     .member(member)
                     .worldCupGame(worldCupGame)
+                    .nickname("Aawfawf")
                     .contents(worldCupGameContents)
                     .build();
             var comment2 = Comment.builder()
                     .body("코멘트 2")
                     .member(member)
+                    .nickname("Aawfawf")
                     .worldCupGame(worldCupGame)
                     .contents(worldCupGameContents)
                     .build();
@@ -134,11 +136,13 @@ public class CommentServiceTest implements IntegrationBaseTest {
                     () -> assertThat(response.size()).isEqualTo(2),
                     () -> assertThat(response.get(0).commentId()).isEqualTo(1),
                     () -> assertThat(response.get(0).commentWriterId()).isEqualTo(1),
+                    () -> assertThat(response.get(0).writerNickname()).isEqualTo("Aawfawf"),
                     () -> assertThat(response.get(0).body()).isEqualTo("코멘트 1"),
                     () -> assertThat(response.get(0).createdAt()).isEqualTo(savedCommentList.get(0).getCreatedAt()),
 
                     () -> assertThat(response.get(1).commentId()).isEqualTo(2),
                     () -> assertThat(response.get(1).commentWriterId()).isEqualTo(1),
+                    () -> assertThat(response.get(0).writerNickname()).isEqualTo("Aawfawf"),
                     () -> assertThat(response.get(1).body()).isEqualTo("코멘트 2"),
                     () -> assertThat(response.get(1).createdAt()).isEqualTo(savedCommentList.get(1).getCreatedAt())
             );
@@ -181,6 +185,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
                             Comment.builder()
                                     .body("코멘트 " + idx)
                                     .member(member)
+                                    .nickname("Aawfawf")
                                     .worldCupGame(worldCupGame)
                                     .contents(worldCupGameContents)
                                     .build()
@@ -204,11 +209,13 @@ public class CommentServiceTest implements IntegrationBaseTest {
                     () -> assertThat(response.size()).isEqualTo(3),
                     () -> assertThat(response.get(0).commentId()).isEqualTo(16),
                     () -> assertThat(response.get(0).commentWriterId()).isEqualTo(1),
+                    () -> assertThat(response.get(0).writerNickname()).isEqualTo("Aawfawf"),
                     () -> assertThat(response.get(0).body()).isEqualTo("코멘트 16"),
                     () -> assertThat(response.get(0).createdAt()).isEqualTo(savedCommentList.get(15).getCreatedAt()),
 
                     () -> assertThat(response.get(2).commentId()).isEqualTo(18),
                     () -> assertThat(response.get(2).commentWriterId()).isEqualTo(1),
+                    () -> assertThat(response.get(2).writerNickname()).isEqualTo("Aawfawf"),
                     () -> assertThat(response.get(2).body()).isEqualTo("코멘트 18"),
                     () -> assertThat(response.get(2).createdAt()).isEqualTo(savedCommentList.get(17).getCreatedAt())
             );
