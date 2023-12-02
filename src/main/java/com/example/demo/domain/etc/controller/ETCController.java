@@ -40,6 +40,9 @@ public class ETCController {
 
 
 
+    
+
+
 
     @Operation(
             summary = "월드컵 컨텐츠에 댓글 작성",
@@ -95,6 +98,9 @@ public class ETCController {
 
 
 
+
+
+
     @Operation(
             summary = "새로운 액세스 토큰 반환",
             description = "리프레시 토큰을 받아 새로운 액세스 토큰을 반환합니다.",
@@ -130,6 +136,10 @@ public class ETCController {
     }
 
 
+
+
+
+
     @Operation(
             summary = "미디어 파일 1건 반환",
             responses = {
@@ -151,6 +161,8 @@ public class ETCController {
                 mediaFileService.getMediaFile(mediaFileId)
         );
     }
+
+
 
 
 
@@ -181,11 +193,29 @@ public class ETCController {
 
 
     @Operation(
-            summary = "컨텐츠 리스트 반환",
+            summary = "댓글 리스트 반환",
+            parameters = {
+                    @Parameter(
+                            name = "worldCupId",
+                            description = "조회하고 싶은 댓글의 월드컵 식별자"
+                    ),
+                    @Parameter(
+                            name = "offset",
+                            description = "댓글 리스트 offset"
+                    )
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "컨텐츠 리스트 조회"
+                            description = "댓글 리스트 조회"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "존재하지 않는 월드컵 게임",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CustomErrorResponse.class)
+                            )
                     ),
             }
     )
