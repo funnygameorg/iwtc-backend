@@ -21,7 +21,6 @@ public class JasyptConfigAES {
         config.setKeyObtentionIterations("1000");
         config.setPoolSize("1");
         config.setProviderName("SunJCE");
-        config.setIvGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
         config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
         config.setStringOutputType("base64");
         encryptor.setConfig(config);
