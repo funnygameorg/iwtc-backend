@@ -7,10 +7,8 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: itwc-backend-repo
-  ECS_SERVICE: itwc-service
-  ECS_CLUSTER: itwc-back-ecs-cluster
-  ECS_TASK_DEFINITION: server-task:1
-  CONTAINER_NAME: server-container
+  EB_APP_NAME: itwc-back
+  EB_ENV_NAME: itwc-back-env
 
 permissions:
   contents: read
@@ -32,11 +30,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # ECR 로그인
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      # Docker image ECR에 푸쉬
+      - name: Build and push image to ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -50,3 +50,15 @@ jobs:
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG public.ecr.aws/y5m8k5s2/itwc-backend-repo:$IMAGE_TAG
           docker push public.ecr.aws/y5m8k5s2/itwc-backend-repo:$IMAGE_TAG
           echo "image=public.ecr.aws/y5m8k5s2/itwc-backend-repo:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      # 엘라스틱 빈스톡 배포
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_EB_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_EB_SECRET_KEY_ID }}
+          application_name: $EB_APP_NAME
+          environment_name: $EB_ENV_NAME
+          version_label: ${{ github.sha }}
+          region: ${{ github.sha }}
+          deployment_package: Dockerrun.aws.json
