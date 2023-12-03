@@ -84,9 +84,16 @@ public class ETCController {
             Optional<MemberDto> optionalMemberDto
 
     ) {
+
+        Long writerId = null;
+
+        if(optionalMemberDto.isPresent()) {
+            writerId = optionalMemberDto.get().getId();
+        }
+
         commentService.writeComment(
                 request,
-                optionalMemberDto.get().getId(),
+                writerId,
                 worldCupId,
                 contentsId
         );

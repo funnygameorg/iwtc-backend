@@ -6,6 +6,8 @@ import com.example.demo.domain.etc.exception.NotFoundCommentException;
 import com.example.demo.domain.etc.exception.NotOwnerCommentException;
 import com.example.demo.domain.etc.model.Comment;
 import com.example.demo.domain.etc.repository.CommentRepository;
+import com.example.demo.domain.member.exception.NotFoundMemberException;
+import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupContentsException;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
@@ -56,7 +58,12 @@ public class CommentService {
         var worldCupGameContents = worldCupGameContentsRepository.findById(contentsId)
                 .orElseThrow(() -> new NotFoundWorldCupContentsException(contentsId));
 
-        var writer = memberRepository.findById(memberId).orElse(null);
+        Member writer = null;
+
+        if(memberId != null) {
+            writer = memberRepository.findById(memberId)
+                    .orElseThrow(NotFoundMemberException::new);
+        }
 
         var newComment = Comment.writeWorldCupGameResult(
                 worldCupGame,
