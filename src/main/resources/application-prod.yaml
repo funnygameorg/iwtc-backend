@@ -20,14 +20,14 @@ spring:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create # PROD 변경
+      ddl-auto: validate # PROD 변경
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect # PROD 변경
+        dialect: org.hibernate.dialect.MySQL57Dialect # PROD 변경
 
 jwt:
-  secret: ENC(token)
+  secret: test123test123test123test123test123test123test123test123test123test123test123
   token-validity-milli-seconds:
     access: 200000000 # PROD 변경
     refresh: 21600000
