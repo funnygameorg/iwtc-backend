@@ -8,7 +8,7 @@ env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: itwc-backend-repo
   EB_APP_NAME: itwc-back
-  EB_ENV_NAME: itwc-back-env
+  EB_ENV_NAME: Itwc-back-server-env
 
 permissions:
   contents: read
@@ -60,5 +60,5 @@ jobs:
           application_name: $EB_APP_NAME
           environment_name: $EB_ENV_NAME
           version_label: ${{ github.sha }}
-          region: ${{ github.sha }}
+          region: $AWS_REGION
           deployment_package: Dockerrun.aws.json
