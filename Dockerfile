@@ -19,7 +19,7 @@ FROM openjdk:17-jdk-slim
 
 # 이전 "builder" 스테이지의 jar파일만 가져온다.
 COPY --from=builder build/libs/*.jar app.jar
-EXPOSE 8080
+EXPOSE 80
 
 ARG SPRING_PROFILES_ACTIVE
 ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
