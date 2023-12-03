@@ -14,9 +14,12 @@ public record GetCommentsListResponse(
     ) {
 
     public static GetCommentsListResponse fromEntity(Comment comment) {
+
+        var nullableWriterId = comment.getMember() != null ? comment.getMember().getId() : null;
+
         return new GetCommentsListResponse(
                 comment.getId(),
-                comment.getMember().getId(),
+                nullableWriterId,
                 comment.getNickname(),
                 comment.getBody(),
                 comment.getCreatedAt()
