@@ -6,9 +6,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(db-url)
-    username: ENC(db-username)
-    password: ENC(db-pass)
+    url: ENC(hLgJVvewSST2VFaGImYQUeNpjRmgH/mFAdlMaZmkT+jl6JskNXzud8h/3t3NfqQuFSgDvckDzstBJNyqFnLzB1C9wlx/4joMJljbLLGqwJs/wpLeHuPkv2PrD5vhiWFSs8eMo5q3kC/B/rFZHAPG3L1fd18fuCgPj52DkSVBvRhRdctYzTUXwNcMFJxuiDUp)
+    username: ENC(KgN+CkbF2Mh+rfLZeJCRC9muYrVpNji1Uwf7gudChmYm/ecbOSgfl3om++Iw2eCe)
+    password: ENC(+EE3drag5n1PayF3akCOzGMSz4VLdze+N6PDmpKe62W6UXoZIXAra3BiW+IlW/tF)
   redis:
     host: redis # PROD 변경
     port: 6379
