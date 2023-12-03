@@ -20,7 +20,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop # PROD 변경
+      ddl-auto: create # PROD 변경
     properties:
       hibernate:
         format_sql: true
