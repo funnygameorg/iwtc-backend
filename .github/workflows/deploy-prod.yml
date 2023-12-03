@@ -47,9 +47,9 @@ jobs:
           # be deployed to ECS.
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y5m8k5s2
           docker build --build-arg SPRING_PROFILES_ACTIVE=prod -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG public.ecr.aws/y5m8k5s2/itwc-backend-repo:$IMAGE_TAG
-          docker push public.ecr.aws/y5m8k5s2/itwc-backend-repo:$IMAGE_TAG
-          echo "image=public.ecr.aws/y5m8k5s2/itwc-backend-repo:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG public.ecr.aws/y5m8k5s2/itwc-backend-repo
+          docker push public.ecr.aws/y5m8k5s2/itwc-backend-repo
+          echo "image=public.ecr.aws/y5m8k5s2/itwc-backend-repo" >> $GITHUB_OUTPUT
 
       # 엘라스틱 빈스톡 배포
       - name: Deploy to EB
