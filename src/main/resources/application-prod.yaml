@@ -1,3 +1,5 @@
+server:
+  port: 80
 jasypt:
   encryptor:
     password: my_jasypt_key
@@ -20,7 +22,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
     hibernate:
-      ddl-auto: validate # PROD 변경
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
