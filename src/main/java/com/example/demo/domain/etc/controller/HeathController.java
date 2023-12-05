@@ -15,7 +15,7 @@ public class HeathController {
     @ResponseStatus(OK)
     @GetMapping
     public String getHealth() {
-        return "OK";
+        return "OK!";
     }
 
 }
