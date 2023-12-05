@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class HeathController {
 
     @ResponseStatus(OK)
-    @GetMapping("/api/health")
+    @GetMapping
     public String getHealth() {
         return "OK";
     }

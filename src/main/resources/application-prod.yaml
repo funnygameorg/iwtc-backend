@@ -34,9 +34,6 @@ jwt:
     access: 200000000 # PROD 변경
     refresh: 21600000
 
-logging:
-  config: classpath:log/logback-spring-local.xml # PROD 변경
-
 cloud:
   aws:
     credentials:
