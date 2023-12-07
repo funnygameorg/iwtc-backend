@@ -13,6 +13,7 @@ import com.example.demo.domain.member.controller.response.SignInResponse;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedNicknameResponse;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedServiceIdResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class MemberService {
     private final JwtService jwtService;
     private final RememberMeRepository rememberMeRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
 
 
@@ -38,7 +40,9 @@ public class MemberService {
             throw new DuplicatedServiceIdException();
         }
 
+
         Member newMember = Member.signUp(
+                passwordEncoder,
                 request.serviceId(),
                 request.nickname(),
                 request.password()
@@ -51,14 +55,18 @@ public class MemberService {
 
     public SignInResponse signIn(SignInRequest request) {
 
-        Long memberId = memberRepository
-                .findByMemberIdByServiceIdAndPassword(request.serviceId(), request.password())
+        Member member = memberRepository
+                .findByServiceId(request.serviceId())
                 .orElseThrow(NotFoundMemberException::new);
 
-        rememberMeRepository.save(memberId);
+        if(!passwordEncoder.matches(request.password(), member.getPassword())) {
+            throw new NotFoundMemberException();
+        }
 
-        String refreshToken = jwtService.createRefreshTokenById(memberId);
-        String accessToken = jwtService.createAccessTokenById(memberId);
+        rememberMeRepository.save(member.getId());
+
+        String refreshToken = jwtService.createRefreshTokenById(member.getId());
+        String accessToken = jwtService.createAccessTokenById(member.getId());
 
         return SignInResponse.builder()
                 .accessToken(accessToken)

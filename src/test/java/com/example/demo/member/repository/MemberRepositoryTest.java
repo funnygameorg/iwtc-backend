@@ -95,45 +95,6 @@ public class MemberRepositoryTest implements IntegrationBaseTest {
 
     }
 
-    @Nested
-    @DisplayName("Member Table의 serviceId, password를 가진 row가 존재하는지 확인할 수 있다.")
-    public class findByMemberIdByServiceIdAndPassword {
-
-
-        @Test
-        @DisplayName(SUCCESS_PREFIX + "Member 존재 O")
-        public void success1() {
-            Member member = Member.builder()
-                    .serviceId("A")
-                    .nickname("A")
-                    .password("B")
-                    .build();
-            memberRepository.save(member);
-
-            // when
-            Optional<Long> optionalResult = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
-
-            // then
-            assertThat(optionalResult.isPresent()).isTrue();
-        }
-
-        @Test
-        @DisplayName(SUCCESS_PREFIX + "Member 존재 X")
-        public void findByMemberIdByServiceIdAndPassword2() {
-            Member member = Member.builder()
-                    .serviceId("A")
-                    .nickname("A")
-                    .password("C")
-                    .build();
-            memberRepository.save(member);
-
-            // when
-            Optional<Long> optionalResult = memberRepository.findByMemberIdByServiceIdAndPassword("A", "B");
-
-            assertThat(optionalResult.isEmpty()).isTrue();
-        }
-
-    }
 
 
 }

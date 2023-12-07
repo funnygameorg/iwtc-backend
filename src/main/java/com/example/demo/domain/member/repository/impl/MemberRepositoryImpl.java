@@ -28,15 +28,4 @@ public class MemberRepositoryImpl implements MemberQueryRepository {
         return jdbcTemplate.queryForObject(sql, Boolean.class, serviceId);
     }
 
-    @Override
-    public Optional<Long> findByMemberIdByServiceIdAndPassword(String serviceId, String password) {
-        String sql = "SELECT m.id FROM member m WHERE m.service_id = ? AND m.password = ?";
-        List<Long> result = jdbcTemplate.query(
-                sql,
-                (rs, rowNum) -> rs.getLong("id"),
-                serviceId,
-                password
-        );
-        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
-    }
 }
