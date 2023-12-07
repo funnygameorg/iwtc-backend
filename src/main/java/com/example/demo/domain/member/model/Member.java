@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.google.common.base.Objects.*;
 import static lombok.AccessLevel.PRIVATE;
@@ -40,9 +41,24 @@ public class Member extends TimeBaseEntity {
     @Comment("사용자 암호")
     private String password;
 
-    public static Member signUp(String serviceId, String nickname, String password) {
-        return new Member(null, serviceId, nickname, password);
+
+
+
+
+    public static Member signUp(PasswordEncoder passwordEncoder, String serviceId, String nickname, String password) {
+
+        passwordEncoder.encode(password);
+
+        return new Member(
+                null,
+                serviceId,
+                nickname,
+                passwordEncoder.encode(password)
+        );
     }
+
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -56,9 +72,14 @@ public class Member extends TimeBaseEntity {
                 && Objects.equal(password, other.getPassword());
     }
 
+
+
     @Override
     public int hashCode() {
         return Objects.hashCode(serviceId, password);
 
     }
+
+
+    
 }

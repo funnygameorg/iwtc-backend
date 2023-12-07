@@ -74,6 +74,8 @@ dependencies {
 
 	implementation("mysql:mysql-connector-java:8.0.33")
 
+	implementation ("org.springframework.security:spring-security-crypto")
+
 	implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
 
 	compileOnly("org.projectlombok:lombok")

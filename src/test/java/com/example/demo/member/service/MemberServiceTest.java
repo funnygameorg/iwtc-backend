@@ -4,6 +4,7 @@ import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.controller.request.SignInRequest;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
+import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedNicknameResponse;
 import com.example.demo.domain.member.controller.response.VerifyDuplicatedServiceIdResponse;
@@ -17,7 +18,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -31,6 +35,9 @@ public class MemberServiceTest {
 
     @InjectMocks
     private MemberService memberServiceTest;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @Mock
     private MemberRepository memberRepository;
     @Mock
@@ -96,7 +103,7 @@ public class MemberServiceTest {
     @Nested
     @DisplayName("로그인을 할 수 있다.")
     public class signIn {
-        private Optional<Long> optionalMemberId;
+
         final private SignInRequest REQUEST = SignInRequest.builder()
                 .serviceId("LoginRequesterId")
                 .password("tempPassword")
@@ -106,11 +113,21 @@ public class MemberServiceTest {
         @DisplayName(SUCCESS_PREFIX)
         public void success() {
             // given
-            optionalMemberId = Optional.of(1L);
+            var optionalMember = Optional.of(
+                    Member.builder()
+                            .id(1L)
+                            .serviceId("LoginRequesterId")
+                            .nickname("A")
+                            .password("A")
+                            .build()
+            );
 
             // 사용자의 정보가 DB에 있다면
-            given(memberRepository.findByMemberIdByServiceIdAndPassword(any(), any()))
-                    .willReturn(optionalMemberId);
+            given(memberRepository.findByServiceId("LoginRequesterId"))
+                    .willReturn(optionalMember);
+
+            given(passwordEncoder.matches("tempPassword", "A"))
+                    .willReturn(true);
 
             // when
             memberServiceTest.signIn(REQUEST);
@@ -118,19 +135,19 @@ public class MemberServiceTest {
             // then
             then(memberRepository)
                     .should(times(1))
-                    .findByMemberIdByServiceIdAndPassword(any(), any());
+                    .findByServiceId(any());
 
             then(rememberMeRepository)
                     .should(times(1))
-                    .save(optionalMemberId.get());
+                    .save(1L);
 
             then(jwtService)
                     .should(times(1))
-                    .createAccessTokenById(optionalMemberId.get());
+                    .createAccessTokenById(1L);
 
             then(jwtService)
                     .should(times(1))
-                    .createRefreshTokenById(optionalMemberId.get());
+                    .createRefreshTokenById(1L);
         }
 
 
@@ -138,11 +155,11 @@ public class MemberServiceTest {
         @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 아이디")
         public void fail() {
             // given
-            optionalMemberId = Optional.empty();
+            Optional emptyMember = Optional.empty();
 
             // 사용자의 정보가 DB에 있다면
-            given(memberRepository.findByMemberIdByServiceIdAndPassword(any(), any()))
-                    .willReturn(optionalMemberId);
+            given(memberRepository.findByServiceId(any()))
+                    .willReturn(emptyMember);
 
             // when then
             assertThrows(
@@ -152,7 +169,7 @@ public class MemberServiceTest {
 
             then(memberRepository)
                     .should(times(1))
-                    .findByMemberIdByServiceIdAndPassword(any(), any());
+                    .findByServiceId(any());
 
             then(rememberMeRepository)
                     .should(never())
