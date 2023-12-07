@@ -1,11 +1,15 @@
 package com.example.demo.domain.worldcup.repository.impl;
 
 import com.example.demo.domain.member.model.Member;
+import com.example.demo.domain.worldcup.model.WorldCupGame;
+import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameCustomRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.World;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -68,14 +72,51 @@ public class WorldCupGamePageRepositoryImpl {
 
 
     // 메인 게임 컨텐츠 조회 쿼리
-    private List  getWorldCupGamePage(LocalDate startDate, LocalDate endDate, Pageable pageable, String sql) {
+    private List<GetWorldCupGamePageProjection>  getWorldCupGamePage(LocalDate startDate, LocalDate endDate, Pageable pageable, String sql) {
 
-        return em.createNativeQuery(sql, "FindWorldCupGamePageProjectionMapping")
+        List<WorldCupGame> worldCupList = em.createNativeQuery(sql, WorldCupGame.class)
                 .setParameter(WORLD_CUP_GAME_START_DATE, startDate)
                 .setParameter(WORLD_CUP_GAME_END_DATE, endDate)
                 .setParameter(PAGING_SIZE, pageable.getPageSize())
                 .setParameter(PAGING_OFFSET, pageable.getOffset())
                 .getResultList();
+
+
+        return worldCupList.stream().map(worldCupGame -> {
+                    List<WorldCupGameContents> contentsList = em.createQuery(
+                            "SELECT wgc FROM WorldCupGameContents wgc WHERE wgc.worldCupGame = :game ORDER BY wgc.id DESC LIMIT 2",
+                                    WorldCupGameContents.class
+                            )
+                            .setParameter("game", worldCupGame)
+                            .getResultList();
+
+                    return getGetWorldCupGamePageProjection(worldCupGame, contentsList);
+                }).toList();
+    }
+
+
+
+
+
+
+
+    private GetWorldCupGamePageProjection getGetWorldCupGamePageProjection(WorldCupGame worldCupGame, List<WorldCupGameContents> contentsList) {
+
+        String rank1ContentsName = contentsList.size() > 0 ? contentsList.get(0).getName() : null;
+        String rank2ContentsName = contentsList.size() > 1 ? contentsList.get(1).getName() : null;
+        Long rank1ContentsMediaFileId = contentsList.size() > 0 ? contentsList.get(0).getMediaFile().getId() : null;
+        Long rank2ContentsMediaFileId = contentsList.size() > 1 ? contentsList.get(1).getMediaFile().getId() : null;
+
+        return new GetWorldCupGamePageProjection(
+                worldCupGame.getId(),
+                worldCupGame.getTitle(),
+                worldCupGame.getDescription(),
+                rank1ContentsName,
+                rank1ContentsMediaFileId,
+                rank2ContentsName,
+                rank2ContentsMediaFileId
+        );
+
     }
 
 
@@ -166,52 +207,29 @@ public class WorldCupGamePageRepositoryImpl {
 
     private String getWorldCupGamePagingQuery(String... condition) {
         return """
-            SELECT 
-                wcg.id AS id, 
-                wcg.title AS title, 
-                wcg.description AS description, 
-                wcgc_max.name AS contentsName1, 
-                mf_max.id AS mediaFileId1, 
-                wcgc_min.name AS contentsName2, 
-                mf_min.id AS mediaFileId2 
-            FROM world_cup_game AS wcg 
-            INNER JOIN world_cup_game_contents AS wcgc_max ON wcgc_max.id = (
-                SELECT MAX(inner_wcgc.id) AS id 
-                FROM world_cup_game_contents AS inner_wcgc 
-                WHERE inner_wcgc.world_cup_game_id = wcg.id
-                AND inner_wcgc.id IN (
-                    SELECT inner_wcgc_2.id 
-                    FROM world_cup_game_contents AS inner_wcgc_2 
-                    WHERE inner_wcgc_2.world_cup_game_id = wcg.id AND inner_wcgc_2.soft_delete = false 
-                    ORDER BY inner_wcgc_2.id DESC 
-                    LIMIT 2
-                )
-            )
-            
-            INNER JOIN world_cup_game_contents AS wcgc_min ON wcgc_min.id = (
-                SELECT MIN(inner_wcgc.id) AS id 
-                FROM world_cup_game_contents AS inner_wcgc 
-                WHERE inner_wcgc.world_cup_game_id = wcg.id 
-                AND inner_wcgc.id IN (
-                    SELECT inner_wcgc_2.id 
-                    FROM world_cup_game_contents AS inner_wcgc_2 
-                    WHERE inner_wcgc_2.world_cup_game_id = wcg.id AND inner_wcgc_2.soft_delete = false 
-                    ORDER BY inner_wcgc_2.id DESC 
-                    LIMIT 2
-                )
-            )
-            INNER JOIN MEDIA_FILE AS mf_max on wcgc_max.media_file_id = mf_max.id 
-            INNER JOIN MEDIA_FILE AS mf_min on wcgc_min.media_file_id = mf_min.id 
-            
-            WHERE DATE(wcg.created_at) BETWEEN :startDate AND :endDate 
-            %s
-            %s
-            GROUP BY wcg.id 
-            %s
-            LIMIT :pageSize OFFSET :offset
-            """.formatted(condition[0], condition[1], condition[2]);
+                SELECT 
+                    wcg.id, 
+                    wcg.title,
+                    wcg.description,
+                    wcg.visible_type,
+                    wcg.views,
+                    wcg.soft_delete,
+                    wcg.member_id,
+                    wcg.world_cup_game_statistics_id,
+                    wcg.created_at,
+                    wcg.updated_at 
+                FROM 
+                    world_cup_game AS wcg                      
+                WHERE 
+                    DATE(wcg.created_at) BETWEEN :startDate AND :endDate 
+                %s
+                %s
+                GROUP BY 
+                    wcg.id 
+                %s
+                LIMIT :pageSize OFFSET :offset
+                """.formatted(condition[0], condition[1], condition[2]);
     }
-
 
 
 }

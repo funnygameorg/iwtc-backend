@@ -17,23 +17,6 @@ import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
-@SqlResultSetMapping(
-        name = "FindWorldCupGamePageProjectionMapping",
-        classes = {
-                @ConstructorResult(
-                        targetClass = GetWorldCupGamePageProjection.class,
-                        columns = {
-                                @ColumnResult(name = "id", type = Long.class),
-                                @ColumnResult(name = "title", type = String.class),
-                                @ColumnResult(name = "description", type = String.class),
-                                @ColumnResult(name = "contentsName1", type = String.class),
-                                @ColumnResult(name = "mediaFileId1", type = Long.class),
-                                @ColumnResult(name = "contentsName2", type = String.class),
-                                @ColumnResult(name = "mediaFileId2", type = Long.class)
-                        }
-                )
-        }
-)
 @Getter
 @Entity
 @Builder
@@ -76,6 +59,7 @@ public class WorldCupGame extends TimeBaseEntity {
 
     @Comment("게임 작성자")
     private long memberId;
+
 
     @Comment("해당 월드컵 통계")
     @OneToOne(fetch = LAZY)
