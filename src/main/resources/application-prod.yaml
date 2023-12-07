@@ -10,7 +10,7 @@ spring:
     username: ENC(KgN+CkbF2Mh+rfLZeJCRC9muYrVpNji1Uwf7gudChmYm/ecbOSgfl3om++Iw2eCe)
     password: ENC(+EE3drag5n1PayF3akCOzGMSz4VLdze+N6PDmpKe62W6UXoZIXAra3BiW+IlW/tF)
   redis:
-    host: redis # PROD 변경
+    host: ENC(z398vNTC9ElIGNzwEP2Udc2f36yirvNcM/4XBsKuK9K/3w8Yo1nFMzuhx2dMY4DE3kRHL2TaXrYHVnnwv+K/2+0Fy0lTzMfXP4T6JjLyfInxapzaCJFuLHmdVBJG9AkZ) # PROD 변경
     port: 6379
   jpa:
     open-in-view: false
