@@ -116,16 +116,16 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 
                     () -> assertThat(firstElement.id()).isEqualTo(2),
                     () -> assertThat(firstElement.title()).isEqualTo(worldCupGames.get(1).getTitle()),
-                    () -> assertThat(firstElement.contentsName1()).isEqualTo(worldCupGameContentsList2.get(1).getName()),
-                    () -> assertThat(firstElement.contentsName2()).isEqualTo(worldCupGameContentsList2.get(0).getName()),
+                    () -> assertThat(firstElement.contentsName1()).isEqualTo("컨텐츠7"),
+                    () -> assertThat(firstElement.contentsName2()).isEqualTo("컨텐츠6"),
                     () -> assertThat(firstElement.mediaFileId1()).isEqualTo(7),
                     () -> assertThat(firstElement.mediaFileId2()).isEqualTo(6),
 
                     () -> assertThat(secondElement.id()).isEqualTo(1),
                     () -> assertThat(secondElement.title()).isEqualTo(worldCupGames.get(0).getTitle()),
                     () -> assertThat(secondElement.description()).isEqualTo(worldCupGames.get(0).getDescription()),
-                    () -> assertThat(secondElement.contentsName1()).isEqualTo(worldCupGameContentsList1.get(4).getName()),
-                    () -> assertThat(secondElement.contentsName2()).isEqualTo(worldCupGameContentsList1.get(3).getName()),
+                    () -> assertThat(secondElement.contentsName1()).isEqualTo("컨텐츠5"),
+                    () -> assertThat(secondElement.contentsName2()).isEqualTo("컨텐츠4"),
                     () -> assertThat(secondElement.mediaFileId1()).isEqualTo(5),
                     () -> assertThat(secondElement.mediaFileId2()).isEqualTo(4)
             );
