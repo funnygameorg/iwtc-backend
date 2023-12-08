@@ -11,6 +11,7 @@ import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.RestApiResponse;
 import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.etc.service.MediaFileService;
+import com.example.demo.domain.etc.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -37,8 +38,7 @@ public class ETCController {
     private final JwtService jwtService;
     private final MediaFileService mediaFileService;
     private final CommentService commentService;
-
-
+    private final TokenService tokenService;
 
 
     
@@ -133,8 +133,15 @@ public class ETCController {
             @RequestHeader("access-token") String accessToken,
             @RequestHeader("refresh-token") String refreshToken
     ) {
-        String newAccessToken = jwtService.createAccessTokenByRefreshToken(refreshToken);
 
+        String newAccessToken;
+
+        try {
+            newAccessToken = jwtService.createAccessTokenByRefreshToken(refreshToken);
+        } catch (Exception ex) {
+            tokenService.disableRefreshToken(refreshToken);
+            throw ex;
+        }
 
         return new RestApiResponse<CreateAccessTokenResponse>(
                 1,
