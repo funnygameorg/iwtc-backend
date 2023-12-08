@@ -27,8 +27,8 @@ spring:
 jwt:
   secret: ENC(token)
   token-validity-milli-seconds:
-    access: 200000000 # PROD 변경
-    refresh: 21600000
+    access: 30000 # 30초
+    refresh: 180000 # 3분
 
 logging:
   config: classpath:log/logback-spring-local.xml # PROD 변경
