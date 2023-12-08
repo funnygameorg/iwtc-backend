@@ -72,6 +72,7 @@ dependencies {
 
 	implementation("com.google.guava:guava:32.1.2-jre")
 
+	implementation("mysql:mysql-connector-java:8.0.33")
 
 	implementation ("org.springframework.security:spring-security-crypto")
 

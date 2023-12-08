@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
-@Tag(name = "WorldCup contents", description = "월드컵 게임 컨텐츠 제공 API")
+@Tag(name = "WorldCup contents", description = "월드컵 게임 컨텐츠 제공 API ")
 @RestController
 @RequestMapping("/api/world-cups")
 @RequiredArgsConstructor

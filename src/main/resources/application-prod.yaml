@@ -1,16 +1,20 @@
+server:
+  port: 80
 jasypt:
   encryptor:
-    bean: jasyptEncryptorAES
+    password: my_jasypt_key
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 
 spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(hLgJVvewSST2VFaGImYQUeNpjRmgH/mFAdlMaZmkT+jl6JskNXzud8h/3t3NfqQuFSgDvckDzstBJNyqFnLzB1C9wlx/4joMJljbLLGqwJs/wpLeHuPkv2PrD5vhiWFSs8eMo5q3kC/B/rFZHAPG3L1fd18fuCgPj52DkSVBvRhRdctYzTUXwNcMFJxuiDUp)
+    url: ENC(ak8pdUDOLv6Gr4qmq+T9Xil8hxd5tjlKc30FhHGASDcI4GgguIPI6+O3qyRxHtXrIKqScDr/Z5HRP7BmB/dbTX+BKzyFE8cW3WLms1XSt6XIlPHBpTrP/SewsoOnlWnDelz+pBrtSvmSzrpk1a9lKTDsW6oTHvZwZS7VAkwd0t0S34FxlJNmLEAJ/9oXFDV+S5isSPWikESPhKAqEuckVQ==)
     username: ENC(KgN+CkbF2Mh+rfLZeJCRC9muYrVpNji1Uwf7gudChmYm/ecbOSgfl3om++Iw2eCe)
     password: ENC(+EE3drag5n1PayF3akCOzGMSz4VLdze+N6PDmpKe62W6UXoZIXAra3BiW+IlW/tF)
   redis:
-    host: ENC(z398vNTC9ElIGNzwEP2Udc2f36yirvNcM/4XBsKuK9K/3w8Yo1nFMzuhx2dMY4DE3kRHL2TaXrYHVnnwv+K/2+0Fy0lTzMfXP4T6JjLyfInxapzaCJFuLHmdVBJG9AkZ) # PROD 변경
+    host: ENC(mKCkUmM/qBfmWsz4WQJvO8nefQtdwnQVhJCY7rrQ/YDq4kSArOyP0PQflOFb24dcIxpKKiTFcJzjsx3ws9gjPnGHlaqBWP95j1je3xY9x9iEIloRjc5dH/oyYzajnoLF) # PROD 변경
     port: 6379
   jpa:
     open-in-view: false
@@ -18,20 +22,17 @@ spring:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop # PROD 변경
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect # PROD 변경
+        dialect: org.hibernate.dialect.MySQL57Dialect # PROD 변경
 
 jwt:
-  secret: ENC(token)
+  secret: ENC(jNtfh8SGjyY4DfLK9eY9nh3cRVqVtzIWxj/2gYML7s+5rG8l1y5qbo7rIjO81qGUIMeVzHT7XP55zApSnajld9YTefQCtMMHr6eCezsLkgE82m6uian5+l1mPSSWrvyOEaEI/mjP3+tJArgBMVcNPO0S4oq6lJaBsMReL69jWautEInFdgz9vwGReKczh8FEGnMCuEgl+IzQMJXyxye7iMjsIqhvlFmblFtFBYq8FhgJf7ljsNKWcmrulIwF3JqA)
   token-validity-milli-seconds:
     access: 30000 # 30초
     refresh: 180000 # 3분
-
-logging:
-  config: classpath:log/logback-spring-local.xml # PROD 변경
 
 cloud:
   aws:
