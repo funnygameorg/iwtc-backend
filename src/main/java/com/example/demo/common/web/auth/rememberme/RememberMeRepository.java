@@ -1,9 +1,13 @@
 package com.example.demo.common.web.auth.rememberme;
 
 
-// TODO : 운영하면서 REDIS, MEMCACHED, RDB 고려하기
 public interface RememberMeRepository {
+
+
+    Long removeRemember(Long memberId);
     Boolean isRemember(Long memberId);
+
+
     void save(Long MemberId);
     void signOut(String accessToken, Long memberId);
     Boolean containBlacklistedAccessToken(String accessToken);

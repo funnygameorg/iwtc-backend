@@ -4,6 +4,7 @@ import com.example.demo.common.config.WebConfig;
 import com.example.demo.domain.etc.controller.ETCController;
 import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.etc.service.MediaFileService;
+import com.example.demo.domain.etc.service.TokenService;
 import com.example.demo.domain.member.controller.MemberController;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.domain.worldcup.controller.WorldCupBasedOnAuthController;
@@ -59,7 +60,8 @@ public abstract class WebMvcBaseTest {
         private WorldCupGameContentsService worldCupGameContentsService;
         @MockBean
         private WorldCupBasedOnAuthService worldCupBasedOnAuthService;
-
+        @MockBean
+        private TokenService tokenService;
 
 
         protected static final String ROOT_PATH = "/api";
