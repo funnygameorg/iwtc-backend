@@ -13,6 +13,7 @@ import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.etc.service.MediaFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -129,16 +130,19 @@ public class ETCController {
     @PostMapping("/new-access-token")
     @ResponseStatus(OK)
     public RestApiResponse<CreateAccessTokenResponse> createAccessToken(
+            @RequestHeader("access-token") String accessToken,
             @RequestHeader("refresh-token") String refreshToken
     ) {
-        if(refreshToken.length() < 3) {
-            throw new RuntimeException();
-        }
         String newAccessToken = jwtService.createAccessTokenByRefreshToken(refreshToken);
+
+
         return new RestApiResponse<CreateAccessTokenResponse>(
                 1,
                 "엑세스 토큰 생성",
-                new CreateAccessTokenResponse(newAccessToken)
+                new CreateAccessTokenResponse(
+                        newAccessToken,
+                        refreshToken
+                )
         );
     }
 
