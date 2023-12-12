@@ -16,8 +16,8 @@ public class TokenService {
 
     public void disableRefreshToken(String refreshToken) {
 
-//        Long memberId = jwtService.getPayLoadByToken(refreshToken);
-//        rememberMeRepository.removeRemember(memberId);
+        Long memberId = jwtService.getPayLoadByTokenIgnoreExpiredTime(refreshToken);
+        rememberMeRepository.removeRemember(memberId);
 
     }
 
