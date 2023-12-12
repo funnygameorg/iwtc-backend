@@ -50,6 +50,7 @@ public class JwtService {
                 UnsupportedJwtException |
                 IllegalArgumentException e
         ) {
+            System.out.println("토큰 에러 " + e);
             throw new AuthenticationTokenException(e.getMessage());
         }
     }
@@ -81,8 +82,7 @@ public class JwtService {
     }
 
     public String createAccessTokenByRefreshToken(String refreshToken) {
-        String refreshTokenWithoutPrefix = removedPrefix(refreshToken);
-        Long id = getPayLoadByToken(refreshTokenWithoutPrefix);
+        Long id = getPayLoadByToken(refreshToken);
         return createToken(id, accessTokenValidityMilliSeconds);
     }
 
