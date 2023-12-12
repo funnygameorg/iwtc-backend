@@ -134,18 +134,25 @@ public class ETCController {
             @RequestHeader("refresh-token") String refreshToken
     ) {
 
-        String newAccessToken;
+        String newAccessToken = null;
+        int code = 1;
+        String message = "엑세스 토큰 생성";
+
 
         try {
+
             newAccessToken = jwtService.createAccessTokenByRefreshToken(refreshToken);
+
         } catch (Exception ex) {
             tokenService.disableRefreshToken(refreshToken);
-            throw ex;
+            code = 1010101;
+            message = "다시 로그인해주세요.";
         }
 
+
         return new RestApiResponse<CreateAccessTokenResponse>(
-                1,
-                "엑세스 토큰 생성",
+                code,
+                message,
                 new CreateAccessTokenResponse(
                         newAccessToken,
                         refreshToken
