@@ -144,9 +144,13 @@ public class ETCController {
             newAccessToken = jwtService.createAccessTokenByRefreshToken(refreshToken);
 
         } catch (Exception ex) {
+
             tokenService.disableRefreshToken(refreshToken);
+
+            refreshToken = null;
             code = 1010101;
             message = "다시 로그인해주세요.";
+
         }
 
 

@@ -50,7 +50,6 @@ public class JwtService {
                 UnsupportedJwtException |
                 IllegalArgumentException e
         ) {
-            System.out.println("토큰 에러 " + e);
             throw new AuthenticationTokenException(e.getMessage());
         }
     }
