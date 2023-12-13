@@ -130,8 +130,8 @@ public class ETCController {
     @PostMapping("/new-access-token")
     @ResponseStatus(OK)
     public RestApiResponse<CreateAccessTokenResponse> createAccessToken(
-            @RequestHeader("access-token") String accessToken,
-            @RequestHeader("refresh-token") String refreshToken
+            @RequestBody String accessToken,
+            @RequestBody String refreshToken
     ) {
 
         String newAccessToken = null;
