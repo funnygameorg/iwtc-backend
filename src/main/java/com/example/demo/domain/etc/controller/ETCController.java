@@ -1,6 +1,7 @@
 package com.example.demo.domain.etc.controller;
 import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.memberresolver.MemberDto;
+import com.example.demo.domain.etc.controller.request.CreateAccessTokenRequest;
 import com.example.demo.domain.etc.controller.request.WriteCommentRequest;
 
 import com.example.demo.domain.etc.controller.response.GetCommentsListResponse;
@@ -130,9 +131,10 @@ public class ETCController {
     @PostMapping("/new-access-token")
     @ResponseStatus(OK)
     public RestApiResponse<CreateAccessTokenResponse> createAccessToken(
-            @RequestBody String accessToken,
-            @RequestBody String refreshToken
-    ) {
+            @RequestBody CreateAccessTokenRequest createAccessTokenRequest
+            ) {
+
+        String refreshToken = createAccessTokenRequest.refreshToken();
 
         String newAccessToken = null;
         int code = 1;
