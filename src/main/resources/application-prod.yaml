@@ -37,13 +37,13 @@ jwt:
 cloud:
   aws:
     credentials:
-      access-key: localstack-access-key
-      secret-key: localstack-secret-key
+      access-key: ENC(L5nkU1CtIQA9bQqDHwwvEXjK8bj5q8xVig5RSdOdxQAJBYTHTdrRoaBPnc/UJ2n+HHaNDUFSlsfHf4MU0+RXCg==)
+      secret-key: ENC(3BgK9UA4pc2pmPZjUZhh2jpMLh18dzFoQrrqVu7XbLW1iyVOo+05tv41DtxmqSV1JPnhMIDzADxhbSbRPuOLbhk75jdDr3niR9JrV3uqpuk=)
     region:
-      static: us-east-1
+      static: ap-northeast-2
     end-point: http://localstack:4566
     s3:
-      bucket: media # PROD 변경
+      bucket: itwc-file
     stack:
       auto: false
 
