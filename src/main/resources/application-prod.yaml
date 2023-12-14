@@ -41,7 +41,7 @@ cloud:
       secret-key: ENC(3BgK9UA4pc2pmPZjUZhh2jpMLh18dzFoQrrqVu7XbLW1iyVOo+05tv41DtxmqSV1JPnhMIDzADxhbSbRPuOLbhk75jdDr3niR9JrV3uqpuk=)
     region:
       static: ap-northeast-2
-    end-point: http://localstack:4566
+    end-point: http://itwc-file.s3-website-ap-northeast-2.amazonaws.com
     s3:
       bucket: itwc-file
     stack:
