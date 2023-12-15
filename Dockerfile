@@ -8,6 +8,7 @@ COPY gradle gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY src src
+COPY .platform .platform
 
 RUN chmod +x ./gradlew
 
