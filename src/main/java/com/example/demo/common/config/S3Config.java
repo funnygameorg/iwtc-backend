@@ -20,23 +20,15 @@ public class S3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    @Value("${cloud.aws.endpoint}")
-    private String endpoint;
-
     @Bean
     public AmazonS3Client amazonS3Client() {
 
         AWSStaticCredentialsProvider provider =
                 new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
 
-        AwsClientBuilder.EndpointConfiguration endpointConfiguration =
-                new AwsClientBuilder.EndpointConfiguration(endpoint, region);
-
-
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
-                .withEndpointConfiguration(endpointConfiguration)
                 .withCredentials(provider)
-                .withPathStyleAccessEnabled(true)
+                .withRegion(region)
                 .build();
     }
 
