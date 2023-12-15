@@ -43,8 +43,6 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: itwc-file
-    stack:
-      auto: false
 
 management:
   endpoints:
