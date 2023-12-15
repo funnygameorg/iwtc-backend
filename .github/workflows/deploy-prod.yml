@@ -1,4 +1,4 @@
-name: Deploy to Amazon ECS
+name: Deploy ECR And EB
 
 on:
   push:
@@ -42,9 +42,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y5m8k5s2
           docker build --build-arg SPRING_PROFILES_ACTIVE=prod -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG public.ecr.aws/y5m8k5s2/itwc-backend-repo
