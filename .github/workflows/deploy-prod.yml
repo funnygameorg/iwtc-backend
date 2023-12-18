@@ -48,6 +48,10 @@ jobs:
           docker push public.ecr.aws/y5m8k5s2/itwc-backend-repo
           echo "image=public.ecr.aws/y5m8k5s2/itwc-backend-repo" >> $GITHUB_OUTPUT
 
+      # 배포 파일 압축
+      - name: compress files
+        run: zip -r deploy.zip Dockerrun.aws.json .platform/nginx/conf.d
+
       # 엘라스틱 빈스톡 배포
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
@@ -58,5 +62,5 @@ jobs:
           environment_name: ${{ env.EB_ENV_NAME }}
           version_label: ${{ github.sha }}
           region: ${{ env.AWS_REGION }}
-          deployment_package: Dockerrun.aws.json
+          deployment_package: deploy.zip
           wait_for_environment_recovery: 50
