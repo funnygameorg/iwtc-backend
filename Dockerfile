@@ -8,7 +8,6 @@ COPY gradle gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY src src
-COPY proxyconfig/proxy.conf proxy.conf
 
 RUN chmod +x ./gradlew
 
@@ -20,7 +19,6 @@ FROM openjdk:17-jdk-slim
 
 # 이전 "builder" 스테이지의 jar파일만 가져온다.
 COPY --from=builder build/libs/*.jar app.jar
-COPY --from=builder proxy.conf proxyconfig/proxy.conf
 
 EXPOSE 80
 
