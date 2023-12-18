@@ -126,7 +126,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                         FROM 
                             world_cup_game_contents AS inner_wcgc
                         WHERE 
-                            inner_wcgc.world_cup_game_id = :worldCupGameId AND INNER_WCGC.soft_delete = false 
+                            inner_wcgc.world_cup_game_id = :worldCupGameId AND inner_wcgc.soft_delete = false 
                         %s
                     ) AS wcgc
                     LEFT JOIN media_file AS amf ON amf.id = wcgc.media_file_id
