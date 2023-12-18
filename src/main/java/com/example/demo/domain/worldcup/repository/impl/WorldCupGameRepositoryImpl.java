@@ -120,7 +120,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                         amu.video_play_duration AS VIDEO_PLAY_DURATION 
                     FROM (
                         SELECT 
-                            inner_wcgc.ID AS id, 
+                            inner_wcgc.id AS id, 
                             inner_wcgc.name AS name, 
                             inner_wcgc.media_file_id AS MEDIA_FILE_ID
                         FROM 
@@ -158,7 +158,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
         if(CollectionUtils.isEmpty(alreadyPlayedContentsIds))
             return "";
         else
-            return " AND inner_wcgc.ID NOT IN (%s)  "
+            return " AND inner_wcgc.id NOT IN (%s)  "
                     .formatted(alreadyPlayedContentsIds.toString())
                     .replace("[", "")
                     .replace("]", "");
