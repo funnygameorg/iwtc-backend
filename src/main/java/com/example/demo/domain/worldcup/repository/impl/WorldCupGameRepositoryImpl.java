@@ -49,7 +49,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 
     @Override
     public Boolean existsWorldCupGame(Long worldCupGameId) {
-        String nativeQuery = "SELECT EXISTS (SELECT 1 FROM WORLD_CUP_GAME WHERE id = :worldCupGameId)";
+        String nativeQuery = "SELECT EXISTS (SELECT 1 FROM world_cup_game WHERE id = :worldCupGameId)";
         Query query = em.createNativeQuery(nativeQuery);
         query.setParameter(
                 WORLD_CUP_GAME_TABLE_PK,
@@ -107,25 +107,25 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
         String NotInAlreadyPlayedContentsIdsDynamicQuery = buildAlreadyPlayedContentsIdsCondition(alreadyPlayedContentsIds);
         String sql = """
                     SELECT 
-                        wcgc.ID AS ID, 
-                        wcgc.NAME AS CONTENTS_NAME,  
-                        amf.ID AS MEDIA_FILE_ID,
-                        amf.FILE_TYPE AS FILE_TYPE,
-                        amu.VIDEO_START_TIME AS VIDEO_START_TIME,
-                        amu.VIDEO_PLAY_DURATION AS VIDEO_PLAY_DURATION 
+                        wcgc.id AS ID, 
+                        wcgc.name AS CONTENTS_NAME,  
+                        amf.id AS MEDIA_FILE_ID,
+                        amf.file_type AS FILE_TYPE,
+                        amu.video_start_time AS VIDEO_START_TIME,
+                        amu.video_play_duration AS VIDEO_PLAY_DURATION 
                     FROM (
                         SELECT 
                             inner_wcgc.ID AS id, 
-                            inner_wcgc.NAME AS name, 
-                            inner_wcgc.MEDIA_FILE_ID AS MEDIA_FILE_ID
+                            inner_wcgc.name AS name, 
+                            inner_wcgc.media_file_id AS MEDIA_FILE_ID
                         FROM 
                             WORLD_CUP_GAME_CONTENTS AS INNER_WCGC
                         WHERE 
-                            INNER_WCGC.WORLD_CUP_GAME_ID = :worldCupGameId AND INNER_WCGC.SOFT_DELETE = false 
+                            INNER_WCGC.world_cup_game_id = :worldCupGameId AND INNER_WCGC.soft_delete = false 
                         %s
                     ) AS wcgc
-                    LEFT JOIN MEDIA_FILE AS amf ON amf.ID = wcgc.MEDIA_FILE_ID
-                    LEFT JOIN INTERNET_VIDEO_URL AS amu ON amu.id = amf.ID
+                    LEFT JOIN MEDIA_FILE AS amf ON amf.id = wcgc.media_file_id
+                    LEFT JOIN INTERNET_VIDEO_URL AS amu ON amu.id = amf.id
                     LIMIT :divideContentsSizePerRequest
                 """
                 .formatted(NotInAlreadyPlayedContentsIdsDynamicQuery);

@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
 @Where(clause = "soft_delete = false")
-@Table(name = "COMMENT")
+@Table(name = "comment")
 public class Comment extends MemberTimeBaseEntity {
 
     @Id

@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
-@Table(name = "STATIC_MEDIA_FILE")
+@Table(name = "static_media_file")
 @NoArgsConstructor(access = PROTECTED)
 public class StaticMediaFile extends MediaFile {
 

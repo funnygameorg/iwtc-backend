@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "WORLD_CUP_GAME",
+@Table(name = "world_cup_game",
         uniqueConstraints = {
                 @UniqueConstraint(name = "TITLE__UNIQUE", columnNames = "title")
         },

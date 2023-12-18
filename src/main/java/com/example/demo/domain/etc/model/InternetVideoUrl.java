@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @Getter
 @Entity
-@Table(name = "INTERNET_VIDEO_URL")
+@Table(name = "internet_video_url")
 @NoArgsConstructor(access = PROTECTED)
 public class InternetVideoUrl extends MediaFile {
 

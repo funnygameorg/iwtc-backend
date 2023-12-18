@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "MEMBER")
+@Table(name = "member")
 public class Member extends TimeBaseEntity {
 
     @Id

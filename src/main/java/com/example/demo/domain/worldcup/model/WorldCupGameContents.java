@@ -31,7 +31,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Where(clause = "SOFT_DELETE = false")
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "WORLD_CUP_GAME_CONTENTS",
+@Table(name = "world_cup_game_contents",
         indexes = {
                 // 게임 랭킹 노출용
                 @Index(name = "VISIBLE_TYPE__GAME_SCORE__INDEX", columnList = "visibleType, gameScore")
