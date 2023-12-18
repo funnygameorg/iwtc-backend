@@ -8,7 +8,7 @@ COPY gradle gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY src src
-COPY .ebextensions/01-nginx-proxy.config .
+COPY .ebextensions/01-nginx-proxy.config 01-nginx-proxy.config
 
 RUN chmod +x ./gradlew
 
