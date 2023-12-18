@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 @Repository
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -49,6 +52,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 
     @Override
     public Boolean existsWorldCupGame(Long worldCupGameId) {
+
         String nativeQuery = "SELECT EXISTS (SELECT 1 FROM world_cup_game WHERE id = :worldCupGameId)";
         Query query = em.createNativeQuery(nativeQuery);
         query.setParameter(
@@ -56,7 +60,8 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                 worldCupGameId
         );
 
-        return (Boolean) query.getSingleResult();
+        Long isExists = (Long) query.getSingleResult();
+        return isExists == 1 ? TRUE : FALSE;
     }
 
     @Override
