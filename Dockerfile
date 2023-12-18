@@ -8,7 +8,7 @@ COPY gradle gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY src src
-COPY .platform/nginx/conf.d/proxy.conf /etc/nginx/conf.d/
+COPY .ebextensions/01-nginx-proxy.config .
 
 RUN chmod +x ./gradlew
 
@@ -20,6 +20,8 @@ FROM openjdk:17-jdk-slim
 
 # 이전 "builder" 스테이지의 jar파일만 가져온다.
 COPY --from=builder build/libs/*.jar app.jar
+COPY 01-nginx-proxy.config.conf .ebextensions/01-nginx-proxy.config
+
 EXPOSE 80
 
 ARG SPRING_PROFILES_ACTIVE
