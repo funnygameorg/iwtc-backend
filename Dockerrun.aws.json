@@ -9,5 +9,11 @@
       "ContainerPort": 80,
       "HostPort": 5000
     }
+  ],
+  "Volumes": [
+    {
+      "HostDirectory": "/etc/nginx/conf.d",
+      "ContainerDirectory": "/proxyconfig"
+    }
   ]
 }
