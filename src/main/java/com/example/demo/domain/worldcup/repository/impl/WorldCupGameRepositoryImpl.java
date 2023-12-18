@@ -124,13 +124,13 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                             inner_wcgc.name AS name, 
                             inner_wcgc.media_file_id AS MEDIA_FILE_ID
                         FROM 
-                            WORLD_CUP_GAME_CONTENTS AS INNER_WCGC
+                            world_cup_game_contents AS INNER_WCGC
                         WHERE 
                             INNER_WCGC.world_cup_game_id = :worldCupGameId AND INNER_WCGC.soft_delete = false 
                         %s
                     ) AS wcgc
-                    LEFT JOIN MEDIA_FILE AS amf ON amf.id = wcgc.media_file_id
-                    LEFT JOIN INTERNET_VIDEO_URL AS amu ON amu.id = amf.id
+                    LEFT JOIN media_file AS amf ON amf.id = wcgc.media_file_id
+                    LEFT JOIN internet_video_url AS amu ON amu.id = amf.id
                     LIMIT :divideContentsSizePerRequest
                 """
                 .formatted(NotInAlreadyPlayedContentsIdsDynamicQuery);
