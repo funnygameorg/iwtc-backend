@@ -20,7 +20,7 @@ FROM openjdk:17-jdk-slim
 
 # 이전 "builder" 스테이지의 jar파일만 가져온다.
 COPY --from=builder build/libs/*.jar app.jar
-COPY 01-nginx-proxy.config.conf .ebextensions/01-nginx-proxy.config
+COPY 01-nginx-proxy.config .ebextensions/01-nginx-proxy.config
 
 EXPOSE 80
 
