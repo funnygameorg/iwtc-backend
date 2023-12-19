@@ -32,7 +32,7 @@ jwt:
   secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
   token-validity-milli-seconds:
     access: 300000
-    refresh: 180000
+    refresh: 36000000
 
 logging:
   config: classpath:log/logback-spring-local.xml
