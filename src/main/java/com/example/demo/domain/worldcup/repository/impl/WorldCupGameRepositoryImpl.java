@@ -59,9 +59,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                 WORLD_CUP_GAME_TABLE_PK,
                 worldCupGameId
         );
-
-        Long isExists = (Long) query.getSingleResult();
-        return isExists == 1 ? TRUE : FALSE;
+        return booleanValueConvert(query.getSingleResult());
     }
 
     @Override
@@ -162,6 +160,19 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
                     .formatted(alreadyPlayedContentsIds.toString())
                     .replace("[", "")
                     .replace("]", "");
+    }
+
+
+
+
+    /*
+        TODO : H2, MySQL DB Boolean 타입 호환으로 임시 사용
+     */
+    private Boolean booleanValueConvert(Object booleanTypeValue) {
+        if(booleanTypeValue instanceof Boolean) {
+            return (Boolean) booleanTypeValue;
+        }
+        return (Long) booleanTypeValue == 1 ? TRUE : FALSE;
     }
 
 }

@@ -4,12 +4,14 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtService {
     @Value("${jwt.secret}")
@@ -50,6 +52,7 @@ public class JwtService {
                 UnsupportedJwtException |
                 IllegalArgumentException e
         ) {
+            log.info(e.getMessage());
             throw new AuthenticationTokenException(e.getMessage());
         }
     }

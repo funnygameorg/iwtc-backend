@@ -1,11 +1,11 @@
-package com.example.demo.common.config.s3;
+package com.example.demo.common.config.condition;
 
 import com.google.common.base.Objects;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
-public class NotProdS3ConfigCondition implements Condition {
+public class NotProdConfigCondition implements Condition {
 
     // `Local, Test Profile`에서 활성화된다.
     // 로컬 환경 - spring.profile.active = local

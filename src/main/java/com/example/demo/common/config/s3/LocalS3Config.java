@@ -5,6 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.example.demo.common.config.condition.NotProdConfigCondition;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
     localstack S3 연결
  */
 @Configuration
-@Conditional(NotProdS3ConfigCondition.class)
+@Conditional(NotProdConfigCondition.class)
 public class LocalS3Config {
 
     @Value("${cloud.aws.credentials.access-key}")
