@@ -86,15 +86,16 @@ VALUES
     ('b', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('c', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('d', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('e', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('f', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('g', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('e', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('f', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('g', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('h', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('i', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('j', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
     ('k', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('l', 'STATIC_MEDIA_FILE', 'StaticMediaFile', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
-    ('m', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()));
+    ('l', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('m', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW())),
+    ('n', 'INTERNET_VIDEO_URL', 'InternetVideoUrl', DATEADD('MONTH', -2, NOW()), DATEADD('MONTH', -2, NOW()));
 
 INSERT INTO `STATIC_MEDIA_FILE` (`extension`, `original_name`, `id`)
 VALUES
@@ -102,18 +103,19 @@ VALUES
     ('png', 'originalName2', 2),
     ('jpeg', 'originalName3', 3),
     ('gif', 'originalName4', 4),
-    ('gif', 'originalName5', 8),
-    ('gif', 'originalName6', 9),
-    ('JPEG', 'originalName7', 12);
+    ('gif', 'originalName5', 5),
+    ('gif', 'originalName6', 6),
+    ('JPEG', 'originalName7', 7),
+    ('JPEG', 'originalName8', 8),
+    ('JPEG', 'originalName9', 9);
 
 INSERT INTO `INTERNET_VIDEO_URL`(`id`, `is_playable_video`, `video_start_time`, `video_play_duration`)
 VALUES
-    (5, true, '00001', 5),
-    (6, true, '00010', 4),
-    (7, true, '00101', 3),
-    (10, true, '01001', 5),
-    (11, true, '00030', 2),
-    (13, true, '00525', 4);
+    (10, true, '00001', 5),
+    (11, true, '00010', 4),
+    (12, true, '00101', 3),
+    (13, true, '01001', 5),
+    (14, true, '00030', 2);
 
 INSERT INTO `WORLD_CUP_GAME_CONTENTS` (`media_file_id`, `name`, `world_cup_game_id`, `game_score`, `game_rank`, `visible_type`, `created_at`, `updated_at`, `soft_delete`)
 VALUES
