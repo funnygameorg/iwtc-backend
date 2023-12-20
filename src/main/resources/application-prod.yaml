@@ -52,3 +52,6 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  config: classpath:log/logback-spring-prod.xml

@@ -21,8 +21,6 @@ public class LoggingAspect {
 
     private static final String EXECUTION = "execution(* ";
     private static final String ROOT_PACKAGE = "com.example.demo.";
-    private static final String METHOD_CALL_LOG_PATTERN = "method call name: [{}] : args: {}";
-    private static final String METHOD_RETURN_LOG_PATTERN = "method return name: [{}], return value: {}";
 
 
 
@@ -58,37 +56,39 @@ public class LoggingAspect {
         String methodName = joinPoint.getSignature().getName();
         List<String> params = getParams(joinPoint);
 
-        log.info(METHOD_CALL_LOG_PATTERN, methodName, params);
+        log.debug("controller Before {} {}", methodName, params);
         Object result = joinPoint.proceed();
-        log.info(METHOD_RETURN_LOG_PATTERN, methodName, result);
+        log.debug("controller After {} {}", methodName, result);
 
         return result;
     }
+
+
 
     @Around(EXECUTION + ROOT_PACKAGE + "domain.*.service.*.*(..))")
     public Object serviceAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
+        String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
         String methodName = joinPoint.getSignature().getName();
+        String classAndMethod = className + "." + methodName + "()";
+
         List<String> params = getParams(joinPoint);
 
-        log.info("before {}", joinPoint.getSignature().getName());
-        Object result = joinPoint.proceed();
-        log.info("after {}", joinPoint.getSignature().getName());
+
+        Object result = null;
+        try {
+
+            log.info("Service Before Method : {}, Param : {}", classAndMethod, params);
+            result = joinPoint.proceed();
+            log.info("Service After Method : {}, Param : {}", classAndMethod, params);
+
+        }catch (Exception e) {
+            log.info("Service After Method : {}, Param : {}", classAndMethod, params);
+            throw e;
+        }
+
 
         return result;
     }
 
-    // TODO : param name을 못 읽음 수정 필요
-    // @Around(EXECUTION + ROOT_PACKAGE + "domain.*.repository.impl.*.*(..))")
-    public Object repositoryAround(ProceedingJoinPoint joinPoint) throws Throwable {
-
-        String methodName = joinPoint.getSignature().getName();
-        List<String> params = getParams(joinPoint);
-        
-        log.info("before {}", joinPoint.getSignature().getName());
-        Object result = joinPoint.proceed();
-        log.info("after {}", joinPoint.getSignature().getName());
-
-        return result;
-    }
 }

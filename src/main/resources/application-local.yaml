@@ -34,9 +34,6 @@ jwt:
     access: 300000
     refresh: 36000000
 
-logging:
-  config: classpath:log/logback-spring-local.xml
-
 cloud:
   aws:
     credentials:
@@ -57,3 +54,7 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+logging:
+  config: classpath:log/logback-spring-local.xml

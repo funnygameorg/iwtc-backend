@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static com.example.demo.common.error.CustomErrorCode.INVALID_CLIENT_REQUEST_BODY;
@@ -21,14 +22,19 @@ import static java.util.UUID.randomUUID;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
+
+
+
     /*
         사용자가 요청안에 양식에 부합하지 않은 데이터를 포함
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<CustomErrorResponse> invalidRequestException(MethodArgumentNotValidException ex) {
+
         String invalidRequestMessage = getBindingErrorMessage(ex);
 
-        log.info("invalidRequestException - {}", invalidRequestMessage);
+        var body = generateLog("handled", invalidRequestMessage);
+        log.warn(body);
 
         return ResponseEntity
                 .badRequest()
@@ -43,9 +49,11 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     ResponseEntity<CustomErrorResponse> invalidRequestException2(ConstraintViolationException ex) {
+
         String invalidRequestMessage = getConstraintViolationMessage(ex);
 
-        log.info("invalidRequestException - {}", invalidRequestMessage);
+        var body = generateLog("handled", invalidRequestMessage);
+        log.warn(body);
 
         return ResponseEntity
                 .badRequest()
@@ -61,7 +69,8 @@ public class CustomExceptionHandler {
     @ExceptionHandler(BaseException.class)
     ResponseEntity<CustomErrorResponse> handledException(BaseException ex) {
 
-        log.info("BaseException - {}", ex);
+        var body = generateLog("handled", ex.toString());
+        log.warn(body);
 
         return ResponseEntity
                 .status(ex.getHttpStatus())
@@ -73,13 +82,17 @@ public class CustomExceptionHandler {
                         .build()
                 );
     }
+
+    // TODO : BaseException을 상속하지만 위험한 에러
+
     /*
         핸들링하지 못한 예외
      */
     @ExceptionHandler(RuntimeException.class)
     ResponseEntity<CustomErrorResponse> notHandledException(RuntimeException ex) {
 
-        log.warn("RuntimeException - {}", ex);
+        var body = generateLog("not_handle", Arrays.toString(ex.getStackTrace()));
+        log.error(body);
 
         return ResponseEntity
                 .internalServerError()
@@ -90,6 +103,12 @@ public class CustomExceptionHandler {
                         .errorId(randomUUID().toString())
                         .build()
                 );
+    }
+
+
+
+    private String generateLog(String level, String msg) {
+        return "{'lv' : '%s', 'msg': '%s'}".formatted(level, msg);
     }
 
 

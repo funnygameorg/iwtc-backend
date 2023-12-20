@@ -12,6 +12,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @NoArgsConstructor(access = PRIVATE)
+@ToString
 public abstract class BaseException extends RuntimeException {
 
     protected BaseException(String publicMessage, CustomErrorCode errorCode, HttpStatus httpStatus) {

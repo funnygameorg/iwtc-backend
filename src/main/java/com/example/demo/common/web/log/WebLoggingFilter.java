@@ -15,8 +15,10 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 
 // 한 번 실행을 보장하기 위해 OncePerRequestFilter 사용
@@ -37,8 +39,8 @@ public class WebLoggingFilter extends OncePerRequestFilter {
 
 
         // 톰캣에서 한 번만 읽을 수 있게 함. 다시 읽을 수 있는 형태로 래핑
-        ContentCachingRequestWrapper wrappingRequest = new ContentCachingRequestWrapper((HttpServletRequest) request);
-        ContentCachingResponseWrapper wrappingResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
+        ContentCachingRequestWrapper wrappingRequest = new ContentCachingRequestWrapper(request);
+        ContentCachingResponseWrapper wrappingResponse = new ContentCachingResponseWrapper(response);
 
 
         // 로직 수행
@@ -49,8 +51,18 @@ public class WebLoggingFilter extends OncePerRequestFilter {
 
 
         String uri = wrappingRequest.getRequestURI();
+
+
+        if(uri.equals("/actuator/prometheus"))
+            return;
+
+        String httpMethod = wrappingRequest.getMethod();
+
+        String requestQueryString = wrappingRequest.getQueryString();
         String requestContent = new String(wrappingRequest.getContentAsByteArray());
-        String resContent = new String(wrappingRequest.getContentAsByteArray());
+
+
+        String resContent = new String(wrappingResponse.getContentAsByteArray());
         int httpStatus = wrappingResponse.getStatus();
 
 
@@ -58,8 +70,20 @@ public class WebLoggingFilter extends OncePerRequestFilter {
 
 
         // TODO : requestContents 밸류마다 길이 체크하는 것으로 수정하기
-        log.info("request url : {}, request body : {}", uri, abbreviate(requestContent,60));
-        log.info("response status : {}, response body: {}", httpStatus, resContent );
+        log.info("[REQ] [{}] [{}] [QUERY_STR : {}, BODY : {}] ",
+                httpMethod,
+                uri,
+                requestQueryString,
+                abbreviate(requestContent,60)
+        );
+
+        log.info("[RES] [{}] [{}] [{}] [{}] [RES : {}]",
+                httpMethod,
+                uri,
+                httpStatus - 200 < 200 ? "SUCCESS" : "FALSE",
+                httpStatus,
+                resContent
+        );
 
 
         MDC.clear();
