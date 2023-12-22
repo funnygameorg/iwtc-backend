@@ -1,4 +1,4 @@
-package com.example.demo.common.web.log;
+package com.example.demo.common.log;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,7 +26,11 @@ import static org.apache.commons.lang3.StringUtils.abbreviate;
 // 한 번 실행을 보장하기 위해 OncePerRequestFilter 사용
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class WebLoggingFilter extends OncePerRequestFilter {
+
+    private final LogComponent logComponent;
+
 
     @Override
     protected void doFilterInternal(
@@ -59,10 +65,9 @@ public class WebLoggingFilter extends OncePerRequestFilter {
         String httpMethod = wrappingRequest.getMethod();
 
         String requestQueryString = wrappingRequest.getQueryString();
-        String requestContent = new String(wrappingRequest.getContentAsByteArray());
+        String requestContents = new String(wrappingRequest.getContentAsByteArray());
+        String responseContents = new String(wrappingResponse.getContentAsByteArray());
 
-
-        String resContent = new String(wrappingResponse.getContentAsByteArray());
         int httpStatus = wrappingResponse.getStatus();
 
 
@@ -74,7 +79,7 @@ public class WebLoggingFilter extends OncePerRequestFilter {
                 httpMethod,
                 uri,
                 requestQueryString,
-                abbreviate(requestContent,60)
+                logComponent.reduceLongString(requestContents)
         );
 
         log.info("[RES] [{}] [{}] [{}] [{}] [RES : {}]",
@@ -82,12 +87,14 @@ public class WebLoggingFilter extends OncePerRequestFilter {
                 uri,
                 httpStatus - 200 < 200 ? "SUCCESS" : "FALSE",
                 httpStatus,
-                resContent
+                logComponent.reduceLongString(responseContents)
         );
 
 
         MDC.clear();
     }
+
+
 
 
 }

@@ -1,7 +1,7 @@
-package com.example.demo.common.aop;
+package com.example.demo.common.log;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -17,12 +17,13 @@ import static org.apache.commons.lang3.StringUtils.abbreviate;
 @Slf4j
 @org.aspectj.lang.annotation.Aspect
 @Component
+@RequiredArgsConstructor
 public class LoggingAspect {
 
     private static final String EXECUTION = "execution(* ";
     private static final String ROOT_PACKAGE = "com.example.demo.";
 
-
+    private final LogComponent logComponent;
 
 
 
@@ -39,16 +40,6 @@ public class LoggingAspect {
 
 
 
-    // `argument`의 값이 20자 이상이면 20번째 문자에서 자른 후 `...(reduce)`를 연결한다.
-    private String reduceLongArgument(String arg) {
-        if(arg.length() >= 20) {
-            return arg.substring(0, 20) + "...(reduce)";
-        }
-        return arg;
-    }
-
-
-
 
     @Around(EXECUTION + ROOT_PACKAGE + "domain.*.controller.*.*(..))")
     public Object controllerAround(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -56,9 +47,9 @@ public class LoggingAspect {
         String methodName = joinPoint.getSignature().getName();
         List<String> params = getParams(joinPoint);
 
-        log.debug("controller Before {} {}", methodName, params);
+        log.debug("controller Before {}, params : {}", methodName, params);
         Object result = joinPoint.proceed();
-        log.debug("controller After {} {}", methodName, result);
+        log.debug("controller After {}, result : {}", methodName, logComponent.reduceLongString(String.valueOf(result)));
 
         return result;
     }
@@ -80,15 +71,16 @@ public class LoggingAspect {
 
             log.info("Service Before Method : {}, Param : {}", classAndMethod, params);
             result = joinPoint.proceed();
-            log.info("Service After Method : {}, Param : {}", classAndMethod, params);
+            log.info("Service After Method : {}, Result : {}", classAndMethod, logComponent.reduceLongString(String.valueOf(result)));
+
+
 
         }catch (Exception e) {
-            log.info("Service After Method : {}, Param : {}", classAndMethod, params);
+            log.info("Service After Method : {}, Result : {}", classAndMethod, result);
             throw e;
         }
 
 
         return result;
     }
-
 }
