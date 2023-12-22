@@ -74,7 +74,6 @@ public class WebLoggingFilter extends OncePerRequestFilter {
         wrappingResponse.copyBodyToResponse();
 
 
-        // TODO : requestContents 밸류마다 길이 체크하는 것으로 수정하기
         log.info("[REQ] [{}] [{}] [QUERY_STR : {}, BODY : {}] ",
                 httpMethod,
                 uri,
@@ -82,7 +81,7 @@ public class WebLoggingFilter extends OncePerRequestFilter {
                 logComponent.reduceLongString(requestContents)
         );
 
-        log.info("[RES] [{}] [{}] [{}] [{}] [RES : {}]",
+        log.info("[RES] [{}] [{}] [{}] [{}] [BODY : {}]",
                 httpMethod,
                 uri,
                 httpStatus - 200 < 200 ? "SUCCESS" : "FALSE",
