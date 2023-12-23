@@ -47,9 +47,9 @@ public class LoggingAspect {
         String methodName = joinPoint.getSignature().getName();
         List<String> params = getParams(joinPoint);
 
-        log.debug("controller Before {}, params : {}", methodName, params);
+        log.debug("\" controller Before {}, params : {} \"", methodName, params);
         Object result = joinPoint.proceed();
-        log.debug("controller After {}, result : {}", methodName, logComponent.reduceLongString(String.valueOf(result)));
+        log.debug("\" controller After {}, result : {} \"", methodName, logComponent.reduceLongString(String.valueOf(result)));
 
         return result;
     }
@@ -69,14 +69,14 @@ public class LoggingAspect {
         Object result = null;
         try {
 
-            log.info("' Service Before Method : {}, Param : {} '", classAndMethod, params);
+            log.info("\" Service Before Method : {}, Param : {} \"", classAndMethod, params);
             result = joinPoint.proceed();
-            log.info("' Service After Method : {}, Result : {} '", classAndMethod, logComponent.reduceLongString(String.valueOf(result)));
+            log.info("\" Service After Method : {}, Result : {} \"", classAndMethod, logComponent.reduceLongString(String.valueOf(result)));
 
 
 
         }catch (Exception e) {
-            log.info("Service After Method : {}, Result : {}", classAndMethod, result);
+            log.info("\" Service After Method : {}, Result : {} \"", classAndMethod, result);
             throw e;
         }
 
