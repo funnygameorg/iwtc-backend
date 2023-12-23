@@ -35,7 +35,7 @@
         </encoder>
 
         <logGroupName>itwc-log</logGroupName>
-        <logStreamUuidPrefix>info-log-</logStreamUuidPrefix>
+        <logStreamUuidPrefix>info-log</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>10</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
@@ -61,7 +61,7 @@
         </encoder>
 
         <logGroupName>itwc-log</logGroupName>
-        <logStreamUuidPrefix>info-log-</logStreamUuidPrefix>
+        <logStreamUuidPrefix>warn-log-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
@@ -87,7 +87,7 @@
         </encoder>
 
         <logGroupName>itwc-log</logGroupName>
-        <logStreamUuidPrefix>info-log-</logStreamUuidPrefix>
+        <logStreamUuidPrefix>error-log-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
