@@ -3,14 +3,17 @@
 
 
 
-    <conversionRule
-            conversionWord="clr"
-            converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
     <!-- 변수 설정 -->
     <property name="BY_DATE" value="%d{yyyy-MM-dd-HH}.%i" />
     <property name="LOG_PATH" value="./logs" />
     <property name="LOG_FILE_NAME" value="logFile" />
     <property name="LOG_PATTERN" value="[%date{yyyy-mm-dd HH:mm:ss.SSS}] %blue([%logger{72}]) %highlight([%-5level]) %green([%X{request_id}]) %msg%n" />
+
+    <property name="AWS_ACCESS_KEY" value="cloud.aws.credentials.cloud-watch.access-key"/>
+    <property name="AWS_SECRET_KEY" value="cloud.aws.credentials.cloud-watch.secret-key"/>
+
 
     <appender name="console" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
@@ -18,32 +21,37 @@
         </layout>
     </appender>
 
-    <!-- ALL CONSOLE -->
-    <appender name="CONSOLE_ALL" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>
-                ${LOG_PATTERN}
-            </pattern>
-        </encoder>
-    </appender>
 
 
     <!-- INFO CONSOLE -->
-    <appender name="CONSOLE_INFO" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="AWS_INFO" class="ca.pjer.logback.AwsLogsAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
+
         <encoder>
             <pattern>
                 ${LOG_PATTERN}
             </pattern>
         </encoder>
+
+        <logGroupName>itwc-log</logGroupName>
+        <logStreamUuidPrefix>info-log-</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>10</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>
+        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>
     </appender>
 
+
+
     <!-- WARN CONSOLE -->
-    <appender name="CONSOLE_WARN" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="AWS_WARN" class="ca.pjer.logback.AwsLogsAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
@@ -54,10 +62,22 @@
                 ${LOG_PATTERN}
             </pattern>
         </encoder>
+
+        <logGroupName>itwc-log</logGroupName>
+        <logStreamUuidPrefix>info-log-</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>
+        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>
     </appender>
 
+
+
     <!-- ERR CONSOLE -->
-    <appender name="CONSOLE_ERROR" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="AWS_ERROR" class="ca.pjer.logback.AwsLogsAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -68,16 +88,24 @@
                 ${LOG_PATTERN}
             </pattern>
         </encoder>
+
+        <logGroupName>itwc-log</logGroupName>
+        <logStreamUuidPrefix>info-log-</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>
+        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>
     </appender>
-
-
 
 
     <!-- 기본 출력-->
     <root level="DEBUG">
-        <appender-ref ref="CONSOLE_INFO" />
-        <appender-ref ref="CONSOLE_WARN" />
-        <appender-ref ref="CONSOLE_ERROR" />
+        <appender-ref ref="AWS_INFO" />
+        <appender-ref ref="AWS_WARN" />
+        <appender-ref ref="AWS_ERROR" />
     </root>
 
     <!-- S3와 통신할 때 정보 출력에 사용, 데이터가 너무 커서 로그 읽기가 힘들다.-->
