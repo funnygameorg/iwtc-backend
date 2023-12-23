@@ -23,7 +23,7 @@ public class LogComponent {
 
     // 모든 숫자를 '*'로 변경
     public String replaceNumberToStar(String data) {
-        return data.replaceAll("\\d", "*");
+        return data.replaceAll("\\d+", "*");
     }
 
 
