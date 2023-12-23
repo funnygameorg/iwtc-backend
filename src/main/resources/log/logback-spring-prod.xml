@@ -6,7 +6,7 @@
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
 
     <!-- 변수 설정 -->
-    <property name="LOG_PATTERN" value="[%date{yyyy-mm-dd HH:mm:ss.SSS}] %blue([%logger{72}]) %highlight([%-5level]) %green([%X{request_id}]) %msg%n" />
+    <property name="LOG_PATTERN" value="[%date{yyyy-mm-dd HH:mm:ss.SSS}] %highlight([%-5level]) %green([%X{request_id}]) %msg%n" />
 
     <springProperty name="AWS_ACCESS_KEY" source="cloud.aws.credentials.cloud-watch.access-key"/>
     <springProperty name="AWS_SECRET_KEY" source="cloud.aws.credentials.cloud-watch.secret-key"/>
