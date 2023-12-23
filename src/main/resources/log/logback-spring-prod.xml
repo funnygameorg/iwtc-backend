@@ -86,7 +86,7 @@
             </pattern>
         </encoder>
 
-        <logGroupName>itwc-log</logGroupName>
+        <logGroupName>itwc-log-error</logGroupName>
         <logStreamUuidPrefix>error-log-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
