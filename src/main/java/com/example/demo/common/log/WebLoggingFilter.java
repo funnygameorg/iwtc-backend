@@ -56,10 +56,10 @@ public class WebLoggingFilter extends OncePerRequestFilter {
         );
 
 
-        String uri = wrappingRequest.getRequestURI();
+        String path = wrappingRequest.getRequestURI();
 
 
-        if(uri.equals("/actuator/prometheus"))
+        if(path.equals("/actuator/prometheus"))
             return;
 
         String httpMethod = wrappingRequest.getMethod();
@@ -74,16 +74,18 @@ public class WebLoggingFilter extends OncePerRequestFilter {
         wrappingResponse.copyBodyToResponse();
 
 
-        log.info("{\"is_req\": \"req\", \"method\": \"{}\", \"path\": \"{}\", \"qs\": \"{}\", \"body\": \"{}\" }",
+        log.info("{\"is_req\": \"req\", \"method\": \"{}\", \"path\": \"{}\", \"origin_path\": \"{}\", \"qs\": \"{}\", \"body\": \"{}\" }",
                 httpMethod,
-                uri,
+                path,
+                logComponent.replaceNumberToStar(path),
                 requestQueryString,
                 logComponent.reduceLongString(requestContents)
         );
 
-        log.info("{ \"is_req\": \"res\", \"method\": \"{}\", \"path\": \"{}\", \"is_success\": \"{}\", \"status\" : \"{}\", \"body\" : \"{}\" }",
+        log.info("{ \"is_req\": \"res\", \"method\": \"{}\", \"path\": \"{}\", \"origin_path\": \"{}\", \"is_success\": \"{}\", \"status\" : \"{}\", \"body\" : \"{}\" }",
                 httpMethod,
-                uri,
+                path,
+                logComponent.replaceNumberToStar(path),
                 httpStatus - 200 < 200 ? "SUCCESS" : "FALSE",
                 httpStatus,
                 logComponent.reduceLongString(responseContents)
