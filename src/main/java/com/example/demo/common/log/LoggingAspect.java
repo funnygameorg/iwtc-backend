@@ -69,9 +69,9 @@ public class LoggingAspect {
         Object result = null;
         try {
 
-            log.info("Service Before Method : {}, Param : {}", classAndMethod, params);
+            log.info("' Service Before Method : {}, Param : {} '", classAndMethod, params);
             result = joinPoint.proceed();
-            log.info("Service After Method : {}, Result : {}", classAndMethod, logComponent.reduceLongString(String.valueOf(result)));
+            log.info("' Service After Method : {}, Result : {} '", classAndMethod, logComponent.reduceLongString(String.valueOf(result)));
 
 
 
