@@ -74,14 +74,14 @@ public class WebLoggingFilter extends OncePerRequestFilter {
         wrappingResponse.copyBodyToResponse();
 
 
-        log.info("[REQ] [{}] [{}] [QUERY_STR : {}, BODY : {}] ",
+        log.info("{'is_req': 'req', 'method': '{}', 'path': '{}', 'qs': '{}', 'body': '{}' }",
                 httpMethod,
                 uri,
                 requestQueryString,
                 logComponent.reduceLongString(requestContents)
         );
 
-        log.info("[RES] [{}] [{}] [{}] [{}] [BODY : {}]",
+        log.info("{ 'is_req': 'res', 'method': '{}', 'path': '{}', 'is_success': '{}', 'status' : '{}', 'body' : '{}' }",
                 httpMethod,
                 uri,
                 httpStatus - 200 < 200 ? "SUCCESS" : "FALSE",
