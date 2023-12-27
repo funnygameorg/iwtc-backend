@@ -20,7 +20,7 @@ public class StringEncryptor {
 
     public String jasyptEncoding(String value) {
 
-        String key = "my_jasypt_key";
+        String key = "**";
         StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
         pbeEnc.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
         pbeEnc.setPassword(key);
