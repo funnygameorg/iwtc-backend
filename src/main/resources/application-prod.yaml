@@ -2,7 +2,7 @@ server:
   port: 80
 jasypt:
   encryptor:
-    password: my_jasypt_key
+    password: ${JASYPT_KEY}
     algorithm: PBEWITHHMACSHA512ANDAES_256
     iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 
@@ -10,11 +10,11 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(ak8pdUDOLv6Gr4qmq+T9Xil8hxd5tjlKc30FhHGASDcI4GgguIPI6+O3qyRxHtXrIKqScDr/Z5HRP7BmB/dbTX+BKzyFE8cW3WLms1XSt6XIlPHBpTrP/SewsoOnlWnDelz+pBrtSvmSzrpk1a9lKTDsW6oTHvZwZS7VAkwd0t0S34FxlJNmLEAJ/9oXFDV+S5isSPWikESPhKAqEuckVQ==)
-    username: ENC(KgN+CkbF2Mh+rfLZeJCRC9muYrVpNji1Uwf7gudChmYm/ecbOSgfl3om++Iw2eCe)
-    password: ENC(+EE3drag5n1PayF3akCOzGMSz4VLdze+N6PDmpKe62W6UXoZIXAra3BiW+IlW/tF)
+    url: ${RDS_URL}
+    username: ${RDS_USER_NAME}
+    password: ${RDS_PASSWORD}
   redis:
-    host: ENC(mKCkUmM/qBfmWsz4WQJvO8nefQtdwnQVhJCY7rrQ/YDq4kSArOyP0PQflOFb24dcIxpKKiTFcJzjsx3ws9gjPnGHlaqBWP95j1je3xY9x9iEIloRjc5dH/oyYzajnoLF) # PROD 변경
+    host: ${REDIS_HOST}
     port: 6379
   jpa:
     open-in-view: false
@@ -28,7 +28,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL57Dialect
 
 jwt:
-  secret: ENC(jNtfh8SGjyY4DfLK9eY9nh3cRVqVtzIWxj/2gYML7s+5rG8l1y5qbo7rIjO81qGUIMeVzHT7XP55zApSnajld9YTefQCtMMHr6eCezsLkgE82m6uian5+l1mPSSWrvyOEaEI/mjP3+tJArgBMVcNPO0S4oq6lJaBsMReL69jWautEInFdgz9vwGReKczh8FEGnMCuEgl+IzQMJXyxye7iMjsIqhvlFmblFtFBYq8FhgJf7ljsNKWcmrulIwF3JqA)
+  secret: ${JWT_SECRET}
   token-validity-milli-seconds:
     access: 360000 # 6분
     refresh: 1800000 # 30분
@@ -36,11 +36,11 @@ jwt:
 cloud:
   aws:
     credentials:
-      access-key: ENC(L5nkU1CtIQA9bQqDHwwvEXjK8bj5q8xVig5RSdOdxQAJBYTHTdrRoaBPnc/UJ2n+HHaNDUFSlsfHf4MU0+RXCg==)
-      secret-key: ENC(3BgK9UA4pc2pmPZjUZhh2jpMLh18dzFoQrrqVu7XbLW1iyVOo+05tv41DtxmqSV1JPnhMIDzADxhbSbRPuOLbhk75jdDr3niR9JrV3uqpuk=)
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
       cloud-watch:
-        access-key: ENC(h3CIHsMbShh18XDAO2NATkJ6VAQqPNL66L2gBqv2qpYiVcZV5BEZYh6fZaIn4cXTMNp1RtocKUA/OcwEhkx/xg==)
-        secret-key: ENC(R6QFldLtE3iYQB93pGU44V2wWTnMUHsBBSmpswoZOAwYHPe/rA7tIJUWTS3QLufz+UGKXxNlPFrttyh+Zdzr96H7f1mHllCYUzzI4ijIKwg=)
+        access-key: ${AWS_CLOUD_WATCH_ACCESS_KEY}
+        secret-key: ${AWS_CLOUD_WATCH_SECRET_KEY}
     region:
       static: ap-northeast-2
     s3:
