@@ -29,9 +29,11 @@ public class Comment extends MemberTimeBaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(length = 50)
     @org.hibernate.annotations.Comment("댓글 내용")
     private String body;
 
+    @Column(length = 255)
     @org.hibernate.annotations.Comment("댓글 작성에 사용된 닉네임")
     private String nickname;
 

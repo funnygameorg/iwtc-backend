@@ -28,16 +28,19 @@ public class Member extends TimeBaseEntity {
 
     @NotBlank
     @NotNull
+    @Column(length = 20)
     @Comment("사용자 아이디")
     private String serviceId;
 
     @NotBlank
     @NotNull
+    @Column(length = 10)
     @Comment("사용자 별명")
     private String nickname;
 
     @NotBlank
     @NotNull
+    @Column(length = 20)
     @Comment("사용자 암호")
     private String password;
 

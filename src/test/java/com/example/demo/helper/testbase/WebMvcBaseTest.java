@@ -1,6 +1,7 @@
 package com.example.demo.helper.testbase;
 
 import com.example.demo.common.config.WebConfig;
+import com.example.demo.common.log.LogComponent;
 import com.example.demo.domain.etc.controller.ETCController;
 import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.etc.service.MediaFileService;
@@ -62,7 +63,8 @@ public abstract class WebMvcBaseTest {
         private WorldCupBasedOnAuthService worldCupBasedOnAuthService;
         @MockBean
         private TokenService tokenService;
-
+        @MockBean
+        private LogComponent logComponent;
 
         protected static final String ROOT_PATH = "/api";
         protected static final String WORLD_CUPS_PATH = ROOT_PATH + "/world-cups";

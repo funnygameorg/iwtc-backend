@@ -39,10 +39,12 @@ public class WorldCupGame extends TimeBaseEntity {
 
     @NotNull
     @NotBlank
+    @Column(length = 35)
     @Comment("월드컵 이름")
     private String title;
 
     @Size(max = 100, message = "description 최대 100자")
+    @Column(length = 100)
     @Comment("월드컵 설명, 최대 100자")
     private String description;
 
