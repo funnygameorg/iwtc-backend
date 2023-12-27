@@ -41,7 +41,7 @@ dependencies {
 	// monitor
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
-
+	implementation("ca.pjer:logback-awslogs-appender:1.4.0")
 
 	// cache
 	implementation("org.springframework.boot:spring-boot-starter-cache")

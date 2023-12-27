@@ -56,10 +56,10 @@ public class WebLoggingFilter extends OncePerRequestFilter {
         );
 
 
-        String uri = wrappingRequest.getRequestURI();
+        String path = wrappingRequest.getRequestURI();
 
 
-        if(uri.equals("/actuator/prometheus"))
+        if(path.equals("/actuator/prometheus"))
             return;
 
         String httpMethod = wrappingRequest.getMethod();
@@ -74,17 +74,18 @@ public class WebLoggingFilter extends OncePerRequestFilter {
         wrappingResponse.copyBodyToResponse();
 
 
-        // TODO : requestContents 밸류마다 길이 체크하는 것으로 수정하기
-        log.info("[REQ] [{}] [{}] [QUERY_STR : {}, BODY : {}] ",
+        log.info("{\"is_req\": \"req\", \"method\": \"{}\", \"path\": \"{}\", \"origin_path\": \"{}\", \"qs\": \"{}\", \"body\": \"{}\" }",
                 httpMethod,
-                uri,
+                path,
+                logComponent.replaceNumberToStar(path),
                 requestQueryString,
                 logComponent.reduceLongString(requestContents)
         );
 
-        log.info("[RES] [{}] [{}] [{}] [{}] [RES : {}]",
+        log.info("{ \"is_req\": \"res\", \"method\": \"{}\", \"path\": \"{}\", \"origin_path\": \"{}\", \"is_success\": \"{}\", \"status\" : \"{}\", \"body\" : \"{}\" }",
                 httpMethod,
-                uri,
+                path,
+                logComponent.replaceNumberToStar(path),
                 httpStatus - 200 < 200 ? "SUCCESS" : "FALSE",
                 httpStatus,
                 logComponent.reduceLongString(responseContents)

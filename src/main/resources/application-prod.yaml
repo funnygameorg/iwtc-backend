@@ -38,6 +38,9 @@ cloud:
     credentials:
       access-key: ENC(L5nkU1CtIQA9bQqDHwwvEXjK8bj5q8xVig5RSdOdxQAJBYTHTdrRoaBPnc/UJ2n+HHaNDUFSlsfHf4MU0+RXCg==)
       secret-key: ENC(3BgK9UA4pc2pmPZjUZhh2jpMLh18dzFoQrrqVu7XbLW1iyVOo+05tv41DtxmqSV1JPnhMIDzADxhbSbRPuOLbhk75jdDr3niR9JrV3uqpuk=)
+      cloud-watch:
+        access-key: ENC(h3CIHsMbShh18XDAO2NATkJ6VAQqPNL66L2gBqv2qpYiVcZV5BEZYh6fZaIn4cXTMNp1RtocKUA/OcwEhkx/xg==)
+        secret-key: ENC(R6QFldLtE3iYQB93pGU44V2wWTnMUHsBBSmpswoZOAwYHPe/rA7tIJUWTS3QLufz+UGKXxNlPFrttyh+Zdzr96H7f1mHllCYUzzI4ijIKwg=)
     region:
       static: ap-northeast-2
     s3:
