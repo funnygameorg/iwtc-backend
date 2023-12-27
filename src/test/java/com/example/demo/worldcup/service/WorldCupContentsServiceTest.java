@@ -431,6 +431,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
     @Nested
     @DisplayName("게임을 클리어할 수 있다.")
     public class clearWorldCupGame {
+
         @Test
         @DisplayName(SUCCESS_PREFIX)
         public void clearWorldCupGame() {

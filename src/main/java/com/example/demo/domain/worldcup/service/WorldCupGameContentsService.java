@@ -13,13 +13,16 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepositor
 import com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
+import com.google.common.base.Objects;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
 
+import static com.google.common.base.Objects.equal;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
@@ -164,6 +167,7 @@ public class WorldCupGameContentsService {
 
 
 
+
     public List<ClearWorldCupGameResponse> clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
 
         var contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
@@ -172,22 +176,61 @@ public class WorldCupGameContentsService {
             throw new NotFoundWorldCupContentsException("조회 실패 개수 " + (4 - contents.size()));
         }
 
+
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.firstWinnerContentsId(), 10);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.secondWinnerContentsId(), 7);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.thirdWinnerContentsId(), 4);
         worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.fourthWinnerContentsId(), 4);
 
 
-        return range(0, contents.size())
-                .mapToObj(index -> {
-
-                    var rank = index + 1;
-                    return ClearWorldCupGameResponse.fromEntity(contents.get(index), rank);
-
-                })
-                .toList();
+        return getClearWorldCupGameResponses(request, contents);
 
     }
+
+
+
+
+
+    // 조회한 컨텐츠들을 랭크별로 정렬한다.
+    // TODO : `request`의 순위 객체를 배열에 넣고 코드 작성하기
+    private List<ClearWorldCupGameResponse> getClearWorldCupGameResponses(ClearWorldCupGameRequest request, List<WorldCupGameContents> contents) {
+
+        var firstContents = ClearWorldCupGameResponse.fromEntity(
+                contents.stream()
+                        .filter(item -> item.getId() == request.firstWinnerContentsId())
+                        .findFirst()
+                        .orElse(null),
+                1
+        );
+
+        var secondContents = ClearWorldCupGameResponse.fromEntity(
+                contents.stream()
+                        .filter(item -> item.getId() == request.secondWinnerContentsId())
+                        .findFirst()
+                        .orElse(null),
+                2
+        );
+
+        var thirdContents = ClearWorldCupGameResponse.fromEntity(
+                contents.stream()
+                        .filter(item -> item.getId() == request.thirdWinnerContentsId())
+                        .findFirst().orElse(null),
+                3
+        );
+
+        var fourthContents = ClearWorldCupGameResponse.fromEntity(
+                contents.stream()
+                        .filter(item -> item.getId() == request.fourthWinnerContentsId())
+                        .findFirst()
+                        .orElse(null),
+                4
+        );
+
+
+        return List.of(firstContents, secondContents, thirdContents, fourthContents);
+    }
+
+
 
 
 
