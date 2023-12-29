@@ -42,6 +42,7 @@ public class WorldCupGameContentsService {
 
 
 
+    @Transactional
     public GetAvailableGameRoundsResponse getAvailableGameRounds(Long worldCupGameId) {
 
         if(!worldCupGameRepository.existsWorldCupGame(worldCupGameId)) {
