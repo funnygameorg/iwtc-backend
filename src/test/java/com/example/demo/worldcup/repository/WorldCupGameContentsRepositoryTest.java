@@ -23,8 +23,8 @@ import org.springframework.data.redis.core.ValueOperations;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.example.demo.domain.worldcup.model.vo.VisibleType.PUBLIC;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
-import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,7 +59,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                     "TITLE",
                     "DESCRIPTION",
                     WorldCupGameRound.ROUND_32,
-                    VisibleType.PUBLIC,
+                    PUBLIC,
                     1
             );
             WorldCupGame savedWorldCupGame = worldCupGameRepository.save(worldCupGame);
@@ -79,7 +79,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                     "TITLE",
                     "DESCRIPTION",
                     WorldCupGameRound.ROUND_32,
-                    VisibleType.PUBLIC,
+                    PUBLIC,
                     1
             );
             WorldCupGame savedWorldCupGame = worldCupGameRepository.save(worldCupGame);
@@ -105,7 +105,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                     "TITLE",
                     "DESCRIPTION",
                     WorldCupGameRound.ROUND_32,
-                    VisibleType.PUBLIC,
+                    PUBLIC,
                     1
             );
             List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
@@ -142,7 +142,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                     "TITLE",
                     "DESCRIPTION",
                     WorldCupGameRound.ROUND_32,
-                    VisibleType.PUBLIC,
+                    PUBLIC,
                     1
             );
 
@@ -168,34 +168,74 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
     @DisplayName("이상형 월드컵 게임의 순위권 컨텐츠의 점수 저장할 수 있다.")
     public class saveWinnerContentsScore {
 
+
         @Test
         @DisplayName(SUCCESS_PREFIX + "컨텐츠 1개 10점 저장")
         public void success1() {
             // given
-            ValueOperations ops = redisTemplate.opsForValue();
+            var worldCupGame = WorldCupGame.builder()
+                    .title("title1")
+                    .visibleType(PUBLIC)
+                    .build();
+
+            var mediaFile = StaticMediaFile.builder()
+                    .objectKey("testObjectKey")
+                    .originalName("originalName")
+                    .extension("extension")
+                    .build();
+
+            var gameContents = WorldCupGameContents.builder()
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile)
+                    .name("name")
+                    .build();
+
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.save(mediaFile);
+            worldCupGameContentsRepository.save(gameContents);
 
             // when
             worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 10);
 
-            String winnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
+            var winnerPoint = worldCupGameContentsRepository.findById(1L).get().getGameScore();
             // then
-            assertThat(winnerPoint).isEqualTo("10");
+            assertThat(winnerPoint).isEqualTo(10);
         }
+
 
         @Test
         @DisplayName(SUCCESS_PREFIX + "동일 컨텐츠 21점 저장(10점 + 7점 + 4점 중첩)")
         public void success2() {
             // given
-            ValueOperations ops = redisTemplate.opsForValue();
+            var worldCupGame = WorldCupGame.builder()
+                    .title("title1")
+                    .visibleType(PUBLIC)
+                    .build();
 
+            var mediaFile = StaticMediaFile.builder()
+                    .objectKey("testObjectKey")
+                    .originalName("originalName")
+                    .extension("extension")
+                    .build();
+
+            var gameContents = WorldCupGameContents.builder()
+                    .worldCupGame(worldCupGame)
+                    .mediaFile(mediaFile)
+                    .name("name")
+                    .build();
+
+            worldCupGameRepository.save(worldCupGame);
+            mediaFileRepository.save(mediaFile);
+            worldCupGameContentsRepository.save(gameContents);
+            
             // when
             worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 10);
             worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 7);
             worldCupGameContentsRepository.saveWinnerContentsScore(1L, 1L, 4);
 
-            String winnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
+            var winnerPoint = worldCupGameContentsRepository.findById(1L).get().getGameScore();
             // then
-            assertThat(winnerPoint).isEqualTo("21");
+            assertThat(winnerPoint).isEqualTo(21);
         }
     }
 
@@ -211,7 +251,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                     "TITLE",
                     "DESCRIPTION",
                     WorldCupGameRound.ROUND_32,
-                    VisibleType.PUBLIC,
+                    PUBLIC,
                     1
             );
             List<StaticMediaFile> mediaFiles = IntStream.range(1,4)
@@ -254,7 +294,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
                     "TITLE",
                     "DESCRIPTION",
                     WorldCupGameRound.ROUND_32,
-                    VisibleType.PUBLIC,
+                    PUBLIC,
                     1
             );
             List<StaticMediaFile> mediaFiles = IntStream.range(1,4)

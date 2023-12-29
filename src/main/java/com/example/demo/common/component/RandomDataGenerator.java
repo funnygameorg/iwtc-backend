@@ -1,4 +1,4 @@
-package com.example.demo.domain.worldcup.component;
+package com.example.demo.common.component;
 
 import org.springframework.stereotype.Component;
 
