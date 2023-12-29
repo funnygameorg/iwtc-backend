@@ -3,7 +3,7 @@ package com.example.demo.domain.worldcup.service;
 import com.example.demo.domain.etc.component.MediaFileFactory;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
-import com.example.demo.domain.worldcup.component.RandomDataGeneratorInterface;
+import com.example.demo.common.component.RandomDataGeneratorInterface;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
 import com.example.demo.domain.worldcup.controller.request.UpdateWorldCupContentsRequest;

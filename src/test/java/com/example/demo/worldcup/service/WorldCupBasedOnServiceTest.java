@@ -1,13 +1,8 @@
 package com.example.demo.worldcup.service;
 
 import com.example.demo.domain.etc.model.InternetVideoUrl;
-import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.model.StaticMediaFile;
-import com.example.demo.domain.etc.model.vo.FileType;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
-import com.example.demo.domain.worldcup.component.RandomDataGenerator;
-import com.example.demo.domain.worldcup.component.RandomDataGeneratorInterface;
-import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
 import com.example.demo.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.example.demo.domain.worldcup.exception.DuplicatedWorldCupGameTitleException;
@@ -15,23 +10,18 @@ import com.example.demo.domain.worldcup.exception.NotFoundWorldCupGameException;
 import com.example.demo.domain.worldcup.exception.NotOwnerGameException;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
-import com.example.demo.domain.worldcup.model.vo.VisibleType;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.service.WorldCupBasedOnAuthService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
 import com.example.demo.infra.s3.S3Component;
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.*;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.example.demo.domain.etc.model.vo.FileType.INTERNET_VIDEO_URL;
 import static com.example.demo.domain.etc.model.vo.FileType.STATIC_MEDIA_FILE;
@@ -44,7 +34,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
