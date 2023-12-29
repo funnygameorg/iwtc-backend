@@ -8,7 +8,7 @@ env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: itwc-backend-repo
   EB_APP_NAME: itwc-back
-  EB_ENV_NAME: Itwc-backend-env
+  EB_ENV_NAME: Itwc-backend-server-2023
 
 permissions:
   contents: read
