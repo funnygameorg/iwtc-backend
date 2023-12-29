@@ -15,6 +15,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
 import com.google.common.base.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
 import static java.util.stream.IntStream.range;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -58,7 +60,11 @@ public class WorldCupGameContentsService {
 
         }
 
-        worldCupGameRepository.incrementWorldCupGameViews(worldCupGameId);
+        try {
+            worldCupGameRepository.incrementWorldCupGameViews(worldCupGameId);
+        }catch (Exception e) {
+            log.warn("Failed increment View! game id : {}", worldCupGameId);
+        }
 
         return new GetAvailableGameRoundsResponse(
                 result.worldCupId(),
@@ -163,11 +169,12 @@ public class WorldCupGameContentsService {
 
     }
 
-    
 
 
 
 
+
+    @Transactional
     public List<ClearWorldCupGameResponse> clearWorldCupGame(long worldCupId, ClearWorldCupGameRequest request) {
 
         var contents = worldCupGameContentsRepository.findAllById(request.getWinnerIds());
@@ -176,12 +183,16 @@ public class WorldCupGameContentsService {
             throw new NotFoundWorldCupContentsException("조회 실패 개수 " + (4 - contents.size()));
         }
 
+        try {
 
-        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.firstWinnerContentsId(), 10);
-        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.secondWinnerContentsId(), 7);
-        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.thirdWinnerContentsId(), 4);
-        worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.fourthWinnerContentsId(), 4);
+            worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.firstWinnerContentsId(), 10);
+            worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.secondWinnerContentsId(), 7);
+            worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.thirdWinnerContentsId(), 4);
+            worldCupGameContentsRepository.saveWinnerContentsScore(worldCupId, request.fourthWinnerContentsId(), 4);
 
+        } catch (Exception e) {
+            log.warn("Failed increment Contents Score! contents id : {}", request);
+        }
 
         return getClearWorldCupGameResponses(request, contents);
 

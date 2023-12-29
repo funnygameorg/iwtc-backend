@@ -29,7 +29,6 @@ import java.util.List;
 import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
-import static com.example.demo.domain.worldcup.repository.impl.WorldCupGameContentsRepositoryImpl.WINNER_CONTENTS_SCORE_KEY_FORMAT;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,13 +50,10 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
     private AbstractMediaFileRepository abstractMediaFileRepository;
     @Autowired
     private DataBaseCleanUp dataBaseCleanUp;
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     @AfterEach
     public void tearDown() {
         dataBaseCleanUp.truncateAllEntity();
-        redisTemplate.getConnectionFactory().getConnection().serverCommands().flushDb();
     }
 
 
@@ -103,12 +99,14 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 
             // when
             GetAvailableGameRoundsResponse result = worldCupGamecontentsService.getAvailableGameRounds(1L);
+            var findWorldCupGame = worldCupGameRepository.findById(1L).get();
 
             // then
             assertAll(
                     () -> assertThat(result.worldCupId()).isEqualTo(1),
                     () -> assertThat(result.worldCupDescription()).isEqualTo("description1"),
-                    () -> assertThat(result.rounds()).isEqualTo(List.of(2, 4, 8))
+                    () -> assertThat(result.rounds()).isEqualTo(List.of(2, 4, 8)),
+                    () -> assertThat(findWorldCupGame.getViews()).isEqualTo(1)
             );
         }
 
@@ -435,7 +433,6 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
         @Test
         @DisplayName(SUCCESS_PREFIX)
         public void clearWorldCupGame() {
-            ValueOperations ops = redisTemplate.opsForValue();
             // given
             WorldCupGame worldCupGame = WorldCupGame
                     .builder()
@@ -472,21 +469,25 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
                     .name("contentsName1")
                     .worldCupGame(worldCupGame)
                     .mediaFile(mediaFile1)
+                    .gameScore(0)
                     .build();
             WorldCupGameContents contents2 = WorldCupGameContents.builder()
                     .name("contentsName2")
                     .worldCupGame(worldCupGame)
                     .mediaFile(mediaFile2)
+                    .gameScore(0)
                     .build();
             WorldCupGameContents contents3 = WorldCupGameContents.builder()
                     .name("contentsName3")
                     .worldCupGame(worldCupGame)
                     .mediaFile(mediaFile3)
+                    .gameScore(0)
                     .build();
             WorldCupGameContents contents4 = WorldCupGameContents.builder()
                     .name("contentsName4")
                     .worldCupGame(worldCupGame)
                     .mediaFile(mediaFile4)
+                    .gameScore(0)
                     .build();
 
             worldCupGameRepository.save(worldCupGame);
@@ -504,10 +505,10 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
             List<ClearWorldCupGameResponse> response = worldCupGamecontentsService.clearWorldCupGame(worldCupGame.getId(), request);
 
             // then
-            String firstWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 1L));
-            String secondWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 2L));
-            String thirdWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 3L));
-            String fourthWinnerPoint = (String) ops.get(WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(1L, 4L));
+            String firstWinnerPoint = String.valueOf(worldCupGameContentsRepository.findById(1L).get().getGameScore());
+            String secondWinnerPoint = String.valueOf(worldCupGameContentsRepository.findById(2L).get().getGameScore());
+            String thirdWinnerPoint = String.valueOf(worldCupGameContentsRepository.findById(3L).get().getGameScore());
+            String fourthWinnerPoint = String.valueOf(worldCupGameContentsRepository.findById(4L).get().getGameScore());
 
             ClearWorldCupGameResponse firstWinner = response.stream().filter(winner -> winner.rank() == 1).toList().get(0);
             ClearWorldCupGameResponse secondWinner = response.stream().filter(winner -> winner.rank() == 2).toList().get(0);
@@ -545,7 +546,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
         @Test
         @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 컨텐츠가 순위권이다.")
         public void fail1() {
-            ValueOperations ops = redisTemplate.opsForValue();
+
             // given
             WorldCupGame worldCupGame = WorldCupGame
                     .builder()

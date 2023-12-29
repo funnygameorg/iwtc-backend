@@ -22,7 +22,8 @@ public interface WorldCupGameCustomRepository {
 
     Boolean existsWorldCupGame(Long worldCupGameId);
     GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId);
-    @Async
+
+    // TODO : 인프라 구현체가 자주 변하는 기능
     void incrementWorldCupGameViews(Long worldCupGameId);
 
     List<GetDividedWorldCupGameContentsProjection> getDividedWorldCupGameContents(

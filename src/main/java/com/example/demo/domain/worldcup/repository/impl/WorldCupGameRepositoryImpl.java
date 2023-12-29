@@ -34,11 +34,16 @@ import static java.lang.Boolean.TRUE;
 public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository {
 
     private final WorldCupGamePageRepositoryImpl worldCupGamePageRepositoryImpl;
-    private final RedisTemplate redisTemplate;
     private final EntityManager em;
+
+
 
     private static final String WORLD_CUP_GAME_TABLE_PK= "worldCupGameId";
     private static final String INCREMENT_GAME_VIEWS_KEY_FORMAT = "'type':'gameView', 'game':%s";
+
+
+
+
     @Override
     public Page<GetWorldCupGamePageProjection> getWorldCupGamePage(
             LocalDate startDate,
@@ -82,16 +87,23 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
         return query.getSingleResult();
     }
 
+
+
     /**
-     * 월드컵 게임의 조회수를 Redis에서 Increase 연산
+     * 월드컵 게임의 조회수 증감 연산
      * @param worldCupGameId 조회수 상승하는 게임 id
      */
     @Override
+    @Transactional
     public void incrementWorldCupGameViews(Long worldCupGameId) {
-        ValueOperations ops = redisTemplate.opsForValue();
-        String redisViewsKey = INCREMENT_GAME_VIEWS_KEY_FORMAT.formatted(worldCupGameId);
-        ops.increment(redisViewsKey);
+
+        em.createQuery("UPDATE WorldCupGame w SET w.views = w.views + 1 WHERE w.id = :id")
+                .setParameter("id", worldCupGameId)
+                .executeUpdate();
+
     }
+
+
 
 
     /**

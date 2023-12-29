@@ -1,6 +1,7 @@
 package com.example.demo.domain.worldcup.repository.impl;
 
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsCustomRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,20 +12,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class WorldCupGameContentsRepositoryImpl implements WorldCupGameContentsCustomRepository {
 
-    private final RedisTemplate redisTemplate;
-    public static final String WINNER_CONTENTS_SCORE_KEY_FORMAT = "'type':'clear', 'game':%s, 'Contents':%s";
+
+    private final EntityManager em;
 
 
 
     @Override
     public void saveWinnerContentsScore(
             long worldCupGameId,
-            long WorldCupGameContentsId,
+            long worldCupGameContentsId,
             long score
     ) {
-        String redisKey = WINNER_CONTENTS_SCORE_KEY_FORMAT.formatted(worldCupGameId, WorldCupGameContentsId);
-
-        redisTemplate.opsForValue().increment(redisKey, score);
+        em.createQuery("UPDATE WorldCupGameContents w SET w.gameScore = w.gameScore + :score WHERE w.id = :id")
+                .setParameter("id", worldCupGameContentsId)
+                .setParameter("score", score)
+                .executeUpdate();
     }
 
 
