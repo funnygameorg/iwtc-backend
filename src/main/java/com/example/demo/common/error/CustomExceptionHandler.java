@@ -91,7 +91,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     ResponseEntity<CustomErrorResponse> notHandledException(RuntimeException ex) {
 
-        var body = generateLog("not_handle", Arrays.toString(ex.getStackTrace()));
+        var body = generateLog("not_handle", ex.toString() + " / " + Arrays.toString(ex.getStackTrace()));
         log.error(body);
 
         return ResponseEntity

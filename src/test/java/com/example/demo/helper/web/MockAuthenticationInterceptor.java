@@ -1,6 +1,6 @@
 package com.example.demo.helper.web;
 
-import com.example.demo.common.interceptor.AuthenticationInterceptor;
+import com.example.demo.common.web.AuthenticationInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

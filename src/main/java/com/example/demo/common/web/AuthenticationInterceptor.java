@@ -1,4 +1,4 @@
-package com.example.demo.common.interceptor;
+package com.example.demo.common.web;
 
 import com.example.demo.common.web.auth.RequestWithBlackListedAccessToken;
 import com.example.demo.common.web.auth.CustomAuthentication;
@@ -22,35 +22,50 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private final RememberMeRepository rememberMeRepository;
     private final JwtService jwtService;
 
+
+
     @Override
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response,
             Object handler
     ) {
+
         if(request.getMethod().equals(PRE_FLIGHT_HTTP_METHOD)) {
             return true;
         }
+
         if (!isRequiredAuthenticationApi(handler, request)) {
             return true;
         }
+
+
         String accessToken = request.getHeader(HEADER_TOKEN_NAME);
         Long memberId = jwtService.getPayLoadByToken(accessToken);
 
         Boolean isBlackListedAccessToken = rememberMeRepository.containBlacklistedAccessToken(accessToken);
+
+
         if(isBlackListedAccessToken) {
             throw new RequestWithBlackListedAccessToken(accessToken);
         }
+
         boolean isRemember = rememberMeRepository.isRemember(memberId);
+
         if(!isRemember) {
             throw new ExpiredAuthenticationException();
         }
+
         return true;
     }
+
+
 
     private boolean isRequiredAuthenticationApi(Object handler, HttpServletRequest request) {
         CustomAuthentication customAuthentication = ((HandlerMethod) handler).getMethodAnnotation(CustomAuthentication.class);
         return customAuthentication != null && request.getHeader(HEADER_TOKEN_NAME) != null;
     }
+
+
 
 }

@@ -1,6 +1,6 @@
 package com.example.demo.common.config;
 
-import com.example.demo.common.interceptor.AuthenticationInterceptor;
+import com.example.demo.common.web.AuthenticationInterceptor;
 import com.example.demo.common.web.memberresolver.OptionalMemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.RequiredMemberArgumentResolver;
 import lombok.RequiredArgsConstructor;

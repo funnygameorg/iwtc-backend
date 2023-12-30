@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme.impl;
+package com.example.demo.common.web.auth.rememberme.impl.redis;
 
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +11,8 @@ import org.springframework.stereotype.Repository;
 import static java.util.concurrent.TimeUnit.*;
 
 @Slf4j
-@Repository
 @RequiredArgsConstructor
-public class RedisRepository implements RememberMeRepository {
+public class RedisRememberMeRepository implements RememberMeRepository {
 
     private final RedisTemplate<String, Object> template;
     private final String REMEMBER_KEY = "remember";

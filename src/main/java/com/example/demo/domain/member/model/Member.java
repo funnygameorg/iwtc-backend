@@ -40,7 +40,7 @@ public class Member extends TimeBaseEntity {
 
     @NotBlank
     @NotNull
-    @Column(length = 20)
+    @Column(length = 250)
     @Comment("사용자 암호")
     private String password;
 

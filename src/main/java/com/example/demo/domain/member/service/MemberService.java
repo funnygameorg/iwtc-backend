@@ -53,6 +53,7 @@ public class MemberService {
 
 
 
+    @Transactional
     public SignInResponse signIn(SignInRequest request) {
 
         Member member = memberRepository
@@ -62,7 +63,6 @@ public class MemberService {
         if(!passwordEncoder.matches(request.password(), member.getPassword())) {
             throw new NotFoundMemberException();
         }
-
         rememberMeRepository.save(member.getId());
 
         String refreshToken = jwtService.createRefreshTokenById(member.getId());
@@ -77,6 +77,7 @@ public class MemberService {
 
 
 
+    @Transactional
     public void signOut(String accessToken) {
 
         Long memberId = jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken);
