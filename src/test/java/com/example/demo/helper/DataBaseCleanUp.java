@@ -24,6 +24,7 @@ public class DataBaseCleanUp implements InitializingBean {
         tableNames = entityManager.getMetamodel().getEntities().stream()
                 .filter(entityType -> entityType.getJavaType().getAnnotation(Entity.class) != null)
                 .map(entityType -> UPPER_CAMEL.to(LOWER_UNDERSCORE, entityType.getName()))
+                .map(this::replaceBadEntityName)
                 .collect(Collectors.toList());
     }
 
@@ -36,4 +37,14 @@ public class DataBaseCleanUp implements InitializingBean {
         }
         entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
     }
+
+
+    private String replaceBadEntityName(String entityName) {
+        if("r_d_b_remember_me".equals(entityName))
+            return "RDBREMEMBER_ME";
+        else
+            return entityName;
+    }
+
+
 }

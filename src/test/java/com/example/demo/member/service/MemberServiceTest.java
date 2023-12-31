@@ -12,6 +12,10 @@ import com.example.demo.domain.member.exception.DuplicatedNicknameException;
 import com.example.demo.domain.member.exception.DuplicatedServiceIdException;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.repository.MemberRepository;
+import com.example.demo.helper.DataBaseCleanUp;
+import com.example.demo.helper.testbase.IntegrationBaseTest;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,261 +31,303 @@ import java.util.Optional;
 
 import static com.example.demo.helper.TestConstant.EXCEPTION_PREFIX;
 import static com.example.demo.helper.TestConstant.SUCCESS_PREFIX;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class MemberServiceTest {
+public class MemberServiceTest implements IntegrationBaseTest {
 
-    @InjectMocks
-    private MemberService memberServiceTest;
+    @Autowired
+    private MemberService memberService;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
-    @Mock
+    @Autowired
     private MemberRepository memberRepository;
-    @Mock
+
+    @Autowired
     private RememberMeRepository rememberMeRepository;
-    @Mock
+
+    @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private DataBaseCleanUp dataBaseCleanUp;
+
+    @AfterEach
+    public void tearDown() {
+        dataBaseCleanUp.truncateAllEntity();
+    }
+
+
+
+
+
 
     @Nested
     @DisplayName("회원가입을 할 수 있다.")
-    class signUp {
-        final private SignUpRequest REQUEST = SignUpRequest.builder()
-                .serviceId("A")
-                .nickname("A")
-                .password("A")
-                .build();
+    public class SignUp {
 
         @Test
         @DisplayName(SUCCESS_PREFIX)
-        public void success() {
-            // When
-            memberServiceTest.signUp(REQUEST);
+        public void success1() {
 
-            then(memberRepository)
-                    .should(times(1))
-                    .save(any());
+            var serviceId = "Zero123";
+            var nickname = "Hello123";
+            var password = "!Awtewy1235*";
+
+            var request = SignUpRequest.builder()
+                    .serviceId(serviceId)
+                    .nickname(nickname)
+                    .password(password)
+                    .build();
+
+            //when
+            memberService.signUp(request);
+
+            var newMember = memberRepository.findByServiceId(serviceId).get();
+
+
+            //then
+            assertAll(
+                    () -> assertThat(newMember.getServiceId()).isEqualTo("Zero123"),
+                    () -> assertThat(newMember.getNickname()).isEqualTo("Hello123"),
+                    () -> assertThat(passwordEncoder.matches(password, newMember.getPassword())).isTrue()
+            );
         }
 
         @Test
-        @DisplayName(EXCEPTION_PREFIX + "닉네임 중복")
-        public void fail() {
-            given(memberRepository.existsNickname(any())).willReturn(true);
+        @DisplayName(EXCEPTION_PREFIX + "중복된 닉네임은 회원가입이 불가능하다.")
+        public void fail1() {
 
-            // when then
+            // given
+            var serviceId = "Zero123";
+            var nickname = "Hello123";
+            var password = "!Awtewy1235*";
+
+            var request = SignUpRequest.builder()
+                    .serviceId(serviceId)
+                    .nickname(nickname)
+                    .password(password)
+                    .build();
+
+            var duplicateNicknameMember = Member.builder()
+                    .serviceId("Five514")
+                    .nickname("Hello123")
+                    .password("!ABCDEFF123")
+                    .build();
+
+            memberRepository.save(duplicateNicknameMember);
+
+            //when & then
             assertThrows(
                     DuplicatedNicknameException.class,
-                    () -> memberServiceTest.signUp(REQUEST)
+                    () ->memberService.signUp(request)
             );
-
-            then(memberRepository)
-                    .should(times(1))
-                    .existsNickname(any());
         }
+
 
         @Test
-        @DisplayName(EXCEPTION_PREFIX + "아이디 중복")
+        @DisplayName(EXCEPTION_PREFIX + "중복된 서비스 아이디는 회원가입이 불가능하다.")
         public void fail2() {
-            given(memberRepository.existsServiceId(any())).willReturn(true);
 
-            // when then
+            // given
+            var serviceId = "Zero123";
+            var nickname = "Hello123";
+            var password = "!Awtewy1235*";
+
+            var request = SignUpRequest.builder()
+                    .serviceId(serviceId)
+                    .nickname(nickname)
+                    .password(password)
+                    .build();
+
+            var duplicateServiceIdMember = Member.builder()
+                    .serviceId("Zero123")
+                    .nickname("IPhone135")
+                    .password("!ABCDEFF123")
+                    .build();
+
+            memberRepository.save(duplicateServiceIdMember);
+
+            //when & then
             assertThrows(
                     DuplicatedServiceIdException.class,
-                    () -> memberServiceTest.signUp(REQUEST)
+                    () ->memberService.signUp(request)
             );
-
-            then(memberRepository)
-                    .should(times(1))
-                    .existsServiceId(any());
         }
+
     }
+
+
+
 
 
 
     @Nested
     @DisplayName("로그인을 할 수 있다.")
-    public class signIn {
+    public class SignIn {
 
-        final private SignInRequest REQUEST = SignInRequest.builder()
-                .serviceId("LoginRequesterId")
-                .password("tempPassword")
-                .build();
 
         @Test
         @DisplayName(SUCCESS_PREFIX)
-        public void success() {
+        public void success1() {
+
             // given
-            var optionalMember = Optional.of(
-                    Member.builder()
-                            .id(1L)
-                            .serviceId("LoginRequesterId")
-                            .nickname("A")
-                            .password("A")
-                            .build()
-            );
+            var signInRequest = SignInRequest.builder()
+                    .serviceId("Hey123")
+                    .password("magicPass12@@")
+                    .build();
 
-            // 사용자의 정보가 DB에 있다면
-            given(memberRepository.findByServiceId("LoginRequesterId"))
-                    .willReturn(optionalMember);
+            var encodedPassword = passwordEncoder.encode("magicPass12@@");
 
-            given(passwordEncoder.matches("tempPassword", "A"))
-                    .willReturn(true);
+
+            var newMember = Member.builder()
+                    .serviceId("Hey123")
+                    .nickname("Ja111az")
+                    .password(encodedPassword)
+                    .build();
+
+            memberRepository.save(newMember);
 
             // when
-            memberServiceTest.signIn(REQUEST);
+            var signInResult = memberService.signIn(signInRequest);
+
+            var accessToken = jwtService.createAccessTokenById(1L);
+            var refreshToken = jwtService.createRefreshTokenById(1L);
 
             // then
-            then(memberRepository)
-                    .should(times(1))
-                    .findByServiceId(any());
-
-            then(rememberMeRepository)
-                    .should(times(1))
-                    .save(1L);
-
-            then(jwtService)
-                    .should(times(1))
-                    .createAccessTokenById(1L);
-
-            then(jwtService)
-                    .should(times(1))
-                    .createRefreshTokenById(1L);
+            assertAll(
+                    () -> assertThat(signInResult.accessToken()).isEqualTo(accessToken),
+                    () -> assertThat(signInResult.refreshToken()).isEqualTo(refreshToken),
+                    () -> assertThat(rememberMeRepository.isRemember(1L)).isTrue()
+            );
         }
 
 
         @Test
-        @DisplayName(EXCEPTION_PREFIX + "존재하지 않는 아이디")
-        public void fail() {
+        @DisplayName(EXCEPTION_PREFIX + " 존재하지 않는 사용자는 로그인 할 수 없다.")
+        public void fail1() {
+
             // given
-            Optional emptyMember = Optional.empty();
-
-            // 사용자의 정보가 DB에 있다면
-            given(memberRepository.findByServiceId(any()))
-                    .willReturn(emptyMember);
-
-            // when then
+            var signInRequest = SignInRequest.builder()
+                    .serviceId("Hey123")
+                    .password("magicPass12@@")
+                    .build();
+            // when
             assertThrows(
                     NotFoundMemberException.class,
-                    () ->memberServiceTest.signIn(REQUEST)
+                    () -> memberService.signIn(signInRequest)
             );
-
-            then(memberRepository)
-                    .should(times(1))
-                    .findByServiceId(any());
-
-            then(rememberMeRepository)
-                    .should(never())
-                    .save(any());
-
-            then(jwtService)
-                    .should(never())
-                    .createAccessTokenById(any());
-
-            then(jwtService)
-                    .should(never())
-                    .createRefreshTokenById(any());
         }
 
     }
+
+
 
 
 
     @Nested
-    @DisplayName("아이디 중복 체크를 할 수 있다.")
-    class existsServiceId {
-        final private String SERVICE_ID = "testServiceID";
+    @DisplayName("로그아웃을 할 수 있다.")
+    public class SignOut {
+
 
         @Test
-        @DisplayName(SUCCESS_PREFIX + "중복된 아이디 O")
-        public void isFalse() {
-            given(memberRepository.existsServiceId(SERVICE_ID))
-                    .willReturn(false);
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1() {
 
-            VerifyDuplicatedServiceIdResponse response = memberServiceTest.existsServiceId(SERVICE_ID);
+            // given
+            var signInRequest = SignInRequest.builder()
+                    .serviceId("Hey123")
+                    .password("magicPass12@@")
+                    .build();
 
-            then(memberRepository)
-                    .should(times(1))
-                    .existsServiceId(SERVICE_ID);
+            var encodedPassword = passwordEncoder.encode("magicPass12@@");
 
-            assert !response.isDuplicatedServiceId();
+
+            var newMember = Member.builder()
+                    .serviceId("Hey123")
+                    .nickname("Ja111az")
+                    .password(encodedPassword)
+                    .build();
+
+            memberRepository.save(newMember);
+            memberService.signIn(signInRequest);
+            var accessToken = jwtService.createAccessTokenById(1L);
+
+            // when
+            memberService.signOut(accessToken);
+
+
+            // then
+            assertThat(rememberMeRepository.isRemember(1L)).isFalse();
+
         }
 
-        @Test
-        @DisplayName(EXCEPTION_PREFIX + "중복된 아이디 X")
-        public void isTrue() {
-            given(memberRepository.existsServiceId(SERVICE_ID))
-                    .willReturn(true);
-
-            VerifyDuplicatedServiceIdResponse response = memberServiceTest.existsServiceId(SERVICE_ID);
-
-            then(memberRepository)
-                    .should(times(1))
-                    .existsServiceId(SERVICE_ID);
-
-            assert response.isDuplicatedServiceId();
-        }
     }
+
+
 
 
 
     @Nested
-    @DisplayName("닉네임 중복 체크를 할수 있다.")
-    class existsNickname {
-
-        final private String NICKNAME = "testNickname";
+    @DisplayName("서비스 아이디 중복확인을 할 수 있다.")
+    public class ExistsServiceId {
 
         @Test
-        @DisplayName(SUCCESS_PREFIX + "중복된 닉네임 O")
-        public void isTrue() {
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1() {
 
-            given(memberRepository.existsNickname(NICKNAME))
-                    .willReturn(true);
+            // given
+            var newMember = Member.builder()
+                    .serviceId("Hey123")
+                    .nickname("Ja111az")
+                    .password("ABC")
+                    .build();
 
-            VerifyDuplicatedNicknameResponse response = memberServiceTest.existsNickname(NICKNAME);
+            memberRepository.save(newMember);
 
-            then(memberRepository)
-                    .should(times(1))
-                    .existsNickname(NICKNAME);
+            // when
+            var result = memberService.existsServiceId("Hey123");
 
-            assert response.isDuplicatedNickname();
+            // then
+            assertThat(result.isDuplicatedServiceId()).isTrue();
+
         }
+    }
+
+
+
+
+    @Nested
+    @DisplayName("닉네임 중복확인을 할 수 있다.")
+    public class ExistsName {
+
 
         @Test
-        @DisplayName(EXCEPTION_PREFIX + "중복된 닉네임 X")
-        public void isFalse() {
+        @DisplayName(SUCCESS_PREFIX)
+        public void success1() {
 
-            given(memberRepository.existsNickname(NICKNAME))
-                    .willReturn(false);
+            // given
+            var newMember = Member.builder()
+                    .serviceId("Hey123")
+                    .nickname("Ja111az")
+                    .password("ABC")
+                    .build();
 
-            VerifyDuplicatedNicknameResponse response = memberServiceTest.existsNickname(NICKNAME);
+            memberRepository.save(newMember);
 
-            then(memberRepository)
-                    .should(times(1))
-                    .existsNickname(NICKNAME);
+            // when
+            var result = memberService.existsNickname("Ja111az");
 
-            assert !response.isDuplicatedNickname();
+            // then
+            assertThat(result.isDuplicatedNickname()).isTrue();
+
         }
+
 
     }
 
 
 
-    @Test
-    @DisplayName(SUCCESS_PREFIX + "로그아웃을 할 수 있다.")
-    public void signOut() {
-
-        String accessToken = "testAccessToken";
-        Long memberId = 1L;
-
-        given(jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken))
-                .willReturn(memberId);
-
-        memberServiceTest.signOut(accessToken);
-
-        then(rememberMeRepository)
-                .should(times(1))
-                .signOut(accessToken, memberId);
-    }
 }
