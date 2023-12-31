@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -183,14 +184,19 @@ public class ETCController {
     @GetMapping("/media-files/{mediaFileId}")
     @ResponseStatus(OK)
     public RestApiResponse<MediaFileResponse> getMediaFiles(
-            @PathVariable Long mediaFileId
+            @PathVariable Long mediaFileId,
+            HttpServletResponse httpServletResponse
     ) throws IOException {
+
+        
+        httpServletResponse.setHeader("Cache-Control", "max-age=600");
 
         return new RestApiResponse(
                 1,
                 "미디어 파일 조회",
                 mediaFileService.getMediaFile(mediaFileId)
         );
+
     }
 
 
