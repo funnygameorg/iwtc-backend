@@ -31,7 +31,7 @@ jwt:
   secret: ENC(jNtfh8SGjyY4DfLK9eY9nh3cRVqVtzIWxj/2gYML7s+5rG8l1y5qbo7rIjO81qGUIMeVzHT7XP55zApSnajld9YTefQCtMMHr6eCezsLkgE82m6uian5+l1mPSSWrvyOEaEI/mjP3+tJArgBMVcNPO0S4oq6lJaBsMReL69jWautEInFdgz9vwGReKczh8FEGnMCuEgl+IzQMJXyxye7iMjsIqhvlFmblFtFBYq8FhgJf7ljsNKWcmrulIwF3JqA)
   token-validity-milli-seconds:
     access: 360000 # 6분
-    refresh: 1800000 # 30분
+    refresh: 18000000 # 5시간
 
 cloud:
   aws:
