@@ -1,5 +1,6 @@
 package com.example.demo.domain.member.controller.response;
 
-public record VerifyDuplicatedServiceIdResponse (
-        Boolean isDuplicatedServiceId
-){ }
+public record VerifyDuplicatedServiceIdResponse(
+	Boolean isDuplicatedServiceId
+) {
+}

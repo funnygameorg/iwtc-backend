@@ -1,17 +1,15 @@
 package com.example.demo.domain.worldcup.repository.impl;
 
-import com.example.demo.domain.worldcup.model.WorldCupGame;
-import com.example.demo.domain.worldcup.model.WorldCupGameContents;
-import org.springframework.data.jpa.repository.EntityGraph;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.demo.domain.worldcup.model.WorldCupGame;
 
 public interface WorldCupGameJpaRepository extends JpaRepository<WorldCupGame, Long> {
 
-    boolean existsByTitle(String title);
+	boolean existsByTitle(String title);
 
-    List<WorldCupGame> findAllByMemberId(Long memberId);
+	List<WorldCupGame> findAllByMemberId(Long memberId);
 
 }

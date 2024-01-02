@@ -1,33 +1,33 @@
 package com.example.demo.domain.worldcup.controller.response;
 
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
-import com.example.demo.domain.worldcup.model.vo.VisibleType;
+
 import lombok.Builder;
 
 @Builder
 public record GetGameResultContentsListResponse(
 
-        Long id,
+	Long id,
 
-        String contentsName,
+	String contentsName,
 
-        Long mediaFileId,
+	Long mediaFileId,
 
-        int gameRank,
+	int gameRank,
 
-        int gameScore
+	int gameScore
 
 ) {
 
-    public static GetGameResultContentsListResponse fromEntity(WorldCupGameContents worldCupGameContents) {
+	public static GetGameResultContentsListResponse fromEntity(WorldCupGameContents worldCupGameContents) {
 
-        return GetGameResultContentsListResponse.builder()
-                .id(worldCupGameContents.getId())
-                .contentsName(worldCupGameContents.getName())
-                .mediaFileId(worldCupGameContents.getMediaFile().getId())
-                .gameRank(worldCupGameContents.getGameRank())
-                .gameScore(worldCupGameContents.getGameScore())
-                .build();
+		return GetGameResultContentsListResponse.builder()
+			.id(worldCupGameContents.getId())
+			.contentsName(worldCupGameContents.getName())
+			.mediaFileId(worldCupGameContents.getMediaFile().getId())
+			.gameRank(worldCupGameContents.getGameRank())
+			.gameScore(worldCupGameContents.getGameScore())
+			.build();
 
-    }
+	}
 }

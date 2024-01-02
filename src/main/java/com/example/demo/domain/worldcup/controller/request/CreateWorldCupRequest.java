@@ -5,30 +5,30 @@ import com.example.demo.domain.worldcup.controller.validator.worldcup.VerifyWorl
 import com.example.demo.domain.worldcup.controller.validator.worldcup.VerifyWorldCupTitle;
 import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.vo.VisibleType;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Schema
 @Builder
-public record CreateWorldCupRequest (
-    @VerifyWorldCupTitle
-    String title,
+public record CreateWorldCupRequest(
+	@VerifyWorldCupTitle
+	String title,
 
-    @VerifyWorldCupDescription
-    String description,
+	@VerifyWorldCupDescription
+	String description,
 
-    @VerifyVisibleType
-    VisibleType visibleType
+	@VerifyVisibleType
+	VisibleType visibleType
 
 ) {
 
-
-    public WorldCupGame toEntity(long memberId) {
-        return WorldCupGame.createNewGame(
-                title,
-                description,
-                visibleType,
-                memberId
-        );
-    }
+	public WorldCupGame toEntity(long memberId) {
+		return WorldCupGame.createNewGame(
+			title,
+			description,
+			visibleType,
+			memberId
+		);
+	}
 }

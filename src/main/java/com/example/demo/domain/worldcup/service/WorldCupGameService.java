@@ -1,62 +1,57 @@
 package com.example.demo.domain.worldcup.service;
 
-import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
-import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
-import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import java.time.LocalDate;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange;
+import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
+import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WorldCupGameService {
 
-    private final WorldCupGameRepository worldCupGameRepository;
+	private final WorldCupGameRepository worldCupGameRepository;
 
+	// TODO : 캐시 파라미터 수정하기
+	//    @Cacheable(
+	//            value = "findWorldCupByPageable",
+	//            key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
+	//            unless = "#result.isEmpty()"
+	//    )
+	public Page<GetWorldCupGamePageProjection> findWorldCupByPageable(
+		Pageable pageable,
+		WorldCupDateRange dateRange,
+		String worldCupKeyword,
+		Long memberId
+	) {
 
+		LocalDate now = LocalDate.now();
 
-    // TODO : 캐시 파라미터 수정하기
-//    @Cacheable(
-//            value = "findWorldCupByPageable",
-//            key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
-//            unless = "#result.isEmpty()"
-//    )
-    public Page<GetWorldCupGamePageProjection> findWorldCupByPageable(
-            Pageable pageable,
-            WorldCupDateRange dateRange,
-            String worldCupKeyword,
-            Long memberId
-    ) {
+		LocalDate startDate = calculatePagingStartDate(dateRange, now);
 
-        LocalDate now = LocalDate.now();
+		return worldCupGameRepository.getWorldCupGamePage(
+			startDate,
+			now,
+			worldCupKeyword,
+			pageable,
+			memberId
+		);
+	}
 
-        LocalDate startDate = calculatePagingStartDate(dateRange, now);
-
-        return worldCupGameRepository.getWorldCupGamePage(
-                startDate,
-                now,
-                worldCupKeyword,
-                pageable,
-                memberId
-        );
-    }
-
-
-
-
-    private LocalDate calculatePagingStartDate(WorldCupDateRange dateRange, LocalDate today) {
-        return switch (dateRange) {
-            case ALL -> today.minusYears(3);
-            case YEAR -> today.minusYears(1);
-            case MONTH -> today.minusMonths(1);
-            case DAY -> today.minusDays(1);
-        };
-    }
+	private LocalDate calculatePagingStartDate(WorldCupDateRange dateRange, LocalDate today) {
+		return switch (dateRange) {
+			case ALL -> today.minusYears(3);
+			case YEAR -> today.minusYears(1);
+			case MONTH -> today.minusMonths(1);
+			case DAY -> today.minusDays(1);
+		};
+	}
 }

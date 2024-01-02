@@ -1,18 +1,17 @@
 package com.example.demo.domain.member.controller.validator;
 
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.Retention;
+import java.util.Objects;
+
 import com.example.demo.common.web.validation.NoSpace;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.Size;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.lang.annotation.Retention;
-import java.util.Objects;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @NoSpace
 @Retention(RUNTIME)
@@ -20,16 +19,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = VerifyMemberServiceId.Validator.class)
 public @interface VerifyMemberServiceId {
 
-    String message() default "사용자 아이디 : 6자리 이상, 20자리 이하";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+	String message() default "사용자 아이디 : 6자리 이상, 20자리 이하";
 
+	Class<?>[] groups() default {};
 
-    class Validator implements ConstraintValidator<VerifyMemberServiceId, String> {
+	Class<? extends Payload>[] payload() default {};
 
-        @Override
-        public boolean isValid(String value, ConstraintValidatorContext context) {
-            return Objects.nonNull(value) && value.length() >= 6 && value.length() <= 20;
-        }
-    }
+	class Validator implements ConstraintValidator<VerifyMemberServiceId, String> {
+
+		@Override
+		public boolean isValid(String value, ConstraintValidatorContext context) {
+			return Objects.nonNull(value) && value.length() >= 6 && value.length() <= 20;
+		}
+	}
 }

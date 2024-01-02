@@ -1,110 +1,97 @@
 package com.example.demo.domain.member.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.controller.request.SignInRequest;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
+import com.example.demo.domain.member.controller.response.SignInResponse;
+import com.example.demo.domain.member.controller.response.VerifyDuplicatedNicknameResponse;
+import com.example.demo.domain.member.controller.response.VerifyDuplicatedServiceIdResponse;
 import com.example.demo.domain.member.exception.DuplicatedNicknameException;
 import com.example.demo.domain.member.exception.DuplicatedServiceIdException;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
-import com.example.demo.domain.member.controller.response.SignInResponse;
-import com.example.demo.domain.member.controller.response.VerifyDuplicatedNicknameResponse;
-import com.example.demo.domain.member.controller.response.VerifyDuplicatedServiceIdResponse;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
-    private final JwtService jwtService;
-    private final RememberMeRepository rememberMeRepository;
+	private final MemberRepository memberRepository;
+	private final JwtService jwtService;
+	private final RememberMeRepository rememberMeRepository;
 
-    private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
+	@Transactional
+	public void signUp(SignUpRequest request) {
 
+		if (memberRepository.existsNickname(request.nickname())) {
+			throw new DuplicatedNicknameException();
+		}
+		if (memberRepository.existsServiceId(request.serviceId())) {
+			throw new DuplicatedServiceIdException();
+		}
 
-    @Transactional
-    public void signUp(SignUpRequest request) {
+		Member newMember = Member.signUp(
+			passwordEncoder,
+			request.serviceId(),
+			request.nickname(),
+			request.password()
+		);
+		memberRepository.save(newMember);
+	}
 
-        if(memberRepository.existsNickname(request.nickname())) {
-            throw new DuplicatedNicknameException();
-        }
-        if(memberRepository.existsServiceId(request.serviceId())) {
-            throw new DuplicatedServiceIdException();
-        }
+	@Transactional
+	public SignInResponse signIn(SignInRequest request) {
 
+		Member member = memberRepository
+			.findByServiceId(request.serviceId())
+			.orElseThrow(NotFoundMemberException::new);
 
-        Member newMember = Member.signUp(
-                passwordEncoder,
-                request.serviceId(),
-                request.nickname(),
-                request.password()
-        );
-        memberRepository.save(newMember);
-    }
+		if (!passwordEncoder.matches(request.password(), member.getPassword())) {
+			throw new NotFoundMemberException();
+		}
+		rememberMeRepository.save(member.getId());
 
+		String refreshToken = jwtService.createRefreshTokenById(member.getId());
+		String accessToken = jwtService.createAccessTokenById(member.getId());
 
+		return SignInResponse.builder()
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.build();
+	}
 
+	@Transactional
+	public void signOut(String accessToken) {
 
-    @Transactional
-    public SignInResponse signIn(SignInRequest request) {
+		Long memberId = jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken);
 
-        Member member = memberRepository
-                .findByServiceId(request.serviceId())
-                .orElseThrow(NotFoundMemberException::new);
+		rememberMeRepository.signOut(accessToken, memberId);
 
-        if(!passwordEncoder.matches(request.password(), member.getPassword())) {
-            throw new NotFoundMemberException();
-        }
-        rememberMeRepository.save(member.getId());
+	}
 
-        String refreshToken = jwtService.createRefreshTokenById(member.getId());
-        String accessToken = jwtService.createAccessTokenById(member.getId());
+	public VerifyDuplicatedServiceIdResponse existsServiceId(String serviceId) {
 
-        return SignInResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-    }
+		Boolean isDuplicated = memberRepository.existsServiceId(serviceId);
 
+		return new VerifyDuplicatedServiceIdResponse(isDuplicated);
 
+	}
 
+	public VerifyDuplicatedNicknameResponse existsNickname(String nickname) {
 
-    @Transactional
-    public void signOut(String accessToken) {
+		Boolean isDuplicatedNickname = memberRepository.existsNickname(nickname);
 
-        Long memberId = jwtService.getPayLoadByTokenIgnoreExpiredTime(accessToken);
+		return new VerifyDuplicatedNicknameResponse(isDuplicatedNickname);
 
-        rememberMeRepository.signOut(accessToken, memberId);
-
-    }
-
-
-
-
-    public VerifyDuplicatedServiceIdResponse existsServiceId(String serviceId) {
-
-        Boolean isDuplicated = memberRepository.existsServiceId(serviceId);
-
-        return new VerifyDuplicatedServiceIdResponse(isDuplicated);
-
-    }
-
-
-
-
-    public VerifyDuplicatedNicknameResponse existsNickname(String nickname) {
-
-        Boolean isDuplicatedNickname = memberRepository.existsNickname(nickname);
-
-        return new VerifyDuplicatedNicknameResponse(isDuplicatedNickname);
-
-    }
+	}
 }

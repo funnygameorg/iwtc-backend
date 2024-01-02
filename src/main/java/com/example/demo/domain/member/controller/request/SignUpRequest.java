@@ -1,24 +1,23 @@
 package com.example.demo.domain.member.controller.request;
 
-import com.example.demo.common.web.validation.NoSpace;
 import com.example.demo.domain.member.controller.validator.VerifyMemberNickname;
 import com.example.demo.domain.member.controller.validator.VerifyMemberPassword;
 import com.example.demo.domain.member.controller.validator.VerifyMemberServiceId;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Schema
 @Builder
-public record SignUpRequest (
-        @VerifyMemberServiceId
-        String serviceId,
+public record SignUpRequest(
+	@VerifyMemberServiceId
+	String serviceId,
 
-        @VerifyMemberNickname
-        String nickname,
+	@VerifyMemberNickname
+	String nickname,
 
-        @VerifyMemberPassword
-        String password
+	@VerifyMemberPassword
+	String password
 ) {
 
 }

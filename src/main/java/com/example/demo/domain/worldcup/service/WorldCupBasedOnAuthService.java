@@ -1,9 +1,14 @@
 package com.example.demo.domain.worldcup.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.common.component.RandomDataGeneratorInterface;
 import com.example.demo.domain.etc.component.MediaFileFactory;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
-import com.example.demo.common.component.RandomDataGeneratorInterface;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;
 import com.example.demo.domain.worldcup.controller.request.UpdateWorldCupContentsRequest;
@@ -20,12 +25,9 @@ import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.infra.s3.S3Component;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -33,265 +35,218 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class WorldCupBasedOnAuthService {
 
+	private final WorldCupGameRepository worldCupGameRepository;
+	private final WorldCupGameContentsRepository worldCupGameContentsRepository;
+	private final MediaFileRepository mediaFileRepository;
+	private final MediaFileFactory mediaFileFactory;
+	private final RandomDataGeneratorInterface randomDataGenerator;
+	private final S3Component s3Component;
 
-    private final WorldCupGameRepository worldCupGameRepository;
-    private final WorldCupGameContentsRepository worldCupGameContentsRepository;
-    private final MediaFileRepository mediaFileRepository;
-    private final MediaFileFactory mediaFileFactory;
-    private final RandomDataGeneratorInterface randomDataGenerator;
-    private final S3Component s3Component;
+	public List<GetWorldCupContentsResponse> getMyWorldCupGameContents(long worldCupId, long memberId) {
 
+		WorldCupGame worldCupGame = worldCupGameRepository
+			.findById(worldCupId)
+			.orElseThrow(() ->
+				new NotFoundWorldCupGameException("%s 는 존재하지 않는 게임입니다.".formatted(worldCupId))
+			);
 
+		if (!worldCupGame.isOwner(memberId)) {
+			throw new NotOwnerGameException();
+		}
 
+		return worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame)
+			.stream()
+			.map(GetWorldCupContentsResponse::fromEntity)
+			.toList();
 
-    public List<GetWorldCupContentsResponse> getMyWorldCupGameContents(long worldCupId, long memberId) {
+	}
 
-        WorldCupGame worldCupGame = worldCupGameRepository
-                .findById(worldCupId)
-                .orElseThrow(() ->
-                        new NotFoundWorldCupGameException("%s 는 존재하지 않는 게임입니다.".formatted(worldCupId))
-                );
+	@Transactional
+	public long createMyWorldCup(CreateWorldCupRequest request, Long memberId) {
 
-        if(!worldCupGame.isOwner(memberId)) {
-            throw new NotOwnerGameException();
-        }
+		if (existsGameTitle(request)) {
+			throw new DuplicatedWorldCupGameTitleException(request.title());
+		}
 
-        return worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame)
-                .stream()
-                .map(GetWorldCupContentsResponse::fromEntity)
-                .toList();
+		WorldCupGame newGame = request.toEntity(memberId);
 
-    }
+		WorldCupGame savedGame = worldCupGameRepository.save(newGame);
 
+		return savedGame.getId();
+	}
 
+	@Transactional
+	public void putMyWorldCup(CreateWorldCupRequest request, Long worldCupId, Long memberId) {
 
+		if (existsGameTitle(request)) {
+			throw new DuplicatedWorldCupGameTitleException(request.title());
+		}
 
+		WorldCupGame worldCupGame = worldCupGameRepository
+			.findById(worldCupId)
+			.orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
 
-    @Transactional
-    public long createMyWorldCup(CreateWorldCupRequest request, Long memberId) {
+		if (!isGameOwner(memberId, worldCupGame)) {
+			throw new NotOwnerGameException();
+		}
 
-        if(existsGameTitle(request)) {
-            throw new DuplicatedWorldCupGameTitleException(request.title());
-        }
+		worldCupGame.simpleUpdate(
+			request.title(),
+			request.description(),
+			request.visibleType()
+		);
 
-        WorldCupGame newGame = request.toEntity(memberId);
+	}
 
-        WorldCupGame savedGame = worldCupGameRepository.save(newGame);
+	// 해당 `WorldCupGame`의 작성자인가?
+	private boolean isGameOwner(Long memberId, WorldCupGame worldCupGame) {
 
-        return savedGame.getId();
-    }
+		return worldCupGame.getMemberId() == memberId;
 
+	}
 
+	// 이미 존재하는 `WorldCupGame Title`인가?
+	private boolean existsGameTitle(CreateWorldCupRequest request) {
 
+		return worldCupGameRepository.existsByTitle(request.title());
 
+	}
 
-    @Transactional
-    public void putMyWorldCup(CreateWorldCupRequest request, Long worldCupId, Long memberId) {
+	@Transactional
+	public void createMyWorldCupContents(CreateWorldCupContentsRequest request, long WorldCupId, long memberId) {
 
-        if(existsGameTitle(request)) {
-            throw new DuplicatedWorldCupGameTitleException(request.title());
-        }
+		WorldCupGame worldCupGame = worldCupGameRepository
+			.findById(WorldCupId)
+			.orElseThrow(() -> new NotFoundWorldCupGameException(WorldCupId));
 
-        WorldCupGame worldCupGame = worldCupGameRepository
-                .findById(worldCupId)
-                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
+		if (!worldCupGame.isOwner(memberId)) {
+			throw new NotOwnerGameException();
+		}
 
-        if(!isGameOwner(memberId, worldCupGame)) {
-            throw new NotOwnerGameException();
-        }
+		List<WorldCupGameContents> newContentsList = createNewContentsList(request, worldCupGame);
+		List<MediaFile> newMediaFiles = newContentsList.stream().map(contents -> contents.getMediaFile()).toList();
 
-        worldCupGame.simpleUpdate(
-                request.title(),
-                request.description(),
-                request.visibleType()
-        );
+		mediaFileRepository.saveAll(newMediaFiles);
+		worldCupGameContentsRepository.saveAll(newContentsList);
 
-    }
+	}
 
+	private List<WorldCupGameContents> createNewContentsList(
+		CreateWorldCupContentsRequest request,
+		WorldCupGame worldCupGame
+	) {
 
+		return request.data().stream()
+			.map(contentsRequest -> {
 
+					CreateWorldCupContentsRequest.CreateMediaFileRequest mediaFileRequest =
+						contentsRequest.createMediaFileRequest();
 
+					String objectKey = randomDataGenerator.generate();
 
-    // 해당 `WorldCupGame`의 작성자인가?
-    private boolean isGameOwner(Long memberId, WorldCupGame worldCupGame) {
+					s3Component.putObject(mediaFileRequest.mediaData(), objectKey);
 
-        return worldCupGame.getMemberId() == memberId;
+					MediaFile newMediaFile = mediaFileFactory.createMediaFile(
+						mediaFileRequest.fileType(),
+						objectKey,
+						mediaFileRequest.originalName(),
+						mediaFileRequest.videoPlayDuration(),
+						mediaFileRequest.videoStartTime()
+					);
 
-    }
+					return WorldCupGameContents.createNewContents(
+						worldCupGame,
+						newMediaFile,
+						contentsRequest.contentsName(),
+						contentsRequest.visibleType()
+					);
+				}
+			).toList();
 
+	}
 
+	public List<GetMyWorldCupResponse> getMyWorldCupList(Long memberId) {
 
+		return worldCupGameRepository.findAllByMemberId(memberId).stream()
+			.map(GetMyWorldCupResponse::fromEntity)
+			.toList();
 
-    // 이미 존재하는 `WorldCupGame Title`인가?
-    private boolean existsGameTitle(CreateWorldCupRequest request) {
+	}
 
-        return worldCupGameRepository.existsByTitle(request.title());
+	public GetWorldCupResponse getMyWorldCup(long worldCupId, Long memberId) {
 
-    }
+		WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+			.orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
 
+		if (!worldCupGame.isOwner(memberId)) {
+			throw new NotOwnerGameException();
+		}
 
+		return GetWorldCupResponse.fromEntity(worldCupGame);
 
+	}
 
+	public List<GetMyWorldCupContentsResponse> getMyWorldCupContentsList(Long worldCupId, Long memberId) {
 
-    @Transactional
-    public void createMyWorldCupContents(CreateWorldCupContentsRequest request, long WorldCupId, long memberId) {
+		WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+			.orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
 
-        WorldCupGame worldCupGame = worldCupGameRepository
-                .findById(WorldCupId)
-                .orElseThrow(() -> new NotFoundWorldCupGameException(WorldCupId));
+		if (!worldCupGame.isOwner(memberId)) {
+			throw new NotOwnerGameException();
+		}
 
-        if(!worldCupGame.isOwner(memberId)) {
-            throw new NotOwnerGameException();
-        }
+		return worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame)
+			.stream()
+			.map(GetMyWorldCupContentsResponse::fromEntity)
+			.toList();
+	}
 
-        List<WorldCupGameContents> newContentsList = createNewContentsList(request, worldCupGame);
-        List<MediaFile> newMediaFiles = newContentsList.stream().map(contents -> contents.getMediaFile()).toList();
+	@Transactional
+	public long updateMyWorldCupContents(UpdateWorldCupContentsRequest request, Long worldCupId,
+		Long worldCupContentsId, Long memberId) {
 
-        mediaFileRepository.saveAll(newMediaFiles);
-        worldCupGameContentsRepository.saveAll(newContentsList);
+		WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+			.orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
 
-    }
+		if (!worldCupGame.isOwner(memberId)) {
+			throw new NotOwnerGameException();
+		}
 
+		WorldCupGameContents contents = worldCupGameContentsRepository.findById(worldCupContentsId)
+			.orElseThrow(() -> new NotFoundWorldCupContentsException(worldCupContentsId));
 
+		String objectKey = randomDataGenerator.generate();
 
+		s3Component.putObject(request.mediaData(), objectKey);
 
+		contents.updateByCommonManage(
+			request.contentsName(),
+			request.originalName(),
+			request.videoStartTime(),
+			request.videoPlayDuration(),
+			request.visibleType(),
+			objectKey
+		);
 
-    private List<WorldCupGameContents> createNewContentsList(
-            CreateWorldCupContentsRequest request,
-            WorldCupGame worldCupGame
-    ) {
+		return contents.getId();
+	}
 
-        return request.data().stream()
-                .map(contentsRequest -> {
+	@Transactional
+	public long deleteMyWorldCupContents(long worldCupId, long worldCupContentsId, Long memberId) {
 
-                    CreateWorldCupContentsRequest.CreateMediaFileRequest mediaFileRequest =
-                            contentsRequest.createMediaFileRequest();
+		WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+			.orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
 
-                    String objectKey = randomDataGenerator.generate();
+		if (!worldCupGame.isOwner(memberId)) {
+			throw new NotOwnerGameException();
+		}
 
-                            s3Component.putObject(mediaFileRequest.mediaData(), objectKey);
+		WorldCupGameContents contents = worldCupGameContentsRepository.findById(worldCupContentsId)
+			.orElseThrow(() -> new NotFoundWorldCupContentsException(worldCupContentsId));
 
-                    MediaFile newMediaFile = mediaFileFactory.createMediaFile(
-                            mediaFileRequest.fileType(),
-                            objectKey,
-                            mediaFileRequest.originalName(),
-                            mediaFileRequest.videoPlayDuration(),
-                            mediaFileRequest.videoStartTime()
-                    );
+		contents.softDelete();
 
-                    return WorldCupGameContents.createNewContents(
-                            worldCupGame,
-                            newMediaFile,
-                            contentsRequest.contentsName(),
-                            contentsRequest.visibleType()
-                    );
-                }
-                ).toList();
-
-    }
-
-
-
-
-    public List<GetMyWorldCupResponse> getMyWorldCupList(Long memberId) {
-
-        return worldCupGameRepository.findAllByMemberId(memberId).stream()
-                .map(GetMyWorldCupResponse::fromEntity)
-                .toList();
-
-    }
-
-
-
-    public GetWorldCupResponse getMyWorldCup(long worldCupId, Long memberId) {
-
-        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
-                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
-
-        if(!worldCupGame.isOwner(memberId)) {
-            throw new NotOwnerGameException();
-        }
-
-        return GetWorldCupResponse.fromEntity(worldCupGame);
-
-    }
-
-
-
-
-    public List<GetMyWorldCupContentsResponse> getMyWorldCupContentsList(Long worldCupId, Long memberId) {
-
-        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
-                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
-
-        if(!worldCupGame.isOwner(memberId)) {
-            throw new NotOwnerGameException();
-        }
-
-        return worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame)
-                .stream()
-                .map(GetMyWorldCupContentsResponse::fromEntity)
-                .toList();
-    }
-
-
-
-
-
-    @Transactional
-    public long updateMyWorldCupContents(UpdateWorldCupContentsRequest request, Long worldCupId, Long worldCupContentsId, Long memberId) {
-
-        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
-                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
-
-        if(!worldCupGame.isOwner(memberId)) {
-            throw new NotOwnerGameException();
-        }
-
-        WorldCupGameContents contents = worldCupGameContentsRepository.findById(worldCupContentsId)
-                .orElseThrow(() -> new NotFoundWorldCupContentsException(worldCupContentsId));
-
-
-
-        String objectKey = randomDataGenerator.generate();
-
-        s3Component.putObject(request.mediaData(), objectKey);
-
-
-        contents.updateByCommonManage(
-                request.contentsName(),
-                request.originalName(),
-                request.videoStartTime(),
-                request.videoPlayDuration(),
-                request.visibleType(),
-                objectKey
-        );
-
-        return contents.getId();
-    }
-
-
-
-
-
-    @Transactional
-    public long deleteMyWorldCupContents(long worldCupId, long worldCupContentsId, Long memberId) {
-
-        WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
-                .orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
-
-        if(!worldCupGame.isOwner(memberId)) {
-            throw new NotOwnerGameException();
-        }
-
-        WorldCupGameContents contents = worldCupGameContentsRepository.findById(worldCupContentsId)
-                .orElseThrow(() -> new NotFoundWorldCupContentsException(worldCupContentsId));
-
-        contents.softDelete();
-
-        return contents.getId();
-    }
-
-
+		return contents.getId();
+	}
 
 }
