@@ -104,7 +104,18 @@ public class WorldCupGamePageRepositoryImpl {
 	private long countByCreatedAtBetween(LocalDate startDate, LocalDate endDate) {
 
 		String sql = """
-			SELECT COUNT(*) FROM world_cup_game WHERE DATE(created_at) BETWEEN :startDate AND :endDate
+			SELECT 
+				COUNT(*) 
+			FROM 
+				world_cup_game 
+			WHERE 
+				DATE(created_at) 
+			BETWEEN 
+				:startDate AND :endDate
+			AND
+				soft_delete = 0
+			AND
+				visible_type = 'PUBLIC'
 			""";
 
 		Query query = em.createNativeQuery(sql);
@@ -178,6 +189,10 @@ public class WorldCupGamePageRepositoryImpl {
 			    world_cup_game AS wcg                      
 			WHERE 
 			    DATE(wcg.created_at) BETWEEN :startDate AND :endDate 
+			AND
+				wcg.soft_delete = 0 
+			AND
+				wcg.visible_type = 'PUBLIC'
 			%s
 			%s
 			GROUP BY 
