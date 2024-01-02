@@ -31,11 +31,12 @@ public class WebLoggingFilter extends OncePerRequestFilter {
 		FilterChain filterChain
 	) throws ServletException, IOException {
 
-		if (logComponent.excludeApi(request.getRequestURI())) {
+		if (logComponent.excludeMediaFileRequest(request.getRequestURI())) {
 			filterChain.doFilter(
 				request,
 				response
 			);
+			return;
 		}
 
 		UUID uuid = UUID.randomUUID();

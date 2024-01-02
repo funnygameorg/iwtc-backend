@@ -41,7 +41,7 @@ public class LoggingAspect {
 
 		String methodName = joinPoint.getSignature().getName();
 
-		if (logComponent.excludeApi(methodName)) {
+		if (logComponent.excludeMediaFileRequest(methodName)) {
 			return joinPoint.proceed();
 		}
 
@@ -62,7 +62,7 @@ public class LoggingAspect {
 		String methodName = joinPoint.getSignature().getName();
 		String classAndMethod = className + "." + methodName + "()";
 
-		if (logComponent.excludeApi(methodName)) {
+		if (logComponent.excludeMediaFileRequest(methodName)) {
 			return joinPoint.proceed();
 		}
 

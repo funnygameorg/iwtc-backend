@@ -28,7 +28,8 @@ public class LogComponent {
 		return data.replaceAll("\\d+", "*");
 	}
 
-	public boolean excludeApi(String target) {
+	// 미디어 파일 조회와 관련된 경우 `True`를 반환
+	public boolean excludeMediaFileRequest(String target) {
 		return logExcludeList.contains(target) || target.contains(logExcludeList.get(0));
 	}
 }
