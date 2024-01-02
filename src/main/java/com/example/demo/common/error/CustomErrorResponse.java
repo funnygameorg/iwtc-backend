@@ -1,10 +1,14 @@
 package com.example.demo.common.error;
 
-import lombok.*;
+import static lombok.AccessLevel.*;
 
 import java.time.LocalDateTime;
 
-import static lombok.AccessLevel.PRIVATE;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @ToString
@@ -13,8 +17,8 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class CustomErrorResponse {
 
-    private LocalDateTime errorTime;
-    private int errorCode;
-    private String message;
-    private String errorId;
+	private LocalDateTime errorTime;
+	private int errorCode;
+	private String message;
+	private String errorId;
 }

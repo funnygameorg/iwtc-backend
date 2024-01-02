@@ -1,23 +1,24 @@
 package com.example.demo.common.config;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
 
-    @Bean
-    OpenAPI openAPI() {
-        return new OpenAPI()
-                .components(new Components())
-                .info(apiInfo());
-    }
+	@Bean
+	OpenAPI openAPI() {
+		return new OpenAPI()
+			.components(new Components())
+			.info(apiInfo());
+	}
 
-    private Info apiInfo() {
-        return new Info()
-                .title("아이돌 월드컵 API 문서");
-    }
+	private Info apiInfo() {
+		return new Info()
+			.title("아이돌 월드컵 API 문서");
+	}
 }
