@@ -31,6 +31,10 @@ public class WebLoggingFilter extends OncePerRequestFilter {
 		FilterChain filterChain
 	) throws ServletException, IOException {
 
+		if (logComponent.excludeApi(request.getRequestURI())) {
+			return;
+		}
+
 		UUID uuid = UUID.randomUUID();
 		MDC.put("request_id", uuid.toString());
 

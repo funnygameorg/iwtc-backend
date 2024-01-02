@@ -1,5 +1,7 @@
 package com.example.demo.common.log;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,6 +10,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LogComponent {
+
+	private List<String> logExcludeList = List.of("/api/media-files/", "getMediaFiles",
+		"getMediaFile");
 
 	// `data`의 값이 400자 이상이면 `...(reduce)`로 변경
 	// 너무 길면 로그 확인에 불편함
@@ -23,4 +28,7 @@ public class LogComponent {
 		return data.replaceAll("\\d+", "*");
 	}
 
+	public boolean excludeApi(String target) {
+		return logExcludeList.contains(target) || target.contains(logExcludeList.get(0));
+	}
 }

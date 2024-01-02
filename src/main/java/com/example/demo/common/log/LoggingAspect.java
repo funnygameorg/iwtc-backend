@@ -40,6 +40,11 @@ public class LoggingAspect {
 	public Object controllerAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
 		String methodName = joinPoint.getSignature().getName();
+
+		if (logComponent.excludeApi(methodName)) {
+			return joinPoint.proceed();
+		}
+
 		List<String> params = getParams(joinPoint);
 
 		log.debug("\" controller Before {}, params : {} \"", methodName, params);
@@ -56,6 +61,10 @@ public class LoggingAspect {
 		String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
 		String methodName = joinPoint.getSignature().getName();
 		String classAndMethod = className + "." + methodName + "()";
+
+		if (logComponent.excludeApi(methodName)) {
+			return joinPoint.proceed();
+		}
 
 		List<String> params = getParams(joinPoint);
 
