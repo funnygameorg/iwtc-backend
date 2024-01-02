@@ -32,7 +32,10 @@ public class WebLoggingFilter extends OncePerRequestFilter {
 	) throws ServletException, IOException {
 
 		if (logComponent.excludeApi(request.getRequestURI())) {
-			return;
+			filterChain.doFilter(
+				request,
+				response
+			);
 		}
 
 		UUID uuid = UUID.randomUUID();
