@@ -6,8 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CacheType {
+
 	CACHE_STORE(
-		"findWorldCupByPageable",
+		"worldCupList",
 		5 * 60,
 		10000
 	);

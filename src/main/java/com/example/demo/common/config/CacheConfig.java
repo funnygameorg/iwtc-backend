@@ -22,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 @EnableCaching
 public class CacheConfig {
 
+	/*
+		구현체 카페인 사용
+	 */
 	@Bean
 	public List<CaffeineCache> caffeineConfig() {
 		return stream(CacheType.values())

@@ -2,6 +2,7 @@ package com.example.demo.domain.worldcup.service;
 
 import java.time.LocalDate;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,16 @@ public class WorldCupGameService {
 
 	private final WorldCupGameRepository worldCupGameRepository;
 
-	// TODO : 캐시 파라미터 수정하기
-	//    @Cacheable(
-	//            value = "findWorldCupByPageable",
-	//            key = "#dateRange?.toString() + #worldCupKeyword?.toString() + #pageable?.toString()",
-	//            unless = "#result.isEmpty()"
-	//    )
+	// 기본 인자 + 첫 페이지 조회 조건으로만 cache를 사용한다.
+	@Cacheable(
+		cacheNames = "worldCupList",
+		key = "'firstPage'",
+		condition = "#pageable.getPageNumber() == 0 "
+			+ "and #worldCupKeyword == null "
+			+ "and #memberId == null "
+			+ "and #pageable.getSort().toString() == 'id: DESC' "
+			+ "and #dateRange.name() == 'ALL' "
+	)
 	public Page<GetWorldCupGamePageProjection> findWorldCupByPageable(
 		Pageable pageable,
 		WorldCupDateRange dateRange,
