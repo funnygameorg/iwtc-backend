@@ -6,8 +6,8 @@ package com.example.demo.helper;
  */
 public class TestConstant {
 
-    // Display에 노출되는 성공, 예외 문구
-    public static final String SUCCESS_PREFIX = "성공 : ";
-    public static final String EXCEPTION_PREFIX = "예외 : ";
+	// Display에 노출되는 성공, 예외 문구
+	public static final String SUCCESS_PREFIX = "성공 : ";
+	public static final String EXCEPTION_PREFIX = "예외 : ";
 
 }
