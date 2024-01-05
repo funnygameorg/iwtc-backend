@@ -3,6 +3,7 @@ package com.example.demo.domain.worldcup.service;
 import static java.util.Arrays.*;
 import static java.util.Comparator.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -79,10 +80,19 @@ public class WorldCupGameContentsService {
 
 	}
 
+	/**
+	 * 월드컵 게임에 포함된 컨텐츠 리스트를 반환한다. (게임 플레이에 사용)
+	 *
+	 * @param worldCupGameId 플레이하는 월드컵 게임
+	 * @param currentRound 현재 라운드
+	 * @param sliceContents 몇 분의 일의 컨텐츠 양을 응답할 것인가?
+	 * @param alreadyPlayedContentsIds 사용자가 이미 플레이한 컨텐츠 아이디 리스트
+	 * @return 사용자가 플레이할 월드컵 컨텐츠 리스트
+	 */
 	public GetWorldCupPlayContentsResponse getPlayContents(
 		Long worldCupGameId,
 		int currentRound,
-		int divideContentsSizePerRequest,
+		int sliceContents,
 		List<Long> alreadyPlayedContentsIds
 	) {
 
@@ -92,7 +102,7 @@ public class WorldCupGameContentsService {
 
 		WorldCupGameRound worldCupGameRound = WorldCupGameRound.getRoundFromValue(currentRound);
 
-		int wantedContentsSize = worldCupGameRound.getGameContentsSizePerRequest(divideContentsSizePerRequest);
+		int wantedContentsSize = worldCupGameRound.getGameContentsSizePerRequest(sliceContents);
 
 		List<GetDividedWorldCupGameContentsProjection> contentsProjections = worldCupGameRepository
 			.getDividedWorldCupGameContents(
@@ -102,19 +112,21 @@ public class WorldCupGameContentsService {
 			);
 
 		if (equalsExpectedContentsSize(wantedContentsSize, contentsProjections.size())) {
-
 			throw new IllegalWorldCupGameContentsException(
 				"조회 컨텐츠 수가 다름 %s, %s".formatted(wantedContentsSize, contentsProjections.size())
 			);
-
 		}
 
 		if (containsAlreadyContents(alreadyPlayedContentsIds, contentsProjections)) {
-
 			throw new IllegalWorldCupGameContentsException("컨텐츠 중복 : 이미 플레이한 컨텐츠 %s, 조회 성공 컨텐츠 %s"
 				.formatted(alreadyPlayedContentsIds, contentsProjections)
 			);
+		}
 
+		var notShuffledContentsIds = getContentsIds(contentsProjections);
+
+		while (notShuffledContentsIds.equals(getContentsIds(contentsProjections))) {
+			Collections.shuffle(contentsProjections);
 		}
 
 		return GetWorldCupPlayContentsResponse.fromProjection(
@@ -141,6 +153,11 @@ public class WorldCupGameContentsService {
 			.map(GetDividedWorldCupGameContentsProjection::contentsId)
 			.anyMatch(alreadyPlayedContentsIds::contains);
 
+	}
+
+	// 컨텐츠 리스트 결과에서 아이디만 반환한다.
+	public List<Long> getContentsIds(List<GetDividedWorldCupGameContentsProjection> contentsList) {
+		return contentsList.stream().map(GetDividedWorldCupGameContentsProjection::contentsId).toList();
 	}
 
 	@Transactional

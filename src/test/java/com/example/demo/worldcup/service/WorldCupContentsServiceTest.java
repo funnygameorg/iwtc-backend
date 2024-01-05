@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.List;
+import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -193,6 +194,15 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				List.of()
 			);
 
+			var firstContents = result.contentsList().stream()
+				.filter(contents -> contents.getContentsId() == 1)
+				.findFirst()
+				.get();
+			var sevenContents = result.contentsList().stream()
+				.filter(contents -> contents.getContentsId() == 8)
+				.findFirst()
+				.get();
+
 			// then
 			assertAll(
 				() -> assertThat(result.worldCupId()).isEqualTo(1L),
@@ -201,17 +211,17 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				() -> assertThat(result.title()).isEqualTo("title1"),
 				() -> assertThat(result.contentsList().size()).isEqualTo(8),
 
-				() -> assertThat(result.contentsList().get(0).getContentsId()).isEqualTo(1),
-				() -> assertThat(result.contentsList().get(0).getName()).isEqualTo("contentsName1"),
-				() -> assertThat(result.contentsList().get(0).getMediaFileId()).isEqualTo(1),
-				() -> assertThat(result.contentsList().get(0).getInternetMovieStartPlayTime()).isEqualTo(null),
-				() -> assertThat(result.contentsList().get(0).getPlayDuration()).isEqualTo(null),
+				() -> assertThat(firstContents.getContentsId()).isEqualTo(1),
+				() -> assertThat(firstContents.getName()).isEqualTo("contentsName1"),
+				() -> assertThat(firstContents.getMediaFileId()).isEqualTo(1),
+				() -> assertThat(firstContents.getInternetMovieStartPlayTime()).isEqualTo(null),
+				() -> assertThat(firstContents.getPlayDuration()).isEqualTo(null),
 
-				() -> assertThat(result.contentsList().get(7).getContentsId()).isEqualTo(8),
-				() -> assertThat(result.contentsList().get(7).getName()).isEqualTo("contentsName8"),
-				() -> assertThat(result.contentsList().get(7).getMediaFileId()).isEqualTo(8),
-				() -> assertThat(result.contentsList().get(0).getInternetMovieStartPlayTime()).isEqualTo(null),
-				() -> assertThat(result.contentsList().get(0).getPlayDuration()).isEqualTo(null)
+				() -> assertThat(sevenContents.getContentsId()).isEqualTo(8),
+				() -> assertThat(sevenContents.getName()).isEqualTo("contentsName8"),
+				() -> assertThat(sevenContents.getMediaFileId()).isEqualTo(8),
+				() -> assertThat(sevenContents.getInternetMovieStartPlayTime()).isEqualTo(null),
+				() -> assertThat(sevenContents.getPlayDuration()).isEqualTo(null)
 			);
 
 		}
@@ -276,6 +286,15 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				List.of()
 			);
 
+			var firstContents = result.contentsList().stream()
+				.filter(contents -> contents.getContentsId() == 1)
+				.findFirst()
+				.get();
+			var sevenContents = result.contentsList().stream()
+				.filter(contents -> contents.getContentsId() == 8)
+				.findFirst()
+				.get();
+
 			// then
 			assertAll(
 				() -> assertThat(result.worldCupId()).isEqualTo(1L),
@@ -284,19 +303,102 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				() -> assertThat(result.title()).isEqualTo("title1"),
 				() -> assertThat(result.contentsList().size()).isEqualTo(8),
 
-				() -> assertThat(result.contentsList().get(0).getContentsId()).isEqualTo(1),
-				() -> assertThat(result.contentsList().get(0).getName()).isEqualTo("contentsName1"),
-				() -> assertThat(result.contentsList().get(0).getMediaFileId()).isEqualTo(1),
-				() -> assertThat(result.contentsList().get(0).getFileType()).isEqualTo("STATIC_MEDIA_FILE"),
-				() -> assertThat(result.contentsList().get(0).getInternetMovieStartPlayTime()).isEqualTo(null),
-				() -> assertThat(result.contentsList().get(0).getPlayDuration()).isEqualTo(null),
+				() -> assertThat(firstContents.getContentsId()).isEqualTo(1),
+				() -> assertThat(firstContents.getName()).isEqualTo("contentsName1"),
+				() -> assertThat(firstContents.getMediaFileId()).isEqualTo(1),
+				() -> assertThat(firstContents.getFileType()).isEqualTo("STATIC_MEDIA_FILE"),
+				() -> assertThat(firstContents.getInternetMovieStartPlayTime()).isEqualTo(null),
+				() -> assertThat(firstContents.getPlayDuration()).isEqualTo(null),
 
-				() -> assertThat(result.contentsList().get(7).getContentsId()).isEqualTo(8),
-				() -> assertThat(result.contentsList().get(7).getName()).isEqualTo("유튜브 영상 컨텐츠7"),
-				() -> assertThat(result.contentsList().get(7).getMediaFileId()).isEqualTo(8),
-				() -> assertThat(result.contentsList().get(7).getFileType()).isEqualTo("INTERNET_VIDEO_URL"),
-				() -> assertThat(result.contentsList().get(7).getInternetMovieStartPlayTime()).isEqualTo("00001"),
-				() -> assertThat(result.contentsList().get(7).getPlayDuration()).isEqualTo(3)
+				() -> assertThat(sevenContents.getContentsId()).isEqualTo(8),
+				() -> assertThat(sevenContents.getName()).isEqualTo("유튜브 영상 컨텐츠7"),
+				() -> assertThat(sevenContents.getMediaFileId()).isEqualTo(8),
+				() -> assertThat(sevenContents.getFileType()).isEqualTo("INTERNET_VIDEO_URL"),
+				() -> assertThat(sevenContents.getInternetMovieStartPlayTime()).isEqualTo("00001"),
+				() -> assertThat(sevenContents.getPlayDuration()).isEqualTo(3)
+			);
+
+		}
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX + "컨텐츠의 순서가 섞여있다.")
+		public void success3() {
+
+			// given
+			WorldCupGame worldCupGame = WorldCupGame
+				.builder()
+				.title("title1")
+				.description("description1")
+				.visibleType(PUBLIC)
+				.views(0)
+				.softDelete(false)
+				.memberId(1)
+				.build();
+
+			List<StaticMediaFile> mediaFiles = range(1, 6).mapToObj(idx ->
+				StaticMediaFile.builder()
+					.originalName("fileOriginalName")
+					.objectKey("fileAbsoluteName" + idx)
+					.extension(".png")
+					.build()
+			).toList();
+
+			List<InternetVideoUrl> internetMovieUrls = range(1, 6).mapToObj(idx ->
+				InternetVideoUrl.builder()
+					.videoPlayDuration(3)
+					.videoStartTime("00001")
+					.objectKey("https://uTube.com/" + idx)
+					.build()
+			).toList();
+
+			List<WorldCupGameContents> contentsList1 = range(1, 6).mapToObj(idx ->
+				WorldCupGameContents.builder()
+					.name("contentsName" + idx)
+					.worldCupGame(worldCupGame)
+					.mediaFile(mediaFiles.get(idx - 1))
+					.build()
+			).toList();
+
+			List<WorldCupGameContents> contentsList2 = range(5, 10).mapToObj(idx ->
+				WorldCupGameContents.builder()
+					.name("유튜브 영상 컨텐츠" + idx)
+					.worldCupGame(worldCupGame)
+					.mediaFile(internetMovieUrls.get(idx - 5))
+					.build()
+			).toList();
+
+			worldCupGameRepository.save(worldCupGame);
+			abstractMediaFileRepository.saveAll(mediaFiles);
+			abstractMediaFileRepository.saveAll(internetMovieUrls);
+			worldCupGameContentsRepository.saveAll(contentsList1);
+			worldCupGameContentsRepository.saveAll(contentsList2);
+
+			// when
+			GetWorldCupPlayContentsResponse result = worldCupGamecontentsService.getPlayContents(
+				1L,
+				8,
+				1,
+				List.of()
+			);
+
+			var actualContentsIds = result.contentsList()
+				.stream()
+				.map(GetWorldCupPlayContentsResponse.PlayContents::getContentsId)
+				.toList();
+
+			var sortedAscendingNumbers = LongStream.range(1l, 9L)
+				.mapToObj(contentsId -> contentsId)
+				.toList();
+
+			// then
+			assertAll(
+				() -> assertThat(result.worldCupId()).isEqualTo(1L),
+
+				() -> assertThat(result.round()).isEqualTo(8),
+				() -> assertThat(result.title()).isEqualTo("title1"),
+				() -> assertThat(result.contentsList().size()).isEqualTo(8),
+
+				() -> assertThat(actualContentsIds).isNotEqualTo(sortedAscendingNumbers)
 			);
 
 		}
