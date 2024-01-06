@@ -22,7 +22,7 @@ public class S3Config {
 	private String secretKey;
 	@Value("${cloud.aws.region.static}")
 	private String region;
-	@Value("${cloud.aws.endpoint}")
+	@Value("${cloud.aws.endpoint:#{null}}")
 	private String endpoint;
 
 	// LocalStack S3 사용
