@@ -2,13 +2,10 @@ package com.example.demo.common.log;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 /**
  * 로그에 적용하는 기능
  *
  */
-@Component
 public class LogComponent {
 
 	private List<String> logExcludeList = List.of("/api/media-files/", "getMediaFiles",

@@ -4,9 +4,6 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -15,17 +12,18 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+@RequiredArgsConstructor
 public class JwtService {
-	@Value("${jwt.secret}")
-	private String secret;
-	@Value("${jwt.token-validity-milli-seconds.access}")
-	private Long accessTokenValidityMilliSeconds;
-	@Value("${jwt.token-validity-milli-seconds.refresh}")
-	private Long refreshTokenValidityMilliSeconds;
+
+	private final String secret;
+
+	private final Long accessTokenValidityMilliSeconds;
+
+	private final Long refreshTokenValidityMilliSeconds;
 
 	private byte[] keyBytes;
 	private SecretKey key;

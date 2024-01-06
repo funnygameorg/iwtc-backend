@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -18,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 
 // 한 번 실행을 보장하기 위해 OncePerRequestFilter 사용
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class WebLoggingFilter extends OncePerRequestFilter {
 
