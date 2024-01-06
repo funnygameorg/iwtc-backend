@@ -1,4 +1,4 @@
-package com.example.demo.common.component;
+package com.example.demo.common.util;
 
 public interface RandomDataGeneratorInterface {
 	String generate();

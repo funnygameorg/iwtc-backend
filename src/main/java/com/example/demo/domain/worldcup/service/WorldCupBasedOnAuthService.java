@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.common.component.RandomDataGeneratorInterface;
+import com.example.demo.common.util.RandomDataGeneratorInterface;
 import com.example.demo.domain.etc.component.MediaFileFactory;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
