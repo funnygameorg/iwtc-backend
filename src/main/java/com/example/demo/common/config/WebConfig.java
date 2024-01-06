@@ -8,9 +8,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.AuthenticationInterceptor;
+import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.common.web.memberresolver.OptionalMemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.RequiredMemberArgumentResolver;
+import com.example.demo.common.web.memberresolver.WebUtil;
+import com.example.demo.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,20 +22,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-	private final AuthenticationInterceptor authenticationInterceptor;
-	private final RequiredMemberArgumentResolver memberArgumentResolver;
-	private final OptionalMemberArgumentResolver optionalMemberArgumentResolver;
+	private final RememberMeRepository rememberMeRepository;
+	private final MemberRepository memberRepository;
+	private final JwtService jwtService;
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-		resolvers.add(memberArgumentResolver);
-		resolvers.add(optionalMemberArgumentResolver);
+		resolvers.add(requiredMemberArgumentResolver());
+		resolvers.add(optionalMemberArgumentResolver());
 	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry
-			.addInterceptor(authenticationInterceptor)
+			.addInterceptor(authenticationInterceptor())
 			.addPathPatterns("/api/**")
 			.excludePathPatterns("/api/members/sign-out");
 	}
@@ -46,4 +50,19 @@ public class WebConfig implements WebMvcConfigurer {
 			.maxAge(3000);
 	}
 
+	private AuthenticationInterceptor authenticationInterceptor() {
+		return new AuthenticationInterceptor(rememberMeRepository, jwtService);
+	}
+
+	private RequiredMemberArgumentResolver requiredMemberArgumentResolver() {
+		return new RequiredMemberArgumentResolver(jwtService, memberRepository, webUtil());
+	}
+
+	private OptionalMemberArgumentResolver optionalMemberArgumentResolver() {
+		return new OptionalMemberArgumentResolver(jwtService, memberRepository, webUtil());
+	}
+
+	private WebUtil webUtil() {
+		return new WebUtil();
+	}
 }

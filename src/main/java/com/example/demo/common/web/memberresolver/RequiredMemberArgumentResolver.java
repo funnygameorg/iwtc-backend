@@ -3,7 +3,6 @@ package com.example.demo.common.web.memberresolver;
 import java.util.Optional;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -21,14 +20,13 @@ import lombok.RequiredArgsConstructor;
 /**
  * 사용자의 인증값을 필수로 사용하는 경우
  */
-@Component
 @RequiredArgsConstructor
 public class RequiredMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
 	private static final String HEADER_TOKEN_NAME = "access-token";
 	private final JwtService jwtService;
 	private final MemberRepository memberRepository;
-	private final AuthenticationUtil argumentResolverUtil;
+	private final WebUtil argumentResolverUtil;
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {

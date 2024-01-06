@@ -7,12 +7,12 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.example.demo.common.web.memberresolver.AuthenticationUtil;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.common.web.memberresolver.RequiredMemberArgumentResolver;
+import com.example.demo.common.web.memberresolver.WebUtil;
 
 public class MockArgumentResolverRequired extends RequiredMemberArgumentResolver {
-	public MockArgumentResolverRequired(AuthenticationUtil authenticationUtil) {
+	public MockArgumentResolverRequired(WebUtil authenticationUtil) {
 		super(
 			null,
 			null,

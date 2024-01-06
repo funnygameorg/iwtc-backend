@@ -13,7 +13,7 @@ import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.helper.web.MockArgumentResolverRequired;
 import com.example.demo.helper.web.MockAuthenticationInterceptor;
-import com.example.demo.helper.web.MockAuthenticationUtil;
+import com.example.demo.helper.web.MockWebUtil;
 
 /*
     Controller 테스트에 필요한 환경
@@ -27,7 +27,7 @@ public class TestWebConfig extends WebConfig {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-		resolvers.add(new MockArgumentResolverRequired(new MockAuthenticationUtil()));
+		resolvers.add(new MockArgumentResolverRequired(new MockWebUtil()));
 	}
 
 	@Override
@@ -47,5 +47,5 @@ public class TestWebConfig extends WebConfig {
 	private MemberRepository memberRepository;
 
 	@MockBean
-	private MockAuthenticationUtil authenticationUtil;
+	private MockWebUtil authenticationUtil;
 }
