@@ -37,7 +37,7 @@ import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.service.WorldCupBasedOnAuthService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
-import com.example.demo.infra.s3.S3Component;
+import com.example.demo.infra.filestorage.S3Component;
 
 public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 

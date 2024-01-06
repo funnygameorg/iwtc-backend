@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.controller.request.SignInRequest;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
 import com.example.demo.domain.member.controller.response.SignInResponse;
@@ -16,6 +15,7 @@ import com.example.demo.domain.member.exception.DuplicatedServiceIdException;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 import lombok.RequiredArgsConstructor;
 

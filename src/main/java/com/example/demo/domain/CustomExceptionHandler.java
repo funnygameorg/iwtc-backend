@@ -1,4 +1,4 @@
-package com.example.demo.common.error;
+package com.example.demo.domain;
 
 import static com.example.demo.common.error.CustomErrorCode.*;
 import static java.util.UUID.*;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.example.demo.common.error.CustomErrorResponse;
 import com.example.demo.common.error.exception.BaseException;
 
 import jakarta.validation.ConstraintViolation;

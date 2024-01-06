@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme.impl.rdb;
+package com.example.demo.infra.rememberme.impl.rdb;
 
 import static jakarta.persistence.GenerationType.*;
 

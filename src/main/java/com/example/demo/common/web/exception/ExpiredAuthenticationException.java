@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth;
+package com.example.demo.common.web.exception;
 
 import static com.example.demo.common.error.CustomErrorCode.*;
 

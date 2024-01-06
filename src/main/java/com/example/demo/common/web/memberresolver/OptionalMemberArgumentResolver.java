@@ -9,7 +9,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.CustomAuthentication;
+import com.example.demo.common.web.CustomAuthentication;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
 

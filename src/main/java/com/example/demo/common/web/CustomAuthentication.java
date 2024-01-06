@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth;
+package com.example.demo.common.web;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;

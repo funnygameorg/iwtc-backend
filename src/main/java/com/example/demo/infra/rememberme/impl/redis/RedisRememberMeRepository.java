@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme.impl.redis;
+package com.example.demo.infra.rememberme.impl.redis;
 
 import static java.util.concurrent.TimeUnit.*;
 
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

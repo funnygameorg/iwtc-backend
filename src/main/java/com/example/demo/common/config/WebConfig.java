@@ -10,11 +10,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.AuthenticationInterceptor;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.common.web.memberresolver.OptionalMemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.RequiredMemberArgumentResolver;
 import com.example.demo.common.web.memberresolver.WebUtil;
 import com.example.demo.domain.member.repository.MemberRepository;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 import lombok.RequiredArgsConstructor;
 

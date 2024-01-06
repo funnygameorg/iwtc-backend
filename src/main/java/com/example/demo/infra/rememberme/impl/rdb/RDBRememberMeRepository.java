@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme.impl.rdb;
+package com.example.demo.infra.rememberme.impl.rdb;
 
 import static java.lang.Boolean.*;
 import static java.time.LocalDateTime.*;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;

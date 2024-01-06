@@ -1,4 +1,4 @@
-package com.example.demo.infra.s3;
+package com.example.demo.infra.filestorage;
 
 import static java.nio.charset.StandardCharsets.*;
 

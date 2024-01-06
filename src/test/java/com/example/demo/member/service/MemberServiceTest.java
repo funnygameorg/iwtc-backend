@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.controller.request.SignInRequest;
 import com.example.demo.domain.member.controller.request.SignUpRequest;
 import com.example.demo.domain.member.exception.DuplicatedNicknameException;
@@ -23,6 +22,7 @@ import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 public class MemberServiceTest implements IntegrationBaseTest {
 

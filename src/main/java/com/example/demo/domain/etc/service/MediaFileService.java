@@ -16,7 +16,7 @@ import com.example.demo.domain.etc.exception.FailedGetS3MediaDataException;
 import com.example.demo.domain.etc.exception.NotFoundMediaFIleException;
 import com.example.demo.domain.etc.model.MediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
-import com.example.demo.infra.s3.S3Component;
+import com.example.demo.infra.filestorage.S3Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

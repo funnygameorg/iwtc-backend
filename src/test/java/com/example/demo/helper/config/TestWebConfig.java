@@ -9,11 +9,11 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import com.example.demo.common.config.WebConfig;
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
 import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.helper.web.MockArgumentResolverRequired;
 import com.example.demo.helper.web.MockAuthenticationInterceptor;
 import com.example.demo.helper.web.MockWebUtil;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 /*
     Controller 테스트에 필요한 환경

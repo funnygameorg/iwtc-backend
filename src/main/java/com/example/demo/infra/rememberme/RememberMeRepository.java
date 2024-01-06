@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme;
+package com.example.demo.infra.rememberme;
 
 public interface RememberMeRepository {
 

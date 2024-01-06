@@ -21,7 +21,7 @@ import com.example.demo.domain.etc.repository.MediaFileRepository;
 import com.example.demo.domain.etc.service.MediaFileService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
-import com.example.demo.infra.s3.S3Component;
+import com.example.demo.infra.filestorage.S3Component;
 
 public class MediaFileServiceTest implements IntegrationBaseTest {
 

@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme.impl.rdb;
+package com.example.demo.infra.rememberme.impl.rdb;
 
 import java.util.List;
 import java.util.Optional;

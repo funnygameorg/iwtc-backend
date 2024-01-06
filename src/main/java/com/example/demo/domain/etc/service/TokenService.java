@@ -3,7 +3,7 @@ package com.example.demo.domain.etc.service;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 import lombok.RequiredArgsConstructor;
 

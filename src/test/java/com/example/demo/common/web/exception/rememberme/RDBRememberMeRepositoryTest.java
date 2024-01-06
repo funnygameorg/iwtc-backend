@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme;
+package com.example.demo.common.web.exception.rememberme;
 
 import static com.example.demo.helper.TestConstant.*;
 import static java.time.LocalDateTime.*;
@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.rememberme.impl.rdb.RDBRememberMe;
-import com.example.demo.common.web.auth.rememberme.impl.rdb.RDBRememberMeRepository;
-import com.example.demo.common.web.auth.rememberme.impl.rdb.RememberMeJpaRepository;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
+import com.example.demo.infra.rememberme.impl.rdb.RDBRememberMe;
+import com.example.demo.infra.rememberme.impl.rdb.RDBRememberMeRepository;
+import com.example.demo.infra.rememberme.impl.rdb.RememberMeJpaRepository;
 
 import jakarta.persistence.EntityManager;
 

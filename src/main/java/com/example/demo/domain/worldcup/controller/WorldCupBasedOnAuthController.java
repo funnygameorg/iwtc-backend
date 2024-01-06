@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.error.CustomErrorResponse;
+import com.example.demo.common.web.CustomAuthentication;
 import com.example.demo.common.web.RestApiResponse;
-import com.example.demo.common.web.auth.CustomAuthentication;
 import com.example.demo.common.web.memberresolver.MemberDto;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest;
 import com.example.demo.domain.worldcup.controller.request.CreateWorldCupRequest;

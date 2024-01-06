@@ -1,4 +1,4 @@
-package com.example.demo.common.web.auth.rememberme.impl.redis;
+package com.example.demo.infra.rememberme.impl.redis;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;

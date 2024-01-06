@@ -4,10 +4,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.example.demo.common.jwt.JwtService;
-import com.example.demo.common.web.auth.CustomAuthentication;
-import com.example.demo.common.web.auth.ExpiredAuthenticationException;
-import com.example.demo.common.web.auth.RequestWithBlackListedAccessToken;
-import com.example.demo.common.web.auth.rememberme.RememberMeRepository;
+import com.example.demo.common.web.exception.ExpiredAuthenticationException;
+import com.example.demo.common.web.exception.RequestWithBlackListedAccessToken;
+import com.example.demo.infra.rememberme.RememberMeRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

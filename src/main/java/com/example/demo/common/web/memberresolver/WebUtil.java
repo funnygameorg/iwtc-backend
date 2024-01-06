@@ -4,7 +4,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.example.demo.common.web.auth.CustomAuthentication;
+import com.example.demo.common.web.CustomAuthentication;
 
 import jakarta.servlet.http.HttpServletRequest;
 
