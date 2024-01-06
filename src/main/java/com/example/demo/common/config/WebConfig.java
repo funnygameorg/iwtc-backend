@@ -47,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedOrigins(frontOrigin)
+			.allowedOrigins("*") // 요청에 'Access-Control-Allow-Origin' 추가하기
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.exposedHeaders("access-token", "refresh-token")
