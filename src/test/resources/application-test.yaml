@@ -42,3 +42,5 @@ cloud:
       bucket: media
     stack:
       auto: false
+origin:
+  front: http://localhosta:8080
