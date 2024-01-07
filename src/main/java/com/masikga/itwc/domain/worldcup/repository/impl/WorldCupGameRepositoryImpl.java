@@ -61,7 +61,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 	@Override
 	public GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId) {
 		String sql = """
-			SELECT new com.example.demo.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection(
+			SELECT new com.masikga.itwc.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection(
 			    wcg.id, wcg.title, wcg.description, count(wcgc.id) as count
 			)
 			FROM WorldCupGame wcg 
@@ -81,6 +81,7 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 
 	/**
 	 * 월드컵 게임의 조회수 증감 연산
+	 *
 	 * @param worldCupGameId 조회수 상승하는 게임 id
 	 */
 	@Override
@@ -95,8 +96,9 @@ public class WorldCupGameRepositoryImpl implements WorldCupGameCustomRepository 
 
 	/**
 	 * 게임 플레이에 사용되는 이상형 리스트 조회
-	 * @param worldCupId 조회하는 월드컵 게임 Id
-	 * @param wantedContentsSize 조회해야 하는 컨텐츠 수
+	 *
+	 * @param worldCupId               조회하는 월드컵 게임 Id
+	 * @param wantedContentsSize       조회해야 하는 컨텐츠 수
 	 * @param alreadyPlayedContentsIds 제외하는 컨텐츠 아이디
 	 * @return
 	 */
