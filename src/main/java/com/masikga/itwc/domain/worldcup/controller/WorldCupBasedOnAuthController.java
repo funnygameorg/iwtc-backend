@@ -294,11 +294,7 @@ public class WorldCupBasedOnAuthController {
 		Optional<MemberDto> memberDto
 	) {
 
-		worldCupBasedOnAuthService.createMyWorldCupContents(
-			request,
-			worldCupId,
-			memberDto.get().getId()
-		);
+		worldCupBasedOnAuthService.createMyWorldCupContents(request, worldCupId, memberDto.get().getId());
 
 		return new RestApiResponse(
 			1,

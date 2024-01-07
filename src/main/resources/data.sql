@@ -99,23 +99,23 @@ VALUES
 
 INSERT INTO `STATIC_MEDIA_FILE` (`extension`, `original_name`, `id`)
 VALUES
-    ('png', 'originalName1', 1),
-    ('png', 'originalName2', 2),
-    ('jpeg', 'originalName3', 3),
-    ('gif', 'originalName4', 4),
-    ('gif', 'originalName5', 5),
-    ('gif', 'originalName6', 6),
+    ('PNG', 'originalName1', 1),
+    ('PNG', 'originalName2', 2),
+    ('JPEG', 'originalName3', 3),
+    ('GIF', 'originalName4', 4),
+    ('GIF', 'originalName5', 5),
+    ('JPEG', 'originalName6', 6),
     ('JPEG', 'originalName7', 7),
     ('JPEG', 'originalName8', 8),
     ('JPEG', 'originalName9', 9);
 
-INSERT INTO `INTERNET_VIDEO_URL`(`id`, `is_playable_video`, `video_start_time`, `video_play_duration`)
+INSERT INTO `INTERNET_VIDEO_URL`(`id`, `is_playable_video`, `video_start_time`, `video_play_duration`, `video_detail_type`)
 VALUES
-    (10, true, '00001', 5),
-    (11, true, '00010', 4),
-    (12, true, '00101', 3),
-    (13, true, '01001', 5),
-    (14, true, '00030', 2);
+    (10, true, '00001', 5, 'YOU_TUBE_URL'),
+    (11, true, '00010', 4, 'YOU_TUBE_URL'),
+    (12, true, '00101', 3, 'YOU_TUBE_URL'),
+    (13, true, '01001', 5, 'YOU_TUBE_URL'),
+    (14, true, '00030', 2, 'YOU_TUBE_URL');
 
 INSERT INTO `WORLD_CUP_GAME_CONTENTS` (`media_file_id`, `name`, `world_cup_game_id`, `game_score`, `game_rank`, `visible_type`, `created_at`, `updated_at`, `soft_delete`)
 VALUES

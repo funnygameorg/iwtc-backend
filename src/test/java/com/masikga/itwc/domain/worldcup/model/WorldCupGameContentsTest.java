@@ -26,7 +26,7 @@ public class WorldCupGameContentsTest {
 
 			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
 				.originalName("붕어빵.JPG")
-				.extension("jpg")
+				.extension("JPG")
 				.objectKey("ABC-9910")
 				.bucketName("IMAGES")
 				.build();
@@ -67,6 +67,7 @@ public class WorldCupGameContentsTest {
 				.videoStartTime("10100")
 				.videoPlayDuration(5)
 				.isPlayableVideo(true)
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents = WorldCupGameContents.builder()
@@ -102,7 +103,7 @@ public class WorldCupGameContentsTest {
 
 			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
 				.originalName("붕어빵.JPG")
-				.extension("jpg")
+				.extension("JPG")
 				.objectKey("ABC-9910")
 				.bucketName("IMAGES")
 				.build();
@@ -138,6 +139,7 @@ public class WorldCupGameContentsTest {
 				.videoStartTime("00100")
 				.videoPlayDuration(5)
 				.isPlayableVideo(true)
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents = WorldCupGameContents.builder()

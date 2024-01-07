@@ -124,7 +124,7 @@ public class WorldCupBasedOnAuthService {
 		}
 
 		List<WorldCupGameContents> newContentsList = createNewContentsList(request, worldCupGame);
-		List<MediaFile> newMediaFiles = newContentsList.stream().map(contents -> contents.getMediaFile()).toList();
+		List<MediaFile> newMediaFiles = newContentsList.stream().map(WorldCupGameContents::getMediaFile).toList();
 
 		mediaFileRepository.saveAll(newMediaFiles);
 		worldCupGameContentsRepository.saveAll(newContentsList);
@@ -147,11 +147,12 @@ public class WorldCupBasedOnAuthService {
 					s3Component.putObject(mediaFileRequest.mediaData(), objectKey);
 
 					MediaFile newMediaFile = mediaFileFactory.createMediaFile(
-						mediaFileRequest.fileType(),
 						objectKey,
 						mediaFileRequest.originalName(),
 						mediaFileRequest.videoPlayDuration(),
-						mediaFileRequest.videoStartTime()
+						mediaFileRequest.videoStartTime(),
+						mediaFileRequest.fileType(),
+						mediaFileRequest.detailFileType()
 					);
 
 					return WorldCupGameContents.createNewContents(

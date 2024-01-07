@@ -29,8 +29,8 @@ import com.masikga.itwc.domain.worldcup.model.WorldCupGameContents;
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameRepository;
 import com.masikga.itwc.helper.DataBaseCleanUp;
-import com.masikga.itwc.helper.testbase.IntegrationBaseTest;
 import com.masikga.itwc.helper.TestConstant;
+import com.masikga.itwc.helper.testbase.IntegrationBaseTest;
 
 public class CommentServiceTest implements IntegrationBaseTest {
 
@@ -81,7 +81,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
-				.extension("A")
+				.extension("GIF")
 				.build();
 			var worldCupGameContents = WorldCupGameContents.builder()
 				.name("name 1")
@@ -154,7 +154,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
-				.extension("A")
+				.extension("GIF")
 				.build();
 
 			var worldCupGameContents = WorldCupGameContents.builder()
@@ -224,7 +224,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
-				.extension("A")
+				.extension("GIF")
 				.build();
 			var worldCupGameContents = WorldCupGameContents.builder()
 				.name("name 1")
@@ -282,7 +282,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
-				.extension("A")
+				.extension("GIF")
 				.build();
 
 			var worldCup = WorldCupGame.builder()
@@ -343,7 +343,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
-				.extension("A")
+				.extension("GIF")
 				.build();
 
 			var worldCup = WorldCupGame.builder()
@@ -401,7 +401,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
-				.extension("A")
+				.extension("GIF")
 				.build();
 
 			var worldCup = WorldCupGame.builder()
@@ -470,7 +470,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
-				.extension("A")
+				.extension("GIF")
 				.build();
 
 			var worldCup = WorldCupGame.builder()

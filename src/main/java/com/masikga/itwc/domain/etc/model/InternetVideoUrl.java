@@ -1,5 +1,6 @@
 package com.masikga.itwc.domain.etc.model;
 
+import static jakarta.persistence.EnumType.*;
 import static lombok.AccessLevel.*;
 
 import java.util.Objects;
@@ -8,9 +9,11 @@ import org.hibernate.annotations.Comment;
 
 import com.masikga.itwc.common.error.exception.NotNullArgumentException;
 import com.masikga.itwc.domain.etc.model.vo.FileType;
+import com.masikga.itwc.domain.etc.model.vo.VideoDetailType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -21,11 +24,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- *  startTime example
- *      1. 00001 : 000분 01초
- *      2. 00101 : 001분 01초
- *      3. 02000 : 020분 00초
- *      4. 00113 : 001분 13초
+ * startTime example
+ * 1. 00001 : 000분 01초
+ * 2. 00101 : 001분 01초
+ * 3. 02000 : 020분 00초
+ * 4. 00113 : 001분 13초
  */
 @Getter
 @Entity
@@ -48,6 +51,10 @@ public class InternetVideoUrl extends MediaFile {
 	@Max(value = 5, message = "영상 재생 시간은 2 ~ 5초 입니다.")
 	private Integer videoPlayDuration;
 
+	@Comment("동영상의 형태 (ex : 유튜브 링크, 네이버 비디오 링크...)")
+	@Enumerated(STRING)
+	private VideoDetailType videoDetailType;
+
 	public void update(String objectKey, String videoStartTime, Integer videoPlayDuration) {
 
 		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
@@ -62,12 +69,13 @@ public class InternetVideoUrl extends MediaFile {
 
 	@Builder
 	private InternetVideoUrl(Long id, String objectKey, boolean isPlayableVideo, String videoStartTime,
-		Integer videoPlayDuration, String bucketName) {
+		Integer videoPlayDuration, String bucketName, String videoDetailType) {
 
 		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName);
 		this.isPlayableVideo = isPlayableVideo;
 		this.videoStartTime = videoStartTime;
 		this.videoPlayDuration = videoPlayDuration;
+		this.videoDetailType = VideoDetailType.valueOf(videoDetailType);
 
 	}
 }

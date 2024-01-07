@@ -2,7 +2,6 @@ package com.masikga.itwc.domain.etc.controller;
 
 import static org.springframework.http.HttpStatus.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -175,7 +174,7 @@ public class ETCController {
 	public RestApiResponse<MediaFileResponse> getMediaFiles(
 		@PathVariable Long mediaFileId,
 		HttpServletResponse httpServletResponse
-	) throws IOException {
+	) {
 
 		httpServletResponse.setHeader("Cache-Control", "max-age=600");
 
@@ -200,7 +199,7 @@ public class ETCController {
 	@ResponseStatus(OK)
 	public RestApiResponse<List<MediaFileResponse>> getMediaFiles(
 		@RequestParam List<Long> mediaFileIds
-	) throws IOException {
+	) {
 
 		return new RestApiResponse(
 			1,

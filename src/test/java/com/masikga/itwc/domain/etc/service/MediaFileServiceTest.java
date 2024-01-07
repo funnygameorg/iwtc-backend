@@ -18,9 +18,9 @@ import com.masikga.itwc.domain.etc.controller.response.MediaFileResponse;
 import com.masikga.itwc.domain.etc.model.StaticMediaFile;
 import com.masikga.itwc.domain.etc.repository.MediaFileRepository;
 import com.masikga.itwc.helper.DataBaseCleanUp;
+import com.masikga.itwc.helper.TestConstant;
 import com.masikga.itwc.helper.testbase.IntegrationBaseTest;
 import com.masikga.itwc.infra.filestorage.S3Component;
-import com.masikga.itwc.helper.TestConstant;
 
 public class MediaFileServiceTest implements IntegrationBaseTest {
 
@@ -54,7 +54,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				.objectKey("A-46")
 				.bucketName("bucketA")
 				.originalName("originalNameA")
-				.extension(".png")
+				.extension("GIF")
 				.build();
 
 			mediaFileRepository.save(staticMediaFile);

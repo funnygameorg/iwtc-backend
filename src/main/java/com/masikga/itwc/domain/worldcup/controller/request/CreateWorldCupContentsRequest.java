@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.masikga.itwc.domain.etc.model.vo.FileType;
 import com.masikga.itwc.domain.worldcup.controller.validator.VerifyVisibleType;
+import com.masikga.itwc.domain.worldcup.controller.validator.worldcupcontents.VerifyCreateDetailFileType;
 import com.masikga.itwc.domain.worldcup.controller.validator.worldcupcontents.VerifyWorldCupContentsName;
 import com.masikga.itwc.domain.worldcup.model.vo.VisibleType;
 
@@ -35,6 +36,9 @@ public record CreateWorldCupContentsRequest(
 	public record CreateMediaFileRequest(
 
 		FileType fileType,
+
+		@VerifyCreateDetailFileType
+		String detailFileType,
 
 		@Schema(description = "월드컵 컨텐츠 파일명")
 		@NotBlank(message = "월드컵 컨텐츠 파일 이름: 필수 값")
