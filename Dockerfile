@@ -11,6 +11,8 @@ COPY src src
 
 RUN chmod +x ./gradlew
 
+RUN ./gradlew test
+
 # "jar" 파일 생성
 RUN ./gradlew bootJar
 
