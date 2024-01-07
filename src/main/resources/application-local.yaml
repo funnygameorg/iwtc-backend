@@ -39,8 +39,7 @@ cloud:
     credentials:
       access-key: localstack-access-key
       secret-key: localstack-secret-key
-    region:
-      static: us-east-1
+    region: us-east-1
     end-point: http://localstack:4566
     s3:
       bucket: media

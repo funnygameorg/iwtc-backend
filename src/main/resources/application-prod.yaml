@@ -40,8 +40,8 @@ cloud:
       cloud-watch:
         access-key: ENC(h3CIHsMbShh18XDAO2NATkJ6VAQqPNL66L2gBqv2qpYiVcZV5BEZYh6fZaIn4cXTMNp1RtocKUA/OcwEhkx/xg==)
         secret-key: ENC(R6QFldLtE3iYQB93pGU44V2wWTnMUHsBBSmpswoZOAwYHPe/rA7tIJUWTS3QLufz+UGKXxNlPFrttyh+Zdzr96H7f1mHllCYUzzI4ijIKwg=)
-    region:
-      static: ap-northeast-2
+    end-point: not-used-in-prod-profile
+    region: ap-northeast-2
     s3:
       bucket: itwc-file
 

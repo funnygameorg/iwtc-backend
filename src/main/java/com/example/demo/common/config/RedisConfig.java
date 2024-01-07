@@ -1,6 +1,5 @@
 package com.example.demo.common.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -9,19 +8,20 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import com.example.demo.common.config.property.RedisProperty;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableRedisRepositories
+@RequiredArgsConstructor
 public class RedisConfig {
 
-	@Value("${spring.redis.host}")
-	private String host;
-
-	@Value("${spring.redis.port}")
-	private int port;
+	private final RedisProperty redisProperty;
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		return new LettuceConnectionFactory(host, port);
+		return new LettuceConnectionFactory(redisProperty.host(), redisProperty.port());
 	}
 
 	@Bean

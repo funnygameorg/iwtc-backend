@@ -2,13 +2,13 @@ package com.example.demo.common.config;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.example.demo.common.config.property.WebProperty;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.common.web.AuthenticationInterceptor;
 import com.example.demo.common.web.memberresolver.OptionalMemberArgumentResolver;
@@ -26,9 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
 	private final RememberMeRepository rememberMeRepository;
 	private final MemberRepository memberRepository;
 	private final JwtService jwtService;
-
-	@Value("${origin.front}")
-	private String frontOrigin;
+	private final WebProperty webProperty;
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -47,7 +45,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedOrigins(frontOrigin) // 요청에 'Access-Control-Allow-Origin' 추가하기
+			.allowedOrigins(webProperty.front()) // 요청에 'Access-Control-Allow-Origin' 추가하기
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.exposedHeaders("access-token", "refresh-token")

@@ -8,6 +8,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import com.example.demo.common.config.WebConfig;
+import com.example.demo.common.config.property.WebProperty;
 import com.example.demo.common.jwt.JwtService;
 import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.helper.web.MockArgumentResolverRequired;
@@ -22,7 +23,7 @@ import com.example.demo.infra.rememberme.RememberMeRepository;
 public class TestWebConfig extends WebConfig {
 
 	public TestWebConfig() {
-		super(null, null, null);
+		super(null, null, null, new WebProperty("http://localhost:8080"));
 	}
 
 	@Override
@@ -48,4 +49,5 @@ public class TestWebConfig extends WebConfig {
 
 	@MockBean
 	private MockWebUtil authenticationUtil;
+
 }
