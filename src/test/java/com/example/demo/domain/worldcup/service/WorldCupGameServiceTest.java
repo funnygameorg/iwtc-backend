@@ -1,4 +1,4 @@
-package com.example.demo.worldcup.service;
+package com.example.demo.domain.worldcup.service;
 
 import static com.example.demo.domain.worldcup.controller.vo.WorldCupDateRange.*;
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
@@ -24,7 +24,6 @@ import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
-import com.example.demo.domain.worldcup.service.WorldCupGameService;
 import com.example.demo.helper.CacheManagerCleanUp;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;

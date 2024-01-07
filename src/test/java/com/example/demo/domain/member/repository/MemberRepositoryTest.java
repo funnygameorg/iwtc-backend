@@ -1,4 +1,4 @@
-package com.example.demo.member.repository;
+package com.example.demo.domain.member.repository;
 
 import static com.example.demo.helper.TestConstant.*;
 import static org.assertj.core.api.Assertions.*;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.domain.member.model.Member;
-import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
 

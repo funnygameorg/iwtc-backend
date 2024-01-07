@@ -1,4 +1,4 @@
-package com.example.demo.member.controller;
+package com.example.demo.domain.member.controller;
 
 import static com.example.demo.helper.TestConstant.*;
 import static org.mockito.BDDMockito.*;

@@ -1,4 +1,4 @@
-package com.example.demo.worldcup.model;
+package com.example.demo.domain.worldcup.model;
 
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.helper.TestConstant.*;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import com.example.demo.common.error.exception.NotNullArgumentException;
 import com.example.demo.domain.etc.model.InternetVideoUrl;
 import com.example.demo.domain.etc.model.StaticMediaFile;
-import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 
 public class WorldCupGameContentsTest {
 

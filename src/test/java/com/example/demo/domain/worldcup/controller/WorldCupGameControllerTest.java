@@ -1,4 +1,4 @@
-package com.example.demo.worldcup.controller;
+package com.example.demo.domain.worldcup.controller;
 
 import static com.example.demo.helper.TestConstant.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

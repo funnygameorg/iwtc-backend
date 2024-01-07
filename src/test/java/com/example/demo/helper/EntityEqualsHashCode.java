@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.helper;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +9,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.member.model.Member;
-import com.example.demo.helper.DataBaseCleanUp;
 import com.google.common.base.Objects;
 
 import jakarta.persistence.EntityManager;

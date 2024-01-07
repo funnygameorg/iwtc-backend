@@ -1,4 +1,4 @@
-package com.example.demo.etc.service;
+package com.example.demo.domain.etc.service;
 
 import static com.example.demo.domain.etc.model.vo.FileType.*;
 import static com.example.demo.helper.TestConstant.*;
@@ -18,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.example.demo.domain.etc.controller.response.MediaFileResponse;
 import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
-import com.example.demo.domain.etc.service.MediaFileService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
 import com.example.demo.infra.filestorage.S3Component;

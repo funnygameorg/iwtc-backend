@@ -1,4 +1,4 @@
-package com.example.demo.worldcup.service;
+package com.example.demo.domain.worldcup.service;
 
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.helper.TestConstant.*;
@@ -34,7 +34,6 @@ import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
 import com.example.demo.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection;
-import com.example.demo.domain.worldcup.service.WorldCupGameContentsService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.ContainerBaseTest;
 import com.example.demo.helper.testbase.IntegrationBaseTest;

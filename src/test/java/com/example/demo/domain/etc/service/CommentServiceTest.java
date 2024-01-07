@@ -1,4 +1,4 @@
-package com.example.demo.etc.service;
+package com.example.demo.domain.etc.service;
 
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static com.example.demo.helper.TestConstant.*;
@@ -21,7 +21,6 @@ import com.example.demo.domain.etc.model.Comment;
 import com.example.demo.domain.etc.model.StaticMediaFile;
 import com.example.demo.domain.etc.repository.CommentRepository;
 import com.example.demo.domain.etc.repository.MediaFileRepository;
-import com.example.demo.domain.etc.service.CommentService;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.domain.worldcup.exception.NotFoundWorldCupContentsException;

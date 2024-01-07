@@ -1,4 +1,4 @@
-package com.example.demo.worldcup.controller;
+package com.example.demo.domain.worldcup.controller;
 
 import static com.example.demo.domain.worldcup.model.vo.VisibleType.*;
 import static org.springframework.http.MediaType.*;

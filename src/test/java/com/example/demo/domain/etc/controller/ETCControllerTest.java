@@ -1,4 +1,4 @@
-package com.example.demo.etc.controller;
+package com.example.demo.domain.etc.controller;
 
 import static com.example.demo.helper.TestConstant.*;
 import static org.springframework.http.MediaType.*;

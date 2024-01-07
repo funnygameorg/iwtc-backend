@@ -1,4 +1,4 @@
-package com.example.demo.worldcup.service;
+package com.example.demo.domain.worldcup.service;
 
 import static com.example.demo.domain.etc.model.vo.FileType.*;
 import static com.example.demo.domain.worldcup.controller.request.CreateWorldCupContentsRequest.*;
@@ -34,7 +34,6 @@ import com.example.demo.domain.worldcup.model.WorldCupGame;
 import com.example.demo.domain.worldcup.model.WorldCupGameContents;
 import com.example.demo.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.example.demo.domain.worldcup.repository.WorldCupGameRepository;
-import com.example.demo.domain.worldcup.service.WorldCupBasedOnAuthService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
 import com.example.demo.infra.filestorage.S3Component;

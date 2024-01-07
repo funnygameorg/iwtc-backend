@@ -1,4 +1,4 @@
-package com.example.demo.test;
+package com.example.demo.encryptor;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.iv.RandomIvGenerator;

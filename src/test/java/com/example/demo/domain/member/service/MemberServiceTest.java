@@ -1,4 +1,4 @@
-package com.example.demo.member.service;
+package com.example.demo.domain.member.service;
 
 import static com.example.demo.helper.TestConstant.*;
 import static org.assertj.core.api.Assertions.*;
@@ -19,7 +19,6 @@ import com.example.demo.domain.member.exception.DuplicatedServiceIdException;
 import com.example.demo.domain.member.exception.NotFoundMemberException;
 import com.example.demo.domain.member.model.Member;
 import com.example.demo.domain.member.repository.MemberRepository;
-import com.example.demo.domain.member.service.MemberService;
 import com.example.demo.helper.DataBaseCleanUp;
 import com.example.demo.helper.testbase.IntegrationBaseTest;
 import com.example.demo.infra.rememberme.RememberMeRepository;
