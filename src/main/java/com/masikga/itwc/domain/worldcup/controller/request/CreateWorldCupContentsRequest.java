@@ -9,12 +9,14 @@ import com.masikga.itwc.domain.worldcup.controller.validator.worldcupcontents.Ve
 import com.masikga.itwc.domain.worldcup.model.vo.VisibleType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
 @Schema
 public record CreateWorldCupContentsRequest(
+	@Valid
 	List<CreateContentsRequest> data
 ) {
 
@@ -27,6 +29,7 @@ public record CreateWorldCupContentsRequest(
 		@VerifyVisibleType
 		VisibleType visibleType,
 
+		@Valid
 		CreateMediaFileRequest createMediaFileRequest
 	) {
 	}

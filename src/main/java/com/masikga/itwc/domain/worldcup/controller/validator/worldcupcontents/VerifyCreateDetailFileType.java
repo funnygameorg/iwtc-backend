@@ -29,7 +29,7 @@ public @interface VerifyCreateDetailFileType {
 
 		@Override
 		public boolean isValid(String value, ConstraintValidatorContext context) {
-			return List.of("GIF", "PNG", "JPEG", "JPG", "YOU_TUBE_URL").contains(value);
+			return value != null && List.of("GIF", "PNG", "JPEG", "JPG", "YOU_TUBE_URL").contains(value);
 		}
 	}
 
