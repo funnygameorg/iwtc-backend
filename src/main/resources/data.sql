@@ -23,7 +23,7 @@ VALUES
     ('NOT_OWNER_GAME', 10006, '월드컵 게임 작성자가 아닙니다.', 400),
     ('NOT_EXISTS_S3_MEDIA_FILE', 10007, '미디어 파일 저장소에 문제가 생겼습니다.', 400),
     ('NOT_OWNER_COMMENT', 10006, '댓글 작성자가 아닙니다.', 400),
-
+    ('NOT_SUPPORTED_FILE_EXTENSION', 10008, '지원하지 않는 미디어 파일 형식입니다.', 400),
 
     ('SERVER_INTERNAL_ERROR', 444, '서버에 문제가 생겼습니다.', 500);
 

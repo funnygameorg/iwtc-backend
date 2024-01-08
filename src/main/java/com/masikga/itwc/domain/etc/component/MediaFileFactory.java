@@ -41,7 +41,6 @@ public class MediaFileFactory {
 	private StaticMediaFile createStaticMediaFile(String objectKey, String originalName, String detailFileType) {
 		return StaticMediaFile.builder()
 			.objectKey(objectKey)
-			.extension("tempExtension")
 			.originalName(originalName)
 			.extension(detailFileType)
 			.build();

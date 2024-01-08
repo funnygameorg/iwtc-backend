@@ -226,6 +226,7 @@ public class WorldCupBasedOnAuthService {
 			request.videoStartTime(),
 			request.videoPlayDuration(),
 			request.visibleType(),
+			request.detailFileType(),
 			objectKey
 		);
 

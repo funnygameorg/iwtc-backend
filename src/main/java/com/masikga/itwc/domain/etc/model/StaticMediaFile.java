@@ -9,8 +9,9 @@ import org.hibernate.annotations.Comment;
 
 import com.google.common.base.Objects;
 import com.masikga.itwc.common.error.exception.NotNullArgumentException;
+import com.masikga.itwc.domain.etc.exception.NotSupportedFileExtensionException;
 import com.masikga.itwc.domain.etc.model.vo.FileType;
-import com.masikga.itwc.domain.etc.model.vo.StaticMediaFileExtension;
+import com.masikga.itwc.domain.etc.model.vo.MediaFileExtension;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -32,27 +33,32 @@ public class StaticMediaFile extends MediaFile {
 	@NotBlank
 	private String originalName;
 
+	// TODO : MediaFile(부모 클래스)로 이동하기
 	@Comment("파일 확장자")
 	@NotNull
 	@Enumerated(STRING)
-	private StaticMediaFileExtension extension;
+	private MediaFileExtension extension;
 
-	public void update(String objectKey, String originalName) {
+	public void update(String objectKey, String originalName, String detailFileType) {
 
-		if (isNull(objectKey) || isNull(originalName)) {
+		if (isNull(objectKey) || isNull(originalName) || isNull(detailFileType)) {
 			throw new NotNullArgumentException(objectKey, originalName);
+		}
+
+		if (!MediaFileExtension.isSupportedType(detailFileType)) {
+			throw new NotSupportedFileExtensionException(detailFileType);
 		}
 
 		super.objectKey = objectKey;
 		this.originalName = originalName;
-
+		this.extension = MediaFileExtension.valueOf(detailFileType);
 	}
 
 	@Builder
 	public StaticMediaFile(String originalName, String extension, Long id, String objectKey, String bucketName) {
 		super(id, objectKey, FileType.STATIC_MEDIA_FILE, bucketName);
 		this.originalName = originalName;
-		this.extension = StaticMediaFileExtension.valueOf(extension);
+		this.extension = MediaFileExtension.valueOf(extension);
 	}
 
 	@Override

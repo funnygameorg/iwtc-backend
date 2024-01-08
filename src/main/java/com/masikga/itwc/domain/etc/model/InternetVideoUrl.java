@@ -8,8 +8,9 @@ import java.util.Objects;
 import org.hibernate.annotations.Comment;
 
 import com.masikga.itwc.common.error.exception.NotNullArgumentException;
+import com.masikga.itwc.domain.etc.exception.NotSupportedFileExtensionException;
 import com.masikga.itwc.domain.etc.model.vo.FileType;
-import com.masikga.itwc.domain.etc.model.vo.VideoDetailType;
+import com.masikga.itwc.domain.etc.model.vo.MediaFileExtension;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,19 +52,25 @@ public class InternetVideoUrl extends MediaFile {
 	@Max(value = 5, message = "영상 재생 시간은 2 ~ 5초 입니다.")
 	private Integer videoPlayDuration;
 
+	// TODO : MediaFile(부모 클래스)로 이동하기
 	@Comment("동영상의 형태 (ex : 유튜브 링크, 네이버 비디오 링크...)")
 	@Enumerated(STRING)
-	private VideoDetailType videoDetailType;
+	private MediaFileExtension videoDetailType;
 
-	public void update(String objectKey, String videoStartTime, Integer videoPlayDuration) {
+	public void update(String objectKey, String videoStartTime, Integer videoPlayDuration, String detailFileType) {
 
 		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
 			throw new NotNullArgumentException(objectKey, videoStartTime, videoPlayDuration);
 		}
 
+		if (!MediaFileExtension.isSupportedType(detailFileType)) {
+			throw new NotSupportedFileExtensionException(detailFileType);
+		}
+
 		super.objectKey = objectKey;
 		this.videoStartTime = videoStartTime;
 		this.videoPlayDuration = videoPlayDuration;
+		this.videoDetailType = MediaFileExtension.valueOf(detailFileType);
 
 	}
 
@@ -72,10 +79,19 @@ public class InternetVideoUrl extends MediaFile {
 		Integer videoPlayDuration, String bucketName, String videoDetailType) {
 
 		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName);
+
+		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
+			throw new NotNullArgumentException(objectKey, videoStartTime, videoPlayDuration);
+		}
+
+		if (!MediaFileExtension.isSupportedType(videoDetailType)) {
+			throw new NotSupportedFileExtensionException(videoDetailType);
+		}
+
 		this.isPlayableVideo = isPlayableVideo;
 		this.videoStartTime = videoStartTime;
 		this.videoPlayDuration = videoPlayDuration;
-		this.videoDetailType = VideoDetailType.valueOf(videoDetailType);
+		this.videoDetailType = MediaFileExtension.valueOf(videoDetailType);
 
 	}
 }
