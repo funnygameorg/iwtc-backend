@@ -83,9 +83,9 @@ public class WorldCupGameContentsService {
 	/**
 	 * 월드컵 게임에 포함된 컨텐츠 리스트를 반환한다. (게임 플레이에 사용)
 	 *
-	 * @param worldCupGameId 플레이하는 월드컵 게임
-	 * @param currentRound 현재 라운드
-	 * @param sliceContents 몇 분의 일의 컨텐츠 양을 응답할 것인가?
+	 * @param worldCupGameId           플레이하는 월드컵 게임
+	 * @param currentRound             현재 라운드
+	 * @param sliceContents            몇 분의 일의 컨텐츠 양을 응답할 것인가?
 	 * @param alreadyPlayedContentsIds 사용자가 이미 플레이한 컨텐츠 아이디 리스트
 	 * @return 사용자가 플레이할 월드컵 컨텐츠 리스트
 	 */
@@ -231,7 +231,7 @@ public class WorldCupGameContentsService {
 		var contentsList = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
 		return contentsList.stream()
-			.sorted(comparing(WorldCupGameContents::getGameRank))
+			.sorted(comparing(WorldCupGameContents::getGameScore, reverseOrder()))
 			.map(GetGameResultContentsListResponse::fromEntity)
 			.toList();
 
