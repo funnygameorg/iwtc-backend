@@ -1,4 +1,4 @@
-package com.masikga.itwc.domain.member.controller.request;
+package com.masikga.itwc.domain.member.controller.response;
 
 import com.masikga.itwc.common.web.memberresolver.MemberDto;
 
