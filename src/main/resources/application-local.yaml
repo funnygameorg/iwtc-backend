@@ -54,7 +54,7 @@ management:
     health:
       show-details: always
 origin:
-  front: http://localhosta:8080
+  front: http://localhosta:3000
 
 logging:
   config: classpath:log/logback-spring-local.xml
