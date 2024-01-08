@@ -91,11 +91,10 @@ public class WorldCupBasedOnAuthController {
 		@CustomAuthentication
 		Optional<MemberDto> memberDto
 	) {
-		return new RestApiResponse(
-			1,
-			"조회 성공",
-			worldCupBasedOnAuthService.getMyWorldCupGameContents(worldCupId, memberDto.get().getId())
-		);
+
+		var response = worldCupBasedOnAuthService.getMyWorldCupGameContents(worldCupId, memberDto.get().getId());
+		return new RestApiResponse(1, "조회 성공", response);
+
 	}
 
 	@Operation(
@@ -135,11 +134,10 @@ public class WorldCupBasedOnAuthController {
 		@CustomAuthentication
 		Optional<MemberDto> memberDto
 	) {
-		return new RestApiResponse(
-			1,
-			"자신의 월드컵 조회",
-			worldCupBasedOnAuthService.getMyWorldCup(worldCupId, memberDto.get().getId())
-		);
+
+		var response = worldCupBasedOnAuthService.getMyWorldCup(worldCupId, memberDto.get().getId());
+		return new RestApiResponse(1, "자신의 월드컵 조회", response);
+
 	}
 
 	@Operation(
@@ -178,7 +176,7 @@ public class WorldCupBasedOnAuthController {
 	)
 	@ResponseStatus(NO_CONTENT)
 	@PutMapping("/{worldCupId}")
-	public RestApiResponse<Object> putMyWorldCup(
+	public RestApiResponse putMyWorldCup(
 		@Valid
 		@RequestBody
 		CreateWorldCupRequest request,
@@ -191,17 +189,8 @@ public class WorldCupBasedOnAuthController {
 		Long worldCupId
 	) {
 
-		worldCupBasedOnAuthService.putMyWorldCup(
-			request,
-			worldCupId,
-			memberDto.get().getId()
-		);
-
-		return new RestApiResponse(
-			1,
-			"게임 수정",
-			null
-		);
+		worldCupBasedOnAuthService.putMyWorldCup(request, worldCupId, memberDto.get().getId());
+		return new RestApiResponse(1, "게임 수정", null);
 
 	}
 
@@ -231,7 +220,7 @@ public class WorldCupBasedOnAuthController {
 	)
 	@ResponseStatus(CREATED)
 	@PostMapping
-	public RestApiResponse<Object> createMyWorldCup(
+	public RestApiResponse<Long> createMyWorldCup(
 		@Valid
 		@RequestBody
 		CreateWorldCupRequest request,
@@ -241,16 +230,8 @@ public class WorldCupBasedOnAuthController {
 		Optional<MemberDto> memberDto
 	) {
 
-		long worldCupId = worldCupBasedOnAuthService.createMyWorldCup(
-			request,
-			memberDto.get().getId()
-		);
-
-		return new RestApiResponse(
-			1,
-			"게임 생성",
-			worldCupId
-		);
+		var worldCupId = worldCupBasedOnAuthService.createMyWorldCup(request, memberDto.get().getId());
+		return new RestApiResponse(1, "게임 생성", worldCupId);
 
 	}
 
@@ -281,7 +262,7 @@ public class WorldCupBasedOnAuthController {
 	)
 	@ResponseStatus(CREATED)
 	@PostMapping("/{worldCupId}/contents")
-	public RestApiResponse<Object> createMyWorldCupContents(
+	public RestApiResponse createMyWorldCupContents(
 		@Valid
 		@RequestBody
 		CreateWorldCupContentsRequest request,
@@ -294,17 +275,8 @@ public class WorldCupBasedOnAuthController {
 		Optional<MemberDto> memberDto
 	) {
 
-		worldCupBasedOnAuthService.createMyWorldCupContents(
-			request,
-			worldCupId,
-			memberDto.get().getId()
-		);
-
-		return new RestApiResponse(
-			1,
-			"게임 생성",
-			null
-		);
+		worldCupBasedOnAuthService.createMyWorldCupContents(request, worldCupId, memberDto.get().getId());
+		return new RestApiResponse(1, "게임 생성", null);
 
 	}
 
@@ -340,7 +312,7 @@ public class WorldCupBasedOnAuthController {
 	)
 	@ResponseStatus(NO_CONTENT)
 	@PutMapping("/{worldCupId}/contents/{contentsId}")
-	public RestApiResponse<Object> updateMyWorldCupContents(
+	public RestApiResponse<Long> updateMyWorldCupContents(
 		@Valid
 		@RequestBody
 		UpdateWorldCupContentsRequest request,
@@ -356,18 +328,9 @@ public class WorldCupBasedOnAuthController {
 		Optional<MemberDto> memberDto
 	) {
 
-		var updateContentsId = worldCupBasedOnAuthService.updateMyWorldCupContents(
-			request,
-			worldCupId,
-			contentsId,
-			memberDto.get().getId()
-		);
-
-		return new RestApiResponse(
-			1,
-			"게임 생성",
-			updateContentsId
-		);
+		var updateContentsId = worldCupBasedOnAuthService.updateMyWorldCupContents(request, worldCupId, contentsId,
+			memberDto.get().getId());
+		return new RestApiResponse(1, "게임 생성", updateContentsId);
 
 	}
 
@@ -403,7 +366,7 @@ public class WorldCupBasedOnAuthController {
 	)
 	@ResponseStatus(NO_CONTENT)
 	@DeleteMapping("/{worldCupId}/contents/{contentsId}")
-	public RestApiResponse<Object> deleteMyWorldCupContents(
+	public RestApiResponse<Long> deleteMyWorldCupContents(
 
 		@PathVariable
 		long worldCupId,
@@ -416,17 +379,9 @@ public class WorldCupBasedOnAuthController {
 		Optional<MemberDto> memberDto
 	) {
 
-		var deletedContentsId = worldCupBasedOnAuthService.deleteMyWorldCupContents(
-			worldCupId,
-			contentsId,
-			memberDto.get().getId()
-		);
-
-		return new RestApiResponse(
-			1,
-			"게임 삭제",
-			deletedContentsId
-		);
+		var deletedContentsId = worldCupBasedOnAuthService.deleteMyWorldCupContents(worldCupId, contentsId,
+			memberDto.get().getId());
+		return new RestApiResponse(1, "게임 삭제", deletedContentsId);
 
 	}
 
@@ -443,11 +398,8 @@ public class WorldCupBasedOnAuthController {
 		Optional<MemberDto> memberDto
 	) {
 
-		return new RestApiResponse(
-			1,
-			"자신의 게임 리스트 조회",
-			worldCupBasedOnAuthService.getMyWorldCupList(memberDto.get().getId())
-		);
+		var response = worldCupBasedOnAuthService.getMyWorldCupList(memberDto.get().getId());
+		return new RestApiResponse(1, "자신의 게임 리스트 조회", response);
 
 	}
 
@@ -491,11 +443,8 @@ public class WorldCupBasedOnAuthController {
 		Optional<MemberDto> memberDto
 	) {
 
-		return new RestApiResponse(
-			1,
-			"자신의 게임 컨텐츠 리스트 조회",
-			worldCupBasedOnAuthService.getMyWorldCupContentsList(worldCupId, memberDto.get().getId())
-		);
+		var response = worldCupBasedOnAuthService.getMyWorldCupContentsList(worldCupId, memberDto.get().getId());
+		return new RestApiResponse(1, "자신의 게임 컨텐츠 리스트 조회", response);
 
 	}
 

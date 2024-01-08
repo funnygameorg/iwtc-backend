@@ -2,7 +2,6 @@ package com.masikga.itwc.domain.etc.controller;
 
 import static org.springframework.http.HttpStatus.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,7 +72,7 @@ public class ETCController {
 	)
 	@PostMapping("/world-cups/{worldCupId}/contents/{contentsId}/comments")
 	@ResponseStatus(CREATED)
-	public RestApiResponse<Object> writeComment(
+	public RestApiResponse writeComment(
 
 		@PathVariable
 		Long worldCupId,
@@ -97,13 +96,7 @@ public class ETCController {
 			writerId = optionalMemberDto.get().getId();
 		}
 
-		commentService.writeComment(
-			request,
-			writerId,
-			worldCupId,
-			contentsId
-		);
-
+		commentService.writeComment(request, writerId, worldCupId, contentsId);
 		return new RestApiResponse(1, "댓글 작성", null);
 	}
 
@@ -132,7 +125,6 @@ public class ETCController {
 	) {
 
 		String refreshToken = createAccessTokenRequest.refreshToken();
-
 		String newAccessToken = null;
 		int code = 1;
 		String message = "엑세스 토큰 생성";
@@ -151,14 +143,8 @@ public class ETCController {
 
 		}
 
-		return new RestApiResponse<CreateAccessTokenResponse>(
-			code,
-			message,
-			new CreateAccessTokenResponse(
-				newAccessToken,
-				refreshToken
-			)
-		);
+		CreateAccessTokenResponse response = new CreateAccessTokenResponse(newAccessToken, refreshToken);
+		return new RestApiResponse(code, message, response);
 	}
 
 	@Operation(
@@ -175,15 +161,12 @@ public class ETCController {
 	public RestApiResponse<MediaFileResponse> getMediaFiles(
 		@PathVariable Long mediaFileId,
 		HttpServletResponse httpServletResponse
-	) throws IOException {
+	) {
 
 		httpServletResponse.setHeader("Cache-Control", "max-age=600");
 
-		return new RestApiResponse(
-			1,
-			"미디어 파일 조회",
-			mediaFileService.getMediaFile(mediaFileId)
-		);
+		var response = mediaFileService.getMediaFile(mediaFileId);
+		return new RestApiResponse(1, "미디어 파일 조회", response);
 
 	}
 
@@ -200,13 +183,10 @@ public class ETCController {
 	@ResponseStatus(OK)
 	public RestApiResponse<List<MediaFileResponse>> getMediaFiles(
 		@RequestParam List<Long> mediaFileIds
-	) throws IOException {
+	) {
 
-		return new RestApiResponse(
-			1,
-			"미디어 파일 조회",
-			mediaFileService.getMediaFile(mediaFileIds)
-		);
+		var response = mediaFileService.getMediaFile(mediaFileIds);
+		return new RestApiResponse(1, "미디어 파일 조회", response);
 	}
 
 	@Operation(
@@ -244,12 +224,7 @@ public class ETCController {
 	) {
 
 		var response = commentService.getComments(worldCupId, offset);
-
-		return new RestApiResponse(
-			1,
-			"코멘트 조회 성공",
-			response
-		);
+		return new RestApiResponse(1, "코멘트 조회 성공", response);
 
 	}
 
@@ -266,12 +241,7 @@ public class ETCController {
 	) {
 
 		commentService.deleteComment(commentId, optionalMemberDto.get().getId());
-
-		return new RestApiResponse(
-			1,
-			"코멘트 삭제 성공",
-			null
-		);
+		return new RestApiResponse(1, "코멘트 삭제 성공", null);
 
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.primitives.Longs;
 import com.masikga.itwc.common.error.CustomErrorResponse;
 import com.masikga.itwc.common.web.RestApiResponse;
 import com.masikga.itwc.domain.worldcup.controller.request.ClearWorldCupGameRequest;
@@ -21,7 +22,6 @@ import com.masikga.itwc.domain.worldcup.controller.response.GetAvailableGameRoun
 import com.masikga.itwc.domain.worldcup.controller.response.GetGameResultContentsListResponse;
 import com.masikga.itwc.domain.worldcup.controller.response.GetWorldCupPlayContentsResponse;
 import com.masikga.itwc.domain.worldcup.service.WorldCupGameContentsService;
-import com.google.common.primitives.Longs;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -97,17 +97,11 @@ public class WorldCupContentsController {
 		@RequestParam(name = "excludeContentsIds", required = false)
 		long[] excludeContentsIds
 	) {
-		return new RestApiResponse(
-			1,
-			"컨텐츠 조회 성공",
-			worldCupGameContentsService
-				.getPlayContents(
-					worldCupId,
-					currentRound,
-					sliceContents,
-					boxedPrimitiveLongs(excludeContentsIds)
-				)
-		);
+
+		var response = worldCupGameContentsService.getPlayContents(worldCupId, currentRound, sliceContents,
+			boxedPrimitiveLongs(excludeContentsIds));
+		return new RestApiResponse(1, "컨텐츠 조회 성공", response);
+
 	}
 
 	@Operation(
@@ -137,11 +131,10 @@ public class WorldCupContentsController {
 	public RestApiResponse<List<GetGameResultContentsListResponse>> getGameResultContentsList(
 		@PathVariable Long worldCupId
 	) {
-		return new RestApiResponse(
-			1,
-			"게임 결과 컨텐츠 리스트 조회 성공",
-			worldCupGameContentsService.getGameResultContentsList(worldCupId)
-		);
+
+		var response = worldCupGameContentsService.getGameResultContentsList(worldCupId);
+		return new RestApiResponse(1, "게임 결과 컨텐츠 리스트 조회 성공", response);
+
 	}
 
 	@Operation(
@@ -178,11 +171,10 @@ public class WorldCupContentsController {
 		@PathVariable long worldCupId
 
 	) {
-		return new RestApiResponse(
-			1,
-			"플레이 가능한 라운드 조회 성공",
-			worldCupGameContentsService.getAvailableGameRounds(worldCupId)
-		);
+
+		var response = worldCupGameContentsService.getAvailableGameRounds(worldCupId);
+		return new RestApiResponse(1, "플레이 가능한 라운드 조회 성공", response);
+
 	}
 
 	@Operation(
@@ -217,11 +209,10 @@ public class WorldCupContentsController {
 		ClearWorldCupGameRequest request
 
 	) {
-		return new RestApiResponse(
-			1,
-			"게임 결과 생성",
-			worldCupGameContentsService.clearWorldCupGame(worldCupId, request)
-		);
+
+		var response = worldCupGameContentsService.clearWorldCupGame(worldCupId, request);
+		return new RestApiResponse(1, "게임 결과 생성", response);
+
 	}
 
 	private List<Long> boxedPrimitiveLongs(long[] primitiveLongs) {

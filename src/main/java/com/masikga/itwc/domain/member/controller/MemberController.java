@@ -83,11 +83,7 @@ public class MemberController {
 	) {
 
 		memberService.signUp(request);
-		return RestApiResponse.builder()
-			.code(1)
-			.message("가입 성공")
-			.data(null)
-			.build();
+		return new RestApiResponse(1, "가입 성공", null);
 	}
 
 	@Operation(
@@ -126,11 +122,7 @@ public class MemberController {
 		httpServletResponse.addHeader("access-token", response.accessToken());
 		httpServletResponse.addHeader("refresh-token", response.refreshToken());
 
-		return RestApiResponse.builder()
-			.code(1)
-			.message("로그인 성공")
-			.data(null)
-			.build();
+		return new RestApiResponse(1, "로그인 성공", null);
 	}
 
 	@Operation(
@@ -151,17 +143,15 @@ public class MemberController {
 	)
 	@GetMapping("/duplicated-check/service-id")
 	@ResponseStatus(OK)
-	public RestApiResponse verifyDuplicatedServiceId(
+	public RestApiResponse<VerifyDuplicatedServiceIdResponse> verifyDuplicatedServiceId(
 		@VerifyMemberServiceId
 		@RequestParam
 		String serviceId
 	) {
-		VerifyDuplicatedServiceIdResponse response = memberService.existsServiceId(serviceId);
-		return RestApiResponse.builder()
-			.code(1)
-			.message("아이디 검증 성공")
-			.data(response)
-			.build();
+
+		var response = memberService.existsServiceId(serviceId);
+		return new RestApiResponse(1, "아이디 검증 성공", response);
+
 	}
 
 	@Operation(
@@ -182,7 +172,7 @@ public class MemberController {
 	)
 	@GetMapping("/duplicated-check/nickname")
 	@ResponseStatus(OK)
-	public RestApiResponse verifyDuplicatedNickname(
+	public RestApiResponse<VerifyDuplicatedNicknameResponse> verifyDuplicatedNickname(
 
 		@RequestParam
 		@VerifyMemberNickname
@@ -190,12 +180,9 @@ public class MemberController {
 
 	) {
 
-		VerifyDuplicatedNicknameResponse response = memberService.existsNickname(nickname);
-		return RestApiResponse.builder()
-			.code(1)
-			.message("닉네임 검증 성공")
-			.data(response)
-			.build();
+		var response = memberService.existsNickname(nickname);
+		return new RestApiResponse(1, "닉네임 검증 성공", response);
+
 	}
 
 	@Operation(
@@ -244,11 +231,9 @@ public class MemberController {
 
 		httpServletResponse.setHeader("Cache-Control", "max-age=60");
 
-		return RestApiResponse.builder()
-			.code(1)
-			.message("정보 조회 성공")
-			.data(new GetMySummaryResponse(memberDto))
-			.build();
+		var response = new GetMySummaryResponse(memberDto);
+		return new RestApiResponse(1, "정보 조회 성공", response);
+
 	}
 
 	@Operation(
@@ -279,11 +264,9 @@ public class MemberController {
 		@RequestHeader("access-token") String accessToken
 
 	) {
+
 		memberService.signOut(accessToken);
-		return RestApiResponse.builder()
-			.code(1)
-			.message("정보 조회 성공")
-			.data(null)
-			.build();
+		return new RestApiResponse(1, "정보 조회 성공", null);
+
 	}
 }

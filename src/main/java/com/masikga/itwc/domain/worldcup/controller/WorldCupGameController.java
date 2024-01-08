@@ -16,7 +16,6 @@ import com.masikga.itwc.common.web.RestApiResponse;
 import com.masikga.itwc.domain.worldcup.controller.response.GetWorldCupsResponse;
 import com.masikga.itwc.domain.worldcup.controller.validator.worldcup.VerifyWorldCupKeyword;
 import com.masikga.itwc.domain.worldcup.controller.vo.WorldCupDateRange;
-import com.masikga.itwc.domain.worldcup.repository.projection.GetWorldCupGamePageProjection;
 import com.masikga.itwc.domain.worldcup.service.WorldCupGameService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,13 +79,10 @@ public class WorldCupGameController {
 			sort = {"id"}
 		) Pageable pageable
 	) {
-		Page<GetWorldCupGamePageProjection> result = worldCupGameService.findWorldCupByPageable(
-			pageable,
-			dateRange,
-			worldCupKeyword,
-			memberId
-		);
+
+		var result = worldCupGameService.findWorldCupByPageable(pageable, dateRange, worldCupKeyword, memberId);
 		return new RestApiResponse(1, "월드컵 페이지 조회 성공", result);
+
 	}
 
 }
