@@ -189,28 +189,6 @@ public class ETCController {
 	}
 
 	@Operation(
-		summary = "미디어 파일 리스트 반환",
-		responses = {
-			@ApiResponse(
-				responseCode = "200",
-				description = "미디어 파일 조회"
-			),
-		}
-	)
-	@GetMapping("/media-files")
-	@ResponseStatus(OK)
-	public RestApiResponse<List<MediaFileResponse>> getMediaFiles(
-		@RequestParam List<Long> mediaFileIds
-	) {
-
-		return new RestApiResponse(
-			1,
-			"미디어 파일 조회",
-			mediaFileService.getMediaFile(mediaFileIds)
-		);
-	}
-
-	@Operation(
 		summary = "댓글 리스트 반환",
 		parameters = {
 			@Parameter(
