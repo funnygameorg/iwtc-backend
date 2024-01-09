@@ -1,11 +1,10 @@
 package com.masikga.itwc.domain.etc.service;
 
 import static com.masikga.itwc.domain.etc.model.vo.FileType.*;
+import static com.masikga.itwc.helper.TestConstant.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-
-import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.masikga.itwc.domain.etc.controller.response.MediaFileResponse;
+import com.masikga.itwc.domain.etc.exception.NotFoundMediaFIleException;
 import com.masikga.itwc.domain.etc.model.InternetVideoUrl;
 import com.masikga.itwc.domain.etc.model.StaticMediaFile;
 import com.masikga.itwc.domain.etc.repository.MediaFileRepository;
 import com.masikga.itwc.helper.DataBaseCleanUp;
-import com.masikga.itwc.helper.TestConstant;
 import com.masikga.itwc.helper.testbase.IntegrationBaseTest;
-import com.masikga.itwc.infra.filestorage.S3Component;
+import com.masikga.itwc.infra.filestorage.FileStorage;
 
 public class MediaFileServiceTest implements IntegrationBaseTest {
 
@@ -32,7 +31,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 	private MediaFileRepository mediaFileRepository;
 
 	@MockBean
-	private S3Component s3Component;
+	private FileStorage s3Component;
 
 	@Autowired
 	private DataBaseCleanUp dataBaseCleanUp;
@@ -47,8 +46,8 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 	class getMediaFile {
 
 		@Test
-		@DisplayName(TestConstant.SUCCESS_PREFIX + "static file 형식 조회")
-		public void success() throws IOException {
+		@DisplayName(SUCCESS_PREFIX + "static file 형식 조회")
+		public void success() {
 
 			// given
 			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
@@ -80,8 +79,8 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 		}
 
 		@Test
-		@DisplayName(TestConstant.SUCCESS_PREFIX + "동영상 링크 형식 조회")
-		public void success2() throws IOException {
+		@DisplayName(SUCCESS_PREFIX + "동영상 링크 형식 조회")
+		public void success2() {
 
 			// given
 			InternetVideoUrl staticMediaFile = InternetVideoUrl.builder()
@@ -110,6 +109,18 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				() -> assertThat(response.fileType()).isEqualTo(INTERNET_VIDEO_URL),
 				() -> assertThat(response.detailType()).isEqualTo("YOU_TUBE_URL"),
 				() -> assertThat(response.originalName()).isNull()
+			);
+
+		}
+
+		@Test
+		@DisplayName(EXCEPTION_PREFIX + "존재하지 않는 미디어 파일은 조회할 수 없다.")
+		public void fail() {
+
+			// when then
+			assertThrows(
+				NotFoundMediaFIleException.class,
+				() -> mediaFileService.getMediaFile(1L)
 			);
 
 		}

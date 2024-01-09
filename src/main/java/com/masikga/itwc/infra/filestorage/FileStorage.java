@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class S3Component {
+public class FileStorage {
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;

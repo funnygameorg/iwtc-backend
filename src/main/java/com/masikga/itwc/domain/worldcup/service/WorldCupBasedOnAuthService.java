@@ -24,7 +24,7 @@ import com.masikga.itwc.domain.worldcup.model.WorldCupGame;
 import com.masikga.itwc.domain.worldcup.model.WorldCupGameContents;
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameRepository;
-import com.masikga.itwc.infra.filestorage.S3Component;
+import com.masikga.itwc.infra.filestorage.FileStorage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class WorldCupBasedOnAuthService {
 	private final MediaFileRepository mediaFileRepository;
 	private final MediaFileFactory mediaFileFactory;
 	private final RandomDataGeneratorInterface randomDataGenerator;
-	private final S3Component s3Component;
+	private final FileStorage s3Component;
 
 	public List<GetWorldCupContentsResponse> getMyWorldCupGameContents(long worldCupId, long memberId) {
 

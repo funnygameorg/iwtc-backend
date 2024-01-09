@@ -36,7 +36,7 @@ import com.masikga.itwc.domain.worldcup.repository.WorldCupGameContentsRepositor
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameRepository;
 import com.masikga.itwc.helper.DataBaseCleanUp;
 import com.masikga.itwc.helper.testbase.IntegrationBaseTest;
-import com.masikga.itwc.infra.filestorage.S3Component;
+import com.masikga.itwc.infra.filestorage.FileStorage;
 
 public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 
@@ -49,7 +49,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 	@Autowired
 	private WorldCupGameContentsRepository worldCupGameContentsRepository;
 	@MockBean
-	private S3Component s3Component;
+	private FileStorage s3Component;
 	@Autowired
 	private DataBaseCleanUp dataBaseCleanUp;
 

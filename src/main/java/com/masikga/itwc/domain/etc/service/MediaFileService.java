@@ -8,7 +8,7 @@ import com.masikga.itwc.domain.etc.controller.response.MediaFileResponse;
 import com.masikga.itwc.domain.etc.exception.NotFoundMediaFIleException;
 import com.masikga.itwc.domain.etc.model.MediaFile;
 import com.masikga.itwc.domain.etc.repository.MediaFileRepository;
-import com.masikga.itwc.infra.filestorage.S3Component;
+import com.masikga.itwc.infra.filestorage.FileStorage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class MediaFileService {
 
 	private final MediaFileRepository mediaFileRepository;
 	private final MediaFileComponent mediaFileComponent;
-	private final S3Component s3Component;
+	private final FileStorage s3Component;
 
 	public MediaFileResponse getMediaFile(long mediaFileId) {
 
