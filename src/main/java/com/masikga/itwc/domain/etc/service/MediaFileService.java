@@ -29,7 +29,9 @@ public class MediaFileService {
 			.findById(mediaFileId)
 			.orElseThrow(() -> new NotFoundMediaFIleException(mediaFileId));
 
-		var mediaFileBody = s3Component.getObject(mediaFile.getObjectKey());
+		String mediaFileBody = null;
+
+		mediaFileBody = s3Component.getObject(mediaFile.getObjectKey());
 
 		MediaFileComponent.AllFieldMediaFileDto allFieldMediaFileDto = mediaFileComponent.convertToTotalDataMediaFile(
 			mediaFile);

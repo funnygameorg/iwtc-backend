@@ -47,7 +47,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 
 		@Test
 		@DisplayName(SUCCESS_PREFIX + "static file 형식 조회")
-		public void success() {
+		public void success() throws Exception {
 
 			// given
 			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
@@ -80,7 +80,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 
 		@Test
 		@DisplayName(SUCCESS_PREFIX + "동영상 링크 형식 조회")
-		public void success2() {
+		public void success2() throws Exception {
 
 			// given
 			InternetVideoUrl staticMediaFile = InternetVideoUrl.builder()
