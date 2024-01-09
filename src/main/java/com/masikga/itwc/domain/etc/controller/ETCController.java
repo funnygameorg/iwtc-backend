@@ -162,6 +162,8 @@ public class ETCController {
 
 	@Operation(
 		summary = "미디어 파일 1건 반환",
+		description = "detailType 응답 종류 : [GIF, PNG, JPEG, JPG, YOU_TUBE_URL] "
+			+ "Local 브랜치 swagger에서는 9번 ~ 13번 미디어 파일만 요청해주세요.(8번까지는 이미지파일인데 파일이 커서 불안정하네요)",
 		responses = {
 			@ApiResponse(
 				responseCode = "200",

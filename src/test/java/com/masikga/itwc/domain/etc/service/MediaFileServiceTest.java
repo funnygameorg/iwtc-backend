@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.masikga.itwc.domain.etc.controller.response.MediaFileResponse;
+import com.masikga.itwc.domain.etc.model.InternetVideoUrl;
 import com.masikga.itwc.domain.etc.model.StaticMediaFile;
 import com.masikga.itwc.domain.etc.repository.MediaFileRepository;
 import com.masikga.itwc.helper.DataBaseCleanUp;
@@ -46,7 +47,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 	class getMediaFile {
 
 		@Test
-		@DisplayName(TestConstant.SUCCESS_PREFIX)
+		@DisplayName(TestConstant.SUCCESS_PREFIX + "static file 형식 조회")
 		public void success() throws IOException {
 
 			// given
@@ -71,8 +72,44 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				() -> assertThat(response.originalName()).isEqualTo("originalNameA"),
 				() -> assertThat(response.mediaData()).isEqualTo("dataA"),
 				() -> assertThat(response.fileType()).isEqualTo(STATIC_MEDIA_FILE),
+				() -> assertThat(response.detailType()).isEqualTo("GIF"),
 				() -> assertThat(response.videoPlayDuration()).isNull(),
 				() -> assertThat(response.videoStartTime()).isNull()
+			);
+
+		}
+
+		@Test
+		@DisplayName(TestConstant.SUCCESS_PREFIX + "동영상 링크 형식 조회")
+		public void success2() throws IOException {
+
+			// given
+			InternetVideoUrl staticMediaFile = InternetVideoUrl.builder()
+				.objectKey("A-46")
+				.bucketName("bucketA")
+				.videoPlayDuration(5)
+				.isPlayableVideo(true)
+				.videoStartTime("00000")
+				.videoDetailType("YOU_TUBE_URL")
+				.build();
+
+			mediaFileRepository.save(staticMediaFile);
+
+			given(s3Component.getObject("A-46"))
+				.willReturn("youtube_qs");
+
+			// when
+			MediaFileResponse response = mediaFileService.getMediaFile(1L);
+
+			//then
+			assertAll(
+				() -> assertThat(response.mediaFileId()).isEqualTo(1),
+				() -> assertThat(response.videoPlayDuration()).isEqualTo(5),
+				() -> assertThat(response.videoStartTime()).isEqualTo("00000"),
+				() -> assertThat(response.mediaData()).isEqualTo("youtube_qs"),
+				() -> assertThat(response.fileType()).isEqualTo(INTERNET_VIDEO_URL),
+				() -> assertThat(response.detailType()).isEqualTo("YOU_TUBE_URL"),
+				() -> assertThat(response.originalName()).isNull()
 			);
 
 		}

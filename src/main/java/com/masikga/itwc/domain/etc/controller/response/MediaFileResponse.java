@@ -13,6 +13,7 @@ public record MediaFileResponse(
 	String originalName,
 	String videoStartTime,
 	Integer videoPlayDuration,
+	String detailType,
 	LocalDateTime createdAt,
 	LocalDateTime updatedAt
 ) {
@@ -29,6 +30,7 @@ public record MediaFileResponse(
 			mediaFile.originalName(),
 			mediaFile.videoStartTime(),
 			mediaFile.videoPlayDuration(),
+			mediaFile.detailType(),
 			mediaFile.createdAt(),
 			mediaFile.updatedAt()
 		);

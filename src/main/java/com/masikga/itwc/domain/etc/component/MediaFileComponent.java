@@ -8,6 +8,7 @@ import com.masikga.itwc.domain.etc.model.InternetVideoUrl;
 import com.masikga.itwc.domain.etc.model.MediaFile;
 import com.masikga.itwc.domain.etc.model.StaticMediaFile;
 import com.masikga.itwc.domain.etc.model.vo.FileType;
+import com.masikga.itwc.domain.etc.model.vo.MediaFileExtension;
 
 @Component
 public class MediaFileComponent {
@@ -20,17 +21,46 @@ public class MediaFileComponent {
 	 */
 	public AllFieldMediaFileDto convertToTotalDataMediaFile(MediaFile mediaFile) {
 
+		var detailType = getMediaFileDetailType(mediaFile);
+		var imageOriginalName = getOriginalName(mediaFile);
+		var videoStartTime = getVideoStartTime(mediaFile);
+		var videoPlayDuration = getVideoPlayDuration(mediaFile);
+
 		return new AllFieldMediaFileDto(
 			mediaFile.getId(),
 			mediaFile.getFileType(),
 			mediaFile.getObjectKey(),
-			mediaFile instanceof StaticMediaFile ? ((StaticMediaFile)mediaFile).getOriginalName() : null,
-			mediaFile instanceof InternetVideoUrl ? ((InternetVideoUrl)mediaFile).getVideoStartTime() : null,
-			mediaFile instanceof InternetVideoUrl ? ((InternetVideoUrl)mediaFile).getVideoPlayDuration() : null,
+			imageOriginalName,
+			videoStartTime,
+			videoPlayDuration,
+			detailType,
 			mediaFile.getCreatedAt(),
 			mediaFile.getUpdatedAt()
 		);
 
+	}
+
+	// 파일이 비디오 파일인 경우 실제 값을 반환, 이미지 형식인 경우 null을 반환
+	private Integer getVideoPlayDuration(MediaFile mediaFile) {
+		return mediaFile instanceof InternetVideoUrl ? ((InternetVideoUrl)mediaFile).getVideoPlayDuration() : null;
+	}
+
+	// 파일이 비디오 파일인 경우 실제 값을 반환, 이미지 형식인 경우 null을 반환
+	private String getVideoStartTime(MediaFile mediaFile) {
+		return mediaFile instanceof InternetVideoUrl ? ((InternetVideoUrl)mediaFile).getVideoStartTime() : null;
+	}
+
+	// 파일이 이미지 파일인 경우 실제 값을 반환, 비디오 형식인 경우 null을 반환
+	private String getOriginalName(MediaFile mediaFile) {
+		return mediaFile instanceof StaticMediaFile ? ((StaticMediaFile)mediaFile).getOriginalName() : null;
+	}
+
+	// 미디어 파일의 자세한 형식을 반환합니다.
+	private String getMediaFileDetailType(MediaFile mediaFile) {
+		MediaFileExtension detailType = (mediaFile instanceof StaticMediaFile)
+			? ((StaticMediaFile)mediaFile).getExtension()
+			: ((InternetVideoUrl)mediaFile).getVideoDetailType();
+		return detailType.name();
 	}
 
 	public record AllFieldMediaFileDto(
@@ -41,6 +71,7 @@ public class MediaFileComponent {
 		String originalName,
 		String videoStartTime,
 		Integer videoPlayDuration,
+		String detailType,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
 	) {
