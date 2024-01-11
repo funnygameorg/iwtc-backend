@@ -31,8 +31,8 @@ spring:
 jwt:
   secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
   token-validity-milli-seconds:
-    access: 30000
-    refresh: 300000
+    access: 3000000
+    refresh: 30000000
 
 cloud:
   aws:
