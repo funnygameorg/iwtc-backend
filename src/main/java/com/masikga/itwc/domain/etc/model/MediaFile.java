@@ -1,10 +1,14 @@
 package com.masikga.itwc.domain.etc.model;
 
+import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.InheritanceType.*;
 import static lombok.AccessLevel.*;
 
+import org.hibernate.annotations.Comment;
+
 import com.masikga.itwc.common.jpa.TimeBaseEntity;
 import com.masikga.itwc.domain.etc.model.vo.FileType;
+import com.masikga.itwc.domain.etc.model.vo.MediaFileExtension;
 
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -46,5 +50,10 @@ public abstract class MediaFile extends TimeBaseEntity {
 
 	@org.hibernate.annotations.Comment("저장 버킷명")
 	private String bucket;
+
+	@NotNull
+	@Comment("동영상의 형태 (ex : 유튜브 링크, 네이버 비디오 링크...)")
+	@Enumerated(STRING)
+	protected MediaFileExtension detailType;
 
 }

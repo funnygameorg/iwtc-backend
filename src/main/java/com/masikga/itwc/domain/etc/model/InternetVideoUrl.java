@@ -1,6 +1,5 @@
 package com.masikga.itwc.domain.etc.model;
 
-import static jakarta.persistence.EnumType.*;
 import static lombok.AccessLevel.*;
 
 import java.util.Objects;
@@ -14,7 +13,6 @@ import com.masikga.itwc.domain.etc.model.vo.MediaFileExtension;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -52,11 +50,6 @@ public class InternetVideoUrl extends MediaFile {
 	@Max(value = 5, message = "영상 재생 시간은 2 ~ 5초 입니다.")
 	private Integer videoPlayDuration;
 
-	// TODO : MediaFile(부모 클래스)로 이동하기
-	@Comment("동영상의 형태 (ex : 유튜브 링크, 네이버 비디오 링크...)")
-	@Enumerated(STRING)
-	private MediaFileExtension videoDetailType;
-
 	public void update(String objectKey, String videoStartTime, Integer videoPlayDuration, String detailFileType) {
 
 		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
@@ -70,7 +63,7 @@ public class InternetVideoUrl extends MediaFile {
 		super.objectKey = objectKey;
 		this.videoStartTime = videoStartTime;
 		this.videoPlayDuration = videoPlayDuration;
-		this.videoDetailType = MediaFileExtension.valueOf(detailFileType);
+		super.detailType = MediaFileExtension.valueOf(detailFileType);
 
 	}
 
@@ -78,7 +71,7 @@ public class InternetVideoUrl extends MediaFile {
 	private InternetVideoUrl(Long id, String objectKey, boolean isPlayableVideo, String videoStartTime,
 		Integer videoPlayDuration, String bucketName, String videoDetailType) {
 
-		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName);
+		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName, MediaFileExtension.valueOf(videoDetailType));
 
 		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
 			throw new NotNullArgumentException(objectKey, videoStartTime, videoPlayDuration);
@@ -91,7 +84,6 @@ public class InternetVideoUrl extends MediaFile {
 		this.isPlayableVideo = isPlayableVideo;
 		this.videoStartTime = videoStartTime;
 		this.videoPlayDuration = videoPlayDuration;
-		this.videoDetailType = MediaFileExtension.valueOf(videoDetailType);
 
 	}
 }

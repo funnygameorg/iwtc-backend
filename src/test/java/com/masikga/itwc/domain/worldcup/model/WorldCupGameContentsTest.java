@@ -55,7 +55,7 @@ public class WorldCupGameContentsTest {
 				() -> assertThat(contents.getVisibleType()).isEqualTo(PUBLIC),
 				() -> assertThat(contents.getName()).isEqualTo("초코빵 컨텐츠"),
 				() -> assertThat(staticMediaFile.getOriginalName()).isEqualTo("choco!"),
-				() -> assertThat(staticMediaFile.getExtension().name()).isEqualTo("PNG"),
+				() -> assertThat(staticMediaFile.getDetailType().name()).isEqualTo("PNG"),
 				() -> assertThat(staticMediaFile.getObjectKey()).isEqualTo("CDA-1212")
 			);
 		}
@@ -96,7 +96,7 @@ public class WorldCupGameContentsTest {
 				() -> assertThat(contents.getVisibleType()).isEqualTo(PUBLIC),
 				() -> assertThat(internetVideoUrl.getVideoStartTime()).isEqualTo("00105"),
 				() -> assertThat(internetVideoUrl.getVideoPlayDuration()).isEqualTo(3),
-				() -> assertThat(internetVideoUrl.getVideoDetailType().name()).isEqualTo("YOU_TUBE_URL"),
+				() -> assertThat(internetVideoUrl.getDetailType().name()).isEqualTo("YOU_TUBE_URL"),
 				() -> assertThat(internetVideoUrl.getObjectKey()).isEqualTo("ZZQ-1212")
 			);
 		}

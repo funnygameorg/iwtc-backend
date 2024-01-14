@@ -436,7 +436,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> assertThat(firstMediaFile.getObjectKey()).isNotNull(),
 				() -> assertThat(firstMediaFile.getFileType()).isEqualTo(STATIC_MEDIA_FILE),
 				() -> assertThat(firstMediaFile.getOriginalName()).isEqualTo("Original1"),
-				() -> assertThat(firstMediaFile.getExtension().name()).isEqualTo("PNG"),
+				() -> assertThat(firstMediaFile.getDetailType().name()).isEqualTo("PNG"),
 
 				() -> assertThat(contentsList.get(1).getId()).isEqualTo(2),
 				() -> assertThat(contentsList.get(1).getName()).isEqualTo("컨텐츠 이름2"),
@@ -450,7 +450,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> assertThat(secondMediaFile.getVideoStartTime()).isEqualTo("00100"),
 				() -> assertThat(secondMediaFile.getVideoPlayDuration()).isEqualTo(3),
 				() -> assertThat(secondMediaFile.isPlayableVideo()).isEqualTo(true),
-				() -> assertThat(secondMediaFile.getVideoDetailType().name()).isEqualTo("YOU_TUBE_URL")
+				() -> assertThat(secondMediaFile.getDetailType().name()).isEqualTo("YOU_TUBE_URL")
 			);
 		}
 
