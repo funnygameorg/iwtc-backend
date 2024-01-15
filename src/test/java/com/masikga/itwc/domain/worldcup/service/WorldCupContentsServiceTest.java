@@ -755,21 +755,21 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
 				.name("컨텐츠1")
 				.worldCupGame(worldCupGame)
-				.gameRank(1)
+				.gameRank(0)
 				.gameScore(150)
 				.mediaFile(mediaFile1)
 				.build();
 			WorldCupGameContents contents2 = WorldCupGameContents.builder()
 				.name("컨텐츠2")
 				.worldCupGame(worldCupGame)
-				.gameRank(1)
+				.gameRank(0)
 				.gameScore(112)
 				.mediaFile(mediaFile2)
 				.build();
 			WorldCupGameContents contents3 = WorldCupGameContents.builder()
 				.name("컨텐츠3")
 				.worldCupGame(worldCupGame)
-				.gameRank(1)
+				.gameRank(0)
 				.gameScore(320)
 				.mediaFile(mediaFile3)
 				.build();
@@ -788,15 +788,17 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				() -> assertThat(result.get(0).contentsName()).isEqualTo("컨텐츠3"),
 				() -> assertThat(result.get(0).gameScore()).isEqualTo(320),
 				() -> assertThat(result.get(0).mediaFileId()).isEqualTo(3),
+				() -> assertThat(result.get(0).gameRank()).isEqualTo(1),
 
 				() -> assertThat(result.get(1).contentsName()).isEqualTo("컨텐츠1"),
 				() -> assertThat(result.get(1).gameScore()).isEqualTo(150),
 				() -> assertThat(result.get(1).mediaFileId()).isEqualTo(1),
+				() -> assertThat(result.get(1).gameRank()).isEqualTo(2),
 
 				() -> assertThat(result.get(2).contentsName()).isEqualTo("컨텐츠2"),
 				() -> assertThat(result.get(2).gameScore()).isEqualTo(112),
-				() -> assertThat(result.get(2).mediaFileId()).isEqualTo(2)
-
+				() -> assertThat(result.get(2).mediaFileId()).isEqualTo(2),
+				() -> assertThat(result.get(2).gameRank()).isEqualTo(3)
 			);
 
 		}

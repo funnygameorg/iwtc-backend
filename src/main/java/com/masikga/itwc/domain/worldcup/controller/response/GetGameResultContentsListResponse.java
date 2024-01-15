@@ -19,13 +19,14 @@ public record GetGameResultContentsListResponse(
 
 ) {
 
-	public static GetGameResultContentsListResponse fromEntity(WorldCupGameContents worldCupGameContents) {
+	public static GetGameResultContentsListResponse fromEntity(WorldCupGameContents worldCupGameContents,
+		Integer rank) {
 
 		return GetGameResultContentsListResponse.builder()
 			.id(worldCupGameContents.getId())
 			.contentsName(worldCupGameContents.getName())
 			.mediaFileId(worldCupGameContents.getMediaFile().getId())
-			.gameRank(worldCupGameContents.getGameRank())
+			.gameRank(rank)
 			.gameScore(worldCupGameContents.getGameScore())
 			.build();
 

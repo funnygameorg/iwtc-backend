@@ -5,6 +5,7 @@ import static java.util.Comparator.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -230,11 +231,12 @@ public class WorldCupGameContentsService {
 
 		var contentsList = worldCupGameContentsRepository.findAllByWorldCupGame(worldCupGame);
 
-		return contentsList.stream()
-			.sorted(comparing(WorldCupGameContents::getGameScore, reverseOrder()))
-			.map(GetGameResultContentsListResponse::fromEntity)
-			.toList();
+		// TODO : 랭크 계산 람다 활용하기
+		contentsList.sort(comparing(WorldCupGameContents::getGameScore, reverseOrder()));
 
+		return IntStream.range(0, contentsList.size())
+			.mapToObj(index -> GetGameResultContentsListResponse.fromEntity(contentsList.get(index), index + 1))
+			.toList();
 	}
 
 }
