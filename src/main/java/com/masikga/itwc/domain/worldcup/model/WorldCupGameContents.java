@@ -10,12 +10,12 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.Where;
 
+import com.google.common.base.Objects;
 import com.masikga.itwc.common.jpa.TimeBaseEntity;
 import com.masikga.itwc.domain.etc.model.InternetVideoUrl;
 import com.masikga.itwc.domain.etc.model.MediaFile;
 import com.masikga.itwc.domain.etc.model.StaticMediaFile;
 import com.masikga.itwc.domain.worldcup.model.vo.VisibleType;
-import com.google.common.base.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -90,6 +90,7 @@ public class WorldCupGameContents extends TimeBaseEntity {
 		String videoStartTime,
 		Integer videoPlayDuration,
 		VisibleType visibleType,
+		String detailFileType,
 		String objectKey
 	) {
 
@@ -101,12 +102,12 @@ public class WorldCupGameContents extends TimeBaseEntity {
 		if (mediaFile instanceof StaticMediaFile) {
 
 			StaticMediaFile staticMediaFile = (StaticMediaFile)mediaFile;
-			staticMediaFile.update(objectKey, originalName);
+			staticMediaFile.update(objectKey, originalName, detailFileType);
 
 		} else {
 
 			InternetVideoUrl internetVideoUrl = (InternetVideoUrl)mediaFile;
-			internetVideoUrl.update(objectKey, videoStartTime, videoPlayDuration);
+			internetVideoUrl.update(objectKey, videoStartTime, videoPlayDuration, detailFileType);
 
 		}
 

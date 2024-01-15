@@ -63,7 +63,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 						"ORIGINAL" + idx,
 						"ABSOLUTE" + idx,
 						"s3://abc/",
-						".png"))
+						"MP4"))
 				.toList();
 			List<InternetVideoUrl> internetMovieUrls = range(5, 9)
 				.mapToObj(idx ->
@@ -72,6 +72,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 						.isPlayableVideo(true)
 						.videoStartTime("00000")
 						.videoPlayDuration(3)
+						.videoDetailType("YOU_TUBE_URL")
 						.build()
 				).toList();
 			List<WorldCupGameContents> contentsListWithMediaFile = range(1, 5)
@@ -153,7 +154,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 						"ORIGINAL" + idx,
 						"ABSOLUTE" + idx,
 						"s3://abc/",
-						".png"))
+						"JPEG"))
 				.toList();
 			List<InternetVideoUrl> internetMovieUrls = range(5, 14)
 				.mapToObj(idx ->
@@ -162,6 +163,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 						.videoPlayDuration(3)
 						.videoStartTime("00001")
 						.objectKey("path/" + idx)
+						.videoDetailType("YOU_TUBE_URL")
 						.build())
 				.toList();
 			List<WorldCupGameContents> contentsListWithMediaFiles = range(1, 4)
@@ -244,7 +246,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 						"ORIGINAL" + idx,
 						"ABSOLUTE" + idx,
 						"s3://abc/",
-						".png"))
+						"GIF"))
 				.collect(toList());
 			List<WorldCupGameContents> contentsList = range(1, 13)
 				.mapToObj(idx ->

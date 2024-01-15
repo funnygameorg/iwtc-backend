@@ -70,12 +70,12 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("filePath")
-				.extension("extension")
+				.extension("JPG")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -130,22 +130,22 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 			StaticMediaFile mediaFile4 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -219,17 +219,17 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 
 			InternetVideoUrl internetMovieUrl1 = InternetVideoUrl.builder()
@@ -237,18 +237,21 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/1")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl2 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/2")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl3 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/3")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -334,17 +337,17 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("GIF")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("GIF")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("GIF")
 				.build();
 
 			InternetVideoUrl internetMovieUrl1 = InternetVideoUrl.builder()
@@ -352,18 +355,21 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/1")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl2 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/2")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl3 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/3")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -450,17 +456,17 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 
 			InternetVideoUrl internetMovieUrl1 = InternetVideoUrl.builder()
@@ -468,18 +474,21 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/1")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl2 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/2")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl3 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/3")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -570,17 +579,17 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 
 			InternetVideoUrl internetMovieUrl1 = InternetVideoUrl.builder()
@@ -588,18 +597,21 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/1")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl2 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/2")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 			InternetVideoUrl internetMovieUrl3 = InternetVideoUrl.builder()
 				.isPlayableVideo(true)
 				.videoStartTime("00001")
 				.videoPlayDuration(3)
 				.objectKey("https://youtube/cats/3")
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()

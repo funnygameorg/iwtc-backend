@@ -36,7 +36,7 @@ import com.masikga.itwc.domain.worldcup.repository.WorldCupGameContentsRepositor
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameRepository;
 import com.masikga.itwc.helper.DataBaseCleanUp;
 import com.masikga.itwc.helper.testbase.IntegrationBaseTest;
-import com.masikga.itwc.infra.filestorage.S3Component;
+import com.masikga.itwc.infra.filestorage.FileStorage;
 
 public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 
@@ -49,7 +49,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 	@Autowired
 	private WorldCupGameContentsRepository worldCupGameContentsRepository;
 	@MockBean
-	private S3Component s3Component;
+	private FileStorage s3Component;
 	@Autowired
 	private DataBaseCleanUp dataBaseCleanUp;
 
@@ -75,12 +75,12 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("https://www.abc.com/BS/1")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("https://www.abc.com/BS/2")
-				.extension("extension")
+				.extension("PNG")
 				.build();
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
 				.name("컨텐츠1")
@@ -147,13 +147,13 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 			StaticMediaFile mediaFile1 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("filePath")
-				.extension("extension")
+				.extension("GIF")
 				.build();
 
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("filePath")
-				.extension("extension")
+				.extension("GIF")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -241,7 +241,6 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> worldCupBasedOnAuthService.putMyWorldCup(request, 2L, 1L)
 			);
 		}
-
 	}
 
 	@Nested
@@ -383,6 +382,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 						.fileType(STATIC_MEDIA_FILE)
 						.mediaData("base64:jpg...abcd")
 						.originalName("Original1")
+						.detailFileType("PNG")
 						.build()
 				)
 				.build();
@@ -396,6 +396,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 						.mediaData("https://filepaths/2")
 						.videoPlayDuration(3)
 						.videoStartTime("00100")
+						.detailFileType("YOU_TUBE_URL")
 						.build()
 				)
 				.build();
@@ -435,7 +436,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> assertThat(firstMediaFile.getObjectKey()).isNotNull(),
 				() -> assertThat(firstMediaFile.getFileType()).isEqualTo(STATIC_MEDIA_FILE),
 				() -> assertThat(firstMediaFile.getOriginalName()).isEqualTo("Original1"),
-				() -> assertThat(firstMediaFile.getExtension()).isEqualTo("tempExtension"),
+				() -> assertThat(firstMediaFile.getDetailType().name()).isEqualTo("PNG"),
 
 				() -> assertThat(contentsList.get(1).getId()).isEqualTo(2),
 				() -> assertThat(contentsList.get(1).getName()).isEqualTo("컨텐츠 이름2"),
@@ -448,7 +449,8 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> assertThat(secondMediaFile.getFileType()).isEqualTo(INTERNET_VIDEO_URL),
 				() -> assertThat(secondMediaFile.getVideoStartTime()).isEqualTo("00100"),
 				() -> assertThat(secondMediaFile.getVideoPlayDuration()).isEqualTo(3),
-				() -> assertThat(secondMediaFile.isPlayableVideo()).isEqualTo(true)
+				() -> assertThat(secondMediaFile.isPlayableVideo()).isEqualTo(true),
+				() -> assertThat(secondMediaFile.getDetailType().name()).isEqualTo("YOU_TUBE_URL")
 			);
 		}
 
@@ -465,6 +467,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 						.fileType(STATIC_MEDIA_FILE)
 						.mediaData("https://filepaths/1")
 						.originalName("Original1")
+						.detailFileType("GIF")
 						.build()
 				)
 				.build();
@@ -478,6 +481,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 						.mediaData("https://filepaths/2")
 						.videoPlayDuration(3)
 						.videoStartTime("00100")
+						.detailFileType("YOU_TUBE_URL")
 						.build()
 				)
 				.build();
@@ -507,6 +511,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 						.fileType(STATIC_MEDIA_FILE)
 						.mediaData("https://filepaths/1")
 						.originalName("Original1")
+						.detailFileType("JPG")
 						.build()
 				)
 				.build();
@@ -520,6 +525,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 						.mediaData("https://filepaths/2")
 						.videoPlayDuration(3)
 						.videoStartTime("00100")
+						.detailFileType("YOU_TUBE_URL")
 						.build()
 				)
 				.build();
@@ -543,5 +549,6 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 			);
 
 		}
+
 	}
 }

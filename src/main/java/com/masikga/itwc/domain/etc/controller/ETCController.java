@@ -149,6 +149,8 @@ public class ETCController {
 
 	@Operation(
 		summary = "미디어 파일 1건 반환",
+		description = "detailType 응답 종류 : [GIF, PNG, JPEG, JPG, YOU_TUBE_URL] "
+			+ "Local 브랜치 swagger에서는 10번 ~ 13번 미디어 파일만 요청해주세요.",
 		responses = {
 			@ApiResponse(
 				responseCode = "200",
@@ -168,25 +170,6 @@ public class ETCController {
 		var response = mediaFileService.getMediaFile(mediaFileId);
 		return new RestApiResponse(1, "미디어 파일 조회", response);
 
-	}
-
-	@Operation(
-		summary = "미디어 파일 리스트 반환",
-		responses = {
-			@ApiResponse(
-				responseCode = "200",
-				description = "미디어 파일 조회"
-			),
-		}
-	)
-	@GetMapping("/media-files")
-	@ResponseStatus(OK)
-	public RestApiResponse<List<MediaFileResponse>> getMediaFiles(
-		@RequestParam List<Long> mediaFileIds
-	) {
-
-		var response = mediaFileService.getMediaFile(mediaFileIds);
-		return new RestApiResponse(1, "미디어 파일 조회", response);
 	}
 
 	@Operation(

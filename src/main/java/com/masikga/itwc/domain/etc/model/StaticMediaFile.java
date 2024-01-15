@@ -1,14 +1,16 @@
 package com.masikga.itwc.domain.etc.model;
 
+import static com.masikga.itwc.domain.etc.model.vo.FileType.*;
 import static java.util.Objects.*;
 import static lombok.AccessLevel.*;
 
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
-import com.masikga.itwc.common.error.exception.NotNullArgumentException;
 import com.google.common.base.Objects;
-import com.masikga.itwc.domain.etc.model.vo.FileType;
+import com.masikga.itwc.common.error.exception.NotNullArgumentException;
+import com.masikga.itwc.domain.etc.exception.NotSupportedFileExtensionException;
+import com.masikga.itwc.domain.etc.model.vo.MediaFileExtension;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -29,27 +31,25 @@ public class StaticMediaFile extends MediaFile {
 	@NotBlank
 	private String originalName;
 
-	@Comment("파일 확장자")
-	@NotNull
-	@NotBlank
-	private String extension;
+	public void update(String objectKey, String originalName, String detailFileType) {
 
-	public void update(String objectKey, String originalName) {
-
-		if (isNull(objectKey) || isNull(originalName)) {
+		if (isNull(objectKey) || isNull(originalName) || isNull(detailFileType)) {
 			throw new NotNullArgumentException(objectKey, originalName);
+		}
+
+		if (!MediaFileExtension.isSupportedType(detailFileType)) {
+			throw new NotSupportedFileExtensionException(detailFileType);
 		}
 
 		super.objectKey = objectKey;
 		this.originalName = originalName;
-
+		super.detailType = MediaFileExtension.valueOf(detailFileType);
 	}
 
 	@Builder
 	public StaticMediaFile(String originalName, String extension, Long id, String objectKey, String bucketName) {
-		super(id, objectKey, FileType.STATIC_MEDIA_FILE, bucketName);
+		super(id, objectKey, STATIC_MEDIA_FILE, bucketName, MediaFileExtension.valueOf(extension));
 		this.originalName = originalName;
-		this.extension = extension;
 	}
 
 	@Override
@@ -62,12 +62,12 @@ public class StaticMediaFile extends MediaFile {
 
 		return Objects.equal(objectKey, other.getObjectKey())
 			&& Objects.equal(getObjectKey(), other.getObjectKey())
-			&& Objects.equal(extension, other.getExtension());
+			&& Objects.equal(detailType, other.getDetailType());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(objectKey, getObjectKey(), extension);
+		return Objects.hashCode(objectKey, getObjectKey(), detailType);
 
 	}
 }

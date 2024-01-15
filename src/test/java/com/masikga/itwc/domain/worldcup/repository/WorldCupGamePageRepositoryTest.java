@@ -73,7 +73,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 					createMediaFile("originalName" + idx,
 						"A345ytgs32eff1",
 						"https://s3.dsfwwg4fsesef1/aawr.com",
-						".png"
+						"JPG"
 					)
 				)
 				.toList();
@@ -187,7 +187,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 					createMediaFile("originalName" + idx,
 						"A345ytgs32eff1",
 						"https://s3.dsfwwg4fsesef1/aawr.com",
-						".png"
+						"JPEG"
 					)
 				)
 				.toList();
@@ -255,7 +255,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 					createMediaFile("originalName" + idx,
 						"A345ytgs32eff1",
 						"https://s3.dsfwwg4fsesef1/aawr.com",
-						".png"
+						"MP4"
 					)
 				)
 				.toList();
@@ -315,7 +315,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 					createMediaFile("originalName" + idx,
 						"A345ytgs32eff1",
 						"https://s3.dsfwwg4fsesef1/aawr.com",
-						".png"
+						"MP4"
 					)
 				)
 				.toList();
@@ -378,7 +378,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 				createMediaFile("originalName" + idx,
 					"A345ytgs32eff1",
 					"https://s3.dsfwwg4fsesef1/aawr.com",
-					".png"
+					"PNG"
 				)
 			)
 			.toList();
@@ -388,7 +388,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 				createMediaFile("originalName" + idx,
 					"absolute",
 					"https://s3.public/aawr.com",
-					".png"
+					"GIF"
 				)
 			)
 			.toList();

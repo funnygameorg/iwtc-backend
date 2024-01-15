@@ -109,7 +109,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
 			List<StaticMediaFile> mediaFiles = IntStream.range(1, 4)
 				.mapToObj(idx -> StaticMediaFile.builder()
 					.originalName("original")
-					.extension(".png")
+					.extension("MP4")
 					.objectKey("filePath")
 					.build())
 				.toList();
@@ -179,7 +179,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
 			var mediaFile = StaticMediaFile.builder()
 				.objectKey("testObjectKey")
 				.originalName("originalName")
-				.extension("extension")
+				.extension("GIF")
 				.build();
 
 			var gameContents = WorldCupGameContents.builder()
@@ -212,7 +212,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
 			var mediaFile = StaticMediaFile.builder()
 				.objectKey("testObjectKey")
 				.originalName("originalName")
-				.extension("extension")
+				.extension("JPEG")
 				.build();
 
 			var gameContents = WorldCupGameContents.builder()
@@ -254,7 +254,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
 				.mapToObj(idx -> StaticMediaFile.builder()
 					.originalName("original")
 					.objectKey("filePath")
-					.extension(".png")
+					.extension("PNG")
 					.build())
 				.toList();
 			List<WorldCupGameContents> contentsList = IntStream.range(1, 4)
@@ -296,7 +296,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
 				.mapToObj(idx -> StaticMediaFile.builder()
 					.originalName("original")
 					.objectKey("filePath")
-					.extension(".png")
+					.extension("PNG")
 					.build())
 				.toList();
 			List<WorldCupGameContents> contentsList = IntStream.range(1, 4)

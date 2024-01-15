@@ -86,6 +86,7 @@ public class WorldCupBasedOnAuthControllerTest extends WebMvcBaseTest {
 						.mediaData("https://www.naver.com/apples/13")
 						.videoPlayDuration(3)
 						.videoStartTime("00011")
+						.detailFileType("YOU_TUBE_URL")
 						.build()
 				)
 				.build();
@@ -99,6 +100,7 @@ public class WorldCupBasedOnAuthControllerTest extends WebMvcBaseTest {
 						.mediaData("https://www.naver.com/apples/13")
 						.videoPlayDuration(3)
 						.videoStartTime("00011")
+						.detailFileType("PNG")
 						.build()
 				)
 				.build();

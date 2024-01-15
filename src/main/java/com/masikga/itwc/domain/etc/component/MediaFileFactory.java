@@ -19,37 +19,41 @@ public class MediaFileFactory {
 	 * @param originalName 사용자가 제공한 원래 파일 이름 (`staticMediaFile`에서 사용)
 	 * @param videoPlayDuration 영상 반복 구간 (`InternetVideoUrl`에서 사용)
 	 * @param videoStartTime 영상 시작 시간 (`InternetVideoUrl`에서 사용)
+	 * @param detailFileType 미디어 파일의 자세한 형태 (PNG, GIF, YOU_TUBE...)
 	 * @return `MediaFile` 구현체
 	 */
 	public MediaFile createMediaFile(
-		FileType fileType,
 		String objectKey,
 		String originalName,
 		Integer videoPlayDuration,
-		String videoStartTime
-	) {
+		String videoStartTime,
+		FileType fileType,
+		String detailFileType) {
 
 		return switch (fileType) {
-			case STATIC_MEDIA_FILE -> createStaticMediaFile(objectKey, originalName);
-			case INTERNET_VIDEO_URL -> createInternetVideoUrl(objectKey, videoPlayDuration, videoStartTime);
+			case STATIC_MEDIA_FILE -> createStaticMediaFile(objectKey, originalName, detailFileType);
+			case INTERNET_VIDEO_URL ->
+				createInternetVideoUrl(objectKey, videoPlayDuration, videoStartTime, detailFileType);
 		};
 
 	}
 
-	private StaticMediaFile createStaticMediaFile(String objectKey, String originalName) {
+	private StaticMediaFile createStaticMediaFile(String objectKey, String originalName, String detailFileType) {
 		return StaticMediaFile.builder()
 			.objectKey(objectKey)
-			.extension("tempExtension")
 			.originalName(originalName)
+			.extension(detailFileType)
 			.build();
 	}
 
-	private InternetVideoUrl createInternetVideoUrl(String objectKey, int videoPlayDuration, String videoStartTime) {
+	private InternetVideoUrl createInternetVideoUrl(String objectKey, int videoPlayDuration, String videoStartTime,
+		String detailFileType) {
 		return InternetVideoUrl.builder()
 			.objectKey(objectKey)
 			.isPlayableVideo(true)
 			.videoPlayDuration(videoPlayDuration)
 			.videoStartTime(videoStartTime)
+			.videoDetailType(detailFileType)
 			.build();
 	}
 

@@ -4,16 +4,19 @@ import java.util.List;
 
 import com.masikga.itwc.domain.etc.model.vo.FileType;
 import com.masikga.itwc.domain.worldcup.controller.validator.VerifyVisibleType;
+import com.masikga.itwc.domain.worldcup.controller.validator.worldcupcontents.VerifyCreateDetailFileType;
 import com.masikga.itwc.domain.worldcup.controller.validator.worldcupcontents.VerifyWorldCupContentsName;
 import com.masikga.itwc.domain.worldcup.model.vo.VisibleType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
 @Schema
 public record CreateWorldCupContentsRequest(
+	@Valid
 	List<CreateContentsRequest> data
 ) {
 
@@ -26,6 +29,7 @@ public record CreateWorldCupContentsRequest(
 		@VerifyVisibleType
 		VisibleType visibleType,
 
+		@Valid
 		CreateMediaFileRequest createMediaFileRequest
 	) {
 	}
@@ -35,6 +39,9 @@ public record CreateWorldCupContentsRequest(
 	public record CreateMediaFileRequest(
 
 		FileType fileType,
+
+		@VerifyCreateDetailFileType
+		String detailFileType,
 
 		@Schema(description = "월드컵 컨텐츠 파일명")
 		@NotBlank(message = "월드컵 컨텐츠 파일 이름: 필수 값")

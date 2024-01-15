@@ -7,7 +7,9 @@ import java.util.Objects;
 import org.hibernate.annotations.Comment;
 
 import com.masikga.itwc.common.error.exception.NotNullArgumentException;
+import com.masikga.itwc.domain.etc.exception.NotSupportedFileExtensionException;
 import com.masikga.itwc.domain.etc.model.vo.FileType;
+import com.masikga.itwc.domain.etc.model.vo.MediaFileExtension;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,11 +23,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- *  startTime example
- *      1. 00001 : 000분 01초
- *      2. 00101 : 001분 01초
- *      3. 02000 : 020분 00초
- *      4. 00113 : 001분 13초
+ * startTime example
+ * 1. 00001 : 000분 01초
+ * 2. 00101 : 001분 01초
+ * 3. 02000 : 020분 00초
+ * 4. 00113 : 001분 13초
  */
 @Getter
 @Entity
@@ -48,23 +50,37 @@ public class InternetVideoUrl extends MediaFile {
 	@Max(value = 5, message = "영상 재생 시간은 2 ~ 5초 입니다.")
 	private Integer videoPlayDuration;
 
-	public void update(String objectKey, String videoStartTime, Integer videoPlayDuration) {
+	public void update(String objectKey, String videoStartTime, Integer videoPlayDuration, String detailFileType) {
 
 		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
 			throw new NotNullArgumentException(objectKey, videoStartTime, videoPlayDuration);
 		}
 
+		if (!MediaFileExtension.isSupportedType(detailFileType)) {
+			throw new NotSupportedFileExtensionException(detailFileType);
+		}
+
 		super.objectKey = objectKey;
 		this.videoStartTime = videoStartTime;
 		this.videoPlayDuration = videoPlayDuration;
+		super.detailType = MediaFileExtension.valueOf(detailFileType);
 
 	}
 
 	@Builder
 	private InternetVideoUrl(Long id, String objectKey, boolean isPlayableVideo, String videoStartTime,
-		Integer videoPlayDuration, String bucketName) {
+		Integer videoPlayDuration, String bucketName, String videoDetailType) {
 
-		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName);
+		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName, MediaFileExtension.valueOf(videoDetailType));
+
+		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
+			throw new NotNullArgumentException(objectKey, videoStartTime, videoPlayDuration);
+		}
+
+		if (!MediaFileExtension.isSupportedType(videoDetailType)) {
+			throw new NotSupportedFileExtensionException(videoDetailType);
+		}
+
 		this.isPlayableVideo = isPlayableVideo;
 		this.videoStartTime = videoStartTime;
 		this.videoPlayDuration = videoPlayDuration;

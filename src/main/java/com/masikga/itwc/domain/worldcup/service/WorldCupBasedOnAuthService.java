@@ -24,7 +24,7 @@ import com.masikga.itwc.domain.worldcup.model.WorldCupGame;
 import com.masikga.itwc.domain.worldcup.model.WorldCupGameContents;
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameContentsRepository;
 import com.masikga.itwc.domain.worldcup.repository.WorldCupGameRepository;
-import com.masikga.itwc.infra.filestorage.S3Component;
+import com.masikga.itwc.infra.filestorage.FileStorage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class WorldCupBasedOnAuthService {
 	private final MediaFileRepository mediaFileRepository;
 	private final MediaFileFactory mediaFileFactory;
 	private final RandomDataGeneratorInterface randomDataGenerator;
-	private final S3Component s3Component;
+	private final FileStorage s3Component;
 
 	public List<GetWorldCupContentsResponse> getMyWorldCupGameContents(long worldCupId, long memberId) {
 
@@ -124,7 +124,7 @@ public class WorldCupBasedOnAuthService {
 		}
 
 		List<WorldCupGameContents> newContentsList = createNewContentsList(request, worldCupGame);
-		List<MediaFile> newMediaFiles = newContentsList.stream().map(contents -> contents.getMediaFile()).toList();
+		List<MediaFile> newMediaFiles = newContentsList.stream().map(WorldCupGameContents::getMediaFile).toList();
 
 		mediaFileRepository.saveAll(newMediaFiles);
 		worldCupGameContentsRepository.saveAll(newContentsList);
@@ -147,11 +147,12 @@ public class WorldCupBasedOnAuthService {
 					s3Component.putObject(mediaFileRequest.mediaData(), objectKey);
 
 					MediaFile newMediaFile = mediaFileFactory.createMediaFile(
-						mediaFileRequest.fileType(),
 						objectKey,
 						mediaFileRequest.originalName(),
 						mediaFileRequest.videoPlayDuration(),
-						mediaFileRequest.videoStartTime()
+						mediaFileRequest.videoStartTime(),
+						mediaFileRequest.fileType(),
+						mediaFileRequest.detailFileType()
 					);
 
 					return WorldCupGameContents.createNewContents(
@@ -225,6 +226,7 @@ public class WorldCupBasedOnAuthService {
 			request.videoStartTime(),
 			request.videoPlayDuration(),
 			request.visibleType(),
+			request.detailFileType(),
 			objectKey
 		);
 

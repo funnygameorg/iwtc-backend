@@ -26,7 +26,7 @@ public class WorldCupGameContentsTest {
 
 			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
 				.originalName("붕어빵.JPG")
-				.extension("jpg")
+				.extension("JPG")
 				.objectKey("ABC-9910")
 				.bucketName("IMAGES")
 				.build();
@@ -46,6 +46,7 @@ public class WorldCupGameContentsTest {
 				null,
 				null,
 				PUBLIC,
+				"PNG",
 				"CDA-1212"
 			);
 
@@ -54,6 +55,7 @@ public class WorldCupGameContentsTest {
 				() -> assertThat(contents.getVisibleType()).isEqualTo(PUBLIC),
 				() -> assertThat(contents.getName()).isEqualTo("초코빵 컨텐츠"),
 				() -> assertThat(staticMediaFile.getOriginalName()).isEqualTo("choco!"),
+				() -> assertThat(staticMediaFile.getDetailType().name()).isEqualTo("PNG"),
 				() -> assertThat(staticMediaFile.getObjectKey()).isEqualTo("CDA-1212")
 			);
 		}
@@ -67,6 +69,7 @@ public class WorldCupGameContentsTest {
 				.videoStartTime("10100")
 				.videoPlayDuration(5)
 				.isPlayableVideo(true)
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents = WorldCupGameContents.builder()
@@ -84,6 +87,7 @@ public class WorldCupGameContentsTest {
 				"00105",
 				3,
 				PUBLIC,
+				"YOU_TUBE_URL",
 				"ZZQ-1212"
 			);
 
@@ -92,6 +96,7 @@ public class WorldCupGameContentsTest {
 				() -> assertThat(contents.getVisibleType()).isEqualTo(PUBLIC),
 				() -> assertThat(internetVideoUrl.getVideoStartTime()).isEqualTo("00105"),
 				() -> assertThat(internetVideoUrl.getVideoPlayDuration()).isEqualTo(3),
+				() -> assertThat(internetVideoUrl.getDetailType().name()).isEqualTo("YOU_TUBE_URL"),
 				() -> assertThat(internetVideoUrl.getObjectKey()).isEqualTo("ZZQ-1212")
 			);
 		}
@@ -102,7 +107,7 @@ public class WorldCupGameContentsTest {
 
 			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
 				.originalName("붕어빵.JPG")
-				.extension("jpg")
+				.extension("JPG")
 				.objectKey("ABC-9910")
 				.bucketName("IMAGES")
 				.build();
@@ -124,13 +129,14 @@ public class WorldCupGameContentsTest {
 					null,
 					null,
 					PUBLIC,
+					"YOU_TUBE_URL",
 					null
 				)
 			);
 		}
 
 		@Test
-		@DisplayName(EXCEPTION_PREFIX + "인터넷 비디오 컨텐츠 수정에서 `영상 시작 시간`, `반복 구간`, `S3 식별자`가 없으면 안된다.")
+		@DisplayName(EXCEPTION_PREFIX + "인터넷 비디오 컨텐츠 수정에서 `영상 시작 시간`, `반복 구간`, `S3 식별자`, `디테일 파일 타입`이 없으면 안된다.")
 		public void fail2() {
 
 			InternetVideoUrl internetVideoUrl = InternetVideoUrl.builder()
@@ -138,6 +144,7 @@ public class WorldCupGameContentsTest {
 				.videoStartTime("00100")
 				.videoPlayDuration(5)
 				.isPlayableVideo(true)
+				.videoDetailType("YOU_TUBE_URL")
 				.build();
 
 			WorldCupGameContents contents = WorldCupGameContents.builder()
@@ -157,6 +164,7 @@ public class WorldCupGameContentsTest {
 					null,
 					null,
 					PUBLIC,
+					null,
 					null
 				)
 			);

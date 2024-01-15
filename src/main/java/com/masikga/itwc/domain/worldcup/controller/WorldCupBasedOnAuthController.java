@@ -276,6 +276,7 @@ public class WorldCupBasedOnAuthController {
 	) {
 
 		worldCupBasedOnAuthService.createMyWorldCupContents(request, worldCupId, memberDto.get().getId());
+
 		return new RestApiResponse(1, "게임 생성", null);
 
 	}

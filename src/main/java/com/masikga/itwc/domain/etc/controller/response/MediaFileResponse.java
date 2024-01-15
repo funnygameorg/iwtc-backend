@@ -8,10 +8,12 @@ import com.masikga.itwc.domain.etc.model.vo.FileType;
 public record MediaFileResponse(
 	long mediaFileId,
 	FileType fileType,
+
 	String mediaData,
 	String originalName,
 	String videoStartTime,
 	Integer videoPlayDuration,
+	String detailType,
 	LocalDateTime createdAt,
 	LocalDateTime updatedAt
 ) {
@@ -28,6 +30,7 @@ public record MediaFileResponse(
 			mediaFile.originalName(),
 			mediaFile.videoStartTime(),
 			mediaFile.videoPlayDuration(),
+			mediaFile.detailType(),
 			mediaFile.createdAt(),
 			mediaFile.updatedAt()
 		);
