@@ -3,7 +3,7 @@ package com.masikga.itwc.domain.member.controller.response;
 import com.masikga.itwc.common.web.memberresolver.MemberDto;
 
 public record GetMySummaryResponse(
-	Long id,
+	Long memberId,
 	String serviceId,
 	String nickname
 ) {

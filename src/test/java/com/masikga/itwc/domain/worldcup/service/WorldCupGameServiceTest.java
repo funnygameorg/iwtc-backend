@@ -539,9 +539,9 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			// then
 
 			assertThat(result.getContent().size()).isEqualTo(3);
-			assertThat(result.getContent().get(0).id()).isEqualTo(2);
-			assertThat(result.getContent().get(1).id()).isEqualTo(3);
-			assertThat(result.getContent().get(2).id()).isEqualTo(1);
+			assertThat(result.getContent().get(0).worldCupId()).isEqualTo(2);
+			assertThat(result.getContent().get(1).worldCupId()).isEqualTo(3);
+			assertThat(result.getContent().get(2).worldCupId()).isEqualTo(1);
 		}
 
 		@Test
@@ -662,9 +662,9 @@ public class WorldCupGameServiceTest implements IntegrationBaseTest {
 			// then
 
 			assertThat(result.getContent().size()).isEqualTo(3);
-			assertThat(result.getContent().get(0).id()).isEqualTo(3);
-			assertThat(result.getContent().get(1).id()).isEqualTo(2);
-			assertThat(result.getContent().get(2).id()).isEqualTo(1);
+			assertThat(result.getContent().get(0).worldCupId()).isEqualTo(3);
+			assertThat(result.getContent().get(1).worldCupId()).isEqualTo(2);
+			assertThat(result.getContent().get(2).worldCupId()).isEqualTo(1);
 		}
 
 	}

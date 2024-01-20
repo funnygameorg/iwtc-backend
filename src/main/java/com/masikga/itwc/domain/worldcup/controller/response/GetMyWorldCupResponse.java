@@ -3,7 +3,7 @@ package com.masikga.itwc.domain.worldcup.controller.response;
 import com.masikga.itwc.domain.worldcup.model.WorldCupGame;
 
 public record GetMyWorldCupResponse(
-	Long id,
+	Long worldCupId,
 	String title,
 	String description
 ) {
