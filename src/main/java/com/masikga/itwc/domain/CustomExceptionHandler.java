@@ -11,9 +11,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.masikga.itwc.common.error.CustomErrorCode;
 import com.masikga.itwc.common.error.CustomErrorResponse;
 import com.masikga.itwc.common.error.exception.BaseException;
-import com.masikga.itwc.common.error.CustomErrorCode;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -38,7 +38,7 @@ public class CustomExceptionHandler {
 			.badRequest()
 			.body(CustomErrorResponse.builder()
 				.errorCode(CustomErrorCode.INVALID_CLIENT_REQUEST_BODY.getCode())
-				.message(CustomErrorCode.INVALID_CLIENT_REQUEST_BODY.getMessage() + " " + invalidRequestMessage)
+				.message(invalidRequestMessage)
 				.errorTime(LocalDateTime.now())
 				.errorId(randomUUID().toString())
 				.build()

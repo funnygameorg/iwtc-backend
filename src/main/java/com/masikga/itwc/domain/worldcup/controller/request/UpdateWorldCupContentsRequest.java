@@ -4,13 +4,15 @@ import com.masikga.itwc.domain.worldcup.controller.validator.worldcupcontents.Ve
 import com.masikga.itwc.domain.worldcup.controller.validator.worldcupcontents.VerifyWorldCupContentsName;
 import com.masikga.itwc.domain.worldcup.model.vo.VisibleType;
 
+import lombok.Builder;
+
+@Builder
 public record UpdateWorldCupContentsRequest(
 
 	@VerifyWorldCupContentsName
 	String contentsName,
 	String originalName,
 	String mediaData,
-
 	@VerifyCreateDetailFileType
 	String detailFileType,
 	String videoStartTime,

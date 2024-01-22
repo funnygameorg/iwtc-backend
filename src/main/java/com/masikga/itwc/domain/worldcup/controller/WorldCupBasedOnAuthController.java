@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 	name = "WorldCup based on auth",
 	description = "사용자의 인증이 필수적인 월드컵 관련 API"
 )
+@Validated
 @RestController
 @RequestMapping("/api/world-cups/me")
 @RequiredArgsConstructor
@@ -236,7 +238,7 @@ public class WorldCupBasedOnAuthController {
 	}
 
 	@Operation(
-		summary = "월드컵 컨텐츠 1건 이상 생성",
+		summary = "월드컵 컨텐츠 생성",
 		parameters = {
 			@Parameter(
 				name = "worldCupId",
@@ -331,7 +333,7 @@ public class WorldCupBasedOnAuthController {
 
 		var updateContentsId = worldCupBasedOnAuthService.updateMyWorldCupContents(request, worldCupId, contentsId,
 			memberDto.get().getId());
-		return new RestApiResponse(1, "게임 생성", updateContentsId);
+		return new RestApiResponse(1, "게임 수정", updateContentsId);
 
 	}
 
