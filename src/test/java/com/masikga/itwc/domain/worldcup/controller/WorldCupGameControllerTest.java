@@ -28,7 +28,6 @@ public class WorldCupGameControllerTest extends WebMvcBaseTest {
 						.queryParam("dateRange", dateRange.name())
 				)
 				.andExpect(status().isOk());
-			assert true;
 		}
 
 		@ParameterizedTest
@@ -45,21 +44,20 @@ public class WorldCupGameControllerTest extends WebMvcBaseTest {
 						.queryParam("dateRange", dateRange)
 				)
 				.andExpect(status().is5xxServerError());
-			assert true;
 		}
 
-		@ParameterizedTest
-		@CsvSource(value = {
-			"aaaaaaaaaaa"}
-		)
+		@Test
 		@DisplayName(EXCEPTION_PREFIX + " keyword : 길이 11개 초과 불가")
-		public void fail2(String keyword) throws Exception {
+		public void fail2() throws Exception {
+
+			var keyword = "aaaaaaaaaaa";
+			
 			mockMvc.perform(
 					get(WORLD_CUPS_PATH)
 						.queryParam("keyword", keyword)
 				)
-				.andExpect(status().isBadRequest());
-			assert true;
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.message").value("[월드컵 키워드 : 최소: 1, 최대 10]"));
 		}
 
 	}

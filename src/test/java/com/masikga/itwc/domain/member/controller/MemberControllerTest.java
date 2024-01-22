@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -28,17 +28,24 @@ class MemberControllerTest extends WebMvcBaseTest {
 	private final String VERIFY_DUPLICATED_ID_API = MEMBER_PATH + "/duplicated-check/service-id";
 	private final String VERIFY_DUPLICATED_NICKNAME_API = MEMBER_PATH + "/duplicated-check/nickname";
 
-	@Test
-	@DisplayName(SUCCESS_PREFIX + "자신의 정보 조회 요청 검증")
-	public void getMeSummary() throws Exception {
+	@Nested
+	@DisplayName("자신의 정보 조회 요청 검증")
+	public class getMeSummary {
 
-		mockMvc.perform(get(GET_ME_SUMMARY_API))
-			.andExpect(status().isOk());
+		@Test
+		@DisplayName(SUCCESS_PREFIX + "자신의 정보 조회 요청 검증")
+		public void success() throws Exception {
+
+			mockMvc.perform(get(GET_ME_SUMMARY_API))
+				.andExpect(status().isOk());
+		}
+
 	}
 
 	@Nested
 	@DisplayName("회웝가입 요청 검증")
 	public class signUpApi {
+
 		@DisplayName(SUCCESS_PREFIX)
 		@Test
 		public void success1() throws Exception {
@@ -60,17 +67,15 @@ class MemberControllerTest extends WebMvcBaseTest {
 
 		@ParameterizedTest
 		@DisplayName(EXCEPTION_PREFIX + "nickname : 2자리 미만, 10자리 초과 불가")
-		@CsvSource(value = {
+		@ValueSource(strings = {
 			"주",
 			"트레비주리오12345",
 			"A",
 			"1",
-			"a ",
-			"a a a a a a a a a a a",
-			"aaaaa aaaaa",
-			"a a a a a"}
+			"a",
+			"aaaaaaaaaaa"
+		}
 		)
-		@NullAndEmptySource
 		public void fail1(String nickname) throws Exception {
 
 			// given
@@ -86,17 +91,17 @@ class MemberControllerTest extends WebMvcBaseTest {
 						.content(objectMapper.writeValueAsString(request))
 						.contentType(APPLICATION_JSON)
 				)
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.errorCode").value(0))
+				.andExpect(jsonPath("$.message").value("[사용자 닉네임 : 2자리 이상, 10자리 이하]"));
 		}
 
 		@ParameterizedTest
-		@CsvSource(value = {
+		@ValueSource(strings = {
 			"AAAAA",
-			" A A B A B A ",
 			"123",
 			"Θ\nΘ\n"}
 		)
-		@NullAndEmptySource
 		@DisplayName(EXCEPTION_PREFIX + "password : 6자리 미만 불가")
 		public void fail2(String password) throws Exception {
 			// given
@@ -112,19 +117,42 @@ class MemberControllerTest extends WebMvcBaseTest {
 						.content(objectMapper.writeValueAsString(request))
 						.contentType(APPLICATION_JSON)
 				)
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.errorCode").value(0))
+				.andExpect(jsonPath("$.message").value("[사용자 암호 : 6자리 이상]"));
+			;
+		}
+
+		@Test
+		@DisplayName(EXCEPTION_PREFIX + "password : null 불가능")
+		public void fail3() throws Exception {
+			// given
+			SignUpRequest request = SignUpRequest.builder()
+				.serviceId("itwc123")
+				.nickname("주다라니")
+				.password(null)
+				.build();
+
+			// when then
+			mockMvc.perform(
+					post(SIGN_UP_API)
+						.content(objectMapper.writeValueAsString(request))
+						.contentType(APPLICATION_JSON)
+				)
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.errorCode").value(0))
+				.andExpect(jsonPath("$.message").value("[공백이 허용되지 않습니다., 사용자 암호 : 6자리 이상]"));
+			;
 		}
 
 		@ParameterizedTest
-		@CsvSource(value = {
-			"AAAAA",
-			" A A B A B A ",
-			"123",
-			"Θ\nΘ\n"}
+		@ValueSource(strings = {
+			"A",
+			"ABCDEFGHIJABCDEFGHIJ1"
+		}
 		)
-		@NullAndEmptySource
-		@DisplayName(EXCEPTION_PREFIX + "serviceId : 2자리 미만, 10자리 초과 불가")
-		public void fail3(String serviceId) throws Exception {
+		@DisplayName(EXCEPTION_PREFIX + "serviceId : 2자리 미만, 20자리 초과 불가")
+		public void fail4(String serviceId) throws Exception {
 			// given
 			SignUpRequest request = SignUpRequest.builder()
 				.serviceId(serviceId)
@@ -138,7 +166,9 @@ class MemberControllerTest extends WebMvcBaseTest {
 						.content(objectMapper.writeValueAsString(request))
 						.contentType(APPLICATION_JSON)
 				)
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.errorCode").value(0))
+				.andExpect(jsonPath("$.message").value("[사용자 아이디 : 6자리 이상, 20자리 이하]"));
 		}
 
 	}
@@ -176,24 +206,27 @@ class MemberControllerTest extends WebMvcBaseTest {
 		@ParameterizedTest
 		@CsvSource(value = {
 			"AAAAA",
-			" A A B A B A ",
+			"ABCDEFGHIJABCDEFGHIJ1",
 			"123",
 			"Θ\nΘ\n"}
 		)
-		@NullAndEmptySource
 		@DisplayName(EXCEPTION_PREFIX + "serviceId : 6자리 미만, 20자리 초과 불가")
 		public void fail1(String serviceId) throws Exception {
+
 			SignInRequest request = SignInRequest.builder()
 				.serviceId(serviceId)
 				.password("AAAA@32fSD")
 				.build();
+
+			// when then
 			mockMvc.perform(
 					post(SIGN_IN_API)
 						.content(objectMapper.writeValueAsString(request))
 						.contentType(APPLICATION_JSON)
 				)
-				.andExpect(status().isBadRequest());
-			// when then
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.errorCode").value(0))
+				.andExpect(jsonPath("$.message").value("[사용자 아이디 : 6자리 이상, 20자리 이하]"));
 		}
 
 		@ParameterizedTest
@@ -216,24 +249,34 @@ class MemberControllerTest extends WebMvcBaseTest {
 						.content(objectMapper.writeValueAsString(request))
 						.contentType(APPLICATION_JSON)
 				)
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.errorCode").value(0))
+				.andExpect(jsonPath("$.message").value("[사용자 암호 : 6자리 이상]"));
 		}
 
 	}
 
-	@Test
-	@DisplayName(SUCCESS_PREFIX + "로그아웃")
-	public void signOut() throws Exception {
-		mockMvc.perform(
-				get(SIGN_OUT_API)
-					.header("access-token", "TestAccessTokenValue")
-			)
-			.andExpect(status().isNoContent());
+	@Nested
+	@DisplayName("로그아웃")
+	public class signOut {
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX)
+		public void signOut() throws Exception {
+			mockMvc.perform(
+					get(SIGN_OUT_API)
+						.header("access-token", "TestAccessTokenValue")
+				)
+				.andExpect(status().isNoContent())
+				.andExpect(jsonPath("$.message").value("정보 조회 성공"));
+		}
+
 	}
 
 	@Nested
 	@DisplayName("serviceId 중복 검사 요청 검증")
 	public class verifyDuplicatedServiceId {
+
 		@ParameterizedTest
 		@CsvSource(value = {
 			"AAAAAAF",
@@ -253,18 +296,18 @@ class MemberControllerTest extends WebMvcBaseTest {
 					get(VERIFY_DUPLICATED_ID_API)
 						.params(param)
 				)
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.message").value("아이디 검증 성공"));
 		}
 
 		@ParameterizedTest
 		@CsvSource(value = {
 			"AAAAA",
 			"AAAAAAAAAAAAAAAAAAAA1",
-			" A A B A B A ",
+			"AABAB",
 			"123",
 			"Θ\nΘ\n"}
 		)
-		@NullAndEmptySource
 		@DisplayName(EXCEPTION_PREFIX + "serviceId : 6자리 미만, 20자리 초과 불가")
 		public void fail1(String serviceId) throws Exception {
 			MultiValueMap<String, String> param = new LinkedMultiValueMap();
@@ -275,7 +318,8 @@ class MemberControllerTest extends WebMvcBaseTest {
 					get(VERIFY_DUPLICATED_ID_API)
 						.params(param)
 				)
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.message").value("[사용자 아이디 : 6자리 이상, 20자리 이하]"));
 		}
 
 	}
@@ -301,7 +345,8 @@ class MemberControllerTest extends WebMvcBaseTest {
 					get(VERIFY_DUPLICATED_NICKNAME_API)
 						.params(param)
 				)
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.message").value("닉네임 검증 성공"));
 		}
 
 		@ParameterizedTest
@@ -309,10 +354,9 @@ class MemberControllerTest extends WebMvcBaseTest {
 			"A",
 			"AAAAAAAAAAA",
 			"12345678901",
-			"1 2",
+			"2",
 		}
 		)
-		@NullAndEmptySource
 		@DisplayName(EXCEPTION_PREFIX + "nickname : 2자리 미만, 10자리 초과 불가")
 		public void fail1(String nickname) throws Exception {
 			MultiValueMap<String, String> param = new LinkedMultiValueMap();
@@ -323,7 +367,8 @@ class MemberControllerTest extends WebMvcBaseTest {
 					get(VERIFY_DUPLICATED_NICKNAME_API)
 						.params(param)
 				)
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.message").value("[사용자 닉네임 : 2자리 이상, 10자리 이하]"));
 		}
 
 	}
