@@ -7,7 +7,7 @@ import lombok.Builder;
 @Builder
 public record GetGameResultContentsListResponse(
 
-	Long id,
+	Long contentsId,
 
 	String contentsName,
 
@@ -23,7 +23,7 @@ public record GetGameResultContentsListResponse(
 		Integer rank) {
 
 		return GetGameResultContentsListResponse.builder()
-			.id(worldCupGameContents.getId())
+			.contentsId(worldCupGameContents.getId())
 			.contentsName(worldCupGameContents.getName())
 			.mediaFileId(worldCupGameContents.getMediaFile().getId())
 			.gameRank(rank)

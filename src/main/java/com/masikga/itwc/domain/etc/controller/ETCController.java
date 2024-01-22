@@ -211,6 +211,29 @@ public class ETCController {
 
 	}
 
+	@Operation(
+		summary = "댓글을 삭제합니다.",
+		parameters = {
+			@Parameter(
+				name = "commentId",
+				description = "삭제하고 싶은 댓글 아이디"
+			)
+		},
+		responses = {
+			@ApiResponse(
+				responseCode = "204",
+				description = "댓글 삭제 성공"
+			),
+			@ApiResponse(
+				responseCode = "404",
+				description = "존재하지 않는 댓글",
+				content = @Content(
+					mediaType = "application/json",
+					schema = @Schema(implementation = CustomErrorResponse.class)
+				)
+			),
+		}
+	)
 	@ResponseStatus(NO_CONTENT)
 	@DeleteMapping("/comments/{commentId}")
 	public RestApiResponse deleteComment(

@@ -1,7 +1,7 @@
 package com.masikga.itwc.domain.worldcup.repository.projection;
 
 public record GetWorldCupGamePageProjection(
-	Long id,
+	Long worldCupId,
 	String title,
 	String description,
 	String contentsName1,

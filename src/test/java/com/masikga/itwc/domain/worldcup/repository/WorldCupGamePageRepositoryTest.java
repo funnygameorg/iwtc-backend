@@ -114,14 +114,14 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 				() -> assertThat(result.getNumberOfElements()).isEqualTo(2),
 				() -> assertThat(result.getNumber()).isEqualTo(0),
 
-				() -> assertThat(firstElement.id()).isEqualTo(2),
+				() -> assertThat(firstElement.worldCupId()).isEqualTo(2),
 				() -> assertThat(firstElement.title()).isEqualTo(worldCupGames.get(1).getTitle()),
 				() -> assertThat(firstElement.contentsName1()).isEqualTo("컨텐츠7"),
 				() -> assertThat(firstElement.contentsName2()).isEqualTo("컨텐츠6"),
 				() -> assertThat(firstElement.mediaFileId1()).isEqualTo(7),
 				() -> assertThat(firstElement.mediaFileId2()).isEqualTo(6),
 
-				() -> assertThat(secondElement.id()).isEqualTo(1),
+				() -> assertThat(secondElement.worldCupId()).isEqualTo(1),
 				() -> assertThat(secondElement.title()).isEqualTo(worldCupGames.get(0).getTitle()),
 				() -> assertThat(secondElement.description()).isEqualTo(worldCupGames.get(0).getDescription()),
 				() -> assertThat(secondElement.contentsName1()).isEqualTo("컨텐츠5"),
@@ -224,7 +224,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 				() -> assertThat(result.getTotalPages()).isEqualTo(1),
 				() -> assertThat(result.getContent().size()).isEqualTo(1),
 
-				() -> assertThat(firstElement.id()).isEqualTo(1),
+				() -> assertThat(firstElement.worldCupId()).isEqualTo(1),
 				() -> assertThat(firstElement.title()).isEqualTo(game1.getTitle()),
 				() -> assertThat(firstElement.description()).isEqualTo(game1.getDescription()),
 				() -> assertThat(firstElement.contentsName1()).isEqualTo(worldCupGameContentsList.get(5).getName()),
@@ -434,7 +434,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 			() -> assertThat(result.getNumberOfElements()).isEqualTo(1),
 			() -> assertThat(result.getNumber()).isEqualTo(0),
 
-			() -> assertThat(firstElement.id()).isEqualTo(3),
+			() -> assertThat(firstElement.worldCupId()).isEqualTo(3),
 			() -> assertThat(firstElement.title()).isEqualTo("hi game!"),
 			() -> assertThat(firstElement.contentsName1()).isEqualTo("퍼블릭 컨텐츠2"),
 			() -> assertThat(firstElement.contentsName2()).isEqualTo("퍼블릭 컨텐츠1"),

@@ -4,7 +4,7 @@ import com.masikga.itwc.domain.worldcup.model.WorldCupGameContents;
 import com.masikga.itwc.domain.worldcup.model.vo.VisibleType;
 
 public record GetMyWorldCupContentsResponse(
-	Long id,
+	Long worldCupId,
 	String contentsName,
 	Long mediaFileId,
 	VisibleType visibleType,
