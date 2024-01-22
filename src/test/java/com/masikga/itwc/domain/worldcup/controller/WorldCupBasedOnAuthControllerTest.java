@@ -324,7 +324,7 @@ public class WorldCupBasedOnAuthControllerTest extends WebMvcBaseTest {
 
 			var createInternetVideoUrlContents =
 				CreateWorldCupContentsRequest.CreateContentsRequest.builder()
-					.contentsName(null)
+					.contentsName("컨텐츠 네임2")
 					.visibleType(PUBLIC)
 					.createMediaFileRequest(
 						CreateMediaFileRequest.builder()
@@ -348,7 +348,7 @@ public class WorldCupBasedOnAuthControllerTest extends WebMvcBaseTest {
 				)
 				.andExpect(status().isBadRequest())
 				.andExpect(
-					jsonPath("$.message").value("[월드컵 컨텐츠 이름: 필수, 허용 미디어 파일 형식 : GIF, PNG, JPEG, JPG, YOU_TUBE_URL]"));
+					jsonPath("$.message").value("[허용 미디어 파일 형식 : GIF, PNG, JPEG, JPG, YOU_TUBE_URL]"));
 
 		}
 
