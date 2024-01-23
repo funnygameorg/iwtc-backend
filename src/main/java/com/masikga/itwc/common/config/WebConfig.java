@@ -42,10 +42,12 @@ public class WebConfig implements WebMvcConfigurer {
 			.excludePathPatterns("/api/members/sign-out");
 	}
 
+	// TODO : NEXT.JS SSR 테스트로 모든 오리진에 대하여 허용합니다.
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedOrigins(webProperty.front()) // 요청에 'Access-Control-Allow-Origin' 추가하기
+			//.allowedOrigins(webProperty.front()) // 요청에 'Access-Control-Allow-Origin' 추가하기
+			.allowedOriginPatterns("*")
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.exposedHeaders("access-token", "refresh-token")
