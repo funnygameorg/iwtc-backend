@@ -74,4 +74,29 @@ public class FileStorage {
 
 	}
 
+	/**
+	 * `Key`값과 `Bucket`값을 사용하여 저장한 파일을 조회한다.
+	 *
+	 * @param objectKey 찾기위한 파일의 식별자
+	 * @return 파일 내용
+	 */
+	public String getObject(String objectKey, String targetBucket) {
+
+		try (S3Object object = s3Client.getObject(targetBucket, objectKey)) {
+
+			try (S3ObjectInputStream ois = object.getObjectContent()) {
+
+				byte[] readBytes = ois.readAllBytes();
+
+				return new String(readBytes, UTF_8);
+
+			}
+
+		} catch (Exception ex) {
+
+			throw new RuntimeException(ex);
+		}
+
+	}
+
 }

@@ -37,6 +37,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "ETC", description = "서비스의 여러 기능에 공통적으로 사용되는 API")
@@ -161,13 +162,17 @@ public class ETCController {
 	@GetMapping("/media-files/{mediaFileId}")
 	@ResponseStatus(OK)
 	public RestApiResponse<MediaFileResponse> getMediaFiles(
-		@PathVariable Long mediaFileId,
+		@PathVariable
+		Long mediaFileId,
+		@RequestParam(defaultValue = "original")
+		@Pattern(regexp = "^(original|divide2)$")
+		String size,
 		HttpServletResponse httpServletResponse
 	) {
 
 		httpServletResponse.setHeader("Cache-Control", "max-age=600");
 
-		var response = mediaFileService.getMediaFile(mediaFileId);
+		var response = mediaFileService.getMediaFile(mediaFileId, size);
 		return new RestApiResponse(1, "미디어 파일 조회", response);
 
 	}
