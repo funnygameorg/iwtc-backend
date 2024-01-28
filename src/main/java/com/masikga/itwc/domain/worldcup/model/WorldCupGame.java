@@ -8,10 +8,10 @@ import static lombok.AccessLevel.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
 
+import com.google.common.base.Objects;
 import com.masikga.itwc.common.jpa.TimeBaseEntity;
 import com.masikga.itwc.domain.gamestatistics.model.WorldCupGameStatistics;
 import com.masikga.itwc.domain.worldcup.model.vo.VisibleType;
-import com.google.common.base.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -117,6 +117,10 @@ public class WorldCupGame extends TimeBaseEntity {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(title);
+	}
+
+	public void softDelete() {
+		this.softDelete = true;
 	}
 
 }

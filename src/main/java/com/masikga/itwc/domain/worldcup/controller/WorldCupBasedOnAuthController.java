@@ -338,20 +338,19 @@ public class WorldCupBasedOnAuthController {
 	}
 
 	@Operation(
-		summary = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
+		summary = "월드컵 관리페이지에서 표시되는 월드컵 게임 컨텐츠 제거",
 		parameters = {
 			@Parameter(
 				name = "worldCupId",
-				description = "조회하고 싶은 컨텐츠의 월드컵 식별자",
+				description = "삭제하고 싶은 컨텐츠의 월드컵 식별자",
 				required = true
 			),
 			@Parameter(
 				name = "contentsId",
-				description = "조회하고 싶은 컨텐츠의 월드컵 컨텐츠 식별자",
+				description = "삭제하고 싶은 컨텐츠의 월드컵 컨텐츠 식별자",
 				required = true
 			)
 		},
-		description = "월드컵 관리페이지에서 표시되는 월드컵 리스트 조회",
 		security = @SecurityRequirement(name = "Authorization"),
 		responses = {
 			@ApiResponse(
@@ -383,6 +382,48 @@ public class WorldCupBasedOnAuthController {
 	) {
 
 		var deletedContentsId = worldCupBasedOnAuthService.deleteMyWorldCupContents(worldCupId, contentsId,
+			memberDto.get().getId());
+		return new RestApiResponse(1, "게임 삭제", deletedContentsId);
+
+	}
+
+	@Operation(
+		summary = "월드컵 관리페이지에서 표시되는 월드컵 게임 제거",
+		parameters = {
+			@Parameter(
+				name = "worldCupId",
+				description = "삭제하고 싶은 컨텐츠의 월드컵 식별자",
+				required = true
+			)
+		},
+		security = @SecurityRequirement(name = "Authorization"),
+		responses = {
+			@ApiResponse(
+				responseCode = "400",
+				description = "월드컵 게임 작성자가 아님",
+				content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+			),
+			@ApiResponse(
+				responseCode = "404",
+				description = "[존재하지 않는 월드컵, 존재하지 않는 월드컵 컨텐츠]",
+				content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomErrorResponse.class))
+			),
+
+		}
+	)
+	@ResponseStatus(NO_CONTENT)
+	@DeleteMapping("/{worldCupId}")
+	public RestApiResponse<Long> deleteMyWorldCup(
+
+		@PathVariable
+		long worldCupId,
+
+		@Parameter(hidden = true)
+		@CustomAuthentication
+		Optional<MemberDto> memberDto
+	) {
+
+		var deletedContentsId = worldCupBasedOnAuthService.deleteMyWorldCup(worldCupId,
 			memberDto.get().getId());
 		return new RestApiResponse(1, "게임 삭제", deletedContentsId);
 

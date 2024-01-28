@@ -251,4 +251,20 @@ public class WorldCupBasedOnAuthService {
 		return contents.getId();
 	}
 
+	@Transactional
+	public long deleteMyWorldCup(long worldCupId, Long memberId) {
+
+		WorldCupGame worldCupGame = worldCupGameRepository.findById(worldCupId)
+			.orElseThrow(() -> new NotFoundWorldCupGameException(worldCupId));
+
+		if (!worldCupGame.isOwner(memberId)) {
+			throw new NotOwnerGameException();
+		}
+
+		worldCupGame.softDelete();
+
+		return worldCupGame.getId();
+
+	}
+
 }
