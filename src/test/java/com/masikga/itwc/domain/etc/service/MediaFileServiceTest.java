@@ -31,7 +31,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 	private MediaFileRepository mediaFileRepository;
 
 	@MockBean
-	private FileStorage s3Component;
+	private FileStorage fileStorage;
 
 	@Autowired
 	private DataBaseCleanUp dataBaseCleanUp;
@@ -46,7 +46,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 	class getMediaFile {
 
 		@Test
-		@DisplayName(SUCCESS_PREFIX + "static file 형식 조회")
+		@DisplayName(SUCCESS_PREFIX + "static file 형식 미디어 파일을 조회할 수 있다.")
 		public void success() throws Exception {
 
 			// given
@@ -59,11 +59,11 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 
 			mediaFileRepository.save(staticMediaFile);
 
-			given(s3Component.getObject("A-46"))
+			given(fileStorage.getObject("A-46"))
 				.willReturn("dataA");
 
 			// when
-			MediaFileResponse response = mediaFileService.getMediaFile(1L);
+			MediaFileResponse response = mediaFileService.getMediaFile(1L, "original");
 
 			//then
 			assertAll(
@@ -79,7 +79,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 		}
 
 		@Test
-		@DisplayName(SUCCESS_PREFIX + "동영상 링크 형식 조회")
+		@DisplayName(SUCCESS_PREFIX + "동영상 링크 형식 미디어 파일을 조회할 수 있다.")
 		public void success2() throws Exception {
 
 			// given
@@ -94,11 +94,151 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 
 			mediaFileRepository.save(staticMediaFile);
 
-			given(s3Component.getObject("A-46"))
+			given(fileStorage.getObject("A-46"))
 				.willReturn("youtube_qs");
 
 			// when
-			MediaFileResponse response = mediaFileService.getMediaFile(1L);
+			MediaFileResponse response = mediaFileService.getMediaFile(1L, "original");
+
+			//then
+			assertAll(
+				() -> assertThat(response.mediaFileId()).isEqualTo(1),
+				() -> assertThat(response.videoPlayDuration()).isEqualTo(5),
+				() -> assertThat(response.videoStartTime()).isEqualTo("00000"),
+				() -> assertThat(response.mediaData()).isEqualTo("youtube_qs"),
+				() -> assertThat(response.fileType()).isEqualTo(INTERNET_VIDEO_URL),
+				() -> assertThat(response.detailType()).isEqualTo("YOU_TUBE_URL"),
+				() -> assertThat(response.originalName()).isNull()
+			);
+
+		}
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX + "1/2 크기의 static file 형식을 조회할 수 있다.")
+		public void success3() {
+
+			// given
+			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
+				.objectKey("A-46")
+				.bucketName("bucketA")
+				.originalName("originalNameA")
+				.extension("GIF")
+				.build();
+
+			mediaFileRepository.save(staticMediaFile);
+
+			given(fileStorage.getObject("A-46", "media-divide2"))
+				.willReturn("dataA");
+
+			// when
+			MediaFileResponse response = mediaFileService.getMediaFile(1L, "divide2");
+
+			//then
+			assertAll(
+				() -> assertThat(response.mediaFileId()).isEqualTo(1),
+				() -> assertThat(response.originalName()).isEqualTo("originalNameA"),
+				() -> assertThat(response.mediaData()).isEqualTo("dataA"),
+				() -> assertThat(response.fileType()).isEqualTo(STATIC_MEDIA_FILE),
+				() -> assertThat(response.detailType()).isEqualTo("GIF"),
+				() -> assertThat(response.videoPlayDuration()).isNull(),
+				() -> assertThat(response.videoStartTime()).isNull()
+			);
+
+		}
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX + "1/2 크기를 요청했지만 없다면 원본 사이즈의 static file 형식 미디어 파일이라도 조회할 수 있다.")
+		public void success4() {
+
+			// given
+			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
+				.objectKey("A-46")
+				.bucketName("bucketA")
+				.originalName("originalNameA")
+				.extension("GIF")
+				.build();
+
+			mediaFileRepository.save(staticMediaFile);
+
+			given(fileStorage.getObject("A-46", "media-divide2"))
+				.willThrow(new RuntimeException("S3 Client lib에서 던지는 에러"));
+
+			given(fileStorage.getObject("A-46", "media"))
+				.willReturn("dataA");
+
+			// when
+			MediaFileResponse response = mediaFileService.getMediaFile(1L, "divide2");
+
+			//then
+			assertAll(
+				() -> assertThat(response.mediaFileId()).isEqualTo(1),
+				() -> assertThat(response.originalName()).isEqualTo("originalNameA"),
+				() -> assertThat(response.mediaData()).isEqualTo("dataA"),
+				() -> assertThat(response.fileType()).isEqualTo(STATIC_MEDIA_FILE),
+				() -> assertThat(response.detailType()).isEqualTo("GIF"),
+				() -> assertThat(response.videoPlayDuration()).isNull(),
+				() -> assertThat(response.videoStartTime()).isNull()
+			);
+
+		}
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX + "1/2 크기를 요청하였으나 1/2 사이즈와  원본 사이즈 모두 없다면 null을 body로 담아서 응답한다.")
+		public void success5() {
+
+			// given
+			StaticMediaFile staticMediaFile = StaticMediaFile.builder()
+				.objectKey("A-46")
+				.bucketName("bucketA")
+				.originalName("originalNameA")
+				.extension("GIF")
+				.build();
+
+			mediaFileRepository.save(staticMediaFile);
+
+			given(fileStorage.getObject("A-46", "media-divide2"))
+				.willThrow(new RuntimeException("S3 Client lib에서 던지는 에러"));
+
+			given(fileStorage.getObject("A-46", "media"))
+				.willThrow(new RuntimeException("S3 Client lib에서 던지는 에러"));
+
+			// when
+			MediaFileResponse response = mediaFileService.getMediaFile(1L, "divide2");
+
+			//then
+			assertAll(
+				() -> assertThat(response.mediaFileId()).isEqualTo(1),
+				() -> assertThat(response.originalName()).isEqualTo("originalNameA"),
+				() -> assertThat(response.mediaData()).isEqualTo(null),
+				() -> assertThat(response.fileType()).isEqualTo(STATIC_MEDIA_FILE),
+				() -> assertThat(response.detailType()).isEqualTo("GIF"),
+				() -> assertThat(response.videoPlayDuration()).isNull(),
+				() -> assertThat(response.videoStartTime()).isNull()
+			);
+
+		}
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX + "동영상 링크 형식 미디어 파일을 조회하는 경우 원본 버킷에서만 데이터를 조회합니다.")
+		public void success6() {
+
+			// given
+			InternetVideoUrl videoUrl = InternetVideoUrl.builder()
+				.objectKey("A-46")
+				.bucketName("bucketA")
+				.videoPlayDuration(5)
+				.isPlayableVideo(true)
+				.videoStartTime("00000")
+				.videoDetailType("YOU_TUBE_URL")
+				.build();
+
+			mediaFileRepository.save(videoUrl);
+
+			given(fileStorage.getObject("A-46"))
+				.willReturn("youtube_qs");
+
+			// when
+			MediaFileResponse response = mediaFileService.getMediaFile(1L, "divide2");
 
 			//then
 			assertAll(
@@ -120,7 +260,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 			// when then
 			assertThrows(
 				NotFoundMediaFIleException.class,
-				() -> mediaFileService.getMediaFile(1L)
+				() -> mediaFileService.getMediaFile(1L, "original")
 			);
 
 		}
