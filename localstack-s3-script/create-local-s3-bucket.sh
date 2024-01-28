@@ -61,6 +61,7 @@ awslocal s3 cp origin.txt s3://media/i
 # 썸네일 오브젝트 삽입
 awslocal s3 cp thumbnail.txt s3://media-divide2/a
 awslocal s3 cp thumbnail.txt s3://media-divide2/b
+awslocal s3 cp thumbnail.txt s3://media-divide2/h
 
 # 유튜브 URL 오브젝트 삽입
 awslocal s3 cp vedioId1.txt s3://media/j
