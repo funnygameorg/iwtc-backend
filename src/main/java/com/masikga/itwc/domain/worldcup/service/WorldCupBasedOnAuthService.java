@@ -1,7 +1,11 @@
 package com.masikga.itwc.domain.worldcup.service;
 
+import static com.masikga.itwc.domain.etc.model.vo.FileType.*;
+
+import java.util.Base64;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +44,7 @@ public class WorldCupBasedOnAuthService {
 	private final MediaFileRepository mediaFileRepository;
 	private final MediaFileFactory mediaFileFactory;
 	private final RandomDataGeneratorInterface randomDataGenerator;
-	private final FileStorage s3Component;
+	private final FileStorage fileStorage;
 
 	public List<GetWorldCupContentsResponse> getMyWorldCupGameContents(long worldCupId, long memberId) {
 
@@ -138,13 +142,14 @@ public class WorldCupBasedOnAuthService {
 
 		return request.data().stream()
 			.map(contentsRequest -> {
-
 					CreateWorldCupContentsRequest.CreateMediaFileRequest mediaFileRequest =
 						contentsRequest.createMediaFileRequest();
 
 					String objectKey = randomDataGenerator.generate();
 
-					s3Component.putObject(mediaFileRequest.mediaData(), objectKey);
+					fileStorage.putObject(mediaFileRequest.mediaData(), objectKey);
+
+					String fileSize = getFileSize(mediaFileRequest);
 
 					MediaFile newMediaFile = mediaFileFactory.createMediaFile(
 						objectKey,
@@ -152,7 +157,8 @@ public class WorldCupBasedOnAuthService {
 						mediaFileRequest.videoPlayDuration(),
 						mediaFileRequest.videoStartTime(),
 						mediaFileRequest.fileType(),
-						mediaFileRequest.detailFileType()
+						mediaFileRequest.detailFileType(),
+						fileSize
 					);
 
 					return WorldCupGameContents.createNewContents(
@@ -164,6 +170,31 @@ public class WorldCupBasedOnAuthService {
 				}
 			).toList();
 
+	}
+
+	/**
+	 * 사용자 요청에 포함된 파일의 사이즈를 계산합니다.
+	 *
+	 * @param mediaFileRequest 사용자 요청 객체
+	 * @return MB단위로 계산하여 정수 부분만 반환합니다.
+	 */
+	@NotNull
+	private String getFileSize(CreateWorldCupContentsRequest.CreateMediaFileRequest mediaFileRequest) {
+
+		String fileSize = null;
+
+		if (mediaFileRequest.fileType().equals(STATIC_MEDIA_FILE)) {
+			byte[] binaryData = Base64.getDecoder().decode(mediaFileRequest.mediaData());
+			int bytes = binaryData.length;
+			Double megabytes = bytes / (1024.0 * 1024.0);
+			fileSize = String.valueOf(megabytes.intValue());
+
+		} else {
+			fileSize = "0";
+
+		}
+
+		return fileSize;
 	}
 
 	public List<GetMyWorldCupResponse> getMyWorldCupList(Long memberId) {
@@ -218,7 +249,7 @@ public class WorldCupBasedOnAuthService {
 
 		String objectKey = randomDataGenerator.generate();
 
-		s3Component.putObject(request.mediaData(), objectKey);
+		fileStorage.putObject(request.mediaData(), objectKey);
 
 		contents.updateByCommonManage(
 			request.contentsName(),

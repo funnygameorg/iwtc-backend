@@ -82,6 +82,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.bucketName("a")
 				.objectKey("a")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 			var worldCupGameContents = WorldCupGameContents.builder()
 				.name("name 1")
@@ -155,6 +156,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.bucketName("a")
 				.objectKey("a")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			var worldCupGameContents = WorldCupGameContents.builder()
@@ -225,6 +227,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.bucketName("a")
 				.objectKey("a")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 			var worldCupGameContents = WorldCupGameContents.builder()
 				.name("name 1")
@@ -283,6 +286,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.bucketName("a")
 				.objectKey("a")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			var worldCup = WorldCupGame.builder()
@@ -344,6 +348,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.bucketName("a")
 				.objectKey("a")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			var worldCup = WorldCupGame.builder()
@@ -402,6 +407,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.bucketName("a")
 				.objectKey("a")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			var worldCup = WorldCupGame.builder()
@@ -470,6 +476,7 @@ public class CommentServiceTest implements IntegrationBaseTest {
 				.originalName("a")
 				.bucketName("a")
 				.objectKey("a")
+				.originalFileSize("0")
 				.extension("GIF")
 				.build();
 

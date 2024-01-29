@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.masikga.itwc.domain.etc.controller.request.WriteCommentRequest;
@@ -20,6 +21,40 @@ public class ETCControllerTest extends WebMvcBaseTest {
 	private static final String WRITE_COMMENT_API =
 		ROOT_PATH + "/world-cups/{worldCupId}/contents/{contentsId}/comments";
 	private static final String DELETE_COMMENT_API = ROOT_PATH + "/comments/{commentId}";
+
+	private static final String GET_MEDIA_FILE_API = ROOT_PATH + "/media-files/{mediaFileId}";
+
+	@Nested
+	@DisplayName("미디어 파일 조회 테스트")
+	public class getMediaFiles {
+
+		@ParameterizedTest
+		@ValueSource(strings = {"original", "divide2"})
+		@NullAndEmptySource
+		@DisplayName(SUCCESS_PREFIX)
+		public void success(String size) throws Exception {
+
+			mockMvc.perform(
+					get(GET_MEDIA_FILE_API, 1L)
+						.param("size", size)
+				)
+				.andExpect(status().isOk());
+		}
+
+		@ParameterizedTest
+		@ValueSource(strings = {"origin", "1/2", "double"})
+		@DisplayName(EXCEPTION_PREFIX + " 존재하지 않는 사이즈로는 미디어 파일을 요청할 수 없다. ")
+		public void fail(String size) throws Exception {
+
+			mockMvc.perform(
+					get(GET_MEDIA_FILE_API, 1L)
+						.param("size", size)
+				)
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.message").value("[original(원본), dvide2(1/2 사이즈)만 지원합니다.]"));
+		}
+
+	}
 
 	@Nested
 	@DisplayName("월드컵 컨텐츠 목록 조회 테스트")

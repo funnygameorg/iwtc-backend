@@ -28,32 +28,38 @@ public class MediaFileFactory {
 		Integer videoPlayDuration,
 		String videoStartTime,
 		FileType fileType,
-		String detailFileType) {
+		String detailFileType,
+		String originalFileSize) {
 
 		return switch (fileType) {
-			case STATIC_MEDIA_FILE -> createStaticMediaFile(objectKey, originalName, detailFileType);
+			case STATIC_MEDIA_FILE -> createStaticMediaFile(objectKey, originalName, detailFileType, originalFileSize);
 			case INTERNET_VIDEO_URL ->
-				createInternetVideoUrl(objectKey, videoPlayDuration, videoStartTime, detailFileType);
+				createInternetVideoUrl(objectKey, videoPlayDuration, videoStartTime, detailFileType, originalFileSize);
 		};
 
 	}
 
-	private StaticMediaFile createStaticMediaFile(String objectKey, String originalName, String detailFileType) {
+	private StaticMediaFile createStaticMediaFile(String objectKey, String originalName, String detailFileType,
+		String originalFileSize) {
+
 		return StaticMediaFile.builder()
 			.objectKey(objectKey)
 			.originalName(originalName)
 			.extension(detailFileType)
+			.originalFileSize(originalFileSize)
 			.build();
 	}
 
 	private InternetVideoUrl createInternetVideoUrl(String objectKey, int videoPlayDuration, String videoStartTime,
-		String detailFileType) {
+		String detailFileType, String originalFileSize) {
+
 		return InternetVideoUrl.builder()
 			.objectKey(objectKey)
 			.isPlayableVideo(true)
 			.videoPlayDuration(videoPlayDuration)
 			.videoStartTime(videoStartTime)
 			.videoDetailType(detailFileType)
+			.originalFileSize(originalFileSize)
 			.build();
 	}
 

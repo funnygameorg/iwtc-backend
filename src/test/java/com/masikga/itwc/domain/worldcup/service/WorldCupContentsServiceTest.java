@@ -81,6 +81,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 						.extension("PNG")
 						.objectKey("/abc")
 						.originalName("origin")
+						.originalFileSize("0")
 						.build()
 				)
 				.toList();
@@ -170,6 +171,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 					.originalName("fileOriginalName")
 					.objectKey("fileAbsoluteName" + idx)
 					.extension("MP4")
+					.originalFileSize("0")
 					.build()
 			).toList();
 
@@ -245,6 +247,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 					.originalName("fileOriginalName")
 					.objectKey("fileAbsoluteName" + idx)
 					.extension("GIF")
+					.originalFileSize("0")
 					.build()
 			).toList();
 
@@ -254,6 +257,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 					.videoStartTime("00001")
 					.objectKey("https://uTube.com/" + idx)
 					.videoDetailType("YOU_TUBE_URL")
+					.originalFileSize("0")
 					.build()
 			).toList();
 
@@ -340,6 +344,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 					.originalName("fileOriginalName")
 					.objectKey("fileAbsoluteName" + idx)
 					.extension("GIF")
+					.originalFileSize("0")
 					.build()
 			).toList();
 
@@ -349,6 +354,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 					.videoStartTime("00001")
 					.objectKey("https://uTube.com/" + idx)
 					.videoDetailType("YOU_TUBE_URL")
+					.originalFileSize("0")
 					.build()
 			).toList();
 
@@ -424,6 +430,7 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 					.originalName("fileOriginalName")
 					.objectKey("fileAbsoluteName")
 					.extension("GIF")
+					.originalFileSize("0")
 					.build()
 			).toList();
 			List<WorldCupGameContents> contentsList = range(1, 10).mapToObj(idx ->
@@ -479,11 +486,13 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("MP4")
+				.originalFileSize("0")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -547,21 +556,25 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("JPG")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("JPEG")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("PNG")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile4 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("MP4")
+				.originalFileSize("0")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -670,16 +683,19 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("PNG")
+				.originalFileSize("0")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -740,16 +756,19 @@ public class WorldCupContentsServiceTest extends ContainerBaseTest implements In
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("PNG")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("PNG")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile3 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("fileAbsoluteName")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()

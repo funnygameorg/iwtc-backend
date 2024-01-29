@@ -19,7 +19,9 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - HOSTNAME=localstack
     volumes:
-      - ./script/create-local-s3-bucket.sh:/etc/localstack/init/ready.d/init-aws.sh
+      - ./localstack-s3-script/create-local-s3-bucket.sh:/etc/localstack/init/ready.d/init-aws.sh
+      - ./localstack-s3-script/image/original-image.txt:/etc/localstack/init/ready.d/original-image.txt
+      - ./localstack-s3-script/image/thumbnail-divide2-image.txt:/etc/localstack/init/ready.d/thumbnail-divide2-image.txt
 
   itwc-back:
     container_name: itwc-back

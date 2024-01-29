@@ -56,4 +56,8 @@ public abstract class MediaFile extends TimeBaseEntity {
 	@Enumerated(STRING)
 	protected MediaFileExtension detailType;
 
+	@NotNull
+	@org.hibernate.annotations.Comment("원본 파일 크기")
+	private String originalFileSize;
+
 }
