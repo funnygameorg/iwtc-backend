@@ -470,6 +470,7 @@ public class WorldCupGamePageRepositoryTest implements IntegrationBaseTest {
 			.originalName(fileOriginalName)
 			.objectKey(filePath)
 			.extension(extension)
+			.originalFileSize("0")
 			.build();
 	}
 

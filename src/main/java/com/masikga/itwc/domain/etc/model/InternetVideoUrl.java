@@ -69,9 +69,10 @@ public class InternetVideoUrl extends MediaFile {
 
 	@Builder
 	private InternetVideoUrl(Long id, String objectKey, boolean isPlayableVideo, String videoStartTime,
-		Integer videoPlayDuration, String bucketName, String videoDetailType) {
+		Integer videoPlayDuration, String bucketName, String videoDetailType, String originalFileSize) {
 
-		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName, MediaFileExtension.valueOf(videoDetailType));
+		super(id, objectKey, FileType.INTERNET_VIDEO_URL, bucketName, MediaFileExtension.valueOf(videoDetailType),
+			originalFileSize);
 
 		if (Objects.isNull(objectKey) || Objects.isNull(videoStartTime) || Objects.isNull(videoPlayDuration)) {
 			throw new NotNullArgumentException(objectKey, videoStartTime, videoPlayDuration);

@@ -55,6 +55,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				.bucketName("bucketA")
 				.originalName("originalNameA")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			mediaFileRepository.save(staticMediaFile);
@@ -90,6 +91,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				.isPlayableVideo(true)
 				.videoStartTime("00000")
 				.videoDetailType("YOU_TUBE_URL")
+				.originalFileSize("0")
 				.build();
 
 			mediaFileRepository.save(staticMediaFile);
@@ -123,6 +125,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				.bucketName("bucketA")
 				.originalName("originalNameA")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			mediaFileRepository.save(staticMediaFile);
@@ -156,6 +159,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				.bucketName("bucketA")
 				.originalName("originalNameA")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			mediaFileRepository.save(staticMediaFile);
@@ -192,6 +196,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				.bucketName("bucketA")
 				.originalName("originalNameA")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			mediaFileRepository.save(staticMediaFile);
@@ -230,6 +235,7 @@ public class MediaFileServiceTest implements IntegrationBaseTest {
 				.isPlayableVideo(true)
 				.videoStartTime("00000")
 				.videoDetailType("YOU_TUBE_URL")
+				.originalFileSize("0")
 				.build();
 
 			mediaFileRepository.save(videoUrl);

@@ -12,7 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -76,11 +78,13 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				.originalName("fileOriginalName")
 				.objectKey("https://www.abc.com/BS/1")
 				.extension("PNG")
+				.originalFileSize("0")
 				.build();
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("https://www.abc.com/BS/2")
 				.extension("PNG")
+				.originalFileSize("0")
 				.build();
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
 				.name("컨텐츠1")
@@ -148,12 +152,14 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				.originalName("fileOriginalName")
 				.objectKey("filePath")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			StaticMediaFile mediaFile2 = StaticMediaFile.builder()
 				.originalName("fileOriginalName")
 				.objectKey("filePath")
 				.extension("GIF")
+				.originalFileSize("0")
 				.build();
 
 			WorldCupGameContents contents1 = WorldCupGameContents.builder()
@@ -374,13 +380,17 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 			given(s3Component.putObject(anyString(), anyString()))
 				.willReturn(null);
 
+			byte[] bytes = new byte[1000 * 1000 * 4];
+			new SecureRandom().nextBytes(bytes);
+			var tempMediaData = Base64.getEncoder().encodeToString(bytes);
+
 			var createStaticMediaFileContents = CreateContentsRequest.builder()
 				.contentsName("컨텐츠 이름1")
 				.visibleType(PUBLIC)
 				.createMediaFileRequest(
 					CreateMediaFileRequest.builder()
 						.fileType(STATIC_MEDIA_FILE)
-						.mediaData("base64:jpg...abcd")
+						.mediaData(tempMediaData)
 						.originalName("Original1")
 						.detailFileType("PNG")
 						.build()
@@ -437,6 +447,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> assertThat(firstMediaFile.getFileType()).isEqualTo(STATIC_MEDIA_FILE),
 				() -> assertThat(firstMediaFile.getOriginalName()).isEqualTo("Original1"),
 				() -> assertThat(firstMediaFile.getDetailType().name()).isEqualTo("PNG"),
+				() -> assertThat(firstMediaFile.getOriginalFileSize()).isEqualTo("3"),
 
 				() -> assertThat(contentsList.get(1).getId()).isEqualTo(2),
 				() -> assertThat(contentsList.get(1).getName()).isEqualTo("컨텐츠 이름2"),
@@ -450,7 +461,8 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> assertThat(secondMediaFile.getVideoStartTime()).isEqualTo("00100"),
 				() -> assertThat(secondMediaFile.getVideoPlayDuration()).isEqualTo(3),
 				() -> assertThat(secondMediaFile.isPlayableVideo()).isEqualTo(true),
-				() -> assertThat(secondMediaFile.getDetailType().name()).isEqualTo("YOU_TUBE_URL")
+				() -> assertThat(secondMediaFile.getDetailType().name()).isEqualTo("YOU_TUBE_URL"),
+				() -> assertThat(secondMediaFile.getOriginalFileSize()).isEqualTo("0")
 			);
 		}
 

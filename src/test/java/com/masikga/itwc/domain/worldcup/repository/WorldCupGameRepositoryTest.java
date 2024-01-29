@@ -73,6 +73,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 						.videoStartTime("00000")
 						.videoPlayDuration(3)
 						.videoDetailType("YOU_TUBE_URL")
+						.originalFileSize("0")
 						.build()
 				).toList();
 			List<WorldCupGameContents> contentsListWithMediaFile = range(1, 5)
@@ -163,6 +164,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 						.videoPlayDuration(3)
 						.videoStartTime("00001")
 						.objectKey("path/" + idx)
+						.originalFileSize("0")
 						.videoDetailType("YOU_TUBE_URL")
 						.build())
 				.toList();
@@ -301,6 +303,7 @@ public class WorldCupGameRepositoryTest implements IntegrationBaseTest {
 			.originalName(fileOriginalName)
 			.objectKey(filePath)
 			.extension(extension)
+			.originalFileSize("0")
 			.build();
 	}
 
