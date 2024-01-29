@@ -7,6 +7,7 @@ import static lombok.AccessLevel.*;
 
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.Where;
 
 import com.google.common.base.Objects;
 import com.masikga.itwc.common.jpa.TimeBaseEntity;
@@ -36,6 +37,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Builder
+@Where(clause = "SOFT_DELETE = false")
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 @Table(name = "world_cup_game",

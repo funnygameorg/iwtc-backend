@@ -4,6 +4,7 @@ import static com.masikga.itwc.domain.etc.model.vo.FileType.*;
 import static com.masikga.itwc.domain.worldcup.controller.request.CreateWorldCupContentsRequest.*;
 import static com.masikga.itwc.domain.worldcup.model.vo.VisibleType.*;
 import static com.masikga.itwc.helper.TestConstant.*;
+import static java.util.List.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.*;
@@ -26,6 +27,7 @@ import com.masikga.itwc.domain.etc.model.InternetVideoUrl;
 import com.masikga.itwc.domain.etc.model.StaticMediaFile;
 import com.masikga.itwc.domain.etc.repository.MediaFileRepository;
 import com.masikga.itwc.domain.worldcup.controller.request.CreateWorldCupRequest;
+import com.masikga.itwc.domain.worldcup.controller.response.GetMyWorldCupResponse;
 import com.masikga.itwc.domain.worldcup.controller.response.GetWorldCupContentsResponse;
 import com.masikga.itwc.domain.worldcup.exception.DuplicatedWorldCupGameTitleException;
 import com.masikga.itwc.domain.worldcup.exception.NotFoundWorldCupGameException;
@@ -99,8 +101,8 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				.mediaFile(mediaFile2)
 				.build();
 			worldCupGameRepository.save(worldCupGame);
-			mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
-			worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
+			mediaFileRepository.saveAll(of(mediaFile1, mediaFile2));
+			worldCupGameContentsRepository.saveAll(of(contents1, contents2));
 
 			// when
 			List<GetWorldCupContentsResponse> response = worldCupBasedOnAuthService.getMyWorldCupGameContents(1, 1);
@@ -173,8 +175,8 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				.build();
 
 			worldCupGameRepository.save(worldCupGame);
-			mediaFileRepository.saveAll(List.of(mediaFile1, mediaFile2));
-			worldCupGameContentsRepository.saveAll(List.of(contents1, contents2));
+			mediaFileRepository.saveAll(of(mediaFile1, mediaFile2));
+			worldCupGameContentsRepository.saveAll(of(contents1, contents2));
 
 			long worldCupId = 1;
 			long memberId = 1;
@@ -186,6 +188,63 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 			);
 
 		}
+	}
+
+	@Nested
+	@DisplayName("자신이 생성한 월드컵 목록을 조회할 수 있다.")
+	public class getMyWorldCupList {
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX)
+		public void success() {
+
+			var worldCupGame1 = WorldCupGame.builder()
+				.description("")
+				.title("title1")
+				.visibleType(PUBLIC)
+				.softDelete(true)
+				.memberId(1)
+				.build();
+			var worldCupGame2 = WorldCupGame.builder()
+				.description("")
+				.title("title2")
+				.visibleType(PUBLIC)
+				.memberId(1)
+				.build();
+			var worldCupGame3 = WorldCupGame.builder()
+				.description("")
+				.title("title3")
+				.visibleType(PUBLIC)
+				.softDelete(true)
+				.memberId(1)
+				.build();
+			var worldCupGame4 = WorldCupGame.builder()
+				.description("")
+				.title("title4")
+				.visibleType(PUBLIC)
+				.memberId(1)
+				.build();
+			var worldCupGame5 = WorldCupGame.builder()
+				.description("")
+				.title("title5")
+				.visibleType(PUBLIC)
+				.softDelete(true)
+				.memberId(1)
+				.build();
+
+			worldCupGameRepository.saveAll(
+				of(worldCupGame1, worldCupGame2, worldCupGame3, worldCupGame4, worldCupGame5));
+
+			var response = worldCupBasedOnAuthService.getMyWorldCupList(1L);
+
+			var worldCupIds = response.stream().map(GetMyWorldCupResponse::worldCupId).toList();
+			assertAll(
+				() -> assertThat(response.size()).isEqualTo(2),
+				() -> assertThat(worldCupIds).contains(2L, 4L),
+				() -> assertThat(worldCupIds).doesNotContain(1L, 3L, 5L)
+			);
+		}
+
 	}
 
 	@Nested
@@ -402,7 +461,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				.build();
 
 			var request = builder()
-				.data(List.of(createStaticMediaFileContents, createInternetVideoUrlContents))
+				.data(of(createStaticMediaFileContents, createInternetVideoUrlContents))
 				.build();
 
 			var worldCupGame = WorldCupGame.builder()
@@ -487,7 +546,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				.build();
 
 			var request = builder()
-				.data(List.of(createStaticMediaFileContents, createInternetVideoUrlContents))
+				.data(of(createStaticMediaFileContents, createInternetVideoUrlContents))
 				.build();
 
 			// when
@@ -539,7 +598,7 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 			worldCupGameRepository.save(worldCupGame);
 
 			var request = builder()
-				.data(List.of(createStaticMediaFileContents, createInternetVideoUrlContents))
+				.data(of(createStaticMediaFileContents, createInternetVideoUrlContents))
 				.build();
 
 			// when
@@ -548,6 +607,35 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 				() -> worldCupBasedOnAuthService.createMyWorldCupContents(request, 1, 1)
 			);
 
+		}
+
+	}
+
+	@Nested
+	@DisplayName("자신이 생성한 월드컵 1개를 삭제할 수 있다.")
+	public class deleteMyWorldCup {
+
+		@Test
+		@DisplayName(SUCCESS_PREFIX)
+		public void success() {
+
+			// given
+			var worldCupGame = WorldCupGame.builder()
+				.description("")
+				.title("title5")
+				.visibleType(PUBLIC)
+				.memberId(1)
+				.build();
+
+			worldCupGameRepository.save(worldCupGame);
+
+			worldCupBasedOnAuthService.deleteMyWorldCup(1L, 1L);
+
+			// when
+			var optionalWorldCupGame = worldCupGameRepository.findById(1L);
+
+			// then
+			assertThat(optionalWorldCupGame.isEmpty()).isTrue();
 		}
 
 	}
