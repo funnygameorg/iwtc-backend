@@ -439,9 +439,10 @@ public class WorldCupBasedOnServiceTest implements IntegrationBaseTest {
 			given(s3Component.putObject(anyString(), anyString()))
 				.willReturn(null);
 
+			var prefix = "data:image/png;base64,";
 			byte[] bytes = new byte[1000 * 1000 * 4];
 			new SecureRandom().nextBytes(bytes);
-			var tempMediaData = Base64.getEncoder().encodeToString(bytes);
+			var tempMediaData = prefix + Base64.getEncoder().encodeToString(bytes);
 
 			var createStaticMediaFileContents = CreateContentsRequest.builder()
 				.contentsName("컨텐츠 이름1")

@@ -184,7 +184,8 @@ public class WorldCupBasedOnAuthService {
 		String fileSize = null;
 
 		if (mediaFileRequest.fileType().equals(STATIC_MEDIA_FILE)) {
-			byte[] binaryData = Base64.getDecoder().decode(mediaFileRequest.mediaData());
+			String imageData = mediaFileRequest.mediaData().split(",")[1];
+			byte[] binaryData = Base64.getDecoder().decode(imageData);
 			int bytes = binaryData.length;
 			Double megabytes = bytes / (1024.0 * 1024.0);
 			fileSize = String.valueOf(megabytes.intValue());
