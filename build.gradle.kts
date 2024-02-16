@@ -30,6 +30,9 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+    // mybatis
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2")
+
     // validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 

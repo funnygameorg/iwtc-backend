@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.masikga.itwc.domain.worldcup.repository.impl.mapper.WorldCupGameMapper">
+
+    <select id="existsWorldCupGame">
+        SELECT EXISTS (
+                SELECT      1
+                FROM        world_cup_game
+                WHERE       id = ${worldCupGameId}
+        )
+    </select>
+
+    <select id="getAvailableGameRounds"
+            resultType="com.masikga.itwc.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection">
+
+        SELECT      wcg.id AS id
+                    , wcg.title AS title
+                    , wcg.description AS description
+                    , count(wcgc.id) AS count
+        FROM        world_cup_game wcg
+        LEFT JOIN   world_cup_game_contents wcgc
+        ON          wcgc.soft_delete != true
+        AND         wcg.id = wcgc.world_cup_game_id
+        WHERE       wcg.id = ${worldCupGameId}
+        GROUP BY    wcg.id
+
+    </select>
+
+    <select id="getDividedWorldCupGameContents"
+            resultType="com.masikga.itwc.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection">
+        SELECT      wcgc.id AS ID
+                    , wcgc.name AS CONTENTS_NAME
+                    , amf.id AS MEDIA_FILE_ID
+                    , amf.file_type AS FILE_TYPE
+                    , amu.video_start_time AS VIDEO_START_TIME
+                    , amu.video_play_duration AS VIDEO_PLAY_DURATION
+        FROM (
+                SELECT      inner_wcgc.id AS id
+                            , inner_wcgc.name AS name
+                            , inner_wcgc.media_file_id AS MEDIA_FILE_ID
+                FROM        world_cup_game_contents AS inner_wcgc
+                WHERE       inner_wcgc.world_cup_game_id = ${worldCupGameId}
+                AND         inner_wcgc.soft_delete = false
+                <if test="alreadyPlayedContentsIds != null and alreadyPlayedContentsIds.size != 0">
+                    AND         inner_wcgc.id NOT IN
+                    <foreach collection="alreadyPlayedContentsIds" item="item" index="index" separator="," open="(" close=")">
+                        ${item}
+                    </foreach>
+                </if>
+        ) AS wcgc
+        LEFT JOIN   media_file AS amf ON amf.id = wcgc.media_file_id
+        LEFT JOIN   internet_video_url AS amu ON amu.id = amf.id
+        LIMIT       ${divideContentsSizePerRequest}
+    </select>
+
+</mapper>
