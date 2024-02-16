@@ -7,5 +7,4 @@
     <update id="saveWinnerContentsScore">
         UPDATE World_cup_game_contents SET game_score = game_score + #{score} WHERE id = #{worldCupGameContentsId}
     </update>
-
 </mapper>

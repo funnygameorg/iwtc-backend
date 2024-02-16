@@ -5,22 +5,27 @@
 <mapper namespace="com.masikga.itwc.domain.worldcup.repository.impl.mapper.WorldCupGameMapper">
 
     <select id="existsWorldCupGame">
+
         SELECT EXISTS (
                 SELECT      1
                 FROM        world_cup_game
                 WHERE       id = ${worldCupGameId}
         )
+
     </select>
 
-    <select id="getAvailableGameRounds"
-            resultType="com.masikga.itwc.domain.worldcup.repository.projection.GetAvailableGameRoundsProjection">
+    <select id="getAvailableGameRounds" resultType="GetAvailableGameRoundsProjection">
 
-        SELECT      wcg.id AS id
-                    , wcg.title AS title
-                    , wcg.description AS description
-                    , count(wcgc.id) AS count
-        FROM        world_cup_game wcg
-        LEFT JOIN   world_cup_game_contents wcgc
+        SELECT
+                    wcg.id              AS world_cup_game_id
+                    , wcg.title         AS world_cup_game_title
+                    , wcg.description   AS world_cup_game_description
+                    , count(wcgc.id)    AS world_cup_game_contents_count
+
+        FROM        world_cup_game          AS wcg
+
+        -- 월드컵 게임과 월드컵 게임 컨텐츠 조인
+        LEFT JOIN   world_cup_game_contents AS wcgc
         ON          wcgc.soft_delete != true
         AND         wcg.id = wcgc.world_cup_game_id
         WHERE       wcg.id = ${worldCupGameId}
@@ -28,31 +33,41 @@
 
     </select>
 
-    <select id="getDividedWorldCupGameContents"
-            resultType="com.masikga.itwc.domain.worldcup.repository.projection.GetDividedWorldCupGameContentsProjection">
-        SELECT      wcgc.id AS ID
-                    , wcgc.name AS CONTENTS_NAME
-                    , amf.id AS MEDIA_FILE_ID
-                    , amf.file_type AS FILE_TYPE
-                    , amu.video_start_time AS VIDEO_START_TIME
-                    , amu.video_play_duration AS VIDEO_PLAY_DURATION
+    <select id="getDividedWorldCupGameContents" resultType="GetDividedWorldCupGameContentsProjection">
+
+        SELECT      wcgc.id                     AS id
+                    , wcgc.name                 AS contents_name
+                    , amf.id                    AS media_file_id
+                    , amf.file_type             AS file_type
+                    , amu.video_start_time      AS video_start_time
+                    , amu.video_play_duration   AS video_play_duration
+
+        -- 제외 대상은 필터링한 컨텐츠 summary를 생성
         FROM (
-                SELECT      inner_wcgc.id AS id
-                            , inner_wcgc.name AS name
-                            , inner_wcgc.media_file_id AS MEDIA_FILE_ID
-                FROM        world_cup_game_contents AS inner_wcgc
+                SELECT      inner_wcgc.id               AS id
+                            , inner_wcgc.name           AS name
+                            , inner_wcgc.media_file_id  AS media_file_id
+                FROM        world_cup_game_contents     AS inner_wcgc
                 WHERE       inner_wcgc.world_cup_game_id = ${worldCupGameId}
                 AND         inner_wcgc.soft_delete = false
+
+                -- 조회에서 제외하고 싶은 월드컵 컨텐츠가 주어질 때 사용됩니다.
                 <if test="alreadyPlayedContentsIds != null and alreadyPlayedContentsIds.size != 0">
                     AND         inner_wcgc.id NOT IN
                     <foreach collection="alreadyPlayedContentsIds" item="item" index="index" separator="," open="(" close=")">
                         ${item}
                     </foreach>
                 </if>
+
         ) AS wcgc
-        LEFT JOIN   media_file AS amf ON amf.id = wcgc.media_file_id
-        LEFT JOIN   internet_video_url AS amu ON amu.id = amf.id
+
+        -- 컨텐츠 summary와 inter video url 조인
+        LEFT JOIN   media_file AS amf
+        ON          amf.id = wcgc.media_file_id
+        LEFT JOIN   internet_video_url AS amu
+        ON          amu.id = amf.id
         LIMIT       ${divideContentsSizePerRequest}
+
     </select>
 
 </mapper>
