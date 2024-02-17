@@ -19,25 +19,27 @@ public interface WorldCupGameCustomRepository {
             Long memberId
     );
 
-    Boolean existsWorldCupGame(Long worldCupGameId);
-
-    GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId);
-
     // TODO : 인프라 구현체가 자주 변하는 기능
     void incrementWorldCupGameViews(Long worldCupGameId);
-
-    @Deprecated
-    List<GetDividedWorldCupGameContentsProjection> getDividedWorldCupGameContents(
-            Long worldCupId,
-            int wantedContentsSize,
-            List<Long> alreadyPlayedContentsIds
-    );
 
     Boolean existsWorldCupGameV2(Long worldCupGameId);
 
     GetAvailableGameRoundsProjection getAvailableGameRoundsV2(Long worldCupGameId);
 
     List<GetDividedWorldCupGameContentsProjection> getDividedWorldCupGameContentsV2(
+            Long worldCupId,
+            int wantedContentsSize,
+            List<Long> alreadyPlayedContentsIds
+    );
+
+    @Deprecated
+    Boolean existsWorldCupGame(Long worldCupGameId);
+
+    @Deprecated
+    GetAvailableGameRoundsProjection getAvailableGameRounds(Long worldCupGameId);
+
+    @Deprecated
+    List<GetDividedWorldCupGameContentsProjection> getDividedWorldCupGameContents(
             Long worldCupId,
             int wantedContentsSize,
             List<Long> alreadyPlayedContentsIds

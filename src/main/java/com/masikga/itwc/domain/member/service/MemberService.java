@@ -79,7 +79,7 @@ public class MemberService {
 
     public VerifyDuplicatedServiceIdResponse existsServiceId(String serviceId) {
 
-        Boolean isDuplicated = memberRepository.existsServiceId(serviceId);
+        Boolean isDuplicated = memberRepository.existsServiceIdV2(serviceId);
 
         return new VerifyDuplicatedServiceIdResponse(isDuplicated);
 
@@ -87,7 +87,7 @@ public class MemberService {
 
     public VerifyDuplicatedNicknameResponse existsNickname(String nickname) {
 
-        Boolean isDuplicatedNickname = memberRepository.existsNickname(nickname);
+        Boolean isDuplicatedNickname = memberRepository.existsNicknameV2(nickname);
 
         return new VerifyDuplicatedNicknameResponse(isDuplicatedNickname);
 

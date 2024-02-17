@@ -62,7 +62,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             WorldCupGame savedWorldCupGame = worldCupGameRepository.save(worldCupGame);
 
             // when
-            Boolean existsWorldCupGame = worldCupGameRepository.existsWorldCupGame(savedWorldCupGame.getId());
+            Boolean existsWorldCupGame = worldCupGameRepository.existsWorldCupGameV2(savedWorldCupGame.getId());
 
             // then
             assertThat(existsWorldCupGame).isTrue();
@@ -83,7 +83,7 @@ public class WorldCupGameContentsRepositoryTest extends ContainerBaseTest implem
             Long plus1Id = savedWorldCupGame.getId() + 1;
 
             // when
-            Boolean existsWorldCupGame = worldCupGameRepository.existsWorldCupGame(plus1Id);
+            Boolean existsWorldCupGame = worldCupGameRepository.existsWorldCupGameV2(plus1Id);
 
             // then
             assertThat(existsWorldCupGame).isFalse();
