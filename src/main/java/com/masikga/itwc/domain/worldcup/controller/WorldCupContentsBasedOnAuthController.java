@@ -27,8 +27,8 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.*;
 
 @Tag(
-        name = "WorldCup based on auth",
-        description = "사용자의 인증이 필수적인 월드컵 관련 API"
+        name = "WorldCup Contents based on auth",
+        description = "사용자의 인증이 필수적인 월드컵 컨텐츠 관련 API"
 )
 @Validated
 @RestController
