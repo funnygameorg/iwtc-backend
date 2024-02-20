@@ -5,6 +5,6 @@
 <mapper namespace="com.masikga.itwc.domain.worldcup.repository.impl.mapper.WorldCupGameContentsMapper">
 
     <update id="saveWinnerContentsScore">
-        UPDATE World_cup_game_contents SET game_score = game_score + #{score} WHERE id = #{worldCupGameContentsId}
+        UPDATE world_cup_game_contents SET game_score = game_score + ${score} WHERE id = ${worldCupGameContentsId}
     </update>
 </mapper>
