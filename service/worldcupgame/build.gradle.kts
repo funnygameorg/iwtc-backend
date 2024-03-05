@@ -54,7 +54,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
     // database
-    runtimeOnly("com.h2database:h2:1.4.200")
+    runtimeOnly("com.h2database:h2")
 
     // local redis
     testImplementation("it.ozimov:embedded-redis:0.7.3")
