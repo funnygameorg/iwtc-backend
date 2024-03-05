@@ -1,0 +1,67 @@
+server:
+  port: 8080
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/test;MODE=MySQL
+    username: sa
+    password:
+    initialization-mode: always
+  redis:
+    host: redis
+    port: 6379
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL57Dialect
+  sql:
+    init:
+      mode: always
+jwt:
+  secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
+  token-validity-milli-seconds:
+    access: 3000000
+    refresh: 30000000
+
+cloud:
+  aws:
+    credentials:
+      access-key: localstack-access-key
+      secret-key: localstack-secret-key
+    region: us-east-1
+    end-point: http://localstack:4566
+    s3:
+      bucket: media
+    stack:
+      auto: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+origin:
+  front: http://localhost:3000
+
+logging:
+  config: classpath:log/logback-spring-local.xml
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.masikga.itwc.domain
