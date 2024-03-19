@@ -22,14 +22,19 @@ pipeline {
         }
 
         stage('run : member image') {
-            sh 'docker run -v ./logs:/logs -p 8081:8081 itwc-member'
+            steps {
+                sh 'docker run -v ./logs:/logs -p 8081:8081 itwc-member'
+            }
         }
+
     }
 
     post {
+
         always {
             echo 'bye!'
         }
+
     }
 
 }
