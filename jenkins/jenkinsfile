@@ -1,19 +1,23 @@
 pipeline {
     agent any
+
     stages {
-        stage('Build') {
+        stage('build world-cup server image') {
             steps {
-                sh 'echo "Hello World"'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
+                sh "docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
+            }
+        }
+        stage('build member server image') {
+            steps {
+                sh "docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-member.Dockerfile -t itwc-member ."
             }
         }
     }
+
     post {
         always {
-            echo 'This always run!'
+            echo 'bye!'
         }
     }
+
 }
