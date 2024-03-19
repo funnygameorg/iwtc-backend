@@ -1,0 +1,59 @@
+server:
+  port: 80
+jasypt:
+  encryptor:
+    password: my_jasypt_key
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(ak8pdUDOLv6Gr4qmq+T9Xil8hxd5tjlKc30FhHGASDcI4GgguIPI6+O3qyRxHtXrIKqScDr/Z5HRP7BmB/dbTX+BKzyFE8cW3WLms1XSt6XIlPHBpTrP/SewsoOnlWnDelz+pBrtSvmSzrpk1a9lKTDsW6oTHvZwZS7VAkwd0t0S34FxlJNmLEAJ/9oXFDV+S5isSPWikESPhKAqEuckVQ==)
+    username: ENC(KgN+CkbF2Mh+rfLZeJCRC9muYrVpNji1Uwf7gudChmYm/ecbOSgfl3om++Iw2eCe)
+    password: ENC(+EE3drag5n1PayF3akCOzGMSz4VLdze+N6PDmpKe62W6UXoZIXAra3BiW+IlW/tF)
+  redis:
+    host: ENC(mKCkUmM/qBfmWsz4WQJvO8nefQtdwnQVhJCY7rrQ/YDq4kSArOyP0PQflOFb24dcIxpKKiTFcJzjsx3ws9gjPnGHlaqBWP95j1je3xY9x9iEIloRjc5dH/oyYzajnoLF) # PROD 변경
+    port: 6379
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+
+cloud:
+  aws:
+    credentials:
+      access-key: ENC(L5nkU1CtIQA9bQqDHwwvEXjK8bj5q8xVig5RSdOdxQAJBYTHTdrRoaBPnc/UJ2n+HHaNDUFSlsfHf4MU0+RXCg==)
+      secret-key: ENC(3BgK9UA4pc2pmPZjUZhh2jpMLh18dzFoQrrqVu7XbLW1iyVOo+05tv41DtxmqSV1JPnhMIDzADxhbSbRPuOLbhk75jdDr3niR9JrV3uqpuk=)
+      cloud-watch:
+        access-key: ENC(h3CIHsMbShh18XDAO2NATkJ6VAQqPNL66L2gBqv2qpYiVcZV5BEZYh6fZaIn4cXTMNp1RtocKUA/OcwEhkx/xg==)
+        secret-key: ENC(R6QFldLtE3iYQB93pGU44V2wWTnMUHsBBSmpswoZOAwYHPe/rA7tIJUWTS3QLufz+UGKXxNlPFrttyh+Zdzr96H7f1mHllCYUzzI4ijIKwg=)
+    end-point: not-used-in-prod-profile
+    region: ap-northeast-2
+    s3:
+      bucket: itwc-file
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+origin:
+  front: http://masikga.net
+
+logging:
+  config: classpath:log/logback-spring-prod.xml
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.masikga.itwc.domain

@@ -8,8 +8,15 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.30/f195ee86e6c896ea47a1d39defbe20eb59cd149d/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="itwc.service.worldcupgame.main" />
         <module name="itwc.service.worldcupgame.test" />
+        <module name="itwc.service.worldcupgame.main" />
+        <module name="itwc.core.jwt.main" />
+        <module name="itwc.service.member.main" />
+        <module name="itwc.core.caffeine.main" />
+        <module name="itwc.core.redis.main" />
+        <module name="itwc.core.db.main" />
+        <module name="itwc.service.member.test" />
+        <module name="itwc.core.error.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17" />

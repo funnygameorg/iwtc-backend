@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+jwt:
+  secret: glgful8fLHILImISgmxcq12345AWFTt8C76wrqwmrnJFfl8fLHILImISgmxcq12345AWFn5585j3602r8rt29fxcq12345AWF9l8fLHILImISgm
+  tokenValidityMilliSeconds:
+    access: 3000000
+    refresh: 30000000
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+jwt:
+  secret: ENC(jNtfh8SGjyY4DfLK9eY9nh3cRVqVtzIWxj/2gYML7s+5rG8l1y5qbo7rIjO81qGUIMeVzHT7XP55zApSnajld9YTefQCtMMHr6eCezsLkgE82m6uian5+l1mPSSWrvyOEaEI/mjP3+tJArgBMVcNPO0S4oq6lJaBsMReL69jWautEInFdgz9vwGReKczh8FEGnMCuEgl+IzQMJXyxye7iMjsIqhvlFmblFtFBYq8FhgJf7ljsNKWcmrulIwF3JqA)
+  token-validity-milli-seconds:
+    access: 360000 # 6분
+    refresh: 18000000 # 5시간

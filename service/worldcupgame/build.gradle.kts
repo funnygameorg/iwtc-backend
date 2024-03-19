@@ -17,7 +17,27 @@ configurations {
     }
 }
 
+tasks.getByName("bootJar") {
+    enabled = true
+}
+
+tasks.getByName("jar") {
+    enabled = false
+}
+
 dependencies {
+
+    implementation(project(":core:db"))
+    implementation(project(":core:jwt"))
+    implementation(project(":core:caffeine"))
+    implementation(project(":core:redis"))
+    implementation(project(":core:feign"))
+    implementation(project(":core:error"))
+
+    implementation(project(":service:member"))
+
+    implementation(project(":domain:model"))
+
     // default
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -53,9 +73,6 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-    // database
-    runtimeOnly("com.h2database:h2")
-
     // local redis
     testImplementation("it.ozimov:embedded-redis:0.7.3")
 
@@ -81,4 +98,5 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
 }

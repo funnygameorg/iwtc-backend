@@ -27,7 +27,7 @@ services:
     container_name: itwc-back
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: itwc-world-cup.Dockerfile
       args:
         SPRING_PROFILES_ACTIVE: local
     image: itwc-back

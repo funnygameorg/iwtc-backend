@@ -1,0 +1,5 @@
+external:
+  member:
+    host: http://localhost:8081
+  world-cup-game:
+    host: http://localhost:8080

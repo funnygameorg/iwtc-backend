@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.masikga.itwc.domain.worldcup.repository.impl.mapper.WorldCupGameContentsMapper">
+<mapper namespace="com.masikga.worldcupgame.domain.worldcup.repository.impl.mapper.WorldCupGameContentsMapper">
 
     <update id="saveWinnerContentsScore">
         UPDATE world_cup_game_contents SET game_score = game_score + ${score} WHERE id = ${worldCupGameContentsId}
