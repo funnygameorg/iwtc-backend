@@ -17,16 +17,22 @@ pipeline {
 
         stage('run : world-cup image') {
             steps {
-                sh 'docker run -v ./logs:/logs -p 8080:8080 itwc-world-cup'
+                sh 'sudo docker run -v ./logs:/logs -p 8080:8080 itwc-world-cup'
             }
         }
 
         stage('run : member image') {
             steps {
-                sh 'docker run -v ./logs:/logs -p 8081:8081 itwc-member'
+                sh 'sudo docker run -v ./logs:/logs -p 8081:8081 itwc-member'
             }
         }
 
+        stage('remove : not used container & image') {
+            steps {
+                sh 'sudo docker container prune'
+                sh 'sudo docker image prune'
+            }
+        }
     }
 
     post {
