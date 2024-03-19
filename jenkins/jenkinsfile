@@ -2,15 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('build world-cup server image') {
+
+        stage('build : world-cup image') {
             steps {
                 sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
             }
         }
-        stage('build member server image') {
+
+        stage('build : member image') {
             steps {
                 sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-member.Dockerfile -t itwc-member ."
             }
+        }
+
+        stage('run : world-cup image') {
+            steps {
+                sh 'docker run -v ./logs:/logs -p 8080:8080 itwc-world-cup'
+            }
+        }
+
+        stage('run : member image') {
+            sh 'docker run -v ./logs:/logs -p 8081:8081 itwc-member'
         }
     }
 
