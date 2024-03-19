@@ -4,12 +4,12 @@ pipeline {
     stages {
         stage('build world-cup server image') {
             steps {
-                sh "docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
+                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
             }
         }
         stage('build member server image') {
             steps {
-                sh "docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-member.Dockerfile -t itwc-member ."
+                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-member.Dockerfile -t itwc-member ."
             }
         }
     }
