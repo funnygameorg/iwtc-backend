@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('build : world-cup image') {
             steps {
                 sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
@@ -27,17 +26,12 @@ pipeline {
             }
         }
 
-        stage('remove : not used container & image') {
-            steps {
-                sh 'sudo docker container prune'
-                sh 'sudo docker image prune'
-            }
-        }
     }
 
     post {
-
         always {
+            sh 'sudo docker container prune'
+            sh 'sudo docker image prune'
             echo 'bye!'
         }
 
