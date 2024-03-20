@@ -1,3 +1,8 @@
+jasypt:
+  encryptor:
+    password: my_jasypt_key
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
