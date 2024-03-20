@@ -5,8 +5,8 @@ pipeline {
 
         stage('checkout') {
             steps {
-                echo '키값 체크1 : ${AWS_ACCESS_KEY_ID}'
-                echo '키값 체크2 : ${AWS_SECRET_KEY}'
+                echo "키값 체크1 : ${AWS_ACCESS_KEY_ID}"
+                echo "키값 체크2 : ${AWS_SECRET_KEY}"
             }
         }
 
