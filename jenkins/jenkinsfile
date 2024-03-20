@@ -7,30 +7,21 @@ pipeline {
             steps {
                 echo "키값 체크1 : ${AWS_ACCESS_KEY_ID}"
                 echo "키값 체크2 : ${AWS_SECRET_KEY}"
+                echo "키값 체크2 : ${DB_URL}"
+                echo "키값 체크2 : ${DB_USERNAME}"
+                echo "키값 체크2 : ${DB_PASSWORD}"
             }
         }
 
         stage('build : world-cup image') {
             steps {
-                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
-            }
-        }
-
-        stage('build : member image') {
-            steps {
-                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} -f itwc-member.Dockerfile -t itwc-member ."
+                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} --build-arg DB_URL=${DB_URL} --build-arg DB_USERNAME=${DB_USERNAME} --build-arg DB_PASSWORD=${DB_PASSWORD} -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
             }
         }
 
         stage('run : world-cup image') {
             steps {
                 sh 'sudo docker run -v ./logs:/logs -p 8080:8080 itwc-world-cup'
-            }
-        }
-
-        stage('run : member image') {
-            steps {
-                sh 'sudo docker run -v ./logs:/logs -p 8081:8081 itwc-member'
             }
         }
 
