@@ -6,6 +6,7 @@ spring:
     import:
       - application-jwt.yml
       - application-feign.yml
+      - application-db.yml
   redis:
     host: redis
     port: 6379
