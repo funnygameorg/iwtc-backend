@@ -2,15 +2,23 @@ pipeline {
     agent any
 
     stages {
+
+        stage('checkout') {
+            steps {
+                echo '키값 체크1 : ${AWS_ACCESS_KEY_ID}'
+                echo '키값 체크2 : ${AWS_SECRET_KEY}'
+            }
+        }
+
         stage('build : world-cup image') {
             steps {
-                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
+                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
             }
         }
 
         stage('build : member image') {
             steps {
-                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod -f itwc-member.Dockerfile -t itwc-member ."
+                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} -f itwc-member.Dockerfile -t itwc-member ."
             }
         }
 
