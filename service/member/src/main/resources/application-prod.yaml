@@ -7,6 +7,9 @@ jasypt:
     iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 
 spring:
+  config:
+    import:
+      - application-jwt.yml
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(ak8pdUDOLv6Gr4qmq+T9Xil8hxd5tjlKc30FhHGASDcI4GgguIPI6+O3qyRxHtXrIKqScDr/Z5HRP7BmB/dbTX+BKzyFE8cW3WLms1XSt6XIlPHBpTrP/SewsoOnlWnDelz+pBrtSvmSzrpk1a9lKTDsW6oTHvZwZS7VAkwd0t0S34FxlJNmLEAJ/9oXFDV+S5isSPWikESPhKAqEuckVQ==)
