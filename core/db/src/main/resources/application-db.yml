@@ -4,7 +4,7 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/itwc?serverTimezone=UTC&characterEncoding=utf8
+    url: jdbc:mariadb://localhost:3306/itwc?serverTimezone=UTC&characterEncoding=utf8
     username: root
     password: 23g3g#232g@!
 
@@ -15,6 +15,6 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_URL}:3306/itwc?serverTimezone=UTC&characterEncoding=utf8
+    url: jdbc:mariadb://${DB_URL}:3306/itwc?serverTimezone=UTC&characterEncoding=utf8
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
