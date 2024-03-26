@@ -23,6 +23,7 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
+        default_schema: itwc
         dialect: org.hibernate.dialect.MySQL57Dialect
 
 jwt:
