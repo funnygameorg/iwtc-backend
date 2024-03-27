@@ -20,8 +20,8 @@ configurations {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-jdbc:3.2.3")
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.3.3")
-
+    implementation("com.mysql:mysql-connector-j:8.0.33")
+    
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 }
