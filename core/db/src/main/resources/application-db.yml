@@ -15,6 +15,6 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://${DB_URL}:3306/itwc?serverTimezone=UTC&characterEncoding=utf8
+    url: jdbc:mariadb://${DB_URL}:3306/ITWC?serverTimezone=UTC&characterEncoding=utf8
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
