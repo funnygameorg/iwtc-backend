@@ -9,6 +9,7 @@ spring:
   config:
     import:
       - application-jwt.yml
+      - application-db.yml
   redis:
     host: ENC(mKCkUmM/qBfmWsz4WQJvO8nefQtdwnQVhJCY7rrQ/YDq4kSArOyP0PQflOFb24dcIxpKKiTFcJzjsx3ws9gjPnGHlaqBWP95j1je3xY9x9iEIloRjc5dH/oyYzajnoLF) # PROD 변경
     port: 6379
