@@ -15,9 +15,9 @@ pipeline {
 
         stage('clean container & image') {
             steps {
-                sh 'sudo docker stop $(docker ps -a -q)'
-                sh 'sudo docker rm $(docker ps -a -q)'
-                sh 'sudo docker rmi $(docker images -q)'
+                sh 'sudo docker stop $(sudo docker ps -a -q)'
+                sh 'sudo docker rm $(sudo docker ps -a -q)'
+                sh 'sudo docker rmi $(sudo docker images -q)'
             }
         }
 
