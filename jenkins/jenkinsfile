@@ -13,26 +13,26 @@ pipeline {
             }
         }
 
-        stages {
-                stage('cleanup') {
-                    steps {
-                        script {
-                            // 컨테이너를 중지하고 제거
-                            def containers = sh(script: 'sudo docker ps -a -q', returnStdout: true).trim()
-                            if (containers) {
-                                sh "sudo docker stop ${containers}"
-                                sh "sudo docker rm ${containers}"
-                            }
 
-                            // 이미지를 제거
-                            def images = sh(script: 'sudo docker images -q', returnStdout: true).trim()
-                            if (images) {
-                                sh "sudo docker rmi ${images}"
-                            }
-                        }
+        stage('cleanup') {
+            steps {
+                script {
+                    // 컨테이너를 중지하고 제거
+                    def containers = sh(script: 'sudo docker ps -a -q', returnStdout: true).trim()
+                    if (containers) {
+                        sh "sudo docker stop ${containers}"
+                        sh "sudo docker rm ${containers}"
+                    }
+
+                    // 이미지를 제거
+                    def images = sh(script: 'sudo docker images -q', returnStdout: true).trim()
+                    if (images) {
+                        sh "sudo docker rmi ${images}"
                     }
                 }
             }
+        }
+
 
         stage('build world-cup image') {
             steps {
