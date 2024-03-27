@@ -29,7 +29,7 @@ pipeline {
 
         stage('build : member image') {
             steps {
-                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} --build-arg DB_URL=${DB_URL} --build-arg DB_USERNAME=${DB_USERNAME} --build-arg DB_PASSWORD=${DB_PASSWORD} -f itwc-world-cup.Dockerfile -t member ."
+                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} --build-arg DB_URL=${DB_URL} --build-arg DB_USERNAME=${DB_USERNAME} --build-arg DB_PASSWORD=${DB_PASSWORD} -f itwc-member.Dockerfile -t member ."
             }
         }
 
