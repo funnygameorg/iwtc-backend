@@ -100,8 +100,8 @@
 
     <!-- 기본 출력-->
     <root level="DEBUG">
-<!--        <appender-ref ref="AWS_INFO" />-->
-<!--        <appender-ref ref="AWS_WARN" />-->
+        <appender-ref ref="AWS_INFO" />
+        <appender-ref ref="AWS_WARN" />
         <appender-ref ref="AWS_ERROR" />
     </root>
 

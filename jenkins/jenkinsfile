@@ -13,18 +13,35 @@ pipeline {
             }
         }
 
-        stage('build : world-cup image') {
+        stage('clean container & image') {
+            sh 'docker stop $(docker ps -a -q)'
+            sh 'docker rm $(docker ps -a -q)'
+            sh 'docker rmi $(docker images -q)'
+        }
+
+        stage('build world-cup image') {
             steps {
                 sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} --build-arg DB_URL=${DB_URL} --build-arg DB_USERNAME=${DB_USERNAME} --build-arg DB_PASSWORD=${DB_PASSWORD} -f itwc-world-cup.Dockerfile -t itwc-world-cup ."
             }
         }
 
-        stage('run : world-cup image') {
+        stage('build : member image') {
             steps {
-                sh 'sudo docker run -v ./logs:/logs -p 8080:8080 itwc-world-cup'
+                sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} --build-arg DB_URL=${DB_URL} --build-arg DB_USERNAME=${DB_USERNAME} --build-arg DB_PASSWORD=${DB_PASSWORD} -f itwc-world-cup.Dockerfile -t member ."
             }
         }
 
+        stage('run : world-cup image') {
+            steps {
+                sh 'sudo docker run -d -v ./logs:/logs -p 8080:8080 itwc-world-cup'
+            }
+        }
+
+        stage('run : member image') {
+            steps {
+                sh 'sudo docker run -d -v ./logs:/logs -p 8081:8081 member'
+            }
+        }
     }
 
     post {
