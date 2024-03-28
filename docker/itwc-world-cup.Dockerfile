@@ -26,6 +26,10 @@ COPY ../core/feign/build.gradle.kts ./core/feign/build.gradle.kts
 COPY ../core/error/src ./core/error/src
 COPY ../core/error/build.gradle.kts ./core/error/build.gradle.kts
 
+COPY ../core/encoder/src ./core/encoder/src
+COPY ../core/encoder/build.gradle.kts ./core/encoder/build.gradle.kts
+
+
 COPY ../service/member/src ./service/member/src
 COPY ../service/member/build.gradle.kts ./service/member/build.gradle.kts
 
