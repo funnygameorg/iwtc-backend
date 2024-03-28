@@ -27,7 +27,7 @@ public class MemberService {
     private final JwtService jwtService;
     private final RememberMeRepository rememberMeRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder memberEncoder;
 
     @Transactional
     public void signUp(SignUpRequest request) {
@@ -40,7 +40,7 @@ public class MemberService {
         }
 
         Member newMember = Member.signUp(
-                passwordEncoder,
+                memberEncoder,
                 request.serviceId(),
                 request.nickname(),
                 request.password()
@@ -55,7 +55,7 @@ public class MemberService {
                 .findByServiceId(request.serviceId())
                 .orElseThrow(NotFoundMemberExceptionMember::new);
 
-        if (!passwordEncoder.matches(request.password(), member.getPassword())) {
+        if (!memberEncoder.matches(request.password(), member.getPassword())) {
             throw new NotFoundMemberExceptionMember();
         }
         rememberMeRepository.save(member.getId());

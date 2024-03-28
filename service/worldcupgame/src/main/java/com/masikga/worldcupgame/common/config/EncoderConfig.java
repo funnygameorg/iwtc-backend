@@ -33,7 +33,7 @@ public class EncoderConfig {
     }
 
     // 사용자 패스워드 암호화
-    @Bean
+    @Bean(name = "worldCupGameEncoder")
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
