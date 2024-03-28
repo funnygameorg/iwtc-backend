@@ -32,7 +32,11 @@ pipeline {
                     // 이미지를 제거
                     def images = sh(script: 'sudo docker images -q', returnStdout: true).trim().split('\n')
                     for (image in images) {
-                        sh "sudo docker rmi ${image}"
+                        if(image) {
+                            sh "sudo docker rmi ${image}"
+                        } else {
+                            echo "No image to stop or remove."
+                        }
                     }
                 }
             }
