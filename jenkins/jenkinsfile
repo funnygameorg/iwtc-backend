@@ -20,8 +20,13 @@ pipeline {
                     // 컨테이너를 중지하고 제거
                     def containers = sh(script: 'sudo docker ps -a -q', returnStdout: true).trim().split('\n')
                     for (container in containers) {
-                        sh "sudo docker stop ${container}"
-                        sh "sudo docker rm ${container}"
+                        // 컨테이너가 존재하는지 확인
+                        if (container) {
+                            sh "sudo docker stop ${container}"
+                            sh "sudo docker rm ${container}"
+                        } else {
+                            echo "No containers to stop or remove."
+                        }
                     }
 
                     // 이미지를 제거
@@ -32,6 +37,7 @@ pipeline {
                 }
             }
         }
+
 
 
         stage('build world-cup image') {
