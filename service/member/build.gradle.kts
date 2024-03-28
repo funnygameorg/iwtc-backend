@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":core:caffeine"))
     implementation(project(":core:redis"))
     implementation(project(":core:error"))
+    implementation(project(":core:encoder"))
 
     implementation(project(":domain:model"))
     // default
@@ -44,10 +45,6 @@ dependencies {
     // validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-
-    implementation("org.springframework.security:spring-security-crypto")
-    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
-
     // ???
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -58,6 +55,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
     implementation("ca.pjer:logback-awslogs-appender:1.4.0")
+
+    // crypto
+    implementation("org.springframework.security:spring-security-crypto")
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
 
     // test container
     testImplementation("org.testcontainers:testcontainers:1.16.0") // TC 의존성
@@ -71,10 +72,6 @@ dependencies {
     implementation("com.google.guava:guava:32.1.2-jre")
 
     implementation("mysql:mysql-connector-java:8.0.33")
-
-    implementation("org.springframework.security:spring-security-crypto")
-
-    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

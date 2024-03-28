@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/caffeine" />
             <option value="$PROJECT_DIR$/core/db" />
+            <option value="$PROJECT_DIR$/core/encoder" />
             <option value="$PROJECT_DIR$/core/error" />
             <option value="$PROJECT_DIR$/core/feign" />
             <option value="$PROJECT_DIR$/core/jwt" />

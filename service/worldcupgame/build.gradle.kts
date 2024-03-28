@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":core:redis"))
     implementation(project(":core:feign"))
     implementation(project(":core:error"))
+    implementation(project(":core:encoder"))
 
     implementation(project(":service:member"))
 
@@ -73,6 +74,10 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
+    // crypto
+    implementation("org.springframework.security:spring-security-crypto")
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
+
     // local redis
     testImplementation("it.ozimov:embedded-redis:0.7.3")
 
@@ -88,10 +93,6 @@ dependencies {
     implementation("com.google.guava:guava:32.1.2-jre")
 
     implementation("mysql:mysql-connector-java:8.0.33")
-
-    implementation("org.springframework.security:spring-security-crypto")
-
-    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
