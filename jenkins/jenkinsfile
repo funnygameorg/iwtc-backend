@@ -13,37 +13,6 @@ pipeline {
             }
         }
 
-
-        stage('cleanup') {
-            steps {
-                script {
-                    // 컨테이너를 중지하고 제거
-                    def containers = sh(script: 'sudo docker ps -a -q', returnStdout: true).trim().split('\n')
-                    for (container in containers) {
-                        // 컨테이너가 존재하는지 확인
-                        if (container) {
-                            sh "sudo docker stop ${container}"
-                            sh "sudo docker rm ${container}"
-                        } else {
-                            echo "No containers to stop or remove."
-                        }
-                    }
-
-                    // 이미지를 제거
-                    def images = sh(script: 'sudo docker images -q', returnStdout: true).trim().split('\n')
-                    for (image in images) {
-                        if(image) {
-                            sh "sudo docker rmi ${image}"
-                        } else {
-                            echo "No image to stop or remove."
-                        }
-                    }
-                }
-            }
-        }
-
-
-
         stage('build world-cup image') {
             steps {
                 sh "sudo docker build --build-arg SPRING_PROFILES_ACTIVE=prod --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_KEY=${AWS_SECRET_KEY} --build-arg DB_URL=${DB_URL} --build-arg DB_USERNAME=${DB_USERNAME} --build-arg DB_PASSWORD=${DB_PASSWORD} -f docker/itwc-world-cup.Dockerfile -t itwc-world-cup ."
