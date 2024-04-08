@@ -11,6 +11,7 @@
         <module name="itwc.service.worldcupgame.test" />
         <module name="itwc.service.worldcupgame.main" />
         <module name="itwc.core.jwt.main" />
+        <module name="itwc.core.rememberme.main" />
         <module name="itwc.service.member.main" />
         <module name="itwc.core.caffeine.main" />
         <module name="itwc.core.redis.main" />

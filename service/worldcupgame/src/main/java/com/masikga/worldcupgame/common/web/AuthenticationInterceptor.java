@@ -1,8 +1,8 @@
 package com.masikga.worldcupgame.common.web;
 
 import com.masikga.jwt.common.config.JwtService;
-import com.masikga.member.infra.rememberme.RememberMeRepository;
 import com.masikga.model.member.CustomAuthentication;
+import com.masikga.rememberme.RememberMeRepository;
 import com.masikga.worldcupgame.common.web.exception.ExpiredAuthenticationExceptionMember;
 import com.masikga.worldcupgame.common.web.exception.RequestWithBlackListedAccessToken;
 import jakarta.servlet.http.HttpServletRequest;

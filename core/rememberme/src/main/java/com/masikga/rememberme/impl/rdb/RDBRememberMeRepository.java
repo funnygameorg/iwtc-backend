@@ -1,7 +1,7 @@
-package com.masikga.member.infra.rememberme.impl.rdb;
+package com.masikga.rememberme.impl.rdb;
 
 import com.masikga.jwt.common.config.property.JwtProperty;
-import com.masikga.member.infra.rememberme.RememberMeRepository;
+import com.masikga.rememberme.RememberMeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;

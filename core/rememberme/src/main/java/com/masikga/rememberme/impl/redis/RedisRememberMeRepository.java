@@ -1,6 +1,6 @@
-package com.masikga.member.infra.rememberme.impl.redis;
+package com.masikga.rememberme.impl.redis;
 
-import com.masikga.member.infra.rememberme.RememberMeRepository;
+import com.masikga.rememberme.RememberMeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

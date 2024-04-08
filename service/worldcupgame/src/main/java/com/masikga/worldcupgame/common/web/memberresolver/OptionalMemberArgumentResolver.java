@@ -1,10 +1,11 @@
 package com.masikga.worldcupgame.common.web.memberresolver;
 
+import com.masikga.feign.FeignException;
+import com.masikga.feign.MemberClient;
 import com.masikga.jwt.common.config.JwtService;
-import com.masikga.member.model.Member;
-import com.masikga.member.repository.MemberRepository;
 import com.masikga.model.member.CustomAuthentication;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -21,7 +22,9 @@ public class OptionalMemberArgumentResolver implements HandlerMethodArgumentReso
 
     private static final String HEADER_TOKEN_NAME = "access-token";
     private final JwtService jwtService;
-    private final MemberRepository memberRepository;
+
+    @Autowired
+    private MemberClient memberClient;
 
     private final WebUtil argumentResolverUtil;
 
@@ -45,13 +48,20 @@ public class OptionalMemberArgumentResolver implements HandlerMethodArgumentReso
         }
 
         Long memberId = jwtService.getPayLoadByToken(nullableToken);
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-
-        if (optionalMember.isEmpty()) {
-            return Optional.empty();
+        var memberResponse = memberClient.findMember(memberId);
+        if (memberResponse.getCode() != 200) {
+            throw new FeignException(memberResponse.getCode(), "존재하지 않는 사용자입니다.");
         }
 
-        MemberDto memberDto = MemberDto.fromEntity(optionalMember.get());
+        var member = memberResponse.getData();
+
+        MemberDto memberDto = MemberDto.fromEntity(
+                member.getMemberId(),
+                member.getServiceId(),
+                member.getNickname(),
+                member.getPassword()
+        );
+
         argumentResolverUtil.setMemberIdCurrentRequest(memberDto);
         return Optional.of(memberDto);
     }

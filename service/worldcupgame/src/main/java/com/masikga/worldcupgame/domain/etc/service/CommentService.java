@@ -1,8 +1,6 @@
 package com.masikga.worldcupgame.domain.etc.service;
 
-import com.masikga.member.exception.NotFoundMemberExceptionMember;
-import com.masikga.member.model.Member;
-import com.masikga.member.repository.MemberRepository;
+import com.masikga.feign.MemberClient;
 import com.masikga.worldcupgame.domain.etc.controller.request.WriteCommentRequest;
 import com.masikga.worldcupgame.domain.etc.controller.response.GetCommentsListResponse;
 import com.masikga.worldcupgame.domain.etc.exception.NotFoundCommentExceptionMember;
@@ -28,7 +26,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final WorldCupGameRepository worldCupGameRepository;
     private final WorldCupGameContentsRepository worldCupGameContentsRepository;
-    private final MemberRepository memberRepository;
+    private final MemberClient memberClient;
 
     public List<GetCommentsListResponse> getComments(Long worldCupId, Integer offset) {
 
@@ -54,17 +52,16 @@ public class CommentService {
         var worldCupGameContents = worldCupGameContentsRepository.findById(contentsId)
                 .orElseThrow(() -> new NotFoundWorldCupContentsExceptionMember(contentsId));
 
-        Member writer = null;
+        Long writerId = null;
 
         if (memberId != null) {
-            writer = memberRepository.findById(memberId)
-                    .orElseThrow(NotFoundMemberExceptionMember::new);
+            writerId = memberClient.findMember(memberId).getData().getMemberId();
         }
 
         var newComment = Comment.writeWorldCupGameResult(
                 worldCupGame,
                 worldCupGameContents,
-                writer,
+                writerId,
                 request.body(),
                 request.nickname()
         );

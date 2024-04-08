@@ -1,7 +1,7 @@
 package com.masikga.worldcupgame.domain.etc.service;
 
 import com.masikga.jwt.common.config.JwtService;
-import com.masikga.member.infra.rememberme.RememberMeRepository;
+import com.masikga.rememberme.RememberMeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

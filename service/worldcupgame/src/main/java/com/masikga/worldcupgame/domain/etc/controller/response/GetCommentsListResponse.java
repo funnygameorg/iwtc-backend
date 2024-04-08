@@ -5,23 +5,21 @@ import com.masikga.worldcupgame.domain.etc.model.Comment;
 import java.time.LocalDateTime;
 
 public record GetCommentsListResponse(
-	Long commentId,
-	Long commentWriterId,
-	String writerNickname,
-	String body,
-	LocalDateTime createdAt
+        Long commentId,
+        Long commentWriterId,
+        String writerNickname,
+        String body,
+        LocalDateTime createdAt
 ) {
 
-	public static GetCommentsListResponse fromEntity(Comment comment) {
+    public static GetCommentsListResponse fromEntity(Comment comment) {
 
-		var nullableWriterId = comment.getMember() != null ? comment.getMember().getId() : null;
-
-		return new GetCommentsListResponse(
-			comment.getId(),
-			nullableWriterId,
-			comment.getNickname(),
-			comment.getBody(),
-			comment.getCreatedAt()
-		);
-	}
+        return new GetCommentsListResponse(
+                comment.getId(),
+                comment.getMemberId(),
+                comment.getNickname(),
+                comment.getBody(),
+                comment.getCreatedAt()
+        );
+    }
 }

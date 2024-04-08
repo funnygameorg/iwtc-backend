@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":core:redis"))
     implementation(project(":core:error"))
     implementation(project(":core:encoder"))
+    implementation(project(":core:rememberme"))
 
     implementation(project(":domain:model"))
     // default

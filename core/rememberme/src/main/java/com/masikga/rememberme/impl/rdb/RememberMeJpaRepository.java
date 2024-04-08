@@ -1,4 +1,4 @@
-package com.masikga.member.infra.rememberme.impl.rdb;
+package com.masikga.rememberme.impl.rdb;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

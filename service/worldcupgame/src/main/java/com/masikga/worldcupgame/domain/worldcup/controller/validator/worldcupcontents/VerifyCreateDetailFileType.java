@@ -1,6 +1,6 @@
 package com.masikga.worldcupgame.domain.worldcup.controller.validator.worldcupcontents;
 
-import com.masikga.member.common.web.validation.NoSpace;
+import com.masikga.worldcupgame.common.web.NoSpace;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;

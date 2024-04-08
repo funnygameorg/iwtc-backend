@@ -4,6 +4,7 @@ spring:
   config:
     import:
       - application-jwt.yml
+      - application-db.yml
   redis:
     host: redis
     port: 6379

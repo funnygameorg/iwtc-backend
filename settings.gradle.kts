@@ -13,3 +13,4 @@ include(":core:encoder")
 
 include(":domain:model")
 include("core:encoder")
+include("core:rememberme")

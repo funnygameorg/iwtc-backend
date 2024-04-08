@@ -1,4 +1,4 @@
-package com.masikga.member.infra.rememberme.impl.rdb;
+package com.masikga.rememberme.impl.rdb;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

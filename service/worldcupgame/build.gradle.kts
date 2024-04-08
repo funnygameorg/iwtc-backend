@@ -34,8 +34,7 @@ dependencies {
     implementation(project(":core:feign"))
     implementation(project(":core:error"))
     implementation(project(":core:encoder"))
-
-    implementation(project(":service:member"))
+    implementation(project(":core:rememberme"))
 
     implementation(project(":domain:model"))
 

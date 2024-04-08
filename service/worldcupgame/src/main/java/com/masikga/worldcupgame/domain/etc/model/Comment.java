@@ -1,6 +1,5 @@
 package com.masikga.worldcupgame.domain.etc.model;
 
-import com.masikga.member.model.Member;
 import com.masikga.worldcupgame.common.jpa.MemberTimeBaseEntity;
 import com.masikga.worldcupgame.domain.worldcup.model.WorldCupGame;
 import com.masikga.worldcupgame.domain.worldcup.model.WorldCupGameContents;
@@ -54,22 +53,21 @@ public class Comment extends MemberTimeBaseEntity {
     private WorldCupGameContents contents;
 
     @org.hibernate.annotations.Comment("댓글을 작성한 사용자")
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(NO_CONSTRAINT))
-    private Member member;
+    @Column(name = "member_id")
+    private Long memberId;
 
     public void softDelete() {
         this.softDelete = true;
     }
 
     public boolean isOwner(Long memberId) {
-        return Objects.equals(member.getId(), memberId);
+        return Objects.equals(memberId, memberId);
     }
 
     public static Comment writeWorldCupGameResult(
             WorldCupGame worldCupGame,
             WorldCupGameContents worldCupGameContents,
-            Member member,
+            Long memberId,
             String body,
             String nickname) {
 
@@ -78,7 +76,7 @@ public class Comment extends MemberTimeBaseEntity {
                 .contents(worldCupGameContents)
                 .body(body)
                 .nickname(nickname)
-                .member(member)
+                .memberId(memberId)
                 .build();
 
     }

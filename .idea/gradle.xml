@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/core/feign" />
             <option value="$PROJECT_DIR$/core/jwt" />
             <option value="$PROJECT_DIR$/core/redis" />
+            <option value="$PROJECT_DIR$/core/rememberme" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/model" />
             <option value="$PROJECT_DIR$/service" />

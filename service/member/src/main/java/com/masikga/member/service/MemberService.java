@@ -9,10 +9,10 @@ import com.masikga.member.controller.response.VerifyDuplicatedServiceIdResponse;
 import com.masikga.member.exception.DuplicatedNicknameExceptionMember;
 import com.masikga.member.exception.DuplicatedServiceIdExceptionMember;
 import com.masikga.member.exception.NotFoundMemberExceptionMember;
-import com.masikga.member.infra.rememberme.RememberMeRepository;
 import com.masikga.member.model.Member;
 import com.masikga.member.repository.MemberRepository;
 import com.masikga.model.member.GetMemberResponse;
+import com.masikga.rememberme.RememberMeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -98,7 +98,7 @@ public class MemberService {
 
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundMemberExceptionMember::new);
 
-        return new GetMemberResponse(member.getId(), member.getServiceId(), member.getNickname());
+        return new GetMemberResponse(member.getId(), member.getServiceId(), member.getNickname(), member.getPassword());
 
     }
 }

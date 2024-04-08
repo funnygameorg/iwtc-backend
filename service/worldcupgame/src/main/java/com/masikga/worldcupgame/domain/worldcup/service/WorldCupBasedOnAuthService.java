@@ -1,8 +1,6 @@
 package com.masikga.worldcupgame.domain.worldcup.service;
 
 import com.masikga.feign.MemberClient;
-import com.masikga.model.common.RestApiResponse;
-import com.masikga.model.member.GetMemberResponse;
 import com.masikga.worldcupgame.common.util.RandomDataGeneratorInterface;
 import com.masikga.worldcupgame.domain.etc.component.MediaFileFactory;
 import com.masikga.worldcupgame.domain.etc.model.MediaFile;
@@ -49,8 +47,6 @@ public class WorldCupBasedOnAuthService {
     private final MemberClient memberClient;
 
     public List<GetWorldCupContentsResponse> getMyWorldCupGameContents(long worldCupId, long memberId) {
-
-        RestApiResponse<GetMemberResponse> getMemberResponse = memberClient.findMember(100);
 
         WorldCupGame worldCupGame = worldCupGameRepository
                 .findById(worldCupId)

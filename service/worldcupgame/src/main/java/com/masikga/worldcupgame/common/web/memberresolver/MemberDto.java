@@ -1,6 +1,5 @@
 package com.masikga.worldcupgame.common.web.memberresolver;
 
-import com.masikga.member.model.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +15,7 @@ public class MemberDto {
     String nickname;
     String password;
 
-    public static MemberDto fromEntity(Member member) {
-        return new MemberDto(
-                member.getId(),
-                member.getServiceId(),
-                member.getNickname(),
-                member.getPassword()
-        );
+    public static MemberDto fromEntity(Long memberId, String serviceId, String nickname, String password) {
+        return new MemberDto(memberId, serviceId, nickname, password);
     }
 }

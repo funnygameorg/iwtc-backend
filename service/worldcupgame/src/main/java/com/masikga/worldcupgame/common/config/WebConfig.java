@@ -1,8 +1,7 @@
 package com.masikga.worldcupgame.common.config;
 
 import com.masikga.jwt.common.config.JwtService;
-import com.masikga.member.infra.rememberme.RememberMeRepository;
-import com.masikga.member.repository.MemberRepository;
+import com.masikga.rememberme.RememberMeRepository;
 import com.masikga.worldcupgame.common.web.AuthenticationInterceptor;
 import com.masikga.worldcupgame.common.web.memberresolver.OptionalMemberArgumentResolver;
 import com.masikga.worldcupgame.common.web.memberresolver.RequiredMemberArgumentResolver;
@@ -21,7 +20,6 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     private final RememberMeRepository rememberMeRepository;
-    private final MemberRepository memberRepository;
     private final JwtService jwtService;
 
     @Override
@@ -50,16 +48,16 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3000);
     }
 
-    private com.masikga.worldcupgame.common.web.AuthenticationInterceptor authenticationInterceptor() {
+    private AuthenticationInterceptor authenticationInterceptor() {
         return new AuthenticationInterceptor(rememberMeRepository, jwtService);
     }
 
-    private com.masikga.worldcupgame.common.web.memberresolver.RequiredMemberArgumentResolver requiredMemberArgumentResolver() {
-        return new RequiredMemberArgumentResolver(jwtService, memberRepository, webUtil());
+    private RequiredMemberArgumentResolver requiredMemberArgumentResolver() {
+        return new RequiredMemberArgumentResolver(jwtService, webUtil());
     }
 
-    private com.masikga.worldcupgame.common.web.memberresolver.OptionalMemberArgumentResolver optionalMemberArgumentResolver() {
-        return new OptionalMemberArgumentResolver(jwtService, memberRepository, webUtil());
+    private OptionalMemberArgumentResolver optionalMemberArgumentResolver() {
+        return new OptionalMemberArgumentResolver(jwtService, webUtil());
     }
 
     private com.masikga.worldcupgame.common.web.memberresolver.WebUtil webUtil() {
