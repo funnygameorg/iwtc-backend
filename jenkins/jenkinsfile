@@ -27,13 +27,13 @@ pipeline {
 
         stage('run world-cup image') {
             steps {
-                sh 'sudo docker run -d -v ./logs:/logs -p 8080:8080 itwc-world-cup sleep infinity'
+                sh 'sudo docker run -d -t -v ./logs:/logs -p 8080:8080 itwc-world-cup'
             }
         }
 
         stage('run member image') {
             steps {
-                sh 'sudo docker run -d -v ./logs:/logs -p 8081:8081 member sleep infinity'
+                sh 'sudo docker run -d -t -v ./logs:/logs -p 8081:8081 member'
             }
         }
     }
