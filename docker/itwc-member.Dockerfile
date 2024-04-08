@@ -29,6 +29,8 @@ COPY ../core/error/build.gradle.kts ./core/error/build.gradle.kts
 COPY ../core/encoder/src ./core/encoder/src
 COPY ../core/encoder/build.gradle.kts ./core/encoder/build.gradle.kts
 
+COPY ../core/rememberme/src ./core/rememberme/src
+COPY ../core/rememberme/build.gradle.kts ./core/rememberme/build.gradle.kts
 
 COPY ../service/member/src ./service/member/src
 COPY ../service/member/build.gradle.kts ./service/member/build.gradle.kts
